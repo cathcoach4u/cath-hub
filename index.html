@@ -2203,8 +2203,8 @@
       var key = afGetKey();
       var setup = document.getElementById('ai-float-setup');
       var body  = document.getElementById('ai-float-body');
-      if (key) { setup.style.display = 'none'; body.style.display = 'flex'; }
-      else      { setup.style.display = 'flex'; body.style.display = 'none'; }
+      if (key) { setup.style.setProperty('display', 'none', 'important'); body.style.setProperty('display', 'flex', 'important'); }
+      else      { setup.style.setProperty('display', 'flex', 'important'); body.style.setProperty('display', 'none', 'important'); }
     }
 
     window.aiFToggle = function() {

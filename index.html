@@ -391,6 +391,8 @@
     <input type="email" id="login-email" placeholder="Email" onkeydown="if(event.key==='Enter')document.getElementById('login-password').focus()">
     <input type="password" id="login-password" placeholder="Password" onkeydown="if(event.key==='Enter')cathLogin()">
     <button class="login-btn" onclick="cathLogin()">Sign In</button>
+    <div id="login-reset-msg" style="display:none;color:#22c55e;font-size:13px;margin-top:12px;"></div>
+    <a href="#" onclick="cathForgotPassword();return false" style="display:block;margin-top:16px;font-size:13px;color:#94a3b8;text-decoration:underline;">Forgot password?</a>
   </div>
 </div>
 
@@ -732,6 +734,19 @@
     var { error } = await sb.auth.signInWithPassword({ email: email, password: pass });
     if (error) { errEl.textContent = error.message; errEl.style.display = 'block'; return; }
     showApp();
+  };
+
+  window.cathForgotPassword = async function() {
+    var email = document.getElementById('login-email').value.trim();
+    var errEl = document.getElementById('login-error');
+    var msgEl = document.getElementById('login-reset-msg');
+    errEl.style.display = 'none';
+    msgEl.style.display = 'none';
+    if (!email) { errEl.textContent = 'Enter your email first'; errEl.style.display = 'block'; return; }
+    var { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: window.location.origin });
+    if (error) { errEl.textContent = error.message; errEl.style.display = 'block'; return; }
+    msgEl.textContent = 'Password reset email sent — check your inbox';
+    msgEl.style.display = 'block';
   };
 
   window.cathLogout = async function() {

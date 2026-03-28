@@ -717,12 +717,12 @@
 
   // ─── AUTH ───
   function showApp() {
-    document.getElementById('cathHub-login').style.cssText = 'display:none !important';
-    document.getElementById('cathHub').style.cssText = 'display:flex !important';
+    document.getElementById('cathHub-login').style.setProperty('display', 'none', 'important');
+    document.getElementById('cathHub').style.setProperty('display', 'flex', 'important');
   }
   function showLogin() {
-    document.getElementById('cathHub-login').style.cssText = 'display:flex !important';
-    document.getElementById('cathHub').style.cssText = 'display:none !important';
+    document.getElementById('cathHub-login').style.setProperty('display', 'flex', 'important');
+    document.getElementById('cathHub').style.setProperty('display', 'none', 'important');
   }
 
   window.cathLogin = async function() {

@@ -1,0 +1,5 @@
+node_modules/
+.claude/
+batch*.json
+seed_master_items.sql
+package-lock.json

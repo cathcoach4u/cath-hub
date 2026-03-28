@@ -754,12 +754,12 @@
     showLogin();
   };
 
-  // Check session on load
-  (async function() {
-    var { data: { session } } = await sb.auth.getSession();
+  // Check session on load (elements already exist since script is at bottom)
+  sb.auth.getSession().then(function(result) {
+    var session = result.data.session;
     if (session) showApp();
     else showLogin();
-  })();
+  });
 
   sb.auth.onAuthStateChange(function(event, session) {
     if (event === 'SIGNED_OUT') showLogin();
@@ -1755,115 +1755,6 @@
     }
   })();
 
-  // ─── AI CHAT ───
-  (function(){
-    var aiMessages = [];
-    var aiSystemPrompt = "You are Cath's warm and practical personal AI assistant. Cath is an Australian woman who runs a coaching business called Coach4U. She uses Cath Hub to manage her personal life — shopping, workouts, medical appointments, and habits. Be friendly, concise, and helpful. Use Australian English. Currency is AUD ($). Dates in DD/MM/YYYY format. Don't be overly formal.";
-
-    function aiGetKey() { return localStorage.getItem('cathHub_apiKey') || ''; }
-
-    function aiInit() {
-      var key = aiGetKey();
-      document.getElementById('ai-setup-card').style.display = key ? 'none' : 'block';
-      document.getElementById('ai-chat-card').style.display = key ? 'flex' : 'none';
-      if (key) aiRenderMessages();
-    }
-
-    window.aiSaveKey = function() {
-      var val = document.getElementById('ai-key-input').value.trim();
-      if (!val) return;
-      localStorage.setItem('cathHub_apiKey', val);
-      document.getElementById('ai-key-input').value = '';
-      aiInit();
-    };
-
-    window.aiClearKey = function() {
-      if (!confirm('Remove your API key?')) return;
-      localStorage.removeItem('cathHub_apiKey');
-      aiMessages = [];
-      aiInit();
-    };
-
-    window.aiClearChat = function() {
-      aiMessages = [];
-      aiRenderMessages();
-    };
-
-    function aiRenderMessages() {
-      var container = document.getElementById('ai-messages');
-      if (!aiMessages.length) {
-        container.innerHTML = '<div class="ai-welcome"><div class="ai-welcome-icon">&#x1F916;</div><div class="ai-welcome-text">Hi Cath! I\'m your AI assistant.<br>Ask me anything &mdash; workouts, planning, ideas&hellip;</div></div>';
-        return;
-      }
-      var html = '';
-      aiMessages.forEach(function(msg) {
-        html += '<div class="ai-msg ' + msg.role + '"><div class="ai-bubble">' + esc(msg.content).replace(/\n/g, '<br>') + '</div></div>';
-      });
-      container.innerHTML = html;
-      container.scrollTop = container.scrollHeight;
-    }
-
-    window.aiKeyDown = function(e) {
-      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); aiSend(); }
-    };
-
-    window.aiSend = async function() {
-      var input = document.getElementById('ai-input');
-      var text = input.value.trim();
-      if (!text) return;
-      var key = aiGetKey();
-      if (!key) { aiInit(); return; }
-
-      input.value = '';
-      aiMessages.push({role: 'user', content: text});
-      aiRenderMessages();
-
-      var container = document.getElementById('ai-messages');
-      var typing = document.createElement('div');
-      typing.className = 'ai-msg assistant';
-      typing.innerHTML = '<div class="ai-typing">&#x25CF; &#x25CF; &#x25CF;</div>';
-      typing.id = 'ai-typing-indicator';
-      container.appendChild(typing);
-      container.scrollTop = container.scrollHeight;
-
-      var btn = document.getElementById('ai-send-btn');
-      btn.disabled = true;
-
-      try {
-        var resp = await fetch('https://api.anthropic.com/v1/messages', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'x-api-key': key,
-            'anthropic-version': '2023-06-01',
-            'anthropic-dangerous-allow-browser': 'true'
-          },
-          body: JSON.stringify({
-            model: 'claude-haiku-4-5',
-            max_tokens: 1024,
-            system: aiSystemPrompt,
-            messages: aiMessages.map(function(m){ return {role: m.role, content: m.content}; })
-          })
-        });
-        if (!resp.ok) {
-          var err = await resp.json().catch(function(){ return {}; });
-          throw new Error(err.error && err.error.message ? err.error.message : 'API error ' + resp.status);
-        }
-        var data = await resp.json();
-        var reply = (data.content && data.content[0] && data.content[0].text) ? data.content[0].text : 'Sorry, no response received.';
-        aiMessages.push({role: 'assistant', content: reply});
-      } catch(err) {
-        aiMessages.push({role: 'assistant', content: '\u26A0\uFE0F Error: ' + err.message});
-      }
-
-      var ind = document.getElementById('ai-typing-indicator');
-      if (ind) ind.remove();
-      btn.disabled = false;
-      aiRenderMessages();
-    };
-
-    aiInit();
-  })();
 
   // ─── HABITS (from Supabase) ───
   (function(){

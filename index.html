@@ -761,8 +761,19 @@
     else showLogin();
   })();
 
-  sb.auth.onAuthStateChange(function(event) {
+  sb.auth.onAuthStateChange(function(event, session) {
     if (event === 'SIGNED_OUT') showLogin();
+    if (event === 'PASSWORD_RECOVERY') {
+      // Show password reset form
+      var newPass = prompt('Enter your new password:');
+      if (newPass && newPass.length >= 6) {
+        sb.auth.updateUser({ password: newPass }).then(function(res) {
+          if (res.error) alert('Error: ' + res.error.message);
+          else { alert('Password updated!'); showApp(); }
+        });
+      }
+    }
+    if (event === 'SIGNED_IN' && session) showApp();
   });
 
   // ─── NAVIGATION ───

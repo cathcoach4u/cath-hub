@@ -2051,6 +2051,33 @@
           },
           required: ['item_name']
         }
+      },
+      {
+        name: 'save_memory',
+        description: 'Save a fact to persistent memory. Use when Cath says "remember that...", "note that...", "keep in mind...", or tells you something worth remembering for future conversations.',
+        input_schema: {
+          type: 'object',
+          properties: {
+            fact: { type: 'string', description: 'The fact to remember' }
+          },
+          required: ['fact']
+        }
+      },
+      {
+        name: 'forget_memory',
+        description: 'Remove a fact from memory. Use when Cath says "forget that..." or "remove the memory about...".',
+        input_schema: {
+          type: 'object',
+          properties: {
+            search: { type: 'string', description: 'Search term to find the memory to delete (partial match)' }
+          },
+          required: ['search']
+        }
+      },
+      {
+        name: 'list_memories',
+        description: 'List all saved memories. Use when Cath asks "what do you remember?" or "show me your memories".',
+        input_schema: { type: 'object', properties: {} }
       }
     ];
 
@@ -2189,6 +2216,18 @@
         });
         return JSON.stringify({ prices: results });
       }
+      if (toolName === 'save_memory') {
+        await sb.from('ai_memory').insert({ fact: toolInput.fact });
+        return JSON.stringify({ saved: toolInput.fact });
+      }
+      if (toolName === 'forget_memory') {
+        var { data } = await sb.from('ai_memory').delete().ilike('fact', '%' + toolInput.search + '%').select();
+        return JSON.stringify({ removed: (data || []).length, facts: (data || []).map(function(m){ return m.fact; }) });
+      }
+      if (toolName === 'list_memories') {
+        var { data } = await sb.from('ai_memory').select('*').order('created_at');
+        return JSON.stringify(data || []);
+      }
       return '{"error":"Unknown tool"}';
     }
 
@@ -2240,6 +2279,16 @@
 
     async function afCallAPI(messages) {
       var key = afGetKey();
+      // Load memories into system prompt
+      var memoryContext = afSystemPrompt;
+      try {
+        var { data: memories } = await sb.from('ai_memory').select('fact').order('created_at');
+        if (memories && memories.length) {
+          memoryContext += '\n\nYour saved memories about Cath and her family:\n';
+          memories.forEach(function(m) { memoryContext += '- ' + m.fact + '\n'; });
+          memoryContext += '\nUse these memories to give more personalised, relevant responses.';
+        }
+      } catch(e) {}
       var resp = await fetch('/api/claude', {
         method: 'POST',
         headers: {
@@ -2251,7 +2300,7 @@
         body: JSON.stringify({
           model: 'claude-haiku-4-5',
           max_tokens: 1024,
-          system: afSystemPrompt,
+          system: memoryContext,
           tools: afTools,
           messages: messages
         })

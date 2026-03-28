@@ -988,7 +988,7 @@
   async function amScanReceipt(base64, mediaType) {
     var key = amGetApiKey();
     if (!key) { alert('Please set your API key in the AI Assistant first.'); return null; }
-    var resp = await fetch('https://api.anthropic.com/v1/messages', {
+    var resp = await fetch('/api/claude', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -2245,7 +2245,7 @@
 
     async function afCallAPI(messages) {
       var key = afGetKey();
-      var resp = await fetch('https://api.anthropic.com/v1/messages', {
+      var resp = await fetch('/api/claude', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

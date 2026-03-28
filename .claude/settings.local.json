@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__Claude_Preview__preview_start",
+      "Bash(where npx:*)",
+      "Bash(npx netlify:*)",
+      "WebFetch(domain:www.coach4u.com.au)",
+      "Bash(py -3 -c \":*)",
+      "Bash(node -e \":*)",
+      "Bash(npm install:*)",
+      "Bash(pip install:*)",
+      "Bash(python3 -c \":*)",
+      "Bash(where python:*)",
+      "Bash(where python3:*)",
+      "Bash(where py:*)",
+      "Bash(py -3 --version)",
+      "Bash(npm list:*)",
+      "Bash(npx --yes pdf-text-extract \"C:/Users/CathC/OneDrive - Coach4U/Coach4U - Coach4U Downloads/eReceipt_1262_Glenrose_13Mar2026__tbbpc.pdf\")",
+      "Bash(npx --yes pdf-text-extract \"C:/Users/CathC/OneDrive - Coach4U/Coach4U - Coach4U Downloads/eReceipt_1262_Glenrose_14Mar2026__zehtb.pdf\")",
+      "Bash(npx --yes pdf-text-extract \"C:/Users/CathC/OneDrive - Coach4U/Coach4U - Coach4U Downloads/eReceipt_1262_Glenrose_21Mar2026__zbcct.pdf\")",
+      "Bash(npx --yes pdf-text-extract \"C:/Users/CathC/OneDrive - Coach4U/Coach4U - Coach4U Downloads/online_receipt_01Mar20261100_eakxn.pdf\")",
+      "Bash(npx --yes pdf-text-extract \"C:/Users/CathC/OneDrive - Coach4U/Coach4U - Coach4U Downloads/eReceipt_1262_Glenrose_07Mar2026__xhkpn.pdf\")",
+      "Bash(npx netlify-cli:*)"
+    ]
+  }
+}

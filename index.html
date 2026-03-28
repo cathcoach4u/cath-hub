@@ -16,7 +16,7 @@
   #cathHub-login .login-error { color: #ef4444; font-size: 13px; margin-bottom: 12px; display: none; }
 
   #cathHub, #cathHub * { margin: 0 !important; padding: 0 !important; box-sizing: border-box !important; line-height: 1.5 !important; }
-  #cathHub { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif !important; background: #f0f4f8 !important; color: #1e293b !important; display: none !important; min-height: 100vh !important; }
+  #cathHub { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif !important; background: #f0f4f8 !important; color: #1e293b !important; display: none; min-height: 100vh !important; }
   #cathHub a, #cathHub a:hover, #cathHub a:visited { text-decoration: none !important; color: inherit !important; }
   #cathHub button { border: none !important; background: none !important; cursor: pointer !important; font-family: inherit !important; }
   #cathHub input { font-family: inherit !important; }
@@ -717,12 +717,12 @@
 
   // ─── AUTH ───
   function showApp() {
-    document.getElementById('cathHub-login').style.display = 'none';
-    document.getElementById('cathHub').style.display = 'flex';
+    document.getElementById('cathHub-login').style.cssText = 'display:none !important';
+    document.getElementById('cathHub').style.cssText = 'display:flex !important';
   }
   function showLogin() {
-    document.getElementById('cathHub-login').style.display = 'flex';
-    document.getElementById('cathHub').style.display = 'none';
+    document.getElementById('cathHub-login').style.cssText = 'display:flex !important';
+    document.getElementById('cathHub').style.cssText = 'display:none !important';
   }
 
   window.cathLogin = async function() {

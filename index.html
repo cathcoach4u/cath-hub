@@ -461,23 +461,21 @@
     <div class="screen active" id="ch-home">
       <h2 style="font-size:20px !important;margin-bottom:16px !important;">Dashboard</h2>
 
+      <!-- Quick navigation dropdown -->
+      <select id="dash-quick-nav" onchange="dashQuickNav(this)" style="width:100% !important;padding:14px 16px !important;font-size:16px !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;background:white !important;color:#1e293b !important;appearance:auto !important;-webkit-appearance:listbox !important;margin-bottom:16px !important;">
+        <option value="">Quick jump...</option>
+        <option value="shopping">&#x1F6D2; Shopping List</option>
+        <option value="receipt">&#x1F9FE; Upload Receipt</option>
+        <option value="mentalhealth">&#x1F9E0; Mental Health</option>
+        <option value="filing">&#x1F4C1; Filing System (OneDrive)</option>
+      </select>
+
       <div class="dash-section">
         <div style="display:flex !important;justify-content:space-between !important;align-items:center !important;margin-bottom:12px !important;">
           <h3 style="margin-bottom:0 !important;">&#x1F6D2; Shopping List</h3>
           <span style="font-size:12px !important;color:#3b82f6 !important;cursor:pointer !important;" onclick="chNav('aislemate',document.querySelectorAll('#cathHub .nav-item')[1]);setTimeout(function(){amGo('weekly')},100)">View all &rarr;</span>
         </div>
         <div id="dash-shopping-list"></div>
-      </div>
-
-      <div class="dash-section" style="cursor:pointer !important;" onclick="chNav('aislemate',document.querySelectorAll('#cathHub .nav-item')[1]);setTimeout(function(){amGo('receipts')},100)">
-        <div style="display:flex !important;align-items:center !important;gap:10px !important;">
-          <span style="font-size:24px !important;">&#x1F9FE;</span>
-          <div>
-            <div style="font-size:14px !important;font-weight:600 !important;">Upload Receipt</div>
-            <div style="font-size:12px !important;color:#94a3b8 !important;">Scan items &amp; prices automatically</div>
-          </div>
-          <span style="margin-left:auto !important;color:#3b82f6 !important;font-size:14px !important;">&rarr;</span>
-        </div>
       </div>
 
       <div class="dash-section">
@@ -492,17 +490,6 @@
         </div>
       </div>
 
-      <div class="dash-section" style="cursor:pointer !important;" onclick="window.open('https://netorgft4053847.sharepoint.com/:f:/s/bakerpersonal-CathPersonal/IgCDEd3wyYcYTYLNHVmG3vY6AXpwBUtDz6wYy2dclwLsNcw?e=671UAV','_blank')">
-        <div style="display:flex !important;align-items:center !important;gap:10px !important;">
-          <span style="font-size:24px !important;">&#x1F4C1;</span>
-          <div>
-            <div style="font-size:14px !important;font-weight:600 !important;">Filing System</div>
-            <div style="font-size:12px !important;color:#94a3b8 !important;">Open OneDrive documents folder</div>
-          </div>
-          <span style="margin-left:auto !important;color:#0078d4 !important;font-size:14px !important;">&rarr;</span>
-        </div>
-      </div>
-
     </div>
 
     <!-- ═══ AISLEMATE ═══ -->
@@ -510,16 +497,17 @@
       <h2>&#x1F6D2; AisleMate</h2>
       <div class="am-subscreen active" id="am-home">
         <input class="am-search" type="text" placeholder="Search items to add...">
-        <div class="am-grid" style="grid-template-columns: repeat(4, 1fr) !important; gap:8px !important;">
-          <div class="am-tile" style="padding:14px 10px !important;" onclick="amGo('weekly')"><div class="tile-icon" style="font-size:20px !important;">&#x1F6D2;</div><div class="tile-title" style="font-size:12px !important;">Weekly Shop</div><div class="tile-sub" id="am-shop-count" style="font-size:10px !important;">0/0</div></div>
-          <div class="am-tile" style="padding:14px 10px !important;" onclick="amGo('select')"><div class="tile-icon" style="font-size:20px !important;">&#x2705;</div><div class="tile-title" style="font-size:12px !important;">Master List</div><div class="tile-sub" id="am-avail-count" style="font-size:10px !important;">100 items</div></div>
-          <div class="am-tile" style="padding:14px 10px !important;" onclick="amGo('shopinfo')"><div class="tile-icon" style="font-size:20px !important;">&#x2139;</div><div class="tile-title" style="font-size:12px !important;">Shop Info</div><div class="tile-sub" style="font-size:10px !important;">Links &amp; rewards</div></div>
-          <div class="am-tile" style="padding:14px 10px !important;" onclick="amGo('family')"><div class="tile-icon" style="font-size:20px !important;">&#x1F46A;</div><div class="tile-title" style="font-size:12px !important;">Family Items</div><div class="tile-sub" style="font-size:10px !important;">4 members</div></div>
-          <div class="am-tile" style="padding:14px 10px !important;" onclick="amGo('receipts')"><div class="tile-icon" style="font-size:20px !important;">&#x1F9FE;</div><div class="tile-title" style="font-size:12px !important;">Receipts</div><div class="tile-sub" style="font-size:10px !important;">Scan &amp; import</div></div>
-          <div class="am-tile" style="padding:14px 10px !important;" onclick="amGo('spending')"><div class="tile-icon" style="font-size:20px !important;">&#x1F4B0;</div><div class="tile-title" style="font-size:12px !important;">Spending</div><div class="tile-sub" style="font-size:10px !important;">By store</div></div>
-          <div class="am-tile" style="padding:14px 10px !important;" onclick="amGo('history')"><div class="tile-icon" style="font-size:20px !important;">&#x1F4C5;</div><div class="tile-title" style="font-size:12px !important;">History</div><div class="tile-sub" style="font-size:10px !important;">Past purchases</div></div>
-          <div class="am-tile" style="padding:14px 10px !important;" onclick="amGo('meals')"><div class="tile-icon" style="font-size:20px !important;">&#x1F372;</div><div class="tile-title" style="font-size:12px !important;">Meal Plan</div><div class="tile-sub" style="font-size:10px !important;">Weekly meals</div></div>
-        </div>
+        <select onchange="if(this.value){amGo(this.value);this.value='';}" style="width:100% !important;padding:14px 16px !important;font-size:16px !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;background:white !important;color:#1e293b !important;appearance:auto !important;-webkit-appearance:listbox !important;margin-bottom:12px !important;">
+          <option value="">Select a section...</option>
+          <option value="weekly">&#x1F6D2; Weekly Shop</option>
+          <option value="select">&#x2705; Master List</option>
+          <option value="shopinfo">&#x2139; Shop Info &amp; Rewards</option>
+          <option value="family">&#x1F46A; Family Items</option>
+          <option value="receipts">&#x1F9FE; Receipts — Scan &amp; import</option>
+          <option value="spending">&#x1F4B0; Spending — By store</option>
+          <option value="history">&#x1F4C5; History — Past purchases</option>
+          <option value="meals">&#x1F372; Meal Plan — Weekly meals</option>
+        </select>
         <div class="am-progress">
           <span class="prog-label">Shopping Progress</span>
           <div class="am-progress-bar"><div class="am-progress-fill" id="am-prog-fill" style="width:0%"></div></div>
@@ -2009,6 +1997,23 @@
   wlRender();
 
   // ─── MEDICAL NAVIGATION ───
+  window.dashQuickNav = function(sel) {
+    var v = sel.value;
+    sel.value = '';
+    if (v === 'shopping') {
+      chNav('aislemate', document.querySelectorAll('#cathHub .nav-item')[1]);
+      setTimeout(function(){ amGo('weekly'); }, 100);
+    } else if (v === 'receipt') {
+      chNav('aislemate', document.querySelectorAll('#cathHub .nav-item')[1]);
+      setTimeout(function(){ amGo('receipts'); }, 100);
+    } else if (v === 'mentalhealth') {
+      chNav('medical', document.querySelectorAll('#cathHub .nav-item')[3]);
+      setTimeout(function(){ medGo('mentalhealth'); }, 100);
+    } else if (v === 'filing') {
+      window.open('https://netorgft4053847.sharepoint.com/:f:/s/bakerpersonal-CathPersonal/IgCDEd3wyYcYTYLNHVmG3vY6AXpwBUtDz6wYy2dclwLsNcw?e=671UAV', '_blank');
+    }
+  };
+
   window.medGo = function(sub) {
     document.querySelectorAll('#ch-medical .am-subscreen').forEach(function(s){ s.classList.remove('active'); });
     document.getElementById('med-' + sub).classList.add('active');

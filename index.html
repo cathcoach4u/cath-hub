@@ -1034,15 +1034,11 @@
   }
 
   async function amScanReceipt(base64, mediaType) {
-    var key = amGetApiKey();
-    if (!key) { alert('Please set your API key in the AI Assistant first.'); return null; }
     var resp = await fetch('https://ziwycymhaqghdiznyhhw.supabase.co/functions/v1/claude-proxy', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer sb_publishable_n-xBxzqdGySGh-JWHuI40g_Hb5Qf8mg',
-        'x-api-key': key,
-        'anthropic-version': '2023-06-01'
+        'Authorization': 'Bearer sb_publishable_n-xBxzqdGySGh-JWHuI40g_Hb5Qf8mg'
       },
       body: JSON.stringify({
         model: 'claude-haiku-4-5',
@@ -2287,18 +2283,18 @@
     function afGetKey() { return localStorage.getItem('cathHub_apiKey') || ''; }
 
     function afInit() {
-      var key = afGetKey();
+      // API key is now stored server-side in Supabase Secrets
       var setup = document.getElementById('ai-float-setup');
       var body  = document.getElementById('ai-float-body');
-      if (key) { setup.style.setProperty('display', 'none', 'important'); body.style.setProperty('display', 'flex', 'important'); }
-      else      { setup.style.setProperty('display', 'flex', 'important'); body.style.setProperty('display', 'none', 'important'); }
+      setup.style.setProperty('display', 'none', 'important');
+      body.style.setProperty('display', 'flex', 'important');
     }
 
     window.aiFToggle = function() {
       var panel = document.getElementById('ai-float-panel');
       afOpen = !afOpen;
       panel.classList.toggle('hidden', !afOpen);
-      if (afOpen) { afInit(); afRender(); if (afGetKey()) setTimeout(function(){ document.getElementById('ai-float-input').focus(); }, 120); }
+      if (afOpen) { afInit(); afRender(); setTimeout(function(){ document.getElementById('ai-float-input').focus(); }, 120); }
     };
 
     window.aiFSaveKey = function() {
@@ -2331,7 +2327,6 @@
     };
 
     async function afCallAPI(messages) {
-      var key = afGetKey();
       // Load memories into system prompt
       var memoryContext = afSystemPrompt;
       try {
@@ -2346,9 +2341,7 @@
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer sb_publishable_n-xBxzqdGySGh-JWHuI40g_Hb5Qf8mg',
-          'x-api-key': key,
-          'anthropic-version': '2023-06-01'
+          'Authorization': 'Bearer sb_publishable_n-xBxzqdGySGh-JWHuI40g_Hb5Qf8mg'
         },
         body: JSON.stringify({
           model: 'claude-haiku-4-5',

@@ -29,6 +29,7 @@
   #cathHub .nav-item.active { background: rgba(59,130,246,0.2) !important; border-right: 3px solid #3b82f6 !important; color: white !important; }
   #cathHub .nav-item .icon { font-size: 16px !important; width: 22px !important; text-align: center !important; }
   #cathHub .sidebar-footer { margin-top: auto !important; padding: 14px 20px !important; font-size: 10px !important; color: rgba(255,255,255,0.3) !important; }
+  #cathHub .mobile-nav-select { display: none !important; }
 
   /* ───── MAIN ───── */
   #cathHub .main { flex: 1 !important; overflow-y: auto !important; padding: 32px !important; }
@@ -447,7 +448,7 @@
   <div class="sidebar">
     <h1>&#x1F3E0; Cath Hub</h1>
     <!-- Mobile: dropdown nav -->
-    <select class="mobile-nav-select" onchange="if(this.value){chNav(this.value);}" style="display:none !important;">
+    <select class="mobile-nav-select" onchange="if(this.value){chNav(this.value);}">
       <option value="home">&#x1F4CA; Dashboard</option>
       <option value="aislemate">&#x1F6D2; AisleMate</option>
       <option value="workout">&#x1F4AA; Workout Log</option>

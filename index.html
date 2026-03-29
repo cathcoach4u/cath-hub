@@ -688,15 +688,14 @@
     <div class="screen" id="ch-medical">
       <h2>&#x1FA7A; Medical</h2>
 
-      <!-- HOME: Dropdown navigation -->
+      <!-- HOME: Button navigation -->
       <div class="am-subscreen active" id="med-home">
-        <select id="med-nav-select" onchange="if(this.value){medGo(this.value);this.value='';}" style="width:100% !important;padding:14px 16px !important;font-size:16px !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;background:white !important;color:#1e293b !important;appearance:auto !important;-webkit-appearance:listbox !important;margin-bottom:8px !important;">
-          <option value="">Select a section...</option>
-          <option value="documents">&#x1F4C1; Documents — Upload &amp; file</option>
-          <option value="contacts">&#x1F4DE; Contacts — Doctors &amp; clinics</option>
-          <option value="medications">&#x1F48A; Medications — Current plan</option>
-          <option value="mentalhealth">&#x1F9E0; Mental Health — Sessions</option>
-        </select>
+        <div style="display:flex !important;flex-direction:column !important;gap:10px !important;">
+          <button class="am-btn" onclick="medGo('documents')" style="width:100% !important;padding:14px 16px !important;font-size:15px !important;text-align:left !important;background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;color:#1e293b !important;display:flex !important;align-items:center !important;gap:10px !important;">&#x1F4C1; Documents <span style="margin-left:auto !important;color:#94a3b8 !important;font-size:12px !important;">Upload &amp; file &rarr;</span></button>
+          <button class="am-btn" onclick="medGo('contacts')" style="width:100% !important;padding:14px 16px !important;font-size:15px !important;text-align:left !important;background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;color:#1e293b !important;display:flex !important;align-items:center !important;gap:10px !important;">&#x1F4DE; Contacts <span style="margin-left:auto !important;color:#94a3b8 !important;font-size:12px !important;">Doctors &amp; clinics &rarr;</span></button>
+          <button class="am-btn" onclick="medGo('medications')" style="width:100% !important;padding:14px 16px !important;font-size:15px !important;text-align:left !important;background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;color:#1e293b !important;display:flex !important;align-items:center !important;gap:10px !important;">&#x1F48A; Medications <span style="margin-left:auto !important;color:#94a3b8 !important;font-size:12px !important;">Current plan &rarr;</span></button>
+          <button class="am-btn" onclick="medGo('mentalhealth')" style="width:100% !important;padding:14px 16px !important;font-size:15px !important;text-align:left !important;background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;color:#1e293b !important;display:flex !important;align-items:center !important;gap:10px !important;">&#x1F9E0; Mental Health <span style="margin-left:auto !important;color:#94a3b8 !important;font-size:12px !important;">Sessions &rarr;</span></button>
+        </div>
       </div>
 
       <!-- SUB: Documents -->

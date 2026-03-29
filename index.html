@@ -421,12 +421,15 @@
         <div id="dash-shopping-list"></div>
       </div>
 
-      <div class="dash-section">
-        <div style="display:flex !important;justify-content:space-between !important;align-items:center !important;margin-bottom:12px !important;">
-          <h3 style="margin-bottom:0 !important;">&#x1F9FE; Recent Receipts</h3>
-          <span style="font-size:12px !important;color:#3b82f6 !important;cursor:pointer !important;" onclick="chNav('aislemate',document.querySelectorAll('#cathHub .nav-item')[1]);setTimeout(function(){amGo('receipts')},100)">Upload &rarr;</span>
+      <div class="dash-section" style="cursor:pointer !important;" onclick="chNav('aislemate',document.querySelectorAll('#cathHub .nav-item')[1]);setTimeout(function(){amGo('receipts')},100)">
+        <div style="display:flex !important;align-items:center !important;gap:10px !important;">
+          <span style="font-size:24px !important;">&#x1F9FE;</span>
+          <div>
+            <div style="font-size:14px !important;font-weight:600 !important;">Upload Receipt</div>
+            <div style="font-size:12px !important;color:#94a3b8 !important;">Scan items &amp; prices automatically</div>
+          </div>
+          <span style="margin-left:auto !important;color:#3b82f6 !important;font-size:14px !important;">&rarr;</span>
         </div>
-        <div id="dash-receipts"></div>
       </div>
 
     </div>
@@ -867,24 +870,6 @@
       container.innerHTML = html;
     }
 
-    // Recent receipts
-    var { data: receipts } = await sb.from('receipts').select('store, receipt_date, total, receipt_items(id)').order('uploaded_at', { ascending: false }).limit(5);
-    var rcContainer = document.getElementById('dash-receipts');
-    if (!receipts || !receipts.length) {
-      rcContainer.innerHTML = '<div style="text-align:center;padding:12px;color:#94a3b8;font-size:13px;">No receipts yet</div>';
-    } else {
-      var html = '';
-      receipts.forEach(function(r) {
-        var itemCount = r.receipt_items ? r.receipt_items.length : 0;
-        var storeCls = (r.store || '').toLowerCase().replace(/[^a-z]/g,'');
-        html += '<div class="dash-receipt-row">';
-        html += '<span class="mi-store ' + storeCls + '">' + esc(r.store || 'Unknown') + '</span>';
-        html += '<span style="flex:1 !important;color:#64748b !important;font-size:12px !important;">' + esc(r.receipt_date || '') + ' &middot; ' + itemCount + ' items</span>';
-        if (r.total) html += '<span style="font-weight:600 !important;font-size:13px !important;">$' + Number(r.total).toFixed(2) + '</span>';
-        html += '</div>';
-      });
-      rcContainer.innerHTML = html;
-    }
 
   }
 

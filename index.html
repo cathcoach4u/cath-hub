@@ -898,14 +898,9 @@
   };
 
   window.amRefresh = async function(){
-    if (!confirm('Clear the entire shopping list and start fresh?')) return;
-    var { data } = await sb.from('shopping_items').select('id');
-    if (data && data.length) {
-      for (var i = 0; i < data.length; i++) {
-        await sb.from('shopping_items').delete().eq('id', data[i].id);
-      }
-    }
+    await sb.from('shopping_items').delete().gte('id', '00000000-0000-0000-0000-000000000000');
     amLoadItems();
+    dashLoad();
   };
 
   window.amSelectUser = function(el){ document.querySelectorAll('#cathHub .user-option').forEach(function(u){ u.classList.remove('selected'); }); el.classList.add('selected'); };

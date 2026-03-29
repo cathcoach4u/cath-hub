@@ -364,6 +364,7 @@
   #cathHub .mi-store.coles { background: #fce7f3 !important; color: #9d174d !important; }
   #cathHub .mi-store.bakersdelight { background: #fff7ed !important; color: #9a3412 !important; }
   #cathHub .mi-store.belrosepharmacy { background: #ede9fe !important; color: #5b21b6 !important; }
+  #cathHub .mi-store.amazon { background: #fff7ed !important; color: #9a3412 !important; }
 
   /* ───── RESPONSIVE ───── */
   @media (max-width: 900px) { #cathHub .dash-grid { grid-template-columns: 1fr 1fr !important; } }
@@ -447,6 +448,7 @@
           <div class="am-tile" style="padding:14px 10px !important;" onclick="amGo('receipts')"><div class="tile-icon" style="font-size:20px !important;">&#x1F9FE;</div><div class="tile-title" style="font-size:12px !important;">Receipts</div><div class="tile-sub" style="font-size:10px !important;">Scan &amp; import</div></div>
           <div class="am-tile" style="padding:14px 10px !important;" onclick="amGo('spending')"><div class="tile-icon" style="font-size:20px !important;">&#x1F4B0;</div><div class="tile-title" style="font-size:12px !important;">Spending</div><div class="tile-sub" style="font-size:10px !important;">By store</div></div>
           <div class="am-tile" style="padding:14px 10px !important;" onclick="amGo('history')"><div class="tile-icon" style="font-size:20px !important;">&#x1F4C5;</div><div class="tile-title" style="font-size:12px !important;">History</div><div class="tile-sub" style="font-size:10px !important;">Past purchases</div></div>
+          <div class="am-tile" style="padding:14px 10px !important;" onclick="amGo('meals')"><div class="tile-icon" style="font-size:20px !important;">&#x1F372;</div><div class="tile-title" style="font-size:12px !important;">Meal Plan</div><div class="tile-sub" style="font-size:10px !important;">Weekly meals</div></div>
         </div>
         <div class="am-progress">
           <span class="prog-label">Shopping Progress</span>
@@ -516,6 +518,13 @@
         <h4 style="font-size:15px !important;font-weight:600 !important;margin-top:24px !important;margin-bottom:12px !important;">Receipt History</h4>
         <div id="am-receipt-list"></div>
       </div>
+      <div class="am-subscreen" id="am-meals">
+        <button class="am-back" onclick="amGo('home')">&#x2190; Back</button>
+        <h3 style="font-size:18px !important;font-weight:700 !important;margin-bottom:8px !important;">&#x1F372; Meal Plan</h3>
+        <p style="color:#64748b !important;font-size:13px !important;margin-bottom:16px !important;">Plan meals for the week. Tap a day to add or edit.</p>
+        <div id="am-meals-container"></div>
+        <button class="am-btn" onclick="amAskAIMeals()" style="margin-top:12px !important;width:100% !important;justify-content:center !important;background:#7c3aed !important;color:white !important;padding:10px !important;font-weight:600 !important;border-radius:8px !important;">&#x1F916; Ask AI to plan meals</button>
+      </div>
       <div class="am-subscreen" id="am-spending">
         <button class="am-back" onclick="amGo('home')">&#x2190; Back</button>
         <h3 style="font-size:18px !important;font-weight:700 !important;margin-bottom:16px !important;">&#x1F4B0; Spending</h3>
@@ -567,6 +576,19 @@
           </div>
           <div style="font-size:12px !important;color:#94a3b8 !important;background:#f8fafc !important;border-radius:6px !important;padding:10px !important;">
             Dog &amp; cat food purchased here.
+          </div>
+        </div>
+
+        <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:16px !important;margin-bottom:12px !important;">
+          <div style="display:flex !important;align-items:center !important;gap:8px !important;margin-bottom:10px !important;">
+            <span style="font-size:10px !important;padding:2px 6px !important;border-radius:4px !important;font-weight:600 !important;text-transform:uppercase !important;background:#fff7ed !important;color:#9a3412 !important;">AMAZON</span>
+            <span style="font-size:14px !important;font-weight:600 !important;">Amazon</span>
+          </div>
+          <div style="font-size:13px !important;color:#64748b !important;margin-bottom:8px !important;">
+            <a href="https://www.amazon.com.au" target="_blank" style="color:#3b82f6 !important;">amazon.com.au &rarr;</a>
+          </div>
+          <div style="font-size:12px !important;color:#94a3b8 !important;background:#f8fafc !important;border-radius:6px !important;padding:10px !important;">
+            Bandaids, protein powder &amp; other useful items.
           </div>
         </div>
 
@@ -639,7 +661,6 @@
       <div class="med-section">
         <div class="med-section-header">
           <h3>&#x1F48A; Current Medication Plan</h3>
-          <span style="font-size:12px !important;color:#94a3b8 !important;">Source: Notion</span>
         </div>
         <table class="med-table">
           <thead>
@@ -1495,6 +1516,52 @@
     container.innerHTML = html;
   }
 
+  // ─── MEAL PLANNING ───
+  var DAYS = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+
+  async function amLoadMeals() {
+    var { data } = await sb.from('meal_plans').select('*').order('day_index');
+    var container = document.getElementById('am-meals-container');
+    var meals = {};
+    (data || []).forEach(function(m) { meals[m.day_index] = m; });
+    var html = '';
+    DAYS.forEach(function(day, i) {
+      var meal = meals[i];
+      html += '<div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:8px !important;padding:12px !important;margin-bottom:8px !important;">';
+      html += '<div style="display:flex !important;justify-content:space-between !important;align-items:center !important;">';
+      html += '<strong style="font-size:13px !important;">' + day + '</strong>';
+      if (meal && meal.who_home) html += '<span style="font-size:11px !important;color:#94a3b8 !important;">' + esc(meal.who_home) + '</span>';
+      html += '</div>';
+      if (meal && meal.meal) {
+        html += '<div style="font-size:13px !important;margin-top:6px !important;">' + esc(meal.meal) + '</div>';
+        if (meal.notes) html += '<div style="font-size:11px !important;color:#94a3b8 !important;margin-top:2px !important;">' + esc(meal.notes) + '</div>';
+      } else {
+        html += '<div style="font-size:12px !important;color:#94a3b8 !important;margin-top:4px !important;font-style:italic !important;">No meal planned</div>';
+      }
+      html += '</div>';
+    });
+    container.innerHTML = html;
+  }
+
+  window.amAskAIMeals = function() {
+    // Open AI and pre-fill with meal planning prompt
+    window.aiFToggle();
+    setTimeout(function() {
+      var input = document.getElementById('ai-float-input');
+      if (input) {
+        input.value = 'Help me plan meals for this week. Ask me who will be home each night.';
+        input.focus();
+      }
+    }, 300);
+  };
+
+  // Load meals when navigating
+  var origAmGo = window.amGo;
+  window.amGo = function(sub) {
+    origAmGo(sub);
+    if (sub === 'meals') amLoadMeals();
+  };
+
   // Drag and drop for receipts
   (function(){
     var zone = document.getElementById('am-receipt-drop');
@@ -1760,8 +1827,13 @@
     var { data: meds } = await sb.from('medications').select('*');
     var medsBody = document.getElementById('med-meds-body');
     medsBody.innerHTML = '';
+    var dailyMeds = ['Vyvanse', 'Valtrex', 'Levothyroxine'];
     (meds || []).forEach(function(m) {
-      medsBody.innerHTML += '<tr><td style="font-weight:600 !important;">' + esc(m.name) + '</td><td>' + esc(m.dose) + '</td><td>' + esc(m.schedule) + '</td><td class="meds-reason">' + esc(m.purpose) + '</td></tr>';
+      var isDaily = dailyMeds.some(function(d) { return m.name.toLowerCase().indexOf(d.toLowerCase()) !== -1; });
+      var freqBadge = isDaily
+        ? '<span style="font-size:10px !important;background:#dbeafe !important;color:#1d4ed8 !important;padding:2px 6px !important;border-radius:4px !important;font-weight:600 !important;">DAILY</span> '
+        : '<span style="font-size:10px !important;background:#fef3c7 !important;color:#92400e !important;padding:2px 6px !important;border-radius:4px !important;font-weight:600 !important;">WEEKLY</span> ';
+      medsBody.innerHTML += '<tr><td style="font-weight:600 !important;">' + freqBadge + esc(m.name) + '</td><td>' + esc(m.dose) + '</td><td>' + esc(m.schedule) + '</td><td class="meds-reason">' + esc(m.purpose) + '</td></tr>';
     });
   })();
 
@@ -1968,7 +2040,7 @@
   (function(){
     var afMessages = [];
     var afOpen = false;
-    var afSystemPrompt = "You are Cath's warm and practical personal AI assistant built into Cath Hub. Cath is an Australian woman who runs a coaching business called Coach4U. She uses Cath Hub to manage her personal life — shopping, workouts, medical appointments, and habits. Be friendly, concise, and helpful. Use Australian English. Currency is AUD ($). Dates in DD/MM/YYYY format. Don't be overly formal.\n\nYou have tools to manage the Supabase database:\n- search_items: search the master item list\n- update_items: update category, store, family_member, or name for items matching a filter\n- delete_items: delete items matching a filter\n- add_item: add a new item to the master list\n\nValid categories: Fruit & Veg, Meat, Dairy, Pantry, Frozen, Drinks, Household, Other\nValid family members: Cath, Andrew, Sarah, Russell (or empty string to unassign)\n\nWhen Cath asks to change items, use the tools. Always confirm what you did after.\n\nWhen Cath asks to add something to the shopping list (e.g. 'add milk'):\n1. First use search_items to check if it's in the master list\n2. If found, use add_to_shopping_list with the master list details (name, category, store). Just do it, don't ask for confirmation.\n3. If not found, add it as a quick-add with category Other and no store (leave store empty).\n4. NEVER offer to add items to the master list. The master list is populated automatically from scanned receipts — receipts are the source of truth.\n\nYou can also:\n- View the shopping list and remove items\n- Repeat last shop (add all items from most recent receipt)\n- Add all of a family member's items at once (e.g. 'add all of Sarah's items')\n- Add multiple items in one go (e.g. 'add milk, bread and bananas')\n- Suggest items Cath might be low on based on purchase frequency\n- Show spending summaries by store or date range\n- Compare prices for items across stores and dates\n\nBe proactive — if Cath asks to add items, handle it. If she asks about spending, use the tools. Always be concise in responses.";
+    var afSystemPrompt = "You are Cath's warm and practical personal AI assistant built into Cath Hub. Cath is an Australian woman who runs a coaching business called Coach4U. She uses Cath Hub to manage her personal life — shopping, workouts, medical appointments, and habits. Be friendly, concise, and helpful. Use Australian English. Currency is AUD ($). Dates in DD/MM/YYYY format. Don't be overly formal.\n\nYou have tools to manage the Supabase database:\n- search_items: search the master item list\n- update_items: update category, store, family_member, or name for items matching a filter\n- delete_items: delete items matching a filter\n- add_item: add a new item to the master list\n\nValid categories: Fruit & Veg, Meat, Dairy, Pantry, Frozen, Drinks, Household, Other\nValid family members: Cath, Andrew, Sarah, Russell (or empty string to unassign)\n\nWhen Cath asks to change items, use the tools. Always confirm what you did after.\n\nWhen Cath asks to add something to the shopping list (e.g. 'add milk'):\n1. First use search_items to check if it's in the master list\n2. If found, use add_to_shopping_list with the master list details (name, category, store). Just do it, don't ask for confirmation.\n3. If not found, add it as a quick-add with category Other and no store (leave store empty).\n4. NEVER offer to add items to the master list. The master list is populated automatically from scanned receipts — receipts are the source of truth.\n\nYou can also:\n- View the shopping list and remove items\n- Repeat last shop (add all items from most recent receipt)\n- Add all of a family member's items at once (e.g. 'add all of Sarah's items')\n- Add multiple items in one go (e.g. 'add milk, bread and bananas')\n- Suggest items Cath might be low on based on purchase frequency\n- Show spending summaries by store or date range\n- Compare prices for items across stores and dates\n\nBe proactive — if Cath asks to add items, handle it. If she asks about spending, use the tools. Always be concise in responses.\n\nMEAL PLANNING:\nCath's family: Cath, Andrew, Sarah, Russell. When asked to plan meals:\n1. Ask who will be home each night (Mon-Sun)\n2. Suggest practical meals based on what's in the master list and what they usually buy\n3. Use set_meal_plan tool to save each day's meal\n4. Offer to add any missing ingredients to the shopping list\n\nSHOPPING LIST REVIEW:\nWhen Cath says the list is finalised or asks you to review it, use view_shopping_list to check it, then analyse and suggest anything obviously missing (e.g. if there's pasta but no sauce, meat but no veggies, breakfast items missing, etc). Be practical not pushy.";
 
     var afTools = [
       {
@@ -2140,6 +2212,30 @@
         name: 'list_memories',
         description: 'List all saved memories. Use when Cath asks "what do you remember?" or "show me your memories".',
         input_schema: { type: 'object', properties: {} }
+      },
+      {
+        name: 'set_meal_plan',
+        description: 'Set the meal for a specific day of the week. Days: 0=Monday, 1=Tuesday, 2=Wednesday, 3=Thursday, 4=Friday, 5=Saturday, 6=Sunday.',
+        input_schema: {
+          type: 'object',
+          properties: {
+            day_index: { type: 'number', description: 'Day index 0-6 (Monday=0, Sunday=6)' },
+            meal: { type: 'string', description: 'The meal description' },
+            who_home: { type: 'string', description: 'Who will be home (e.g. "Cath, Andrew, Sarah")' },
+            notes: { type: 'string', description: 'Any notes (optional)' }
+          },
+          required: ['day_index', 'meal']
+        }
+      },
+      {
+        name: 'get_meal_plan',
+        description: 'Get the current meal plan for the week.',
+        input_schema: { type: 'object', properties: {} }
+      },
+      {
+        name: 'analyse_shopping_list',
+        description: 'Review the current shopping list and suggest missing items. Use when Cath says the list is done, finalised, or asks to review/check it.',
+        input_schema: { type: 'object', properties: {} }
       }
     ];
 
@@ -2289,6 +2385,33 @@
       if (toolName === 'list_memories') {
         var { data } = await sb.from('ai_memory').select('*').order('created_at');
         return JSON.stringify(data || []);
+      }
+      if (toolName === 'set_meal_plan') {
+        var row = { day_index: toolInput.day_index, meal: toolInput.meal, who_home: toolInput.who_home || '', notes: toolInput.notes || '' };
+        await sb.from('meal_plans').delete().eq('day_index', toolInput.day_index);
+        await sb.from('meal_plans').insert(row);
+        var days = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+        return JSON.stringify({ set: days[toolInput.day_index], meal: toolInput.meal });
+      }
+      if (toolName === 'get_meal_plan') {
+        var { data } = await sb.from('meal_plans').select('*').order('day_index');
+        var days = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+        var plan = days.map(function(d, i) {
+          var m = (data || []).find(function(r) { return r.day_index === i; });
+          return { day: d, meal: m ? m.meal : 'Not planned', who_home: m ? m.who_home : '' };
+        });
+        return JSON.stringify(plan);
+      }
+      if (toolName === 'analyse_shopping_list') {
+        var { data: shopItems } = await sb.from('shopping_items').select('name, category');
+        var { data: masterItems } = await sb.from('master_items').select('name, category');
+        var categories = {};
+        (shopItems || []).forEach(function(i) {
+          var cat = i.category || 'Other';
+          if (!categories[cat]) categories[cat] = [];
+          categories[cat].push(i.name);
+        });
+        return JSON.stringify({ current_list: categories, total_items: (shopItems || []).length, master_list_size: (masterItems || []).length });
       }
       return '{"error":"Unknown tool"}';
     }

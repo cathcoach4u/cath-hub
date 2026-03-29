@@ -1036,7 +1036,7 @@
   async function amScanReceipt(base64, mediaType) {
     var key = amGetApiKey();
     if (!key) { alert('Please set your API key in the AI Assistant first.'); return null; }
-    var resp = await fetch('/api/claude', {
+    var resp = await fetch('https://ziwycymhaqghdiznyhhw.supabase.co/functions/v1/claude-proxy', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -2342,7 +2342,7 @@
           memoryContext += '\nUse these memories to give more personalised, relevant responses.';
         }
       } catch(e) {}
-      var resp = await fetch('/api/claude', {
+      var resp = await fetch('https://ziwycymhaqghdiznyhhw.supabase.co/functions/v1/claude-proxy', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

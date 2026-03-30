@@ -892,9 +892,13 @@
 
       <!-- Missed yesterday alert (dismissable) -->
       <div id="hab-missed-alert" style="display:none !important;background:#fef2f2 !important;border:1px solid #fecaca !important;border-radius:10px !important;padding:12px 16px !important;margin-bottom:12px !important;font-size:13px !important;color:#991b1b !important;">
-        <div style="display:flex !important;align-items:center !important;gap:8px !important;">
+        <div style="display:flex !important;align-items:center !important;gap:8px !important;margin-bottom:6px !important;">
           <div style="flex:1 !important;" id="hab-missed-text"></div>
           <button onclick="habDismissMissed()" style="background:none !important;border:none !important;color:#991b1b !important;font-size:18px !important;cursor:pointer !important;padding:0 4px !important;line-height:1 !important;">&times;</button>
+        </div>
+        <div style="display:flex !important;gap:8px !important;">
+          <button onclick="habBackfillYesterday()" style="flex:1 !important;padding:8px 12px !important;font-size:12px !important;background:#10b981 !important;color:white !important;border:none !important;border-radius:6px !important;cursor:pointer !important;">I took them — mark as done</button>
+          <button onclick="habDismissMissed()" style="padding:8px 12px !important;font-size:12px !important;background:#94a3b8 !important;color:white !important;border:none !important;border-radius:6px !important;cursor:pointer !important;">Dismiss</button>
         </div>
       </div>
 
@@ -2369,6 +2373,24 @@
       var yk = yesterday.getFullYear()+'-'+String(yesterday.getMonth()+1).padStart(2,'0')+'-'+String(yesterday.getDate()).padStart(2,'0');
       localStorage.setItem('cathHub_missedDismissed_' + yk, '1');
       document.getElementById('hab-missed-alert').style.display = 'none';
+    };
+
+    window.habBackfillYesterday = async function() {
+      var yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
+      var yk = yesterday.getFullYear()+'-'+String(yesterday.getMonth()+1).padStart(2,'0')+'-'+String(yesterday.getDate()).padStart(2,'0');
+      var { data: allHabs } = await sb.from('habit_meds').select('*').eq('freq', 'daily');
+      var { data: medsList } = await sb.from('medications').select('name');
+      var medNames = (medsList || []).map(function(m){ return m.name.toLowerCase(); });
+      var dailyMeds = (allHabs || []).filter(function(h){ return medNames.indexOf(h.name.toLowerCase()) !== -1; });
+      var { data: existing } = await sb.from('habit_logs').select('med_id').eq('date', yk);
+      var doneIds = (existing || []).map(function(l){ return l.med_id; });
+      for (var i = 0; i < dailyMeds.length; i++) {
+        if (doneIds.indexOf(dailyMeds[i].id) === -1) {
+          await sb.from('habit_logs').insert({ med_id: dailyMeds[i].id, date: yk });
+        }
+      }
+      document.getElementById('hab-missed-alert').style.display = 'none';
+      habRender();
     };
 
     window.habShowSection = function(section) {

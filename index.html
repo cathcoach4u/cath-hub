@@ -67,6 +67,11 @@
   #cathHub .am-progress-fill { height: 100% !important; background: #10b981 !important; border-radius: 3px !important; transition: width 0.3s !important; }
   #cathHub .am-subscreen { display: none !important; }
   #cathHub .am-subscreen.active { display: block !important; }
+  #cathHub .qr-card { background: white !important; border: 1px solid #e2e8f0 !important; border-radius: 14px !important; padding: 32px 24px !important; text-align: center !important; max-width: 400px !important; margin: 0 auto !important; }
+  #cathHub .qr-card h4 { font-size: 16px !important; font-weight: 700 !important; margin-bottom: 4px !important; }
+  #cathHub .qr-card p { font-size: 13px !important; color: #64748b !important; margin-bottom: 20px !important; }
+  #cathHub .qr-card canvas { border-radius: 8px !important; }
+  #cathHub .qr-url { font-size: 11px !important; color: #94a3b8 !important; word-break: break-all !important; margin-top: 16px !important; background: #f8fafc !important; padding: 8px 12px !important; border-radius: 6px !important; }
   #cathHub .am-header-bar { background: white !important; border: 1px solid #e2e8f0 !important; border-radius: 14px !important; padding: 18px 24px !important; display: flex !important; align-items: center !important; justify-content: space-between !important; margin-bottom: 8px !important; flex-wrap: wrap !important; gap: 10px !important; }
   #cathHub .am-header-bar h3 { font-size: 18px !important; font-weight: 700 !important; }
   #cathHub .am-header-actions { display: flex !important; align-items: center !important; gap: 12px !important; }
@@ -449,6 +454,7 @@
           <div class="am-tile" style="padding:14px 10px !important;" onclick="amGo('spending')"><div class="tile-icon" style="font-size:20px !important;">&#x1F4B0;</div><div class="tile-title" style="font-size:12px !important;">Spending</div><div class="tile-sub" style="font-size:10px !important;">By store</div></div>
           <div class="am-tile" style="padding:14px 10px !important;" onclick="amGo('history')"><div class="tile-icon" style="font-size:20px !important;">&#x1F4C5;</div><div class="tile-title" style="font-size:12px !important;">History</div><div class="tile-sub" style="font-size:10px !important;">Past purchases</div></div>
           <div class="am-tile" style="padding:14px 10px !important;" onclick="amGo('meals')"><div class="tile-icon" style="font-size:20px !important;">&#x1F372;</div><div class="tile-title" style="font-size:12px !important;">Meal Plan</div><div class="tile-sub" style="font-size:10px !important;">Weekly meals</div></div>
+          <div class="am-tile" style="padding:14px 10px !important;" onclick="amGo('qrcode')"><div class="tile-icon" style="font-size:20px !important;">&#x1F4F1;</div><div class="tile-title" style="font-size:12px !important;">QR Code</div><div class="tile-sub" style="font-size:10px !important;">Share list</div></div>
         </div>
         <div class="am-progress">
           <span class="prog-label">Shopping Progress</span>
@@ -592,6 +598,17 @@
           </div>
         </div>
 
+      </div>
+      <div class="am-subscreen" id="am-qrcode">
+        <button class="am-back" onclick="amGo('home')">&#x2190; Back</button>
+        <h3 style="font-size:18px !important;font-weight:700 !important;margin-bottom:16px !important;">&#x1F4F1; QR Code &mdash; Shopping List</h3>
+        <div class="qr-card">
+          <h4>Scan to open Shopping List</h4>
+          <p>Anyone who scans this QR code will go straight to the weekly shopping list.</p>
+          <div id="qr-canvas-wrap"></div>
+          <div class="qr-url" id="qr-url-display"></div>
+          <button class="am-btn primary" onclick="amCopyQRLink()" style="margin-top:14px !important;width:100% !important;justify-content:center !important;">&#x1F4CB; Copy Link</button>
+        </div>
       </div>
       <div class="am-subscreen" id="am-settings">
         <button class="am-back" onclick="amGo('home')">&#x2190; Back</button>
@@ -781,6 +798,7 @@
 </div><!-- /cathHub -->
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.4/build/qrcode.min.js"></script>
 <script>
 (function(){
   var SB_URL = 'https://ziwycymhaqghdiznyhhw.supabase.co';
@@ -791,6 +809,11 @@
   function showApp() {
     document.getElementById('cathHub-login').style.setProperty('display', 'none', 'important');
     document.getElementById('cathHub').style.setProperty('display', 'flex', 'important');
+    var params = new URLSearchParams(window.location.search);
+    if (params.get('view') === 'shopping-list') {
+      chNav('aislemate', document.querySelectorAll('#cathHub .nav-item')[1]);
+      setTimeout(function(){ amGo('weekly'); }, 100);
+    }
   }
   function showLogin() {
     document.getElementById('cathHub-login').style.setProperty('display', 'flex', 'important');
@@ -908,6 +931,27 @@
     if (sub === 'select') amLoadMaster();
     if (sub === 'spending') amLoadSpending();
     if (sub === 'history') amLoadHistory();
+    if (sub === 'qrcode') amGenerateQR();
+  };
+
+  window.amGenerateQR = function() {
+    var wrap = document.getElementById('qr-canvas-wrap');
+    var urlDisplay = document.getElementById('qr-url-display');
+    var qrUrl = window.location.origin + window.location.pathname + '?view=shopping-list';
+    urlDisplay.textContent = qrUrl;
+    wrap.innerHTML = '';
+    var canvas = document.createElement('canvas');
+    wrap.appendChild(canvas);
+    if (window.QRCode) {
+      QRCode.toCanvas(canvas, qrUrl, { width: 256, margin: 2, color: { dark: '#1e293b', light: '#ffffff' } });
+    }
+  };
+
+  window.amCopyQRLink = function() {
+    var qrUrl = window.location.origin + window.location.pathname + '?view=shopping-list';
+    navigator.clipboard.writeText(qrUrl).then(function() {
+      alert('Link copied to clipboard!');
+    });
   };
 
   window.amCheck = async function(el) {

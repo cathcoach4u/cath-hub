@@ -496,11 +496,20 @@
         </div>
       </div>
 
+      <div class="dash-section">
+        <div style="display:flex !important;justify-content:space-between !important;align-items:center !important;margin-bottom:12px !important;">
+          <h3 style="margin-bottom:0 !important;">&#x1F9F9; Fiona's List</h3>
+          <span style="font-size:12px !important;color:#3b82f6 !important;cursor:pointer !important;" onclick="chNav('hometab',document.querySelectorAll('#cathHub .nav-item')[7]);setTimeout(function(){hmGo('fiona')},100)">View all &rarr;</span>
+        </div>
+        <div id="dash-fiona-summary">
+          <div style="font-size:13px !important;color:#94a3b8 !important;">Loading...</div>
+        </div>
+      </div>
 
       <div class="dash-section">
         <div style="display:flex !important;justify-content:space-between !important;align-items:center !important;margin-bottom:12px !important;">
           <h3 style="margin-bottom:0 !important;">&#x1F6D2; Shopping List</h3>
-          <span style="font-size:12px !important;color:#3b82f6 !important;cursor:pointer !important;" onclick="chNav('aislemate',document.querySelectorAll('#cathHub .nav-item')[1]);setTimeout(function(){amGo('weekly')},100)">View all &rarr;</span>
+          <span style="font-size:12px !important;color:#3b82f6 !important;cursor:pointer !important;" onclick="chNav('aislemate',document.querySelectorAll('#cathHub .nav-item')[2]);setTimeout(function(){amGo('weekly')},100)">View all &rarr;</span>
         </div>
         <div id="dash-shopping-list"></div>
       </div>
@@ -508,7 +517,7 @@
       <div class="dash-section">
         <div style="display:flex !important;justify-content:space-between !important;align-items:center !important;margin-bottom:12px !important;">
           <h3 style="margin-bottom:0 !important;">&#x1F9E0; Mental Health Summary</h3>
-          <span style="font-size:12px !important;color:#3b82f6 !important;cursor:pointer !important;" onclick="chNav('medical',document.querySelectorAll('#cathHub .nav-item')[3]);setTimeout(function(){medGo('mentalhealth')},100)">View all &rarr;</span>
+          <span style="font-size:12px !important;color:#3b82f6 !important;cursor:pointer !important;" onclick="chNav('medical',document.querySelectorAll('#cathHub .nav-item')[4]);setTimeout(function(){medGo('mentalhealth')},100)">View all &rarr;</span>
         </div>
         <div class="dash-mh-summary" id="dash-mh-summary">
           <div class="dash-mh-stat"><div class="mh-num" id="dash-mh-total">-</div><div class="mh-label">Total Sessions</div></div>
@@ -523,16 +532,6 @@
           <span style="font-size:12px !important;color:#3b82f6 !important;cursor:pointer !important;" onclick="chNav('medical');setTimeout(function(){medGo('tracking')},100)">View all &rarr;</span>
         </div>
         <div id="dash-med-today">
-          <div style="font-size:13px !important;color:#94a3b8 !important;">Loading...</div>
-        </div>
-      </div>
-
-      <div class="dash-section">
-        <div style="display:flex !important;justify-content:space-between !important;align-items:center !important;margin-bottom:12px !important;">
-          <h3 style="margin-bottom:0 !important;">&#x1F9F9; Fiona's List</h3>
-          <span style="font-size:12px !important;color:#3b82f6 !important;cursor:pointer !important;" onclick="chNav('hometab',document.querySelectorAll('#cathHub .nav-item')[6]);setTimeout(function(){hmGo('fiona')},100)">View all &rarr;</span>
-        </div>
-        <div id="dash-fiona-summary">
           <div style="font-size:13px !important;color:#94a3b8 !important;">Loading...</div>
         </div>
       </div>
@@ -570,6 +569,15 @@
           <span class="prog-label">Shopping Progress</span>
           <div class="am-progress-bar"><div class="am-progress-fill" id="am-prog-fill" style="width:0%"></div></div>
           <span class="prog-count" id="am-prog-text">0 of 0 checked</span>
+        </div>
+        <!-- Quick Access Link -->
+        <div style="margin-top:16px !important;padding:14px 16px !important;background:#f8fafc !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;">
+          <div style="font-size:12px !important;font-weight:600 !important;color:#64748b !important;margin-bottom:6px !important;">&#x1F517; Quick Access Link</div>
+          <div style="font-size:12px !important;color:#94a3b8 !important;margin-bottom:8px !important;">Open shopping list without logging in. Use in Apple Shortcuts to quick-add items.</div>
+          <div style="display:flex !important;gap:8px !important;align-items:center !important;">
+            <input type="text" readonly id="am-quick-link" style="flex:1 !important;padding:8px 10px !important;border:1px solid #e2e8f0 !important;border-radius:6px !important;font-size:11px !important;color:#475569 !important;background:white !important;">
+            <button class="am-btn" onclick="(function(){var i=document.getElementById('am-quick-link');i.select();document.execCommand('copy');alert('Link copied!')})()" style="padding:8px 12px !important;font-size:12px !important;white-space:nowrap !important;">Copy</button>
+          </div>
         </div>
       </div>
       <div class="am-subscreen" id="am-weekly">
@@ -751,6 +759,16 @@
       <div id="wl-session-list"></div>
 
       <button class="wl-add-btn" onclick="wlOpenPicker()">&#x2795; Add Exercise</button>
+
+      <!-- Quick Access Link -->
+      <div style="margin-top:16px !important;padding:14px 16px !important;background:#f8fafc !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;">
+        <div style="font-size:12px !important;font-weight:600 !important;color:#64748b !important;margin-bottom:6px !important;">&#x1F517; Quick Access Link</div>
+        <div style="font-size:12px !important;color:#94a3b8 !important;margin-bottom:8px !important;">Open workout log without logging in</div>
+        <div style="display:flex !important;gap:8px !important;align-items:center !important;">
+          <input type="text" readonly id="wl-quick-link" style="flex:1 !important;padding:8px 10px !important;border:1px solid #e2e8f0 !important;border-radius:6px !important;font-size:11px !important;color:#475569 !important;background:white !important;">
+          <button class="am-btn" onclick="(function(){var i=document.getElementById('wl-quick-link');i.select();document.execCommand('copy');alert('Link copied!')})()" style="padding:8px 12px !important;font-size:12px !important;white-space:nowrap !important;">Copy</button>
+        </div>
+      </div>
     </div>
 
     <!-- ═══ MEDICAL ═══ -->
@@ -1304,6 +1322,10 @@
     document.querySelectorAll('#cathHub .nav-item').forEach(function(n){ n.classList.remove('active'); });
     document.getElementById('ch-' + name).classList.add('active');
     if (btn) btn.classList.add('active');
+    // Scroll to top when switching tabs
+    var mainEl = document.querySelector('#cathHub .main');
+    if (mainEl) mainEl.scrollTop = 0;
+    window.scrollTo(0, 0);
     // Sync mobile dropdown
     var mobileSelect = document.querySelector('#cathHub .mobile-nav-select');
     if (mobileSelect) mobileSelect.value = name;
@@ -1466,6 +1488,13 @@
 
   // Load dashboard on startup
   dashLoad();
+
+  // Set quick access links
+  var baseUrl = window.location.origin + '/cath-hub/';
+  var amLink = document.getElementById('am-quick-link');
+  if (amLink) amLink.value = baseUrl + 'shopping.html?add=Item+name';
+  var wlLink = document.getElementById('wl-quick-link');
+  if (wlLink) wlLink.value = baseUrl + 'workout.html';
 
   // ─── AISLEMATE (from Supabase) ───
   var CAT_ICONS = {'Fruit & Veg':'&#x1F96C;','Meat':'&#x1F969;','Dairy':'&#x1F95B;','Pantry':'&#x1F96B;','Frozen':'&#x2744;','Drinks':'&#x1F964;','Household':'&#x1F9F9;','Other':'&#x1F4E6;'};

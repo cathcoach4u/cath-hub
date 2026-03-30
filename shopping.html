@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shopping List - Cath Hub</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: #f0f4f8; color: #1e293b; min-height: 100vh; }
+
+  .header { background: #1e293b; color: white; padding: 16px 20px; display: flex; align-items: center; gap: 10px; }
+  .header h1 { font-size: 18px; font-weight: 700; }
+
+  .container { max-width: 500px; margin: 0 auto; padding: 16px; }
+
+  .add-bar { display: flex; gap: 8px; margin-bottom: 16px; }
+  .add-input { flex: 1; padding: 12px 14px; border: 1px solid #e2e8f0; border-radius: 10px; font-size: 15px; outline: none; font-family: inherit; background: white; }
+  .add-input:focus { border-color: #3b82f6; }
+  .add-btn { padding: 12px 20px; background: #3b82f6; color: white; border: none; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; font-family: inherit; white-space: nowrap; }
+  .add-btn:hover { background: #2563eb; }
+  .add-btn:disabled { opacity: 0.5; cursor: default; }
+
+  .suggest-list { background: white; border: 1px solid #e2e8f0; border-radius: 10px; margin-top: -12px; margin-bottom: 12px; overflow: hidden; display: none; }
+  .suggest-list.visible { display: block; }
+  .suggest-item { padding: 10px 14px; font-size: 14px; cursor: pointer; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; }
+  .suggest-item:last-child { border-bottom: none; }
+  .suggest-item:hover { background: #f8fafc; }
+  .suggest-meta { font-size: 11px; color: #94a3b8; }
+
+  .progress { background: white; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px 16px; margin-bottom: 16px; display: flex; align-items: center; gap: 12px; }
+  .progress-label { font-size: 13px; font-weight: 600; white-space: nowrap; }
+  .progress-bar { flex: 1; height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden; }
+  .progress-fill { height: 100%; background: #10b981; border-radius: 3px; transition: width 0.3s; }
+  .progress-count { font-size: 12px; color: #64748b; white-space: nowrap; }
+
+  .cat-group { background: white; border: 1px solid #e2e8f0; border-radius: 12px; margin-bottom: 12px; overflow: hidden; }
+  .cat-header { padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; font-weight: 700; font-size: 13px; }
+  .cat-count { font-size: 11px; color: #94a3b8; font-weight: 500; }
+
+  .shop-item { padding: 12px 16px; border-top: 1px solid #f1f5f9; display: flex; align-items: center; gap: 10px; }
+  .shop-check { width: 24px; height: 24px; border: 2px solid #cbd5e1; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.15s; background: white; -webkit-tap-highlight-color: transparent; }
+  .shop-check:hover { border-color: #10b981; }
+  .shop-check.done { background: #10b981; border-color: #10b981; }
+  .shop-check.done::after { content: '\2713'; color: white; font-size: 13px; font-weight: 700; }
+  .shop-name { font-size: 14px; font-weight: 500; flex: 1; }
+  .shop-name.checked { text-decoration: line-through; color: #94a3b8; }
+  .store-tag { font-size: 10px; padding: 2px 8px; border-radius: 99px; font-weight: 600; }
+  .store-tag.aldi { background: #eff6ff; color: #2563eb; }
+  .store-tag.woolworths { background: #f0fdf4; color: #16a34a; }
+  .store-tag.coles { background: #fef2f2; color: #ef4444; }
+  .store-tag.bakersdelight { background: #fefce8; color: #ca8a04; }
+  .store-tag.belrosepharmacy { background: #ede9fe; color: #5b21b6; }
+
+  .empty { text-align: center; padding: 40px 20px; color: #94a3b8; font-size: 14px; }
+
+  .loading { text-align: center; padding: 40px; color: #94a3b8; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <span style="font-size: 22px;">&#x1F6D2;</span>
+  <h1>Shopping List</h1>
+</div>
+
+<div class="container">
+  <div class="add-bar">
+    <input class="add-input" id="add-input" type="text" placeholder="Add an item..." autocomplete="off">
+    <button class="add-btn" id="add-btn" onclick="addItem()">Add</button>
+  </div>
+  <div class="suggest-list" id="suggest-list"></div>
+
+  <div class="progress">
+    <span class="progress-label">Progress</span>
+    <div class="progress-bar"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
+    <span class="progress-count" id="prog-count">0 / 0</span>
+  </div>
+
+  <div id="items-container"><div class="loading">Loading...</div></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+(function(){
+  var SB_URL = 'https://ziwycymhaqghdiznyhhw.supabase.co';
+  var SB_KEY = 'sb_publishable_n-xBxzqdGySGh-JWHuI40g_Hb5Qf8mg';
+  var sb = window.supabase.createClient(SB_URL, SB_KEY);
+
+  var CAT_ICONS = {'Fruit & Veg':'\u{1F96C}','Meat':'\u{1F969}','Dairy':'\u{1F95B}','Pantry':'\u{1F96B}','Frozen':'\u{2744}','Drinks':'\u{1F964}','Household':'\u{1F9F9}','Other':'\u{1F4E6}'};
+  var CAT_ORDER = ['Fruit & Veg','Meat','Dairy','Pantry','Frozen','Drinks','Household','Other'];
+
+  function esc(s) { var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+
+  // ─── LOAD ITEMS ───
+  async function loadItems() {
+    var { data: items } = await sb.from('shopping_items').select('*').order('created_at');
+    items = items || [];
+    var { data: masterData } = await sb.from('master_items').select('name');
+    var masterNames = (masterData || []).map(function(m) { return m.name.toLowerCase(); });
+    var container = document.getElementById('items-container');
+
+    var unchecked = items.filter(function(i) { return !i.checked; });
+    var checked = items.filter(function(i) { return i.checked; });
+
+    var html = '';
+
+    if (unchecked.length) {
+      var cats = {};
+      unchecked.forEach(function(item) {
+        var isMaster = masterNames.indexOf(item.name.toLowerCase()) !== -1;
+        var cat = isMaster ? (item.category || 'Other') : '\u270F Quick Adds';
+        if (!cats[cat]) cats[cat] = [];
+        cats[cat].push(item);
+      });
+      CAT_ORDER.forEach(function(cat) {
+        if (!cats[cat] || !cats[cat].length) return;
+        var catIcon = CAT_ICONS[cat] || '\u{1F96B}';
+        html += '<div class="cat-group">';
+        html += '<div class="cat-header"><span>' + catIcon + ' ' + esc(cat) + '</span><span class="cat-count">' + cats[cat].length + '</span></div>';
+        cats[cat].forEach(function(item) { html += renderItem(item); });
+        html += '</div>';
+      });
+      if (cats['\u270F Quick Adds'] && cats['\u270F Quick Adds'].length) {
+        html += '<div class="cat-group" style="border-left:3px solid #f59e0b;">';
+        html += '<div class="cat-header"><span>\u270F Quick Adds</span><span class="cat-count">' + cats['\u270F Quick Adds'].length + '</span></div>';
+        cats['\u270F Quick Adds'].forEach(function(item) { html += renderItem(item); });
+        html += '</div>';
+      }
+    }
+
+    if (checked.length) {
+      html += '<div class="cat-group" style="margin-top:8px;opacity:0.6;">';
+      html += '<div class="cat-header"><span>\u2705 Collected</span><span class="cat-count">' + checked.length + '</span></div>';
+      checked.forEach(function(item) { html += renderItem(item); });
+      html += '</div>';
+    }
+
+    if (!items.length) html = '<div class="empty">No items yet \u2014 type above to add something!</div>';
+    container.innerHTML = html;
+
+    var total = items.length, done = checked.length;
+    var pct = total ? Math.round((done / total) * 100) : 0;
+    document.getElementById('prog-fill').style.width = pct + '%';
+    document.getElementById('prog-count').textContent = done + ' / ' + total;
+  }
+
+  function renderItem(item) {
+    var storeCls = (item.store || '').toLowerCase().replace(/[^a-z]/g, '');
+    var h = '<div class="shop-item" data-id="' + item.id + '" style="' + (item.checked ? 'opacity:0.5;' : '') + '">';
+    h += '<div class="shop-check' + (item.checked ? ' done' : '') + '" onclick="toggleItem(this)"></div>';
+    h += '<span class="shop-name' + (item.checked ? ' checked' : '') + '">' + esc(item.name) + '</span>';
+    if (item.store) h += '<span class="store-tag ' + storeCls + '">' + esc(item.store) + '</span>';
+    h += '</div>';
+    return h;
+  }
+
+  // ─── TOGGLE CHECK ───
+  window.toggleItem = async function(el) {
+    var id = el.closest('.shop-item').dataset.id;
+    var isDone = !el.classList.contains('done');
+    await sb.from('shopping_items').update({ checked: isDone }).eq('id', id);
+    loadItems();
+  };
+
+  // ─── ADD ITEM ───
+  window.addItem = async function() {
+    var input = document.getElementById('add-input');
+    var name = input.value.trim();
+    if (!name) return;
+    document.getElementById('add-btn').disabled = true;
+
+    // Check if it's in master list for auto category/store
+    var { data: match } = await sb.from('master_items').select('*').ilike('name', name).limit(1);
+    var row = { name: name, category: 'Other', store: 'Other' };
+    if (match && match.length) {
+      row.name = match[0].name;
+      row.category = match[0].category || 'Other';
+      row.store = match[0].store || 'Other';
+    }
+
+    await sb.from('shopping_items').insert(row);
+    input.value = '';
+    document.getElementById('suggest-list').classList.remove('visible');
+    document.getElementById('add-btn').disabled = false;
+    loadItems();
+    input.focus();
+  };
+
+  // ─── SUGGESTIONS ───
+  var suggestTimeout;
+  document.getElementById('add-input').addEventListener('input', function() {
+    var query = this.value.trim();
+    clearTimeout(suggestTimeout);
+    var list = document.getElementById('suggest-list');
+    if (!query || query.length < 2) { list.classList.remove('visible'); list.innerHTML = ''; return; }
+    suggestTimeout = setTimeout(async function() {
+      var { data } = await sb.from('master_items').select('*').ilike('name', '%' + query + '%').limit(6);
+      if (!data || !data.length) { list.classList.remove('visible'); list.innerHTML = ''; return; }
+      var html = '';
+      data.forEach(function(item) {
+        html += '<div class="suggest-item" onclick="pickSuggestion(\'' + esc(item.name).replace(/'/g, "\\'") + '\')">';
+        html += '<span>' + esc(item.name) + '</span>';
+        html += '<span class="suggest-meta">' + esc(item.store || '') + (item.last_price ? ' \u00B7 $' + Number(item.last_price).toFixed(2) : '') + '</span>';
+        html += '</div>';
+      });
+      list.innerHTML = html;
+      list.classList.add('visible');
+    }, 200);
+  });
+
+  document.getElementById('add-input').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') addItem();
+  });
+
+  window.pickSuggestion = function(name) {
+    document.getElementById('add-input').value = name;
+    document.getElementById('suggest-list').classList.remove('visible');
+    addItem();
+  };
+
+  // Close suggestions on tap outside
+  document.addEventListener('click', function(e) {
+    if (!e.target.closest('.add-bar') && !e.target.closest('.suggest-list')) {
+      document.getElementById('suggest-list').classList.remove('visible');
+    }
+  });
+
+  // ─── INIT ───
+  loadItems();
+
+  // Auto-refresh every 30 seconds so family members see each other's additions
+  setInterval(loadItems, 30000);
+})();
+</script>
+</body>
+</html>

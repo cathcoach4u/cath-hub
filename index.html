@@ -710,7 +710,7 @@
         <h3 style="font-size:18px !important;font-weight:700 !important;margin-bottom:16px !important;">&#x1F4F1; QR Code &mdash; Shopping List</h3>
         <div class="qr-card">
           <h4>Scan to open Shopping List</h4>
-          <p>Anyone who scans this QR code will go straight to the weekly shopping list.</p>
+          <p>Scan this QR code to open a simple shopping list tool &mdash; add items, check them off, no login needed.</p>
           <div id="qr-canvas-wrap"></div>
           <div class="qr-url" id="qr-url-display"></div>
           <button class="am-btn primary" onclick="amCopyQRLink()" style="margin-top:14px !important;width:100% !important;justify-content:center !important;">&#x1F4CB; Copy Link</button>
@@ -1245,7 +1245,8 @@
   window.amGenerateQR = function() {
     var wrap = document.getElementById('qr-canvas-wrap');
     var urlDisplay = document.getElementById('qr-url-display');
-    var qrUrl = window.location.origin + window.location.pathname + '?view=shopping-list';
+    var basePath = window.location.pathname.replace(/\/[^\/]*$/, '/');
+    var qrUrl = window.location.origin + basePath + 'shopping.html';
     urlDisplay.textContent = qrUrl;
     wrap.innerHTML = '';
     var canvas = document.createElement('canvas');
@@ -1256,7 +1257,8 @@
   };
 
   window.amCopyQRLink = function() {
-    var qrUrl = window.location.origin + window.location.pathname + '?view=shopping-list';
+    var basePath = window.location.pathname.replace(/\/[^\/]*$/, '/');
+    var qrUrl = window.location.origin + basePath + 'shopping.html';
     navigator.clipboard.writeText(qrUrl).then(function() {
       alert('Link copied to clipboard!');
     });

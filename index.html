@@ -1100,7 +1100,7 @@
 </div><!-- /cathHub -->
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.4/build/qrcode.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
 <script>
 (function(){
   var SB_URL = 'https://ziwycymhaqghdiznyhhw.supabase.co';
@@ -1250,8 +1250,8 @@
     wrap.innerHTML = '';
     var canvas = document.createElement('canvas');
     wrap.appendChild(canvas);
-    if (window.QRCode) {
-      QRCode.toCanvas(canvas, qrUrl, { width: 256, margin: 2, color: { dark: '#1e293b', light: '#ffffff' } });
+    if (window.QRious) {
+      new QRious({ element: canvas, value: qrUrl, size: 256, foreground: '#1e293b', background: '#ffffff', level: 'M' });
     }
   };
 

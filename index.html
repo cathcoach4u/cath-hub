@@ -3,8 +3,20 @@
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Cath Hub</title></head>
 <body>
 <style>
+  /* ───── LOGIN SCREEN ───── */
+  #cathHub-login { display: flex; align-items: center; justify-content: center; min-height: 100vh; background: #1e293b; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
+  #cathHub-login .login-card { background: white; border-radius: 16px; padding: 40px; width: 100%; max-width: 380px; text-align: center; box-shadow: 0 8px 30px rgba(0,0,0,0.3); }
+  #cathHub-login .login-icon { font-size: 48px; margin-bottom: 8px; }
+  #cathHub-login h1 { font-size: 24px; font-weight: 700; color: #1e293b; margin: 0 0 4px 0; }
+  #cathHub-login .login-sub { font-size: 13px; color: #94a3b8; margin-bottom: 24px; }
+  #cathHub-login input { width: 100%; padding: 12px 14px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; margin-bottom: 12px; box-sizing: border-box; font-family: inherit; outline: none; }
+  #cathHub-login input:focus { border-color: #3b82f6; }
+  #cathHub-login .login-btn { width: 100%; padding: 12px; background: #3b82f6; color: white; border: none; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; font-family: inherit; }
+  #cathHub-login .login-btn:hover { background: #2563eb; }
+  #cathHub-login .login-error { color: #ef4444; font-size: 13px; margin-bottom: 12px; display: none; }
+
   #cathHub, #cathHub * { margin: 0 !important; padding: 0 !important; box-sizing: border-box !important; line-height: 1.5 !important; }
-  #cathHub { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif !important; background: #f0f4f8 !important; color: #1e293b !important; display: flex !important; min-height: 100vh !important; }
+  #cathHub { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif !important; background: #f0f4f8 !important; color: #1e293b !important; display: none; min-height: 100vh !important; }
   #cathHub a, #cathHub a:hover, #cathHub a:visited { text-decoration: none !important; color: inherit !important; }
   #cathHub button { border: none !important; background: none !important; cursor: pointer !important; font-family: inherit !important; }
   #cathHub input { font-family: inherit !important; }
@@ -25,12 +37,18 @@
   #cathHub .screen.active { display: block !important; }
 
   /* ───── DASHBOARD ───── */
-  #cathHub .dash-grid { display: grid !important; grid-template-columns: repeat(3, 1fr) !important; gap: 24px !important; }
-  #cathHub .dash-card { background: white !important; border: 1px solid #e2e8f0 !important; border-radius: 16px !important; padding: 32px !important; cursor: pointer !important; transition: all 0.2s !important; text-align: center !important; }
-  #cathHub .dash-card:hover { border-color: #3b82f6 !important; box-shadow: 0 4px 12px rgba(59,130,246,0.15) !important; transform: translateY(-2px) !important; }
-  #cathHub .dash-card .card-icon { font-size: 48px !important; margin-bottom: 16px !important; }
-  #cathHub .dash-card .card-title { font-size: 20px !important; font-weight: 700 !important; margin-bottom: 6px !important; }
-  #cathHub .dash-card .card-desc { font-size: 13px !important; color: #64748b !important; }
+  #cathHub .dash-grid { display: grid !important; grid-template-columns: repeat(4, 1fr) !important; gap: 12px !important; margin-bottom: 20px !important; }
+  #cathHub .dash-card { background: white !important; border: 1px solid #e2e8f0 !important; border-radius: 10px !important; padding: 14px !important; cursor: pointer !important; transition: all 0.2s !important; text-align: center !important; }
+  #cathHub .dash-card:hover { border-color: #3b82f6 !important; box-shadow: 0 2px 8px rgba(59,130,246,0.1) !important; }
+  #cathHub .dash-card .card-icon { font-size: 24px !important; margin-bottom: 6px !important; }
+  #cathHub .dash-card .card-title { font-size: 13px !important; font-weight: 700 !important; margin-bottom: 2px !important; }
+  #cathHub .dash-card .card-desc { font-size: 11px !important; color: #64748b !important; }
+  #cathHub .dash-section { background: white !important; border: 1px solid #e2e8f0 !important; border-radius: 10px !important; padding: 16px !important; margin-bottom: 16px !important; }
+  #cathHub .dash-section h3 { font-size: 14px !important; font-weight: 700 !important; margin-bottom: 12px !important; }
+  #cathHub .dash-shop-item { display: flex !important; align-items: center !important; gap: 8px !important; padding: 6px 0 !important; font-size: 13px !important; border-bottom: 1px solid #f1f5f9 !important; }
+  #cathHub .dash-shop-item:last-child { border-bottom: none !important; }
+  #cathHub .dash-receipt-row { display: flex !important; align-items: center !important; gap: 8px !important; padding: 8px 0 !important; font-size: 13px !important; border-bottom: 1px solid #f1f5f9 !important; }
+  #cathHub .dash-receipt-row:last-child { border-bottom: none !important; }
 
   /* ───── AISLEMATE ───── */
   #cathHub .am-search { width: 100% !important; padding: 14px 18px 14px 44px !important; border: 1px solid #e2e8f0 !important; border-radius: 12px !important; font-size: 14px !important; background: white url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' fill='%2394a3b8' viewBox='0 0 24 24'%3E%3Cpath d='M15.5 14h-.79l-.28-.27A6.47 6.47 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z'/%3E%3C/svg%3E") 14px center no-repeat !important; outline: none !important; margin-bottom: 24px !important; }
@@ -323,10 +341,35 @@
   #cathHub .ai-float-send:hover { background: #6d28d9 !important; }
   #cathHub .ai-float-send:disabled { background: #e2e8f0 !important; cursor: default !important; }
 
+  /* ───── ADD ITEM FORM ───── */
+  #cathHub .am-add-form { display: flex !important; gap: 8px !important; align-items: center !important; margin-top: 12px !important; flex-wrap: wrap !important; }
+  #cathHub .am-add-input { flex: 1 !important; min-width: 140px !important; padding: 8px 12px !important; border: 1px solid #e2e8f0 !important; border-radius: 8px !important; font-size: 13px !important; }
+  #cathHub .am-add-select { padding: 8px !important; border: 1px solid #e2e8f0 !important; border-radius: 8px !important; font-size: 13px !important; background: white !important; }
+  #cathHub .am-suggest-list { position: absolute !important; top: 100% !important; left: 0 !important; right: 0 !important; background: white !important; border: 1px solid #e2e8f0 !important; border-radius: 8px !important; max-height: 180px !important; overflow-y: auto !important; z-index: 10 !important; box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important; }
+  #cathHub .am-suggest-item { padding: 8px 12px !important; cursor: pointer !important; font-size: 13px !important; border-bottom: 1px solid #f1f5f9 !important; }
+  #cathHub .am-suggest-item:hover { background: #f0f4f8 !important; }
+  #cathHub .am-suggest-item .suggest-price { font-size: 11px !important; color: #94a3b8 !important; }
+  #cathHub .receipt-card { background: white !important; border: 1px solid #e2e8f0 !important; border-radius: 12px !important; padding: 16px !important; margin-bottom: 12px !important; }
+  #cathHub .receipt-header { display: flex !important; align-items: center !important; gap: 10px !important; cursor: pointer !important; }
+  #cathHub .receipt-items { margin-top: 12px !important; border-top: 1px solid #f1f5f9 !important; padding-top: 12px !important; }
+  #cathHub .receipt-item-row { display: flex !important; justify-content: space-between !important; padding: 4px 0 !important; font-size: 13px !important; }
+  #cathHub .receipt-item-row .ri-price { font-weight: 600 !important; color: #1e293b !important; }
+  #cathHub .master-item { display: flex !important; align-items: center !important; gap: 10px !important; padding: 10px 12px !important; background: white !important; border: 1px solid #e2e8f0 !important; border-radius: 8px !important; margin-bottom: 6px !important; cursor: pointer !important; transition: border-color 0.15s !important; }
+  #cathHub .master-item.selected { border-color: #3b82f6 !important; background: #eff6ff !important; }
+  #cathHub .master-item .mi-check { width: 20px !important; height: 20px !important; border: 2px solid #cbd5e1 !important; border-radius: 4px !important; flex-shrink: 0 !important; display: flex !important; align-items: center !important; justify-content: center !important; font-size: 12px !important; }
+  #cathHub .master-item.selected .mi-check { background: #3b82f6 !important; border-color: #3b82f6 !important; color: white !important; }
+  #cathHub .mi-store { font-size: 10px !important; padding: 2px 6px !important; border-radius: 4px !important; font-weight: 600 !important; text-transform: uppercase !important; }
+  #cathHub .mi-store.aldi { background: #fef3c7 !important; color: #92400e !important; }
+  #cathHub .mi-store.woolworths { background: #dcfce7 !important; color: #166534 !important; }
+  #cathHub .mi-store.coles { background: #fce7f3 !important; color: #9d174d !important; }
+  #cathHub .mi-store.bakersdelight { background: #fff7ed !important; color: #9a3412 !important; }
+  #cathHub .mi-store.belrosepharmacy { background: #ede9fe !important; color: #5b21b6 !important; }
+  #cathHub .mi-store.amazon { background: #fff7ed !important; color: #9a3412 !important; }
+
   /* ───── RESPONSIVE ───── */
   @media (max-width: 900px) { #cathHub .dash-grid { grid-template-columns: 1fr 1fr !important; } }
   @media (max-width: 600px) { #cathHub .dash-grid { grid-template-columns: 1fr !important; } }
-  @media (max-width: 768px) {
+  @media (max-width: 480px) {
     #cathHub { flex-direction: column !important; }
     #cathHub .sidebar { width: 100% !important; flex-direction: row !important; padding: 12px !important; align-items: center !important; flex-wrap: wrap !important; min-height: auto !important; }
     #cathHub .sidebar h1 { margin-bottom: 0 !important; margin-right: 16px !important; }
@@ -340,6 +383,20 @@
   }
 </style>
 
+<div id="cathHub-login">
+  <div class="login-card">
+    <div class="login-icon">&#x1F3E0;</div>
+    <h1>Cath Hub</h1>
+    <div class="login-sub">Sign in to continue</div>
+    <div class="login-error" id="login-error"></div>
+    <input type="email" id="login-email" placeholder="Email" onkeydown="if(event.key==='Enter')document.getElementById('login-password').focus()">
+    <input type="password" id="login-password" placeholder="Password" onkeydown="if(event.key==='Enter')cathLogin()">
+    <button class="login-btn" onclick="cathLogin()">Sign In</button>
+    <div id="login-reset-msg" style="display:none;color:#22c55e;font-size:13px;margin-top:12px;"></div>
+    <a href="#" onclick="cathForgotPassword();return false" style="display:block;margin-top:16px;font-size:13px;color:#94a3b8;text-decoration:underline;">Forgot password?</a>
+  </div>
+</div>
+
 <div id="cathHub">
   <div class="sidebar">
     <h1>&#x1F3E0; Cath Hub</h1>
@@ -347,48 +404,35 @@
     <button class="nav-item" onclick="chNav('aislemate',this)"><span class="icon">&#x1F6D2;</span> AisleMate</button>
     <button class="nav-item" onclick="chNav('workout',this)"><span class="icon">&#x1F4AA;</span> Workout Log</button>
     <button class="nav-item" onclick="chNav('medical',this)"><span class="icon">&#x1FA7A;</span> Medical</button>
-    <button class="nav-item" onclick="chNav('ai',this)"><span class="icon">&#x1F916;</span> AI Assistant</button>
     <button class="nav-item" onclick="chNav('habits',this)"><span class="icon">&#x1F48A;</span> Habits</button>
-    <div class="sidebar-footer">Cath Hub v2.0</div>
+    <div class="sidebar-footer"><span>Cath Hub v2.0</span><br><a href="#" onclick="cathLogout();return false" style="color:rgba(255,255,255,0.5) !important;font-size:10px !important;text-decoration:underline !important;">Sign out</a></div>
   </div>
 
   <div class="main">
 
     <!-- ═══ DASHBOARD ═══ -->
     <div class="screen active" id="ch-home">
-      <h2>Dashboard</h2>
-      <div class="dash-grid">
-        <div class="dash-card" onclick="chNav('aislemate',document.querySelectorAll('#cathHub .nav-item')[1])">
-          <div class="card-icon">&#x1F6D2;</div>
-          <div class="card-title">AisleMate</div>
-          <div class="card-desc">Family shopping list &middot; Plan, shop &amp; track</div>
+      <h2 style="font-size:20px !important;margin-bottom:16px !important;">Dashboard</h2>
+
+      <div class="dash-section">
+        <div style="display:flex !important;justify-content:space-between !important;align-items:center !important;margin-bottom:12px !important;">
+          <h3 style="margin-bottom:0 !important;">&#x1F6D2; Shopping List</h3>
+          <span style="font-size:12px !important;color:#3b82f6 !important;cursor:pointer !important;" onclick="chNav('aislemate',document.querySelectorAll('#cathHub .nav-item')[1]);setTimeout(function(){amGo('weekly')},100)">View all &rarr;</span>
         </div>
-        <div class="dash-card" onclick="chNav('workout',document.querySelectorAll('#cathHub .nav-item')[2])">
-          <div class="card-icon">&#x1F4AA;</div>
-          <div class="card-title">Workout Log</div>
-          <div class="card-desc">Log today&rsquo;s session &middot; Track sets &amp; weights</div>
-        </div>
-        <div class="dash-card" onclick="chNav('medical',document.querySelectorAll('#cathHub .nav-item')[3])">
-          <div class="card-icon">&#x1FA7A;</div>
-          <div class="card-title">Medical</div>
-          <div class="card-desc">Sessions &middot; Plans &amp; appointments</div>
-        </div>
-        <a class="dash-card" href="https://netorgft4053847.sharepoint.com/:f:/s/bakerpersonal-CathPersonal/IgCDEd3wyYcYTYLNHVmG3vY6AXpwBUtDz6wYy2dclwLsNcw?e=vtEb6w" target="_blank" rel="noopener" style="text-decoration:none !important;">
-          <div class="card-icon">&#x1F4C1;</div>
-          <div class="card-title">Cath Personal</div>
-          <div class="card-desc">SharePoint folder &rarr;</div>
-        </a>
-        <div class="dash-card" onclick="chNav('ai',document.querySelectorAll('#cathHub .nav-item')[4])">
-          <div class="card-icon">&#x1F916;</div>
-          <div class="card-title">AI Assistant</div>
-          <div class="card-desc">Chat with your personal AI</div>
-        </div>
-        <div class="dash-card" onclick="chNav('habits',document.querySelectorAll('#cathHub .nav-item')[5])">
-          <div class="card-icon">&#x1F48A;</div>
-          <div class="card-title">Habits</div>
-          <div class="card-desc">Track daily &amp; weekly medications</div>
+        <div id="dash-shopping-list"></div>
+      </div>
+
+      <div class="dash-section" style="cursor:pointer !important;" onclick="chNav('aislemate',document.querySelectorAll('#cathHub .nav-item')[1]);setTimeout(function(){amGo('receipts')},100)">
+        <div style="display:flex !important;align-items:center !important;gap:10px !important;">
+          <span style="font-size:24px !important;">&#x1F9FE;</span>
+          <div>
+            <div style="font-size:14px !important;font-weight:600 !important;">Upload Receipt</div>
+            <div style="font-size:12px !important;color:#94a3b8 !important;">Scan items &amp; prices automatically</div>
+          </div>
+          <span style="margin-left:auto !important;color:#3b82f6 !important;font-size:14px !important;">&rarr;</span>
         </div>
       </div>
+
     </div>
 
     <!-- ═══ AISLEMATE ═══ -->
@@ -396,11 +440,15 @@
       <h2>&#x1F6D2; AisleMate</h2>
       <div class="am-subscreen active" id="am-home">
         <input class="am-search" type="text" placeholder="Search items to add...">
-        <div class="am-grid">
-          <div class="am-tile" onclick="amGo('weekly')"><div class="tile-icon">&#x1F6D2;</div><div class="tile-title">Start Weekly Shop</div><div class="tile-sub" id="am-shop-count">0/0 checked</div></div>
-          <div class="am-tile" onclick="amGo('select')"><div class="tile-icon">&#x2705;</div><div class="tile-title">Select Items</div><div class="tile-sub" id="am-avail-count">100 available</div></div>
-          <div class="am-tile" onclick="amGo('family')"><div class="tile-icon">&#x1F46A;</div><div class="tile-title">Family Items</div><div class="tile-sub">4 members</div></div>
-          <div class="am-tile highlight" onclick="amGo('receipts')"><div class="tile-icon">&#x1F9FE;</div><div class="tile-title">Receipts</div><div class="tile-sub">Scan &amp; import</div></div>
+        <div class="am-grid" style="grid-template-columns: repeat(4, 1fr) !important; gap:8px !important;">
+          <div class="am-tile" style="padding:14px 10px !important;" onclick="amGo('weekly')"><div class="tile-icon" style="font-size:20px !important;">&#x1F6D2;</div><div class="tile-title" style="font-size:12px !important;">Weekly Shop</div><div class="tile-sub" id="am-shop-count" style="font-size:10px !important;">0/0</div></div>
+          <div class="am-tile" style="padding:14px 10px !important;" onclick="amGo('select')"><div class="tile-icon" style="font-size:20px !important;">&#x2705;</div><div class="tile-title" style="font-size:12px !important;">Master List</div><div class="tile-sub" id="am-avail-count" style="font-size:10px !important;">100 items</div></div>
+          <div class="am-tile" style="padding:14px 10px !important;" onclick="amGo('shopinfo')"><div class="tile-icon" style="font-size:20px !important;">&#x2139;</div><div class="tile-title" style="font-size:12px !important;">Shop Info</div><div class="tile-sub" style="font-size:10px !important;">Links &amp; rewards</div></div>
+          <div class="am-tile" style="padding:14px 10px !important;" onclick="amGo('family')"><div class="tile-icon" style="font-size:20px !important;">&#x1F46A;</div><div class="tile-title" style="font-size:12px !important;">Family Items</div><div class="tile-sub" style="font-size:10px !important;">4 members</div></div>
+          <div class="am-tile" style="padding:14px 10px !important;" onclick="amGo('receipts')"><div class="tile-icon" style="font-size:20px !important;">&#x1F9FE;</div><div class="tile-title" style="font-size:12px !important;">Receipts</div><div class="tile-sub" style="font-size:10px !important;">Scan &amp; import</div></div>
+          <div class="am-tile" style="padding:14px 10px !important;" onclick="amGo('spending')"><div class="tile-icon" style="font-size:20px !important;">&#x1F4B0;</div><div class="tile-title" style="font-size:12px !important;">Spending</div><div class="tile-sub" style="font-size:10px !important;">By store</div></div>
+          <div class="am-tile" style="padding:14px 10px !important;" onclick="amGo('history')"><div class="tile-icon" style="font-size:20px !important;">&#x1F4C5;</div><div class="tile-title" style="font-size:12px !important;">History</div><div class="tile-sub" style="font-size:10px !important;">Past purchases</div></div>
+          <div class="am-tile" style="padding:14px 10px !important;" onclick="amGo('meals')"><div class="tile-icon" style="font-size:20px !important;">&#x1F372;</div><div class="tile-title" style="font-size:12px !important;">Meal Plan</div><div class="tile-sub" style="font-size:10px !important;">Weekly meals</div></div>
         </div>
         <div class="am-progress">
           <span class="prog-label">Shopping Progress</span>
@@ -419,23 +467,132 @@
           </div>
         </div>
         <div class="list-progress"><div class="list-progress-fill" id="am-wk-prog" style="width:0%"></div></div>
-        <div class="cat-group">
-          <div class="cat-header"><span>&#x1F96B; Pantry</span><span class="cat-count" id="am-pantry-count">0/2</span></div>
-          <div class="shop-item"><div class="shop-check" onclick="amCheck(this)"></div><span class="shop-name">Honey</span><span class="store-tag aldi">Aldi</span><button class="shop-delete" onclick="this.closest('.shop-item').remove();amUpdateCounts()">&#x1F5D1;</button></div>
-          <div class="shop-item"><div class="shop-check" onclick="amCheck(this)"></div><span class="shop-name">Napisan 4kg</span><span class="store-tag aldi">Aldi</span><button class="shop-delete" onclick="this.closest('.shop-item').remove();amUpdateCounts()">&#x1F5D1;</button></div>
+        <div id="am-items-container"></div>
+        <div class="am-add-form" id="am-add-form" style="display:flex !important;margin-top:12px !important;">
+          <div style="position:relative !important;flex:1 !important;min-width:140px !important;">
+            <input class="am-add-input" id="am-add-name" type="text" placeholder="Type any item or pick from suggestions..." autocomplete="off" oninput="amSuggest(this.value)" onkeydown="if(event.key==='Enter')amAddItem()">
+            <div class="am-suggest-list" id="am-suggest-list"></div>
+          </div>
+          <select class="am-add-select" id="am-add-cat">
+            <option>Pantry</option><option>Dairy</option><option>Meat</option><option>Fruit &amp; Veg</option><option>Frozen</option><option>Drinks</option><option>Household</option><option>Other</option>
+          </select>
+          <select class="am-add-select" id="am-add-store">
+            <option>Aldi</option><option>Woolworths</option><option>Coles</option><option>Bakers Delight</option><option>Belrose Pharmacy</option><option>Other</option>
+          </select>
+          <button class="am-btn" onclick="amAddItem()" style="background:#3b82f6 !important;color:white !important;">Add</button>
         </div>
+        <button class="am-btn" id="am-repeat-btn" onclick="amRepeatLastShop()" style="margin-top:12px !important;width:100% !important;justify-content:center !important;background:#fef3c7 !important;border:1px solid #f59e0b !important;color:#92400e !important;padding:10px !important;font-weight:600 !important;">&#x1F504; Same as Last Week</button>
       </div>
       <div class="am-subscreen" id="am-family">
         <button class="am-back" onclick="amGo('home')">&#x2190; Back</button>
         <h3 style="margin-bottom:8px !important;font-size:18px !important;font-weight:700 !important;">&#x1F46A; Family Items</h3>
-        <p style="color:#64748b !important;font-size:13px !important;margin-bottom:20px !important;">Quick access to each family member's regular items.</p>
-        <div class="family-section"><div class="family-header" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'"><div class="fam-left"><span class="fam-avatar">&#x1F469;</span><div><div class="fam-name">Cath's Items</div><div class="fam-count">0 items</div></div></div><span>&#x25BC;</span></div><div class="family-body"><div class="family-empty">No items yet</div></div></div>
-        <div class="family-section"><div class="family-header" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'"><div class="fam-left"><span class="fam-avatar">&#x1F468;</span><div><div class="fam-name">Andrew's Items</div><div class="fam-count">0 items</div></div></div><span>&#x25BC;</span></div><div class="family-body"><div class="family-empty">No items yet</div></div></div>
-        <div class="family-section"><div class="family-header" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'"><div class="fam-left"><span class="fam-avatar">&#x1F467;</span><div><div class="fam-name">Sarah's Items</div><div class="fam-count">1 item</div></div></div><span class="fam-badge">1 to add</span></div><div class="family-body"><div class="fam-item"><div class="fam-item-left"><div class="fam-item-name">Oh So Natural Smooth Peanut Butter</div><div class="fam-item-tags"><span class="tag store">Aldi</span><span class="tag type">Regular</span><span style="font-size:11px !important;color:#64748b !important;">375g</span></div></div><div class="fam-add-btn">+</div></div></div></div>
-        <div class="family-section"><div class="family-header" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'"><div class="fam-left"><span class="fam-avatar">&#x1F466;</span><div><div class="fam-name">Russell's Items</div><div class="fam-count">0 items</div></div></div><span>&#x25BC;</span></div><div class="family-body"><div class="family-empty">No items yet</div></div></div>
+        <p style="color:#64748b !important;font-size:13px !important;margin-bottom:20px !important;">Each person's regular items from the master list. Tap + to add to this week's shop.</p>
+        <div id="am-family-container"></div>
       </div>
-      <div class="am-subscreen" id="am-select"><button class="am-back" onclick="amGo('home')">&#x2190; Back</button><h3 style="font-size:18px !important;font-weight:700 !important;margin-bottom:16px !important;">&#x2705; Select Items</h3><div style="text-align:center !important;padding:40px !important;color:#94a3b8 !important;">Browse and select from your master item list</div></div>
-      <div class="am-subscreen" id="am-receipts"><button class="am-back" onclick="amGo('home')">&#x2190; Back</button><h3 style="font-size:18px !important;font-weight:700 !important;margin-bottom:16px !important;">&#x1F9FE; Receipts</h3><div style="text-align:center !important;padding:40px !important;color:#94a3b8 !important;">Scan &amp; import receipts to track spending</div></div>
+      <div class="am-subscreen" id="am-select">
+        <button class="am-back" onclick="amGo('home')">&#x2190; Back</button>
+        <h3 style="font-size:18px !important;font-weight:700 !important;margin-bottom:8px !important;">&#x2705; Master Item List</h3>
+        <p style="color:#64748b !important;font-size:13px !important;margin-bottom:12px !important;">Tick items to add to this week's shopping list.</p>
+        <div style="display:flex !important;gap:8px !important;margin-bottom:12px !important;align-items:center !important;">
+          <input class="am-add-input" id="am-master-search" type="text" placeholder="Search items..." oninput="amFilterMaster(this.value)" style="flex:1 !important;">
+          <select class="am-add-select" id="am-master-store-filter" onchange="amFilterMaster(document.getElementById('am-master-search').value)">
+            <option value="">All stores</option><option>Aldi</option><option>Woolworths</option><option>Coles</option><option>Bakers Delight</option><option>Belrose Pharmacy</option>
+          </select>
+        </div>
+        <div id="am-master-add-bar" style="display:none !important;position:sticky !important;top:0 !important;z-index:5 !important;background:#3b82f6 !important;color:white !important;padding:10px 16px !important;border-radius:8px !important;margin-bottom:12px !important;display:none !important;align-items:center !important;justify-content:space-between !important;">
+          <span id="am-master-sel-count">0 selected</span>
+          <button onclick="amAddSelected()" style="background:white !important;color:#3b82f6 !important;border:none !important;padding:6px 14px !important;border-radius:6px !important;font-weight:600 !important;cursor:pointer !important;font-size:13px !important;">Add to list</button>
+        </div>
+        <div id="am-master-container"></div>
+      </div>
+      <div class="am-subscreen" id="am-receipts">
+        <button class="am-back" onclick="amGo('home')">&#x2190; Back</button>
+        <h3 style="font-size:18px !important;font-weight:700 !important;margin-bottom:16px !important;">&#x1F9FE; Receipts</h3>
+        <div class="doc-drop-zone" id="am-receipt-drop" onclick="document.getElementById('am-receipt-input').click()">
+          <div class="doc-drop-icon">&#x1F4F7;</div>
+          <div class="doc-drop-title">Drop a receipt here or click to select</div>
+          <div class="doc-drop-sub">Photos or images of your receipts &mdash; items &amp; prices extracted automatically</div>
+        </div>
+        <input type="file" id="am-receipt-input" accept="image/*,.pdf" style="display:none !important;" onchange="amUploadReceipts(this.files)">
+        <div id="am-scan-status" style="display:none !important;text-align:center !important;padding:20px !important;"><div style="font-size:24px !important;margin-bottom:8px !important;">&#x1F50D;</div><div style="color:#3b82f6 !important;font-weight:600 !important;">Scanning receipt...</div><div style="color:#94a3b8 !important;font-size:12px !important;">Extracting items and prices</div></div>
+        <h4 style="font-size:15px !important;font-weight:600 !important;margin-top:24px !important;margin-bottom:12px !important;">Receipt History</h4>
+        <div id="am-receipt-list"></div>
+      </div>
+      <div class="am-subscreen" id="am-meals">
+        <button class="am-back" onclick="amGo('home')">&#x2190; Back</button>
+        <h3 style="font-size:18px !important;font-weight:700 !important;margin-bottom:8px !important;">&#x1F372; Meal Plan</h3>
+        <p style="color:#64748b !important;font-size:13px !important;margin-bottom:12px !important;">Plan meals for the week. Tap a day to add or edit.</p>
+        <button class="am-btn" onclick="amAskAIMeals()" style="width:auto !important;display:inline-flex !important;align-items:center !important;gap:6px !important;background:#7c3aed !important;color:white !important;padding:6px 14px !important;font-weight:600 !important;border-radius:6px !important;font-size:13px !important;margin-bottom:14px !important;">&#x1F916; Ask AI to plan meals</button>
+        <div id="am-meals-container"></div>
+      </div>
+      <div class="am-subscreen" id="am-spending">
+        <button class="am-back" onclick="amGo('home')">&#x2190; Back</button>
+        <h3 style="font-size:18px !important;font-weight:700 !important;margin-bottom:16px !important;">&#x1F4B0; Spending</h3>
+        <div id="am-spending-container"></div>
+      </div>
+      <div class="am-subscreen" id="am-history">
+        <button class="am-back" onclick="amGo('home')">&#x2190; Back</button>
+        <h3 style="font-size:18px !important;font-weight:700 !important;margin-bottom:16px !important;">&#x1F4C5; Shopping History</h3>
+        <p style="color:#64748b !important;font-size:13px !important;margin-bottom:16px !important;">Past purchases from scanned receipts. Tap a receipt to see items.</p>
+        <div id="am-history-container"></div>
+      </div>
+      <div class="am-subscreen" id="am-shopinfo">
+        <button class="am-back" onclick="amGo('home')">&#x2190; Back</button>
+        <h3 style="font-size:18px !important;font-weight:700 !important;margin-bottom:16px !important;">&#x2139; Shopping Info</h3>
+
+        <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:16px !important;margin-bottom:12px !important;">
+          <div style="display:flex !important;align-items:center !important;gap:8px !important;margin-bottom:10px !important;">
+            <span class="mi-store woolworths">WOOLWORTHS</span>
+            <span style="font-size:14px !important;font-weight:600 !important;">Woolworths</span>
+          </div>
+          <div style="font-size:13px !important;color:#64748b !important;margin-bottom:8px !important;">
+            <a href="https://www.woolworths.com.au/shop/myaccount" target="_blank" style="color:#3b82f6 !important;">Login to My Account &rarr;</a>
+          </div>
+          <div style="font-size:13px !important;color:#64748b !important;margin-bottom:8px !important;">
+            <a href="https://www.everyday.com.au/" target="_blank" style="color:#3b82f6 !important;">Everyday Rewards &rarr;</a>
+          </div>
+          <div style="font-size:12px !important;color:#94a3b8 !important;background:#f8fafc !important;border-radius:6px !important;padding:10px !important;">
+            <strong style="color:#64748b !important;">eReceipts:</strong> My Account &rarr; My Activity and Receipts. Scan your Everyday Rewards card when shopping. May take up to 20 min to appear.
+          </div>
+          <div style="font-size:12px !important;color:#94a3b8 !important;background:#f8fafc !important;border-radius:6px !important;padding:10px !important;margin-top:6px !important;">
+            <strong style="color:#64748b !important;">Orders:</strong> My Account &rarr; My Orders &mdash; view invoices, tracking and resend gift cards.
+          </div>
+        </div>
+
+        <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:16px !important;margin-bottom:12px !important;">
+          <div style="display:flex !important;align-items:center !important;gap:8px !important;margin-bottom:10px !important;">
+            <span class="mi-store aldi">ALDI</span>
+            <span style="font-size:14px !important;font-weight:600 !important;">Aldi</span>
+          </div>
+          <div style="font-size:12px !important;color:#94a3b8 !important;background:#f8fafc !important;border-radius:6px !important;padding:10px !important;">
+            Receipts only available in-store (paper). Take a photo of your receipt and upload in the Receipts section to scan items and prices.
+          </div>
+        </div>
+
+        <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:16px !important;margin-bottom:12px !important;">
+          <div style="display:flex !important;align-items:center !important;gap:8px !important;margin-bottom:10px !important;">
+            <span style="font-size:10px !important;padding:2px 6px !important;border-radius:4px !important;font-weight:600 !important;text-transform:uppercase !important;background:#fce7f3 !important;color:#9d174d !important;">BUNNINGS</span>
+            <span style="font-size:14px !important;font-weight:600 !important;">Bunnings</span>
+          </div>
+          <div style="font-size:12px !important;color:#94a3b8 !important;background:#f8fafc !important;border-radius:6px !important;padding:10px !important;">
+            Dog &amp; cat food purchased here.
+          </div>
+        </div>
+
+        <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:16px !important;margin-bottom:12px !important;">
+          <div style="display:flex !important;align-items:center !important;gap:8px !important;margin-bottom:10px !important;">
+            <span style="font-size:10px !important;padding:2px 6px !important;border-radius:4px !important;font-weight:600 !important;text-transform:uppercase !important;background:#fff7ed !important;color:#9a3412 !important;">AMAZON</span>
+            <span style="font-size:14px !important;font-weight:600 !important;">Amazon</span>
+          </div>
+          <div style="font-size:13px !important;color:#64748b !important;margin-bottom:8px !important;">
+            <a href="https://www.amazon.com.au" target="_blank" style="color:#3b82f6 !important;">amazon.com.au &rarr;</a>
+          </div>
+          <div style="font-size:12px !important;color:#94a3b8 !important;background:#f8fafc !important;border-radius:6px !important;padding:10px !important;">
+            Bandaids, protein powder &amp; other useful items.
+          </div>
+        </div>
+
+      </div>
       <div class="am-subscreen" id="am-settings">
         <button class="am-back" onclick="amGo('home')">&#x2190; Back</button>
         <h3 style="font-size:18px !important;font-weight:700 !important;margin-bottom:16px !important;">&#x2699; Settings</h3>
@@ -504,7 +661,6 @@
       <div class="med-section">
         <div class="med-section-header">
           <h3>&#x1F48A; Current Medication Plan</h3>
-          <span style="font-size:12px !important;color:#94a3b8 !important;">Source: Notion</span>
         </div>
         <table class="med-table">
           <thead>
@@ -515,51 +671,14 @@
               <th>Purpose</th>
             </tr>
           </thead>
-          <tbody>
-            <tr>
-              <td style="font-weight:600 !important;">Valtrex (Valaciclovir)</td>
-              <td>500 mg tablet</td>
-              <td>1 tablet daily</td>
-              <td class="meds-reason">Antiviral — HSV suppression / cold sores</td>
-            </tr>
-            <tr>
-              <td style="font-weight:600 !important;">Vitamin D</td>
-              <td>7000 IU capsule</td>
-              <td>1 capsule once a week</td>
-              <td class="meds-reason">Bone health, immune function &amp; deficiency prevention</td>
-            </tr>
-            <tr>
-              <td style="font-weight:600 !important;">Vyvanse (Lisdexamfetamine)</td>
-              <td>50 mg capsule</td>
-              <td>1 capsule daily</td>
-              <td class="meds-reason">ADHD — focus, attention &amp; executive functioning</td>
-            </tr>
-            <tr>
-              <td style="font-weight:600 !important;">Levothyroxine</td>
-              <td>50 mcg tablet</td>
-              <td>1 tablet daily</td>
-              <td class="meds-reason">Thyroid hormone replacement (hypothyroidism)</td>
-            </tr>
-            <tr>
-              <td style="font-weight:600 !important;">Mounjaro (Tirzepatide) KwikPen</td>
-              <td>7.5 mg dose</td>
-              <td>Once weekly injection</td>
-              <td class="meds-reason">Blood sugar regulation &amp; metabolic / weight management</td>
-            </tr>
-            <tr>
-              <td style="font-weight:600 !important;">Xobet cream (Clobetasol)</td>
-              <td>Topical cream</td>
-              <td>Apply as directed</td>
-              <td class="meds-reason">Topical steroid — eczema, dermatitis or psoriasis</td>
-            </tr>
-          </tbody>
+          <tbody id="med-meds-body"></tbody>
         </table>
       </div>
 
       <div class="med-section">
         <div class="med-section-header">
           <h3>&#x1F4C1; Documents</h3>
-          <a class="doc-sharepoint-btn" href="https://netorgft4053847.sharepoint.com/:f:/s/bakerpersonal-CathPersonal/IgCDEd3wyYcYTYLNHVmG3vY6AXpwBUtDz6wYy2dclwLsNcw?e=vtEb6w" target="_blank" rel="noopener">&#x1F4C2; Open SharePoint Folder &rarr;</a>
+          <a class="doc-sharepoint-btn" href="https://netorgft4053847.sharepoint.com/:f:/s/bakerpersonal-CathPersonal/IgAEdQrlyL4-Qa4rSlz4-SwPAWV2ALT9bZECNDOJyLgPUlU?e=mvuWfJ" target="_blank" rel="noopener">&#x1F4C2; Open Documents Folder &rarr;</a>
         </div>
         <div class="doc-section-body">
           <p class="doc-hint">Select or drop a file below — it will be renamed <strong>yyyymmdd filename.ext</strong> and downloaded, ready to upload to SharePoint.</p>
@@ -582,35 +701,6 @@
           <thead><tr><th>Date</th><th>Duration</th><th>Plan</th><th>Practitioner</th></tr></thead>
           <tbody id="med-sessions-body"></tbody>
         </table>
-      </div>
-    </div>
-
-    <!-- ═══ AI ASSISTANT ═══ -->
-    <div class="screen" id="ch-ai">
-      <h2>&#x1F916; AI Assistant</h2>
-      <div id="ai-setup-card" class="ai-setup">
-        <h3>&#x1F511; Set up your API key</h3>
-        <p>Enter your Anthropic API key to use the AI assistant. It&rsquo;s stored in your browser only &mdash; never sent anywhere except directly to Anthropic.</p>
-        <div class="ai-key-row">
-          <input class="ai-key-input" id="ai-key-input" type="password" placeholder="sk-ant-...">
-          <button class="ai-key-btn" onclick="aiSaveKey()">Save Key</button>
-        </div>
-      </div>
-      <div id="ai-chat-card" class="ai-chat-wrap">
-        <div class="ai-meta-row">
-          <span class="ai-key-info">&#x1F512; API key saved &bull; <span class="ai-key-remove" onclick="aiClearKey()">Remove key</span></span>
-          <span class="ai-clear-btn" onclick="aiClearChat()">Clear chat</span>
-        </div>
-        <div class="ai-messages" id="ai-messages">
-          <div class="ai-welcome">
-            <div class="ai-welcome-icon">&#x1F916;</div>
-            <div class="ai-welcome-text">Hi Cath! I&rsquo;m your AI assistant.<br>Ask me anything &mdash; workouts, planning, ideas&hellip;</div>
-          </div>
-        </div>
-        <div class="ai-input-row">
-          <textarea class="ai-input" id="ai-input" rows="2" placeholder="Ask me anything... (Enter to send, Shift+Enter for new line)" onkeydown="aiKeyDown(event)"></textarea>
-          <button class="ai-send-btn" id="ai-send-btn" onclick="aiSend()">&#x27A4;</button>
-        </div>
       </div>
     </div>
 
@@ -690,8 +780,80 @@
 
 </div><!-- /cathHub -->
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
 (function(){
+  var SB_URL = 'https://ziwycymhaqghdiznyhhw.supabase.co';
+  var SB_KEY = 'sb_publishable_n-xBxzqdGySGh-JWHuI40g_Hb5Qf8mg';
+  var sb = window.supabase.createClient(SB_URL, SB_KEY);
+
+  // ─── AUTH ───
+  function showApp() {
+    document.getElementById('cathHub-login').style.setProperty('display', 'none', 'important');
+    document.getElementById('cathHub').style.setProperty('display', 'flex', 'important');
+  }
+  function showLogin() {
+    document.getElementById('cathHub-login').style.setProperty('display', 'flex', 'important');
+    document.getElementById('cathHub').style.setProperty('display', 'none', 'important');
+  }
+
+  window.cathLogin = async function() {
+    var email = document.getElementById('login-email').value.trim();
+    var pass = document.getElementById('login-password').value;
+    var errEl = document.getElementById('login-error');
+    errEl.style.display = 'none';
+    if (!email || !pass) { errEl.textContent = 'Enter your email and password'; errEl.style.display = 'block'; return; }
+    var { error } = await sb.auth.signInWithPassword({ email: email, password: pass });
+    if (error) { errEl.textContent = error.message; errEl.style.display = 'block'; return; }
+    showApp();
+  };
+
+  window.cathForgotPassword = async function() {
+    var email = document.getElementById('login-email').value.trim();
+    var errEl = document.getElementById('login-error');
+    var msgEl = document.getElementById('login-reset-msg');
+    errEl.style.display = 'none';
+    msgEl.style.display = 'none';
+    if (!email) { errEl.textContent = 'Enter your email first'; errEl.style.display = 'block'; return; }
+    var { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: window.location.origin });
+    if (error) { errEl.textContent = error.message; errEl.style.display = 'block'; return; }
+    msgEl.textContent = 'Password reset email sent — check your inbox';
+    msgEl.style.display = 'block';
+  };
+
+  window.cathLogout = async function() {
+    await sb.auth.signOut();
+    showLogin();
+  };
+
+  // Check session on load (elements already exist since script is at bottom)
+  sb.auth.getSession().then(function(result) {
+    var session = result.data.session;
+    if (session) showApp();
+    else showLogin();
+  });
+
+  sb.auth.onAuthStateChange(function(event, session) {
+    if (event === 'SIGNED_OUT') showLogin();
+    if (event === 'PASSWORD_RECOVERY') {
+      var newPass = prompt('Enter your new password:');
+      if (newPass && newPass.length >= 6) {
+        sb.auth.updateUser({ password: newPass }).then(function(res) {
+          if (res.error) { alert('Error: ' + res.error.message); }
+          else {
+            alert('Password updated! Please sign in with your new password.');
+            sb.auth.signOut().then(function() {
+              window.location.href = window.location.origin;
+            });
+          }
+        });
+      } else {
+        alert('Password must be at least 6 characters.');
+        window.location.href = window.location.origin;
+      }
+    }
+    if (event === 'SIGNED_IN' && session) showApp();
+  });
 
   // ─── NAVIGATION ───
   window.chNav = function(name, btn){
@@ -700,11 +862,66 @@
     document.getElementById('ch-' + name).classList.add('active');
     btn.classList.add('active');
     if(name === 'aislemate') amGo('home');
+    if(name === 'home') dashLoad();
   };
 
-  // ─── AISLEMATE ───
-  window.amGo = function(sub){ document.querySelectorAll('#cathHub .am-subscreen').forEach(function(s){ s.classList.remove('active'); }); document.getElementById('am-' + sub).classList.add('active'); };
-  window.amCheck = function(el){ el.classList.toggle('done'); el.nextElementSibling.classList.toggle('checked'); amUpdateCounts(); };
+  // ─── DASHBOARD DATA ───
+  async function dashLoad() {
+    // Shopping list summary
+    var { data: items } = await sb.from('shopping_items').select('name, category, store, checked').order('created_at');
+    items = items || [];
+    var container = document.getElementById('dash-shopping-list');
+    if (!items.length) {
+      container.innerHTML = '<div style="text-align:center;padding:12px;color:#94a3b8;font-size:13px;">No items on your list yet</div>';
+    } else {
+      var html = '';
+      items.slice(0, 15).forEach(function(item) {
+        html += '<div class="dash-shop-item">';
+        html += '<span style="font-size:14px !important;">' + (item.checked ? '&#x2611;' : '&#x2610;') + '</span>';
+        html += '<span style="flex:1 !important;' + (item.checked ? 'text-decoration:line-through;color:#94a3b8;' : '') + '">' + esc(item.name) + '</span>';
+        if (item.store) {
+          var storeCls = (item.store || '').toLowerCase().replace(/[^a-z]/g,'');
+          html += '<span class="mi-store ' + storeCls + '">' + esc(item.store) + '</span>';
+        }
+        html += '</div>';
+      });
+      if (items.length > 15) html += '<div style="font-size:12px;color:#94a3b8;padding-top:6px;">+ ' + (items.length - 15) + ' more items</div>';
+      var checked = items.filter(function(i){ return i.checked; }).length;
+      html = '<div style="font-size:12px;color:#64748b;margin-bottom:8px;">' + checked + ' of ' + items.length + ' checked</div>' + html;
+      container.innerHTML = html;
+    }
+
+
+  }
+
+  // Load dashboard on startup
+  dashLoad();
+
+  // ─── AISLEMATE (from Supabase) ───
+  var CAT_ICONS = {'Fruit & Veg':'&#x1F96C;','Meat':'&#x1F969;','Dairy':'&#x1F95B;','Pantry':'&#x1F96B;','Frozen':'&#x2744;','Drinks':'&#x1F964;','Household':'&#x1F9F9;','Other':'&#x1F4E6;'};
+  var CAT_ORDER = ['Fruit & Veg','Meat','Dairy','Pantry','Frozen','Drinks','Household','Other'];
+
+  window.amGo = function(sub){
+    document.querySelectorAll('#cathHub .am-subscreen').forEach(function(s){ s.classList.remove('active'); });
+    document.getElementById('am-' + sub).classList.add('active');
+    if (sub === 'family') amLoadFamily();
+    if (sub === 'select') amLoadMaster();
+    if (sub === 'spending') amLoadSpending();
+    if (sub === 'history') amLoadHistory();
+  };
+
+  window.amCheck = async function(el) {
+    var id = el.closest('.shop-item').dataset.id;
+    var isDone = !el.classList.contains('done');
+    await sb.from('shopping_items').update({ checked: isDone }).eq('id', id);
+    amLoadItems();
+  };
+
+  window.amDeleteItem = async function(id) {
+    await sb.from('shopping_items').delete().eq('id', id);
+    amLoadItems();
+  };
+
   window.amUpdateCounts = function(){
     var items = document.querySelectorAll('#am-weekly .shop-item');
     var checked = document.querySelectorAll('#am-weekly .shop-check.done').length;
@@ -714,13 +931,649 @@
     document.getElementById('am-shop-count').textContent = checked + '/' + total + ' checked';
     document.getElementById('am-prog-fill').style.width = pct + '%';
     document.getElementById('am-prog-text').textContent = checked + ' of ' + total + ' checked';
-    var pantryDone = document.querySelectorAll('#am-weekly .cat-group .shop-check.done').length;
-    var pantryItems = document.querySelectorAll('#am-weekly .cat-group .shop-item').length;
-    document.getElementById('am-pantry-count').textContent = pantryDone + '/' + pantryItems;
   };
-  window.amRefresh = function(){ document.querySelectorAll('#am-weekly .shop-check.done').forEach(function(el){ el.classList.remove('done'); el.nextElementSibling.classList.remove('checked'); }); amUpdateCounts(); };
+
+  window.amRefresh = async function(){
+    await sb.from('shopping_items').delete().gte('id', '00000000-0000-0000-0000-000000000000');
+    amLoadItems();
+    dashLoad();
+  };
+
   window.amSelectUser = function(el){ document.querySelectorAll('#cathHub .user-option').forEach(function(u){ u.classList.remove('selected'); }); el.classList.add('selected'); };
-  amUpdateCounts();
+
+  function renderShopItem(item) {
+    var storeCls = (item.store || '').toLowerCase().replace(/[^a-z]/g,'');
+    var h = '<div class="shop-item" data-id="' + item.id + '" style="' + (item.checked ? 'opacity:0.5 !important;' : '') + '">';
+    h += '<div class="shop-check' + (item.checked ? ' done' : '') + '" onclick="amCheck(this)"></div>';
+    h += '<span class="shop-name' + (item.checked ? ' checked' : '') + '">' + esc(item.name) + '</span>';
+    if (item.store) h += '<span class="store-tag ' + storeCls + '">' + esc(item.store) + '</span>';
+    h += '<button class="shop-delete" onclick="amDeleteItem(\'' + item.id + '\')">&#x1F5D1;</button>';
+    h += '</div>';
+    return h;
+  }
+
+  async function amLoadItems() {
+    var { data: items } = await sb.from('shopping_items').select('*').order('created_at');
+    items = items || [];
+    var { data: masterData } = await sb.from('master_items').select('name');
+    var masterNames = (masterData || []).map(function(m) { return m.name.toLowerCase(); });
+    var container = document.getElementById('am-items-container');
+
+    // Split unchecked and checked
+    var unchecked = items.filter(function(i) { return !i.checked; });
+    var checked = items.filter(function(i) { return i.checked; });
+
+    var html = '';
+
+    // Render unchecked items grouped by category
+    if (unchecked.length) {
+      var cats = {};
+      unchecked.forEach(function(item) {
+        var isMaster = masterNames.indexOf(item.name.toLowerCase()) !== -1;
+        var cat = isMaster ? (item.category || 'Other') : '✏ Quick Adds';
+        if (!cats[cat]) cats[cat] = [];
+        cats[cat].push(item);
+      });
+      CAT_ORDER.forEach(function(cat) {
+        if (!cats[cat] || !cats[cat].length) return;
+        var catIcon = CAT_ICONS[cat] || '&#x1F96B;';
+        html += '<div class="cat-group">';
+        html += '<div class="cat-header"><span>' + catIcon + ' ' + esc(cat) + '</span><span class="cat-count">' + cats[cat].length + '</span></div>';
+        cats[cat].forEach(function(item) { html += renderShopItem(item); });
+        html += '</div>';
+      });
+      // Quick adds
+      if (cats['✏ Quick Adds'] && cats['✏ Quick Adds'].length) {
+        html += '<div class="cat-group" style="border-left:3px solid #f59e0b !important;padding-left:8px !important;">';
+        html += '<div class="cat-header"><span>&#x270F; Quick Adds</span><span class="cat-count">' + cats['✏ Quick Adds'].length + '</span></div>';
+        cats['✏ Quick Adds'].forEach(function(item) { html += renderShopItem(item); });
+        html += '</div>';
+      }
+    }
+
+    // Render checked items at bottom
+    if (checked.length) {
+      html += '<div class="cat-group" style="margin-top:16px !important;border-top:2px solid #e2e8f0 !important;padding-top:12px !important;">';
+      html += '<div class="cat-header"><span>&#x2705; Collected</span><span class="cat-count">' + checked.length + '</span></div>';
+      checked.forEach(function(item) { html += renderShopItem(item); });
+      html += '</div>';
+    }
+
+    if (!items.length) html = '<div style="text-align:center;padding:20px;color:#94a3b8;">No items yet — pick from the Master List or type below to add</div>';
+    container.innerHTML = html;
+    amUpdateCounts();
+  }
+
+  window.amRepeatLastShop = async function() {
+    // Get all receipts from the last 7 days
+    var weekAgo = new Date();
+    weekAgo.setDate(weekAgo.getDate() - 7);
+    var { data: receipts } = await sb.from('receipts').select('*, receipt_items(*)').gte('uploaded_at', weekAgo.toISOString()).order('uploaded_at', { ascending: false });
+    if (!receipts || !receipts.length) {
+      alert('No receipts from the last 7 days. Scan a receipt first to use this feature.');
+      return;
+    }
+    // Get master list for category/store lookup
+    var { data: master } = await sb.from('master_items').select('name, category, store');
+    var masterMap = {};
+    (master || []).forEach(function(m) { masterMap[m.name.toLowerCase()] = m; });
+    // Collect all items from all receipts, deduplicated
+    var rows = [];
+    var seen = {};
+    var stores = [];
+    receipts.forEach(function(receipt) {
+      if (receipt.store && stores.indexOf(receipt.store) === -1) stores.push(receipt.store);
+      (receipt.receipt_items || []).forEach(function(item) {
+        if (item.price <= 0) return;
+        var key = item.item_name.toLowerCase();
+        if (seen[key]) return;
+        seen[key] = true;
+        var mi = masterMap[key];
+        rows.push({
+          name: item.item_name,
+          category: mi ? mi.category : 'Other',
+          store: mi ? mi.store : (receipt.store || '')
+        });
+      });
+    });
+    if (rows.length) {
+      await sb.from('shopping_items').insert(rows);
+      amLoadItems();
+      alert(rows.length + ' items added from last week (' + stores.join(' + ') + ')!');
+    }
+  };
+
+  window.amAddItem = async function() {
+    var name = document.getElementById('am-add-name').value.trim();
+    if (!name) return;
+    var cat = document.getElementById('am-add-cat').value;
+    var store = document.getElementById('am-add-store').value;
+    await sb.from('shopping_items').insert({ name: name, category: cat, store: store });
+    document.getElementById('am-add-name').value = '';
+    document.getElementById('am-add-form').style.display = 'none';
+    amLoadItems();
+  };
+
+  // ─── RECEIPTS (Smart Scanning) ───
+  function amGetApiKey() { return localStorage.getItem('cathHub_apiKey') || ''; }
+
+  function fileToBase64(file) {
+    return new Promise(function(resolve, reject) {
+      var reader = new FileReader();
+      reader.onload = function() { resolve(reader.result.split(',')[1]); };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
+  async function amScanReceipt(base64, mediaType) {
+    var resp = await fetch('https://ziwycymhaqghdiznyhhw.supabase.co/functions/v1/claude-proxy', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5',
+        max_tokens: 2048,
+        messages: [{
+          role: 'user',
+          content: [
+            mediaType === 'application/pdf'
+              ? { type: 'document', source: { type: 'base64', media_type: 'application/pdf', data: base64 } }
+              : { type: 'image', source: { type: 'base64', media_type: mediaType, data: base64 } },
+            { type: 'text', text: 'Extract all items and prices from this receipt. Return ONLY valid JSON in this exact format, no other text:\n{"store":"Store Name","date":"DD/MM/YYYY","items":[{"name":"Item Name","price":1.99,"quantity":1}],"total":99.99}\n\nRules:\n- Use the actual store name from the receipt\n- Date in DD/MM/YYYY format\n- Price as a number (not string)\n- Include ALL items, even discounts (as negative prices)\n- Total is the final amount paid' }
+          ]
+        }]
+      })
+    });
+    if (!resp.ok) { var err = await resp.json().catch(function(){ return {}; }); throw new Error(err.error && err.error.message ? err.error.message : 'API error'); }
+    var data = await resp.json();
+    var text = data.content[0].text;
+    // Extract JSON from response (handle markdown code blocks)
+    var jsonMatch = text.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) throw new Error('Could not parse receipt data');
+    return JSON.parse(jsonMatch[0]);
+  }
+
+  window.amUploadReceipts = async function(files) {
+    var statusEl = document.getElementById('am-scan-status');
+    for (var i = 0; i < files.length; i++) {
+      var file = files[i];
+      statusEl.style.display = 'block';
+
+      try {
+        // 1. Upload image to storage
+        var now = new Date();
+        var prefix = now.getFullYear() + '' + String(now.getMonth()+1).padStart(2,'0') + '' + String(now.getDate()).padStart(2,'0');
+        var fileName = prefix + '_' + Date.now() + '_' + file.name;
+        var { error: uploadErr } = await sb.storage.from('receipts').upload(fileName, file, { upsert: true });
+        if (uploadErr) { alert('Upload failed: ' + uploadErr.message); continue; }
+        var { data: urlData } = sb.storage.from('receipts').getPublicUrl(fileName);
+
+        // 2. Scan with Claude
+        var base64 = await fileToBase64(file);
+        var mediaType = file.type || 'image/jpeg';
+        var scanned = await amScanReceipt(base64, mediaType);
+
+        if (scanned) {
+          // 3. Save receipt with extracted info
+          var { data: receiptRow } = await sb.from('receipts').insert({
+            filename: fileName,
+            url: urlData.publicUrl,
+            store: scanned.store || '',
+            receipt_date: scanned.date || '',
+            total: scanned.total || 0
+          }).select().single();
+
+          // 4. Save each item
+          if (scanned.items && scanned.items.length && receiptRow) {
+            var itemRows = scanned.items.map(function(item) {
+              return { receipt_id: receiptRow.id, item_name: item.name, price: item.price || 0, quantity: item.quantity || 1 };
+            });
+            await sb.from('receipt_items').insert(itemRows);
+
+            // 5. Auto-add new items to master_items
+            var { data: existing } = await sb.from('master_items').select('name');
+            var existingNames = (existing || []).map(function(e) { return e.name.toLowerCase(); });
+            var newMasterItems = [];
+            scanned.items.forEach(function(item) {
+              if (item.price > 0 && existingNames.indexOf(item.name.toLowerCase()) === -1) {
+                existingNames.push(item.name.toLowerCase());
+                newMasterItems.push({
+                  name: item.name,
+                  category: 'Other',
+                  store: scanned.store || '',
+                  last_price: item.price,
+                  last_seen: now.toISOString().split('T')[0]
+                });
+              }
+            });
+            if (newMasterItems.length) await sb.from('master_items').insert(newMasterItems);
+
+            // 6. Update last_price for existing items
+            for (var j = 0; j < scanned.items.length; j++) {
+              var si = scanned.items[j];
+              if (si.price > 0) {
+                await sb.from('master_items').update({
+                  last_price: si.price,
+                  store: scanned.store || '',
+                  last_seen: now.toISOString().split('T')[0]
+                }).ilike('name', si.name);
+              }
+            }
+          }
+        }
+      } catch(e) {
+        alert('Scan failed: ' + e.message);
+      }
+    }
+    statusEl.style.display = 'none';
+    document.getElementById('am-receipt-input').value = '';
+    amLoadReceipts();
+  };
+
+  async function amLoadReceipts() {
+    var { data: receipts } = await sb.from('receipts').select('*, receipt_items(*)').order('uploaded_at', { ascending: false });
+    var container = document.getElementById('am-receipt-list');
+    if (!receipts || !receipts.length) {
+      container.innerHTML = '<div style="text-align:center;padding:20px;color:#94a3b8;">No receipts yet. Upload a receipt photo to get started.</div>';
+      return;
+    }
+    var html = '';
+    receipts.forEach(function(r) {
+      var date = r.receipt_date || new Date(r.uploaded_at).toLocaleDateString('en-AU');
+      var items = r.receipt_items || [];
+      var itemCount = items.length;
+      html += '<div class="receipt-card">';
+      html += '<div class="receipt-header" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display===\'none\'?\'block\':\'none\'">';
+      html += '<span style="font-size:20px !important;">&#x1F9FE;</span>';
+      html += '<div style="flex:1 !important;">';
+      html += '<div style="font-size:14px !important;font-weight:600 !important;">' + esc(r.store || r.filename) + '</div>';
+      html += '<div style="font-size:12px !important;color:#94a3b8 !important;">' + esc(date) + ' &middot; ' + itemCount + ' items</div>';
+      html += '</div>';
+      if (r.total) html += '<div style="font-size:15px !important;font-weight:700 !important;color:#1e293b !important;">$' + Number(r.total).toFixed(2) + '</div>';
+      html += '<span style="color:#94a3b8 !important;font-size:12px !important;">&#x25BC;</span>';
+      html += '</div>';
+      html += '<div class="receipt-items" style="display:none !important;">';
+      items.forEach(function(item) {
+        html += '<div class="receipt-item-row">';
+        html += '<span>' + esc(item.item_name) + (item.quantity > 1 ? ' x' + item.quantity : '') + '</span>';
+        html += '<span class="ri-price">$' + Number(item.price).toFixed(2) + '</span>';
+        html += '</div>';
+      });
+      html += '<div style="display:flex !important;justify-content:flex-end !important;gap:8px !important;margin-top:8px !important;padding-top:8px !important;border-top:1px solid #f1f5f9 !important;">';
+      html += '<a href="' + esc(r.url) + '" target="_blank" style="font-size:12px !important;color:#3b82f6 !important;">View image</a>';
+      html += '<button onclick="amDeleteReceipt(\'' + r.id + '\',\'' + esc(r.filename) + '\')" style="font-size:12px !important;color:#ef4444 !important;background:none !important;border:none !important;cursor:pointer !important;">Delete</button>';
+      html += '</div>';
+      html += '</div>';
+      html += '</div>';
+    });
+    container.innerHTML = html;
+  }
+
+  window.amDeleteReceipt = async function(id, filename) {
+    await sb.storage.from('receipts').remove([filename]);
+    await sb.from('receipt_items').delete().eq('receipt_id', id);
+    await sb.from('receipts').delete().eq('id', id);
+    amLoadReceipts();
+  };
+
+  // ─── SMART ADD ITEM (suggestions from master_items) ───
+  var suggestTimeout = null;
+  window.amSuggest = function(query) {
+    clearTimeout(suggestTimeout);
+    var list = document.getElementById('am-suggest-list');
+    if (!query || query.length < 2) { list.innerHTML = ''; return; }
+    suggestTimeout = setTimeout(async function() {
+      var { data } = await sb.from('master_items').select('*').ilike('name', '%' + query + '%').limit(8);
+      if (!data || !data.length) { list.innerHTML = ''; return; }
+      var html = '';
+      data.forEach(function(item) {
+        html += '<div class="am-suggest-item" onclick="amPickSuggestion(\'' + esc(item.name).replace(/'/g, "\\'") + '\',\'' + esc(item.category || 'Other').replace(/'/g, "\\'") + '\',\'' + esc(item.store || 'Aldi').replace(/'/g, "\\'") + '\')">';
+        html += esc(item.name);
+        if (item.last_price) html += ' <span class="suggest-price">$' + Number(item.last_price).toFixed(2) + ' @ ' + esc(item.store || '?') + '</span>';
+        html += '</div>';
+      });
+      list.innerHTML = html;
+    }, 200);
+  };
+
+  window.amPickSuggestion = function(name, category, store) {
+    document.getElementById('am-add-name').value = name;
+    document.getElementById('am-add-cat').value = category;
+    document.getElementById('am-add-store').value = store;
+    document.getElementById('am-suggest-list').innerHTML = '';
+  };
+
+  // Close suggestions on click outside
+  document.addEventListener('click', function(e) {
+    if (!e.target.closest('#am-add-form')) {
+      var list = document.getElementById('am-suggest-list');
+      if (list) list.innerHTML = '';
+    }
+  });
+
+  // ─── FAMILY ITEMS (from master_items) ───
+  var FAMILY = [
+    { name: 'Cath', avatar: '&#x1F469;' },
+    { name: 'Andrew', avatar: '&#x1F468;' },
+    { name: 'Sarah', avatar: '&#x1F467;' },
+    { name: 'Russell', avatar: '&#x1F466;' }
+  ];
+
+  async function amLoadFamily() {
+    var { data: items } = await sb.from('master_items').select('*').neq('family_member', '').order('name');
+    items = items || [];
+    var container = document.getElementById('am-family-container');
+    var html = '';
+    FAMILY.forEach(function(fam) {
+      var memberItems = items.filter(function(i) { return i.family_member === fam.name; });
+      html += '<div class="family-section">';
+      html += '<div class="family-header" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display===\'none\'?\'block\':\'none\'">';
+      html += '<div class="fam-left"><span class="fam-avatar">' + fam.avatar + '</span><div><div class="fam-name">' + fam.name + '\'s Items</div><div class="fam-count">' + memberItems.length + ' item' + (memberItems.length !== 1 ? 's' : '') + '</div></div></div>';
+      html += '<span>&#x25BC;</span></div>';
+      html += '<div class="family-body">';
+      if (!memberItems.length) {
+        html += '<div class="family-empty">No items yet. Assign items from the Master List.</div>';
+      } else {
+        memberItems.forEach(function(item) {
+          html += '<div class="fam-item">';
+          html += '<div class="fam-item-left">';
+          html += '<div class="fam-item-name">' + esc(item.name) + '</div>';
+          html += '<div class="fam-item-tags">';
+          if (item.store) html += '<span class="tag store">' + esc(item.store) + '</span>';
+          if (item.last_price) html += '<span style="font-size:11px !important;color:#64748b !important;">$' + Number(item.last_price).toFixed(2) + '</span>';
+          html += '</div></div>';
+          html += '<div class="fam-add-btn" onclick="amAddFromFamily(\'' + esc(item.name).replace(/'/g, "\\'") + '\',\'' + esc(item.category || 'Other').replace(/'/g, "\\'") + '\',\'' + esc(item.store || 'Aldi').replace(/'/g, "\\'") + '\')">+</div>';
+          html += '</div>';
+        });
+      }
+      html += '</div></div>';
+    });
+    container.innerHTML = html;
+  }
+
+  window.amAddFromFamily = async function(name, category, store) {
+    await sb.from('shopping_items').insert({ name: name, category: category, store: store });
+    alert(name + ' added to shopping list!');
+  };
+
+  // ─── MASTER ITEM LIST (multi-select) ───
+  var masterItems = [];
+  var masterSelected = new Set();
+
+  async function amLoadMaster() {
+    var { data } = await sb.from('master_items').select('*').order('name');
+    masterItems = data || [];
+    masterSelected.clear();
+    // Dynamically build store filter from actual data
+    var stores = {};
+    masterItems.forEach(function(i) { if (i.store) stores[i.store] = true; });
+    var defaultStores = ['Aldi','Woolworths','Coles','Bakers Delight','Belrose Pharmacy'];
+    defaultStores.forEach(function(s) { stores[s] = true; });
+    var storeList = Object.keys(stores).sort();
+    var filterEl = document.getElementById('am-master-store-filter');
+    var curVal = filterEl.value;
+    filterEl.innerHTML = '<option value="">All stores</option>';
+    storeList.forEach(function(s) { filterEl.innerHTML += '<option' + (s === curVal ? ' selected' : '') + '>' + esc(s) + '</option>'; });
+    // Also update the add-item store dropdown
+    var addStoreEl = document.getElementById('am-add-store');
+    if (addStoreEl) {
+      var addVal = addStoreEl.value;
+      addStoreEl.innerHTML = '';
+      storeList.forEach(function(s) { addStoreEl.innerHTML += '<option' + (s === addVal ? ' selected' : '') + '>' + esc(s) + '</option>'; });
+      addStoreEl.innerHTML += '<option>Other</option>';
+    }
+    amRenderMaster(masterItems);
+  }
+
+  function amRenderMaster(items) {
+    var container = document.getElementById('am-master-container');
+    if (!items.length) {
+      container.innerHTML = '<div style="text-align:center;padding:30px;color:#94a3b8;">No items match your search.</div>';
+      amUpdateSelBar();
+      return;
+    }
+    // Group by category
+    var groups = {};
+    items.forEach(function(item) {
+      var cat = item.category || 'Other';
+      if (!groups[cat]) groups[cat] = [];
+      groups[cat].push(item);
+    });
+    var html = '';
+    CAT_ORDER.forEach(function(cat) {
+      if (!groups[cat] || !groups[cat].length) return;
+      var icon = CAT_ICONS[cat] || '&#x1F4E6;';
+      html += '<div class="cat-group" style="margin-bottom:16px !important;">';
+      html += '<div class="cat-header" style="cursor:pointer !important;" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display===\'none\'?\'block\':\'none\'">';
+      html += '<span>' + icon + ' ' + esc(cat) + '</span>';
+      html += '<span class="cat-count">' + groups[cat].length + ' items</span>';
+      html += '</div>';
+      html += '<div style="display:none !important;">';
+      groups[cat].forEach(function(item) {
+        var sel = masterSelected.has(item.id);
+        var storeCls = (item.store || '').toLowerCase().replace(/[^a-z]/g,'');
+        html += '<div class="master-item' + (sel ? ' selected' : '') + '" onclick="amToggleMaster(\'' + item.id + '\')">';
+        html += '<div class="mi-check">' + (sel ? '&#x2713;' : '') + '</div>';
+        html += '<div style="flex:1 !important;">';
+        html += '<div style="font-size:13px !important;font-weight:600 !important;">' + esc(item.name) + '</div>';
+        html += '<div style="font-size:11px !important;color:#94a3b8 !important;">';
+        if (item.last_price) html += '$' + Number(item.last_price).toFixed(2);
+        if (item.family_member) html += ' &middot; ' + esc(item.family_member);
+        html += '</div></div>';
+        if (item.store) html += '<span class="mi-store ' + storeCls + '">' + esc(item.store) + '</span>';
+        html += '<select class="am-add-select" style="font-size:10px !important;padding:3px 4px !important;width:70px !important;" onclick="event.stopPropagation()" onchange="amAssignFamily(\'' + item.id + '\',this.value)">';
+        html += '<option value="">Assign</option>';
+        FAMILY.forEach(function(f) {
+          html += '<option' + (item.family_member === f.name ? ' selected' : '') + '>' + f.name + '</option>';
+        });
+        html += '</select>';
+        html += '</div>';
+      });
+      html += '</div></div>';
+    });
+    container.innerHTML = html;
+    amUpdateSelBar();
+  }
+
+  window.amToggleMaster = function(id) {
+    if (masterSelected.has(id)) masterSelected.delete(id);
+    else masterSelected.add(id);
+    var storeFilter = document.getElementById('am-master-store-filter').value;
+    var query = document.getElementById('am-master-search').value;
+    amRenderMaster(amFilteredItems(query, storeFilter));
+  };
+
+  function amFilteredItems(query, storeFilter) {
+    var q = (query || '').toLowerCase();
+    return masterItems.filter(function(item) {
+      var matchName = !q || item.name.toLowerCase().indexOf(q) !== -1;
+      var matchStore = !storeFilter || item.store === storeFilter;
+      return matchName && matchStore;
+    });
+  }
+
+  window.amFilterMaster = function(query) {
+    var storeFilter = document.getElementById('am-master-store-filter').value;
+    amRenderMaster(amFilteredItems(query, storeFilter));
+  };
+
+  function amUpdateSelBar() {
+    var bar = document.getElementById('am-master-add-bar');
+    var count = masterSelected.size;
+    if (count > 0) {
+      bar.style.display = 'flex';
+      document.getElementById('am-master-sel-count').textContent = count + ' selected';
+    } else {
+      bar.style.display = 'none';
+    }
+  }
+
+  window.amAddSelected = async function() {
+    var items = masterItems.filter(function(i) { return masterSelected.has(i.id); });
+    var rows = items.map(function(i) { return { name: i.name, category: i.category || 'Other', store: i.store || '' }; });
+    if (rows.length) await sb.from('shopping_items').insert(rows);
+    masterSelected.clear();
+    amRenderMaster(amFilteredItems(document.getElementById('am-master-search').value, document.getElementById('am-master-store-filter').value));
+    alert(rows.length + ' item' + (rows.length !== 1 ? 's' : '') + ' added to shopping list!');
+  };
+
+  window.amAssignFamily = async function(itemId, member) {
+    await sb.from('master_items').update({ family_member: member }).eq('id', itemId);
+    var item = masterItems.find(function(i) { return i.id === itemId; });
+    if (item) item.family_member = member;
+  };
+
+  // ─── SPENDING ───
+  async function amLoadSpending() {
+    var { data: receipts } = await sb.from('receipts').select('store, receipt_date, total, uploaded_at').order('uploaded_at', { ascending: false });
+    var container = document.getElementById('am-spending-container');
+    if (!receipts || !receipts.length) {
+      container.innerHTML = '<div style="text-align:center;padding:30px;color:#94a3b8;">No receipts yet. Scan a receipt to start tracking spending.</div>';
+      return;
+    }
+    // Total and by store
+    var total = 0, byStore = {}, byMonth = {};
+    receipts.forEach(function(r) {
+      var amt = Number(r.total) || 0;
+      total += amt;
+      var s = r.store || 'Unknown';
+      byStore[s] = (byStore[s] || 0) + amt;
+      // Monthly
+      var d = r.receipt_date || '';
+      var parts = d.split('/');
+      var monthKey = parts.length === 3 ? parts[1] + '/' + parts[2] : 'Unknown';
+      byMonth[monthKey] = (byMonth[monthKey] || 0) + amt;
+    });
+    var html = '';
+    // Summary card
+    html += '<div style="background:#eff6ff !important;border-radius:10px !important;padding:16px !important;margin-bottom:16px !important;text-align:center !important;">';
+    html += '<div style="font-size:12px !important;color:#64748b !important;">Total Spend</div>';
+    html += '<div style="font-size:28px !important;font-weight:700 !important;color:#1e293b !important;">$' + total.toFixed(2) + '</div>';
+    html += '<div style="font-size:12px !important;color:#94a3b8 !important;">' + receipts.length + ' receipts</div>';
+    html += '</div>';
+    // By store
+    html += '<div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:16px !important;margin-bottom:16px !important;">';
+    html += '<h4 style="font-size:14px !important;font-weight:600 !important;margin-bottom:10px !important;">By Store</h4>';
+    var stores = Object.keys(byStore).sort(function(a,b){ return byStore[b] - byStore[a]; });
+    stores.forEach(function(s) {
+      var pct = Math.round((byStore[s] / total) * 100);
+      var storeCls = s.toLowerCase().replace(/[^a-z]/g,'');
+      html += '<div style="display:flex !important;align-items:center !important;gap:8px !important;margin-bottom:8px !important;">';
+      html += '<span class="mi-store ' + storeCls + '">' + esc(s) + '</span>';
+      html += '<div style="flex:1 !important;height:8px !important;background:#f1f5f9 !important;border-radius:4px !important;"><div style="height:100% !important;background:#3b82f6 !important;border-radius:4px !important;width:' + pct + '% !important;"></div></div>';
+      html += '<span style="font-size:13px !important;font-weight:600 !important;min-width:70px !important;text-align:right !important;">$' + byStore[s].toFixed(2) + '</span>';
+      html += '</div>';
+    });
+    html += '</div>';
+    // By month
+    html += '<div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:16px !important;">';
+    html += '<h4 style="font-size:14px !important;font-weight:600 !important;margin-bottom:10px !important;">By Month</h4>';
+    Object.keys(byMonth).forEach(function(m) {
+      html += '<div style="display:flex !important;justify-content:space-between !important;padding:6px 0 !important;font-size:13px !important;border-bottom:1px solid #f1f5f9 !important;">';
+      html += '<span>' + esc(m) + '</span>';
+      html += '<span style="font-weight:600 !important;">$' + byMonth[m].toFixed(2) + '</span>';
+      html += '</div>';
+    });
+    html += '</div>';
+    container.innerHTML = html;
+  }
+
+  // ─── SHOPPING HISTORY ───
+  async function amLoadHistory() {
+    var { data: receipts } = await sb.from('receipts').select('*, receipt_items(*)').order('uploaded_at', { ascending: false });
+    var container = document.getElementById('am-history-container');
+    if (!receipts || !receipts.length) {
+      container.innerHTML = '<div style="text-align:center;padding:30px;color:#94a3b8;">No shopping history yet. Scan a receipt to get started.</div>';
+      return;
+    }
+    var html = '';
+    receipts.forEach(function(r) {
+      var date = r.receipt_date || new Date(r.uploaded_at).toLocaleDateString('en-AU');
+      var items = r.receipt_items || [];
+      var storeCls = (r.store || '').toLowerCase().replace(/[^a-z]/g,'');
+      html += '<div class="receipt-card">';
+      html += '<div class="receipt-header" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display===\'none\'?\'block\':\'none\'">';
+      html += '<span class="mi-store ' + storeCls + '">' + esc(r.store || 'Unknown') + '</span>';
+      html += '<div style="flex:1 !important;">';
+      html += '<div style="font-size:13px !important;font-weight:600 !important;">' + esc(date) + '</div>';
+      html += '<div style="font-size:11px !important;color:#94a3b8 !important;">' + items.length + ' items</div>';
+      html += '</div>';
+      if (r.total) html += '<div style="font-size:15px !important;font-weight:700 !important;">$' + Number(r.total).toFixed(2) + '</div>';
+      html += '<span style="color:#94a3b8 !important;font-size:12px !important;">&#x25BC;</span>';
+      html += '</div>';
+      html += '<div class="receipt-items" style="display:none !important;">';
+      items.forEach(function(item) {
+        html += '<div class="receipt-item-row">';
+        html += '<span>' + esc(item.item_name) + (item.quantity > 1 ? ' x' + item.quantity : '') + '</span>';
+        html += '<span class="ri-price">$' + Number(item.price).toFixed(2) + '</span>';
+        html += '</div>';
+      });
+      html += '</div>';
+      html += '</div>';
+    });
+    container.innerHTML = html;
+  }
+
+  // ─── MEAL PLANNING ───
+  var DAYS = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+
+  async function amLoadMeals() {
+    var { data } = await sb.from('meal_plans').select('*').order('day_index');
+    var container = document.getElementById('am-meals-container');
+    var meals = {};
+    (data || []).forEach(function(m) { meals[m.day_index] = m; });
+    var html = '';
+    DAYS.forEach(function(day, i) {
+      var meal = meals[i];
+      html += '<div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:8px !important;padding:12px !important;margin-bottom:8px !important;">';
+      html += '<div style="display:flex !important;justify-content:space-between !important;align-items:center !important;">';
+      html += '<strong style="font-size:13px !important;">' + day + '</strong>';
+      if (meal && meal.who_home) html += '<span style="font-size:11px !important;color:#94a3b8 !important;">' + esc(meal.who_home) + '</span>';
+      html += '</div>';
+      if (meal && meal.meal) {
+        html += '<div style="font-size:13px !important;margin-top:6px !important;">' + esc(meal.meal) + '</div>';
+        if (meal.notes) html += '<div style="font-size:11px !important;color:#94a3b8 !important;margin-top:2px !important;">' + esc(meal.notes) + '</div>';
+      } else {
+        html += '<div style="font-size:12px !important;color:#94a3b8 !important;margin-top:4px !important;font-style:italic !important;">No meal planned</div>';
+      }
+      html += '</div>';
+    });
+    container.innerHTML = html;
+  }
+
+  window.amAskAIMeals = function() {
+    // Open AI and pre-fill with meal planning prompt
+    window.aiFToggle();
+    setTimeout(function() {
+      var input = document.getElementById('ai-float-input');
+      if (input) {
+        input.value = 'Help me plan meals for this week. Ask me who will be home each night.';
+        input.focus();
+      }
+    }, 300);
+  };
+
+  // Load meals when navigating
+  var origAmGo = window.amGo;
+  window.amGo = function(sub) {
+    origAmGo(sub);
+    if (sub === 'meals') amLoadMeals();
+  };
+
+  // Drag and drop for receipts
+  (function(){
+    var zone = document.getElementById('am-receipt-drop');
+    if (zone) {
+      zone.addEventListener('dragover', function(e){ e.preventDefault(); zone.classList.add('dragover'); });
+      zone.addEventListener('dragleave', function(){ zone.classList.remove('dragover'); });
+      zone.addEventListener('drop', function(e){ e.preventDefault(); zone.classList.remove('dragover'); amUploadReceipts(e.dataTransfer.files); });
+    }
+  })();
+
+  amLoadItems();
+  amLoadReceipts();
 
   // ─── WORKOUT LOG ───
   var WL = {
@@ -955,28 +1808,34 @@
 
   wlRender();
 
-  // ─── MEDICAL ───
-  var sessions = [
-    {date:'03/11/2025', duration:'50 min', plan:'NDIS',               practitioner:'Dr Tamsen St Clare'},
-    {date:'30/10/2025', duration:'50 min', plan:'Mental Health Plan',  practitioner:'Dr Amanda Tobias'},
-    {date:'19/10/2025', duration:'50 min', plan:'Mental Health Plan',  practitioner:'Dr Tamsen St Clare'},
-    {date:'06/10/2025', duration:'50 min', plan:'Mental Health Plan',  practitioner:'Dr Tamsen St Clare'},
-    {date:'25/09/2025', duration:'50 min', plan:'Mental Health Plan',  practitioner:'Dr Amanda Tobias'},
-    {date:'21/09/2025', duration:'50 min', plan:'Mental Health Plan',  practitioner:'Dr Tamsen St Clare'},
-    {date:'07/09/2025', duration:'50 min', plan:'Mental Health Plan',  practitioner:'Dr Tamsen St Clare'},
-    {date:'25/08/2025', duration:'50 min', plan:'Mental Health Plan',  practitioner:'Dr Tamsen St Clare'},
-    {date:'11/08/2025', duration:'50 min', plan:'Mental Health Plan',  practitioner:'Dr Tamsen St Clare'},
-    {date:'31/07/2025', duration:'50 min', plan:'Mental Health Plan',  practitioner:'Dr Amanda Tobias'},
-    {date:'28/07/2025', duration:'50 min', plan:'Mental Health Plan',  practitioner:'Dr Tamsen St Clare'}
-  ];
-  var tbody = document.getElementById('med-sessions-body');
-  sessions.forEach(function(s) {
-    var cls = s.plan === 'NDIS' ? 'ndis' : s.plan === 'Mental Health Plan' ? 'mhp' : 'private';
-    tbody.innerHTML += '<tr><td style="font-weight:600 !important;">' + s.date + '</td><td>' + s.duration + ' session</td><td><span class="med-badge ' + cls + '">' + s.plan + '</span></td><td>' + s.practitioner + '</td></tr>';
-  });
-  document.getElementById('med-total').textContent = sessions.length;
-  document.getElementById('med-mhp').textContent = sessions.filter(function(s){ return s.plan === 'Mental Health Plan'; }).length;
-  document.getElementById('med-ndis').textContent = sessions.filter(function(s){ return s.plan === 'NDIS'; }).length;
+  // ─── MEDICAL (from Supabase) ───
+  (async function loadMedical(){
+    // Load sessions
+    var { data: sessions } = await sb.from('medical_sessions').select('*');
+    sessions = sessions || [];
+    var tbody = document.getElementById('med-sessions-body');
+    tbody.innerHTML = '';
+    sessions.forEach(function(s) {
+      var cls = s.plan === 'NDIS' ? 'ndis' : s.plan === 'Mental Health Plan' ? 'mhp' : 'private';
+      tbody.innerHTML += '<tr><td style="font-weight:600 !important;">' + esc(s.date) + '</td><td>' + esc(s.duration) + ' session</td><td><span class="med-badge ' + cls + '">' + esc(s.plan) + '</span></td><td>' + esc(s.practitioner) + '</td></tr>';
+    });
+    document.getElementById('med-total').textContent = sessions.length;
+    document.getElementById('med-mhp').textContent = sessions.filter(function(s){ return s.plan === 'Mental Health Plan'; }).length;
+    document.getElementById('med-ndis').textContent = sessions.filter(function(s){ return s.plan === 'NDIS'; }).length;
+
+    // Load medication plan
+    var { data: meds } = await sb.from('medications').select('*');
+    var medsBody = document.getElementById('med-meds-body');
+    medsBody.innerHTML = '';
+    var dailyMeds = ['Vyvanse', 'Valtrex', 'Levothyroxine'];
+    (meds || []).forEach(function(m) {
+      var isDaily = dailyMeds.some(function(d) { return m.name.toLowerCase().indexOf(d.toLowerCase()) !== -1; });
+      var freqBadge = isDaily
+        ? '<span style="font-size:10px !important;background:#dbeafe !important;color:#1d4ed8 !important;padding:2px 6px !important;border-radius:4px !important;font-weight:600 !important;">DAILY</span> '
+        : '<span style="font-size:10px !important;background:#fef3c7 !important;color:#92400e !important;padding:2px 6px !important;border-radius:4px !important;font-weight:600 !important;">WEEKLY</span> ';
+      medsBody.innerHTML += '<tr><td style="font-weight:600 !important;">' + freqBadge + esc(m.name) + '</td><td>' + esc(m.dose) + '</td><td>' + esc(m.schedule) + '</td><td class="meds-reason">' + esc(m.purpose) + '</td></tr>';
+    });
+  })();
 
   // ─── DOCUMENT FILE RENAMER ───
   (function(){
@@ -1025,126 +1884,10 @@
     }
   })();
 
-  // ─── AI CHAT ───
+
+  // ─── HABITS (from Supabase) ───
   (function(){
-    var aiMessages = [];
-    var aiSystemPrompt = "You are Cath's warm and practical personal AI assistant. Cath is an Australian woman who runs a coaching business called Coach4U. She uses Cath Hub to manage her personal life — shopping, workouts, medical appointments, and habits. Be friendly, concise, and helpful. Use Australian English. Currency is AUD ($). Dates in DD/MM/YYYY format. Don't be overly formal.";
-
-    function aiGetKey() { return localStorage.getItem('cathHub_apiKey') || ''; }
-
-    function aiInit() {
-      var key = aiGetKey();
-      document.getElementById('ai-setup-card').style.display = key ? 'none' : 'block';
-      document.getElementById('ai-chat-card').style.display = key ? 'flex' : 'none';
-      if (key) aiRenderMessages();
-    }
-
-    window.aiSaveKey = function() {
-      var val = document.getElementById('ai-key-input').value.trim();
-      if (!val) return;
-      localStorage.setItem('cathHub_apiKey', val);
-      document.getElementById('ai-key-input').value = '';
-      aiInit();
-    };
-
-    window.aiClearKey = function() {
-      if (!confirm('Remove your API key?')) return;
-      localStorage.removeItem('cathHub_apiKey');
-      aiMessages = [];
-      aiInit();
-    };
-
-    window.aiClearChat = function() {
-      aiMessages = [];
-      aiRenderMessages();
-    };
-
-    function aiRenderMessages() {
-      var container = document.getElementById('ai-messages');
-      if (!aiMessages.length) {
-        container.innerHTML = '<div class="ai-welcome"><div class="ai-welcome-icon">&#x1F916;</div><div class="ai-welcome-text">Hi Cath! I\'m your AI assistant.<br>Ask me anything &mdash; workouts, planning, ideas&hellip;</div></div>';
-        return;
-      }
-      var html = '';
-      aiMessages.forEach(function(msg) {
-        html += '<div class="ai-msg ' + msg.role + '"><div class="ai-bubble">' + esc(msg.content).replace(/\n/g, '<br>') + '</div></div>';
-      });
-      container.innerHTML = html;
-      container.scrollTop = container.scrollHeight;
-    }
-
-    window.aiKeyDown = function(e) {
-      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); aiSend(); }
-    };
-
-    window.aiSend = async function() {
-      var input = document.getElementById('ai-input');
-      var text = input.value.trim();
-      if (!text) return;
-      var key = aiGetKey();
-      if (!key) { aiInit(); return; }
-
-      input.value = '';
-      aiMessages.push({role: 'user', content: text});
-      aiRenderMessages();
-
-      var container = document.getElementById('ai-messages');
-      var typing = document.createElement('div');
-      typing.className = 'ai-msg assistant';
-      typing.innerHTML = '<div class="ai-typing">&#x25CF; &#x25CF; &#x25CF;</div>';
-      typing.id = 'ai-typing-indicator';
-      container.appendChild(typing);
-      container.scrollTop = container.scrollHeight;
-
-      var btn = document.getElementById('ai-send-btn');
-      btn.disabled = true;
-
-      try {
-        var resp = await fetch('https://api.anthropic.com/v1/messages', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'x-api-key': key,
-            'anthropic-version': '2023-06-01',
-            'anthropic-dangerous-allow-browser': 'true'
-          },
-          body: JSON.stringify({
-            model: 'claude-haiku-4-5',
-            max_tokens: 1024,
-            system: aiSystemPrompt,
-            messages: aiMessages.map(function(m){ return {role: m.role, content: m.content}; })
-          })
-        });
-        if (!resp.ok) {
-          var err = await resp.json().catch(function(){ return {}; });
-          throw new Error(err.error && err.error.message ? err.error.message : 'API error ' + resp.status);
-        }
-        var data = await resp.json();
-        var reply = (data.content && data.content[0] && data.content[0].text) ? data.content[0].text : 'Sorry, no response received.';
-        aiMessages.push({role: 'assistant', content: reply});
-      } catch(err) {
-        aiMessages.push({role: 'assistant', content: '\u26A0\uFE0F Error: ' + err.message});
-      }
-
-      var ind = document.getElementById('ai-typing-indicator');
-      if (ind) ind.remove();
-      btn.disabled = false;
-      aiRenderMessages();
-    };
-
-    aiInit();
-  })();
-
-  // ─── HABITS ───
-  (function(){
-    var HB_MEDS = 'cathHub_habits_meds';
-    var HB_LOGS = 'cathHub_habits_logs';
     var DAY_LABELS = ['M','T','W','T','F','S','S'];
-
-    function getMeds() { try { return JSON.parse(localStorage.getItem(HB_MEDS) || '[]'); } catch(e){ return []; } }
-    function saveMeds(m) { localStorage.setItem(HB_MEDS, JSON.stringify(m)); }
-    function getLogs() { try { return JSON.parse(localStorage.getItem(HB_LOGS) || '{}'); } catch(e){ return {}; } }
-    function saveLogs(l) { localStorage.setItem(HB_LOGS, JSON.stringify(l)); }
 
     function todayKey() {
       var n = new Date();
@@ -1163,8 +1906,18 @@
 
     function todayIdx() { var d = new Date().getDay(); return d === 0 ? 6 : d-1; }
 
-    function streak(id) {
-      var logs = getLogs(), ml = logs[id] || {}, s = 0;
+    async function getLogsMap() {
+      var { data } = await sb.from('habit_logs').select('*');
+      var logs = {};
+      (data || []).forEach(function(l) {
+        if (!logs[l.med_id]) logs[l.med_id] = {};
+        logs[l.med_id][l.date] = true;
+      });
+      return logs;
+    }
+
+    async function streakFor(id, logs) {
+      var ml = logs[id] || {}, s = 0;
       var d = new Date();
       while (true) {
         var k = d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
@@ -1179,41 +1932,46 @@
       if (f.classList.contains('show')) document.getElementById('hab-'+freq+'-name').focus();
     };
 
-    window.habAddMed = function(freq) {
+    window.habAddMed = async function(freq) {
       var inp = document.getElementById('hab-'+freq+'-name');
       var name = inp.value.trim();
       if (!name) return;
-      var meds = getMeds();
-      meds.push({id: Date.now(), name: name, freq: freq});
-      saveMeds(meds);
+      await sb.from('habit_meds').insert({ id: Date.now(), name: name, freq: freq });
       inp.value = '';
       document.getElementById('hab-'+freq+'-form').classList.remove('show');
       habRender();
     };
 
-    window.habDeleteMed = function(id) {
-      saveMeds(getMeds().filter(function(m){ return m.id !== id; }));
+    window.habDeleteMed = async function(id) {
+      await sb.from('habit_meds').delete().eq('id', id);
       habRender();
     };
 
-    window.habToggleDaily = function(id) {
-      var logs = getLogs(), today = todayKey();
-      if (!logs[id]) logs[id] = {};
-      logs[id][today] = !logs[id][today];
-      saveLogs(logs);
+    window.habToggleDaily = async function(id) {
+      var today = todayKey();
+      var { data } = await sb.from('habit_logs').select('*').eq('med_id', id).eq('date', today);
+      if (data && data.length) {
+        await sb.from('habit_logs').delete().eq('med_id', id).eq('date', today);
+      } else {
+        await sb.from('habit_logs').insert({ med_id: id, date: today });
+      }
       habRender();
     };
 
-    window.habToggleWeekly = function(id, dk) {
-      var logs = getLogs();
-      if (!logs[id]) logs[id] = {};
-      logs[id][dk] = !logs[id][dk];
-      saveLogs(logs);
+    window.habToggleWeekly = async function(id, dk) {
+      var { data } = await sb.from('habit_logs').select('*').eq('med_id', id).eq('date', dk);
+      if (data && data.length) {
+        await sb.from('habit_logs').delete().eq('med_id', id).eq('date', dk);
+      } else {
+        await sb.from('habit_logs').insert({ med_id: id, date: dk });
+      }
       habRender();
     };
 
-    function habRender() {
-      var meds = getMeds(), logs = getLogs();
+    async function habRender() {
+      var { data: meds } = await sb.from('habit_meds').select('*');
+      meds = meds || [];
+      var logs = await getLogsMap();
       var today = todayKey(), wk = weekKeys(), tIdx = todayIdx();
       var daily = meds.filter(function(m){ return m.freq==='daily'; });
       var weekly = meds.filter(function(m){ return m.freq==='weekly'; });
@@ -1224,16 +1982,17 @@
         dl.innerHTML = '<div class="hab-empty">No daily medications yet. Tap + Add to get started.</div>';
       } else {
         var h = '';
-        daily.forEach(function(med) {
+        for (var i = 0; i < daily.length; i++) {
+          var med = daily[i];
           var done = !!(logs[med.id] && logs[med.id][today]);
-          var s = streak(med.id);
+          var s = await streakFor(med.id, logs);
           h += '<div class="hab-med-row">';
           h += '<div class="hab-check'+(done?' done':'')+'" onclick="habToggleDaily('+med.id+')"></div>';
           h += '<div class="hab-med-name">'+esc(med.name)+'</div>';
           if (s > 1) h += '<div class="hab-streak">&#x1F525; '+s+' days</div>';
           h += '<div class="hab-del" onclick="habDeleteMed('+med.id+')">&#x1F5D1;</div>';
           h += '</div>';
-        });
+        }
         dl.innerHTML = h;
       }
 
@@ -1264,7 +2023,10 @@
       var weeklyDone = 0;
       weekly.forEach(function(m){ wk.forEach(function(dk){ if(logs[m.id]&&logs[m.id][dk]) weeklyDone++; }); });
       var best = 0;
-      daily.forEach(function(m){ var s=streak(m.id); if(s>best) best=s; });
+      for (var i = 0; i < daily.length; i++) {
+        var s = await streakFor(daily[i].id, logs);
+        if (s > best) best = s;
+      }
 
       document.getElementById('hab-daily-done').textContent = dailyDone+'/'+daily.length;
       document.getElementById('hab-weekly-done').textContent = weeklyDone;
@@ -1274,27 +2036,401 @@
     habRender();
   })();
 
-  // ─── FLOATING AI ───
+  // ─── FLOATING AI (with database tools) ───
   (function(){
     var afMessages = [];
     var afOpen = false;
-    var afSystemPrompt = "You are Cath's warm and practical personal AI assistant. Cath is an Australian woman who runs a coaching business called Coach4U. She uses Cath Hub to manage her personal life — shopping, workouts, medical appointments, and habits. Be friendly, concise, and helpful. Use Australian English. Currency is AUD ($). Dates in DD/MM/YYYY format. Don't be overly formal.";
+    var afSystemPrompt = "You are Cath's warm and practical personal AI assistant built into Cath Hub. Cath is an Australian woman who runs a coaching business called Coach4U. She uses Cath Hub to manage her personal life — shopping, workouts, medical appointments, and habits. Be friendly, concise, and helpful. Use Australian English. Currency is AUD ($). Dates in DD/MM/YYYY format. Don't be overly formal.\n\nYou have tools to manage the Supabase database:\n- search_items: search the master item list\n- update_items: update category, store, family_member, or name for items matching a filter\n- delete_items: delete items matching a filter\n- add_item: add a new item to the master list\n\nValid categories: Fruit & Veg, Meat, Dairy, Pantry, Frozen, Drinks, Household, Other\nValid family members: Cath, Andrew, Sarah, Russell (or empty string to unassign)\n\nWhen Cath asks to change items, use the tools. Always confirm what you did after.\n\nWhen Cath asks to add something to the shopping list (e.g. 'add milk'):\n1. First use search_items to check if it's in the master list\n2. If found, use add_to_shopping_list with the master list details (name, category, store). Just do it, don't ask for confirmation.\n3. If not found, add it as a quick-add with category Other and no store (leave store empty).\n4. NEVER offer to add items to the master list. The master list is populated automatically from scanned receipts — receipts are the source of truth.\n\nYou can also:\n- View the shopping list and remove items\n- Repeat last shop (add all items from most recent receipt)\n- Add all of a family member's items at once (e.g. 'add all of Sarah's items')\n- Add multiple items in one go (e.g. 'add milk, bread and bananas')\n- Suggest items Cath might be low on based on purchase frequency\n- Show spending summaries by store or date range\n- Compare prices for items across stores and dates\n\nBe proactive — if Cath asks to add items, handle it. If she asks about spending, use the tools. Always be concise in responses.\n\nMEAL PLANNING:\nCath's family: Cath, Andrew, Sarah, Russell. When asked to plan meals:\n1. Ask who will be home each night (Mon-Sun)\n2. Suggest practical meals based on what's in the master list and what they usually buy\n3. Use set_meal_plan tool to save each day's meal\n4. Offer to add any missing ingredients to the shopping list\n\nSHOPPING LIST REVIEW:\nWhen Cath says the list is finalised or asks you to review it, use view_shopping_list to check it, then analyse and suggest anything obviously missing (e.g. if there's pasta but no sauce, meat but no veggies, breakfast items missing, etc). Be practical not pushy.";
+
+    var afTools = [
+      {
+        name: 'search_items',
+        description: 'Search master items by name, category, or store. Returns matching items.',
+        input_schema: {
+          type: 'object',
+          properties: {
+            query: { type: 'string', description: 'Search term to match against item name (case-insensitive partial match)' },
+            category: { type: 'string', description: 'Filter by category' },
+            store: { type: 'string', description: 'Filter by store' }
+          }
+        }
+      },
+      {
+        name: 'update_items',
+        description: 'Update fields on master items matching a filter. Use search_items first to verify which items will be affected.',
+        input_schema: {
+          type: 'object',
+          properties: {
+            filter_name: { type: 'string', description: 'Match items whose name contains this (case-insensitive). Required.' },
+            set_category: { type: 'string', description: 'New category to set' },
+            set_store: { type: 'string', description: 'New store to set' },
+            set_family_member: { type: 'string', description: 'New family member to assign' },
+            set_name: { type: 'string', description: 'New name (only use when renaming a single specific item)' }
+          },
+          required: ['filter_name']
+        }
+      },
+      {
+        name: 'delete_items',
+        description: 'Delete master items matching a name filter. Use search_items first to verify.',
+        input_schema: {
+          type: 'object',
+          properties: {
+            filter_name: { type: 'string', description: 'Delete items whose name contains this (case-insensitive)' }
+          },
+          required: ['filter_name']
+        }
+      },
+      {
+        name: 'add_item',
+        description: 'Add a new item to the master list.',
+        input_schema: {
+          type: 'object',
+          properties: {
+            name: { type: 'string', description: 'Item name' },
+            category: { type: 'string', description: 'Category' },
+            store: { type: 'string', description: 'Store name' },
+            last_price: { type: 'number', description: 'Price (optional)' }
+          },
+          required: ['name', 'category', 'store']
+        }
+      },
+      {
+        name: 'add_to_shopping_list',
+        description: 'Add an item to the weekly shopping list. If the item exists in the master list, search for it first to get the correct category and store. If the user just says an item name, search master_items first, and if found use that data. If not found, add it as a quick-add with category Other.',
+        input_schema: {
+          type: 'object',
+          properties: {
+            name: { type: 'string', description: 'Item name' },
+            category: { type: 'string', description: 'Category (use master list category if available)' },
+            store: { type: 'string', description: 'Store (use master list store if available)' }
+          },
+          required: ['name']
+        }
+      },
+      {
+        name: 'view_shopping_list',
+        description: 'View the current weekly shopping list with checked/unchecked status.',
+        input_schema: {
+          type: 'object',
+          properties: {}
+        }
+      },
+      {
+        name: 'remove_from_shopping_list',
+        description: 'Remove an item from the shopping list by name.',
+        input_schema: {
+          type: 'object',
+          properties: {
+            name: { type: 'string', description: 'Item name to remove (partial match)' }
+          },
+          required: ['name']
+        }
+      },
+      {
+        name: 'repeat_last_shop',
+        description: 'Add all items from the most recent receipt to the shopping list. Use when Cath says things like "repeat last shop", "same as last week", "add last weeks shop".',
+        input_schema: { type: 'object', properties: {} }
+      },
+      {
+        name: 'add_family_member_items',
+        description: 'Add all items assigned to a family member to the shopping list. Use when Cath says "add all of Sarah items" or "add Andrews stuff".',
+        input_schema: {
+          type: 'object',
+          properties: {
+            family_member: { type: 'string', description: 'Family member name: Cath, Andrew, Sarah, or Russell' }
+          },
+          required: ['family_member']
+        }
+      },
+      {
+        name: 'add_multiple_to_shopping_list',
+        description: 'Add multiple items to the shopping list at once. Search master list for each. Use when Cath lists several items like "add milk, bread, bananas and cheese".',
+        input_schema: {
+          type: 'object',
+          properties: {
+            items: {
+              type: 'array',
+              items: { type: 'string' },
+              description: 'Array of item names to add'
+            }
+          },
+          required: ['items']
+        }
+      },
+      {
+        name: 'suggest_low_items',
+        description: 'Analyse purchase frequency and suggest items Cath usually buys but hasnt bought recently. Looks at receipt history to find regular purchases.',
+        input_schema: { type: 'object', properties: {} }
+      },
+      {
+        name: 'spending_summary',
+        description: 'Calculate total spending from receipts, optionally filtered by store or date range. Use for questions like "how much did I spend at Aldi this month" or "total spending in March".',
+        input_schema: {
+          type: 'object',
+          properties: {
+            store: { type: 'string', description: 'Filter by store name (optional)' },
+            from_date: { type: 'string', description: 'Start date YYYY-MM-DD (optional)' },
+            to_date: { type: 'string', description: 'End date YYYY-MM-DD (optional)' }
+          }
+        }
+      },
+      {
+        name: 'compare_prices',
+        description: 'Compare prices for an item across different stores and dates from receipt history. Use for "where is milk cheapest" or "compare chicken prices".',
+        input_schema: {
+          type: 'object',
+          properties: {
+            item_name: { type: 'string', description: 'Item name to search for (partial match)' }
+          },
+          required: ['item_name']
+        }
+      },
+      {
+        name: 'save_memory',
+        description: 'Save a fact to persistent memory. Use when Cath says "remember that...", "note that...", "keep in mind...", or tells you something worth remembering for future conversations.',
+        input_schema: {
+          type: 'object',
+          properties: {
+            fact: { type: 'string', description: 'The fact to remember' }
+          },
+          required: ['fact']
+        }
+      },
+      {
+        name: 'forget_memory',
+        description: 'Remove a fact from memory. Use when Cath says "forget that..." or "remove the memory about...".',
+        input_schema: {
+          type: 'object',
+          properties: {
+            search: { type: 'string', description: 'Search term to find the memory to delete (partial match)' }
+          },
+          required: ['search']
+        }
+      },
+      {
+        name: 'list_memories',
+        description: 'List all saved memories. Use when Cath asks "what do you remember?" or "show me your memories".',
+        input_schema: { type: 'object', properties: {} }
+      },
+      {
+        name: 'set_meal_plan',
+        description: 'Set the meal for a specific day of the week. Days: 0=Monday, 1=Tuesday, 2=Wednesday, 3=Thursday, 4=Friday, 5=Saturday, 6=Sunday.',
+        input_schema: {
+          type: 'object',
+          properties: {
+            day_index: { type: 'number', description: 'Day index 0-6 (Monday=0, Sunday=6)' },
+            meal: { type: 'string', description: 'The meal description' },
+            who_home: { type: 'string', description: 'Who will be home (e.g. "Cath, Andrew, Sarah")' },
+            notes: { type: 'string', description: 'Any notes (optional)' }
+          },
+          required: ['day_index', 'meal']
+        }
+      },
+      {
+        name: 'get_meal_plan',
+        description: 'Get the current meal plan for the week.',
+        input_schema: { type: 'object', properties: {} }
+      },
+      {
+        name: 'analyse_shopping_list',
+        description: 'Review the current shopping list and suggest missing items. Use when Cath says the list is done, finalised, or asks to review/check it.',
+        input_schema: { type: 'object', properties: {} }
+      }
+    ];
+
+    async function afRunTool(toolName, toolInput) {
+      if (toolName === 'search_items') {
+        var q = sb.from('master_items').select('id, name, category, store, family_member, last_price');
+        if (toolInput.query) q = q.ilike('name', '%' + toolInput.query + '%');
+        if (toolInput.category) q = q.eq('category', toolInput.category);
+        if (toolInput.store) q = q.eq('store', toolInput.store);
+        var { data } = await q.order('name').limit(50);
+        return JSON.stringify(data || []);
+      }
+      if (toolName === 'update_items') {
+        var updates = {};
+        if (toolInput.set_category) updates.category = toolInput.set_category;
+        if (toolInput.set_store) updates.store = toolInput.set_store;
+        if (toolInput.set_family_member !== undefined) updates.family_member = toolInput.set_family_member;
+        if (toolInput.set_name) updates.name = toolInput.set_name;
+        var { data, count } = await sb.from('master_items').update(updates).ilike('name', '%' + toolInput.filter_name + '%').select();
+        return JSON.stringify({ updated: (data || []).length, items: (data || []).map(function(i){ return i.name; }) });
+      }
+      if (toolName === 'delete_items') {
+        var { data } = await sb.from('master_items').delete().ilike('name', '%' + toolInput.filter_name + '%').select();
+        return JSON.stringify({ deleted: (data || []).length, items: (data || []).map(function(i){ return i.name; }) });
+      }
+      if (toolName === 'add_item') {
+        var row = { name: toolInput.name, category: toolInput.category, store: toolInput.store };
+        if (toolInput.last_price) row.last_price = toolInput.last_price;
+        await sb.from('master_items').insert(row);
+        return JSON.stringify({ added: toolInput.name });
+      }
+      if (toolName === 'add_to_shopping_list') {
+        var row = { name: toolInput.name, category: toolInput.category || 'Other', store: toolInput.store || '' };
+        await sb.from('shopping_items').insert(row);
+        return JSON.stringify({ added: toolInput.name, category: row.category, store: row.store });
+      }
+      if (toolName === 'view_shopping_list') {
+        var { data } = await sb.from('shopping_items').select('name, category, store, checked').order('created_at');
+        return JSON.stringify(data || []);
+      }
+      if (toolName === 'remove_from_shopping_list') {
+        var { data } = await sb.from('shopping_items').delete().ilike('name', '%' + toolInput.name + '%').select();
+        return JSON.stringify({ removed: (data || []).length, items: (data || []).map(function(i){ return i.name; }) });
+      }
+      if (toolName === 'repeat_last_shop') {
+        var { data: recs } = await sb.from('receipts').select('*, receipt_items(*)').order('uploaded_at', { ascending: false }).limit(1);
+        if (!recs || !recs.length || !recs[0].receipt_items.length) return '{"error":"No previous receipt found"}';
+        var rec = recs[0];
+        var { data: ml } = await sb.from('master_items').select('name, category, store');
+        var mm = {}; (ml || []).forEach(function(m){ mm[m.name.toLowerCase()] = m; });
+        var rows = [], seen = {};
+        rec.receipt_items.forEach(function(ri) {
+          if (ri.price <= 0) return;
+          var k = ri.item_name.toLowerCase();
+          if (seen[k]) return; seen[k] = true;
+          var mi = mm[k];
+          rows.push({ name: ri.item_name, category: mi ? mi.category : 'Other', store: mi ? mi.store : (rec.store || '') });
+        });
+        if (rows.length) await sb.from('shopping_items').insert(rows);
+        return JSON.stringify({ added: rows.length, store: rec.store, date: rec.receipt_date, items: rows.map(function(r){ return r.name; }) });
+      }
+      if (toolName === 'add_family_member_items') {
+        var { data: fi } = await sb.from('master_items').select('name, category, store').eq('family_member', toolInput.family_member);
+        if (!fi || !fi.length) return JSON.stringify({ added: 0, message: 'No items assigned to ' + toolInput.family_member });
+        var rows = fi.map(function(i){ return { name: i.name, category: i.category, store: i.store }; });
+        await sb.from('shopping_items').insert(rows);
+        return JSON.stringify({ added: rows.length, family_member: toolInput.family_member, items: rows.map(function(r){ return r.name; }) });
+      }
+      if (toolName === 'add_multiple_to_shopping_list') {
+        var { data: ml } = await sb.from('master_items').select('name, category, store');
+        var mm = {}; (ml || []).forEach(function(m){ mm[m.name.toLowerCase()] = m; });
+        var rows = [], matched = [], unmatched = [];
+        toolInput.items.forEach(function(itemName) {
+          // Search master list
+          var found = null;
+          (ml || []).forEach(function(m) {
+            if (!found && m.name.toLowerCase().indexOf(itemName.toLowerCase()) !== -1) found = m;
+          });
+          if (found) {
+            rows.push({ name: found.name, category: found.category, store: found.store });
+            matched.push(found.name);
+          } else {
+            rows.push({ name: itemName, category: 'Other', store: '' });
+            unmatched.push(itemName);
+          }
+        });
+        if (rows.length) await sb.from('shopping_items').insert(rows);
+        return JSON.stringify({ added: rows.length, matched_from_master: matched, quick_adds: unmatched });
+      }
+      if (toolName === 'suggest_low_items') {
+        // Get all receipt items with dates
+        var { data: allReceipts } = await sb.from('receipts').select('receipt_date, receipt_items(item_name)').order('uploaded_at', { ascending: false });
+        if (!allReceipts || !allReceipts.length) return '{"suggestions":[],"message":"No receipt history yet"}';
+        // Count how many receipts each item appears in
+        var itemCount = {};
+        (allReceipts || []).forEach(function(r) {
+          var seen = {};
+          (r.receipt_items || []).forEach(function(ri) {
+            var k = ri.item_name.toLowerCase();
+            if (!seen[k]) { seen[k] = true; itemCount[k] = (itemCount[k] || { name: ri.item_name, count: 0 }); itemCount[k].count++; }
+          });
+        });
+        // Get current shopping list
+        var { data: current } = await sb.from('shopping_items').select('name');
+        var currentNames = (current || []).map(function(c){ return c.name.toLowerCase(); });
+        // Suggest items bought in 2+ receipts but not on current list
+        var suggestions = [];
+        Object.keys(itemCount).forEach(function(k) {
+          if (itemCount[k].count >= 2 && currentNames.indexOf(k) === -1) {
+            suggestions.push({ name: itemCount[k].name, bought_times: itemCount[k].count });
+          }
+        });
+        suggestions.sort(function(a,b){ return b.bought_times - a.bought_times; });
+        return JSON.stringify({ suggestions: suggestions.slice(0, 15) });
+      }
+      if (toolName === 'spending_summary') {
+        var q = sb.from('receipts').select('store, receipt_date, total');
+        if (toolInput.store) q = q.ilike('store', '%' + toolInput.store + '%');
+        if (toolInput.from_date) q = q.gte('uploaded_at', toolInput.from_date);
+        if (toolInput.to_date) q = q.lte('uploaded_at', toolInput.to_date + 'T23:59:59');
+        var { data: recs } = await q;
+        if (!recs || !recs.length) return '{"total":0,"message":"No receipts found for that period"}';
+        var total = 0, byStore = {};
+        recs.forEach(function(r) {
+          total += Number(r.total) || 0;
+          var s = r.store || 'Unknown';
+          byStore[s] = (byStore[s] || 0) + (Number(r.total) || 0);
+        });
+        return JSON.stringify({ total: Math.round(total * 100) / 100, receipt_count: recs.length, by_store: byStore });
+      }
+      if (toolName === 'compare_prices') {
+        var { data: ri } = await sb.from('receipt_items').select('item_name, price, receipt_id, receipts(store, receipt_date)').ilike('item_name', '%' + toolInput.item_name + '%').order('item_name');
+        if (!ri || !ri.length) return '{"message":"No price history found for that item"}';
+        var results = ri.map(function(r) {
+          return { item: r.item_name, price: r.price, store: r.receipts ? r.receipts.store : '', date: r.receipts ? r.receipts.receipt_date : '' };
+        });
+        return JSON.stringify({ prices: results });
+      }
+      if (toolName === 'save_memory') {
+        await sb.from('ai_memory').insert({ fact: toolInput.fact });
+        return JSON.stringify({ saved: toolInput.fact });
+      }
+      if (toolName === 'forget_memory') {
+        var { data } = await sb.from('ai_memory').delete().ilike('fact', '%' + toolInput.search + '%').select();
+        return JSON.stringify({ removed: (data || []).length, facts: (data || []).map(function(m){ return m.fact; }) });
+      }
+      if (toolName === 'list_memories') {
+        var { data } = await sb.from('ai_memory').select('*').order('created_at');
+        return JSON.stringify(data || []);
+      }
+      if (toolName === 'set_meal_plan') {
+        var row = { day_index: toolInput.day_index, meal: toolInput.meal, who_home: toolInput.who_home || '', notes: toolInput.notes || '' };
+        await sb.from('meal_plans').delete().eq('day_index', toolInput.day_index);
+        await sb.from('meal_plans').insert(row);
+        var days = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+        return JSON.stringify({ set: days[toolInput.day_index], meal: toolInput.meal });
+      }
+      if (toolName === 'get_meal_plan') {
+        var { data } = await sb.from('meal_plans').select('*').order('day_index');
+        var days = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+        var plan = days.map(function(d, i) {
+          var m = (data || []).find(function(r) { return r.day_index === i; });
+          return { day: d, meal: m ? m.meal : 'Not planned', who_home: m ? m.who_home : '' };
+        });
+        return JSON.stringify(plan);
+      }
+      if (toolName === 'analyse_shopping_list') {
+        var { data: shopItems } = await sb.from('shopping_items').select('name, category');
+        var { data: masterItems } = await sb.from('master_items').select('name, category');
+        var categories = {};
+        (shopItems || []).forEach(function(i) {
+          var cat = i.category || 'Other';
+          if (!categories[cat]) categories[cat] = [];
+          categories[cat].push(i.name);
+        });
+        return JSON.stringify({ current_list: categories, total_items: (shopItems || []).length, master_list_size: (masterItems || []).length });
+      }
+      return '{"error":"Unknown tool"}';
+    }
 
     function afGetKey() { return localStorage.getItem('cathHub_apiKey') || ''; }
 
     function afInit() {
-      var key = afGetKey();
+      // API key is now stored server-side in Supabase Secrets
       var setup = document.getElementById('ai-float-setup');
       var body  = document.getElementById('ai-float-body');
-      if (key) { setup.style.display = 'none'; body.style.display = 'flex'; }
-      else      { setup.style.display = 'flex'; body.style.display = 'none'; }
+      setup.style.setProperty('display', 'none', 'important');
+      body.style.setProperty('display', 'flex', 'important');
     }
 
     window.aiFToggle = function() {
       var panel = document.getElementById('ai-float-panel');
       afOpen = !afOpen;
       panel.classList.toggle('hidden', !afOpen);
-      if (afOpen) { afInit(); afRender(); if (afGetKey()) setTimeout(function(){ document.getElementById('ai-float-input').focus(); }, 120); }
+      if (afOpen) { afInit(); afRender(); setTimeout(function(){ document.getElementById('ai-float-input').focus(); }, 120); }
     };
 
     window.aiFSaveKey = function() {
@@ -1302,7 +2438,6 @@
       if (!val) return;
       localStorage.setItem('cathHub_apiKey', val);
       document.getElementById('ai-float-key-input').value = '';
-      // also refresh the main AI tab
       if (window.aiSaveKey) { localStorage.setItem('cathHub_apiKey', val); }
       afInit();
       setTimeout(function(){ document.getElementById('ai-float-input').focus(); }, 120);
@@ -1311,12 +2446,13 @@
     function afRender() {
       var container = document.getElementById('ai-float-msgs');
       if (!afMessages.length) {
-        container.innerHTML = '<div class="ai-float-welcome"><div class="ai-float-welcome-icon">&#x1F916;</div>Hi Cath! Ask me anything.</div>';
+        container.innerHTML = '<div class="ai-float-welcome"><div class="ai-float-welcome-icon">&#x1F916;</div>Hi Cath! I can help manage your shopping list. Try: "Move Nutella to Pantry" or "Assign all yogurt to Sarah"</div>';
         return;
       }
       var html = '';
       afMessages.forEach(function(msg) {
-        html += '<div class="ai-msg ' + msg.role + '"><div class="ai-bubble">' + esc(msg.content).replace(/\n/g,'<br>') + '</div></div>';
+        if (msg.role === 'user') html += '<div class="ai-msg user"><div class="ai-bubble">' + esc(msg.content).replace(/\n/g,'<br>') + '</div></div>';
+        else if (msg.role === 'assistant' && msg.content) html += '<div class="ai-msg assistant"><div class="ai-bubble">' + esc(msg.content).replace(/\n/g,'<br>') + '</div></div>';
       });
       container.innerHTML = html;
       container.scrollTop = container.scrollHeight;
@@ -1325,6 +2461,37 @@
     window.aiFKeyDown = function(e) {
       if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); aiFSend(); }
     };
+
+    async function afCallAPI(messages) {
+      // Load memories into system prompt
+      var memoryContext = afSystemPrompt;
+      try {
+        var { data: memories } = await sb.from('ai_memory').select('fact').order('created_at');
+        if (memories && memories.length) {
+          memoryContext += '\n\nYour saved memories about Cath and her family:\n';
+          memories.forEach(function(m) { memoryContext += '- ' + m.fact + '\n'; });
+          memoryContext += '\nUse these memories to give more personalised, relevant responses.';
+        }
+      } catch(e) {}
+      var resp = await fetch('https://ziwycymhaqghdiznyhhw.supabase.co/functions/v1/claude-proxy', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          model: 'claude-haiku-4-5',
+          max_tokens: 1024,
+          system: memoryContext,
+          tools: afTools,
+          messages: messages
+        })
+      });
+      if (!resp.ok) {
+        var err = await resp.json().catch(function(){ return {}; });
+        throw new Error(err.error && err.error.message ? err.error.message : 'API error ' + resp.status);
+      }
+      return await resp.json();
+    }
 
     window.aiFSend = async function() {
       var input = document.getElementById('ai-float-input');
@@ -1349,28 +2516,46 @@
       btn.disabled = true;
 
       try {
-        var resp = await fetch('https://api.anthropic.com/v1/messages', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'x-api-key': key,
-            'anthropic-version': '2023-06-01',
-            'anthropic-dangerous-allow-browser': 'true'
-          },
-          body: JSON.stringify({
-            model: 'claude-haiku-4-5',
-            max_tokens: 1024,
-            system: afSystemPrompt,
-            messages: afMessages.map(function(m){ return {role: m.role, content: m.content}; })
-          })
+        // Build API messages (filter out tool results for display but keep for API)
+        var apiMsgs = [];
+        afMessages.forEach(function(m) {
+          if (m.apiContent) apiMsgs.push({ role: m.role, content: m.apiContent });
+          else if (m.content) apiMsgs.push({ role: m.role, content: m.content });
         });
-        if (!resp.ok) {
-          var err = await resp.json().catch(function(){ return {}; });
-          throw new Error(err.error && err.error.message ? err.error.message : 'API error ' + resp.status);
+
+        var data = await afCallAPI(apiMsgs);
+
+        // Handle tool use loop
+        while (data.stop_reason === 'tool_use') {
+          var assistantContent = data.content;
+          afMessages.push({ role: 'assistant', content: '', apiContent: assistantContent });
+
+          var toolResults = [];
+          for (var i = 0; i < assistantContent.length; i++) {
+            var block = assistantContent[i];
+            if (block.type === 'tool_use') {
+              var result = await afRunTool(block.name, block.input);
+              toolResults.push({ type: 'tool_result', tool_use_id: block.id, content: result });
+            }
+          }
+          afMessages.push({ role: 'user', content: '', apiContent: toolResults });
+
+          // Re-build API messages and call again
+          apiMsgs = [];
+          afMessages.forEach(function(m) {
+            if (m.apiContent) apiMsgs.push({ role: m.role, content: m.apiContent });
+            else if (m.content) apiMsgs.push({ role: m.role, content: m.content });
+          });
+          data = await afCallAPI(apiMsgs);
         }
-        var data = await resp.json();
-        var reply = (data.content && data.content[0] && data.content[0].text) ? data.content[0].text : 'Sorry, no response received.';
-        afMessages.push({role: 'assistant', content: reply});
+
+        // Extract final text reply
+        var reply = '';
+        if (data.content) {
+          data.content.forEach(function(b) { if (b.type === 'text') reply += b.text; });
+        }
+        afMessages.push({role: 'assistant', content: reply || 'Done!'});
+
       } catch(e) {
         afMessages.push({role: 'assistant', content: '\u26A0\uFE0F ' + e.message});
       }

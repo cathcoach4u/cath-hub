@@ -459,6 +459,7 @@
       <option value="workout">&#x1F4AA; Workout Log</option>
       <option value="medical">&#x1FA7A; Medical</option>
       <option value="habits">&#x2B50; My Habits</option>
+      <option value="todo">&#x2705; To-Do</option>
       <option value="travel">&#x2708;&#xFE0F; Travel</option>
       <option value="hometab">&#x1F3E0; Home</option>
     </select>
@@ -468,6 +469,7 @@
     <button class="nav-item" onclick="chNav('workout',this)"><span class="icon">&#x1F4AA;</span> Workout Log</button>
     <button class="nav-item" onclick="chNav('medical',this)"><span class="icon">&#x1FA7A;</span> Medical</button>
     <button class="nav-item" onclick="chNav('habits',this)"><span class="icon">&#x2B50;</span> My Habits</button>
+    <button class="nav-item" onclick="chNav('todo',this)"><span class="icon">&#x2705;</span> To-Do</button>
     <button class="nav-item" onclick="chNav('travel',this)"><span class="icon">&#x2708;&#xFE0F;</span> Travel</button>
     <button class="nav-item" onclick="chNav('hometab',this)"><span class="icon">&#x1F3E0;</span> Home</button>
     <div class="sidebar-footer"><span>Cath Hub v2.0</span><br><a href="#" onclick="cathLogout();return false" style="color:rgba(255,255,255,0.5) !important;font-size:10px !important;text-decoration:underline !important;">Sign out</a></div>
@@ -487,7 +489,7 @@
       <div class="dash-section">
         <div style="display:flex !important;justify-content:space-between !important;align-items:center !important;margin-bottom:12px !important;">
           <h3 style="margin-bottom:0 !important;">&#x2705; My To-Do</h3>
-          <span style="font-size:12px !important;color:#3b82f6 !important;cursor:pointer !important;" onclick="chNav('hometab',document.querySelectorAll('#cathHub .nav-item')[6]);setTimeout(function(){hmGo('todo')},100)">View all &rarr;</span>
+          <span style="font-size:12px !important;color:#3b82f6 !important;cursor:pointer !important;" onclick="chNav('todo',document.querySelectorAll('#cathHub .nav-item')[6])">View all &rarr;</span>
         </div>
         <div id="dash-todo-summary">
           <div style="font-size:13px !important;color:#94a3b8 !important;">Loading...</div>
@@ -1068,6 +1070,47 @@
       </div>
     </div>
 
+    <!-- ═══ TO-DO ═══ -->
+    <div class="screen" id="ch-todo">
+      <h2>&#x2705; My To-Do</h2>
+      <p style="font-size:12px !important;color:#94a3b8 !important;margin-bottom:16px !important;">Personal tasks. Items auto-categorise as you add them.</p>
+
+      <!-- Add task -->
+      <div style="display:flex !important;gap:8px !important;margin-bottom:12px !important;">
+        <input type="text" id="td-task-input" placeholder="Add a task..." style="flex:1 !important;padding:12px 14px !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;font-size:14px !important;box-sizing:border-box !important;" onkeydown="if(event.key==='Enter')tdAddTask()">
+        <button class="am-btn" onclick="tdAddTask()" style="background:#3b82f6 !important;color:white !important;border-color:#3b82f6 !important;padding:12px 16px !important;font-size:14px !important;white-space:nowrap !important;">+ Add</button>
+      </div>
+
+      <!-- Category filter -->
+      <div style="display:flex !important;gap:6px !important;flex-wrap:wrap !important;margin-bottom:12px !important;" id="td-cat-filters"></div>
+
+      <!-- Task count -->
+      <div style="display:flex !important;align-items:center !important;justify-content:space-between !important;margin-bottom:12px !important;">
+        <div style="font-size:13px !important;color:#64748b !important;" id="td-task-count">0 items</div>
+        <button class="am-btn" onclick="tdClearDone()" id="td-clear-btn" style="background:#ef4444 !important;color:white !important;border-color:#ef4444 !important;padding:8px 14px !important;font-size:12px !important;display:none !important;">Clear completed</button>
+      </div>
+
+      <!-- Pending list -->
+      <div style="font-size:12px !important;font-weight:600 !important;color:#64748b !important;text-transform:uppercase !important;margin-bottom:8px !important;">To Do</div>
+      <div id="td-pending-list" style="display:flex !important;flex-direction:column !important;gap:6px !important;margin-bottom:16px !important;">
+        <div style="padding:20px !important;text-align:center !important;color:#94a3b8 !important;font-size:13px !important;">Loading...</div>
+      </div>
+
+      <!-- Done list -->
+      <div style="font-size:12px !important;font-weight:600 !important;color:#64748b !important;text-transform:uppercase !important;margin-bottom:8px !important;">Done</div>
+      <div id="td-done-list" style="display:flex !important;flex-direction:column !important;gap:6px !important;margin-bottom:16px !important;"></div>
+
+      <!-- Standalone link -->
+      <div style="margin-top:20px !important;padding:14px 16px !important;background:#f8fafc !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;">
+        <div style="font-size:12px !important;font-weight:600 !important;color:#64748b !important;margin-bottom:6px !important;">&#x1F517; Quick Access Link</div>
+        <div style="font-size:12px !important;color:#94a3b8 !important;margin-bottom:8px !important;">Use this URL in Apple Shortcuts to quick-add items</div>
+        <div style="display:flex !important;gap:8px !important;align-items:center !important;">
+          <input type="text" readonly id="td-link" style="flex:1 !important;padding:8px 10px !important;border:1px solid #e2e8f0 !important;border-radius:6px !important;font-size:11px !important;color:#475569 !important;background:white !important;">
+          <button class="am-btn" onclick="tdCopyLink()" style="padding:8px 12px !important;font-size:12px !important;white-space:nowrap !important;">Copy</button>
+        </div>
+      </div>
+    </div>
+
     <!-- ═══ HOME ═══ -->
     <div class="screen" id="ch-hometab">
       <h2>&#x1F3E0; Home</h2>
@@ -1075,7 +1118,6 @@
       <!-- HOME: Navigation -->
       <div class="am-subscreen active" id="hm-home">
         <div style="display:flex !important;flex-direction:column !important;gap:10px !important;">
-          <button class="am-btn" onclick="hmGo('todo')" style="width:100% !important;padding:14px 16px !important;font-size:15px !important;text-align:left !important;background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;color:#1e293b !important;display:flex !important;align-items:center !important;gap:10px !important;">&#x2705; My To-Do <span style="margin-left:auto !important;color:#94a3b8 !important;font-size:12px !important;" id="hm-todo-badge">0 items</span></button>
           <button class="am-btn" onclick="hmGo('fiona')" style="width:100% !important;padding:14px 16px !important;font-size:15px !important;text-align:left !important;background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;color:#1e293b !important;display:flex !important;align-items:center !important;gap:10px !important;">&#x1F9F9; Fiona's List <span style="margin-left:auto !important;color:#94a3b8 !important;font-size:12px !important;" id="hm-fiona-badge">0 tasks</span></button>
           <button class="am-btn" disabled style="width:100% !important;padding:14px 16px !important;font-size:15px !important;text-align:left !important;background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;color:#94a3b8 !important;display:flex !important;align-items:center !important;gap:10px !important;">&#x1F527; Maintenance Tasks <span style="margin-left:auto !important;font-size:12px !important;">Coming soon</span></button>
           <button class="am-btn" disabled style="width:100% !important;padding:14px 16px !important;font-size:15px !important;text-align:left !important;background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;color:#94a3b8 !important;display:flex !important;align-items:center !important;gap:10px !important;">&#x1F4E6; Home Inventory <span style="margin-left:auto !important;font-size:12px !important;">Coming soon</span></button>
@@ -1113,48 +1155,6 @@
           <div style="display:flex !important;gap:8px !important;align-items:center !important;">
             <input type="text" readonly id="fi-link" style="flex:1 !important;padding:8px 10px !important;border:1px solid #e2e8f0 !important;border-radius:6px !important;font-size:11px !important;color:#475569 !important;background:white !important;">
             <button class="am-btn" onclick="fiCopyLink()" style="padding:8px 12px !important;font-size:12px !important;white-space:nowrap !important;">Copy</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- ═══ MY TO-DO SUBSCREEN ═══ -->
-      <div class="am-subscreen" id="hm-todo">
-        <button class="am-back" onclick="hmGo('home')">&#x2190; Back</button>
-        <h3 style="font-size:18px !important;font-weight:700 !important;margin-bottom:4px !important;">&#x2705; My To-Do</h3>
-        <p style="font-size:12px !important;color:#94a3b8 !important;margin-bottom:16px !important;">Personal tasks. Items auto-categorise as you add them.</p>
-
-        <!-- Add task -->
-        <div style="display:flex !important;gap:8px !important;margin-bottom:12px !important;">
-          <input type="text" id="td-task-input" placeholder="Add a task..." style="flex:1 !important;padding:12px 14px !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;font-size:14px !important;box-sizing:border-box !important;" onkeydown="if(event.key==='Enter')tdAddTask()">
-          <button class="am-btn" onclick="tdAddTask()" style="background:#3b82f6 !important;color:white !important;border-color:#3b82f6 !important;padding:12px 16px !important;font-size:14px !important;white-space:nowrap !important;">+ Add</button>
-        </div>
-
-        <!-- Category filter -->
-        <div style="display:flex !important;gap:6px !important;flex-wrap:wrap !important;margin-bottom:12px !important;" id="td-cat-filters"></div>
-
-        <!-- Task count -->
-        <div style="display:flex !important;align-items:center !important;justify-content:space-between !important;margin-bottom:12px !important;">
-          <div style="font-size:13px !important;color:#64748b !important;" id="td-task-count">0 items</div>
-          <button class="am-btn" onclick="tdClearDone()" id="td-clear-btn" style="background:#ef4444 !important;color:white !important;border-color:#ef4444 !important;padding:8px 14px !important;font-size:12px !important;display:none !important;">Clear completed</button>
-        </div>
-
-        <!-- Pending list -->
-        <div style="font-size:12px !important;font-weight:600 !important;color:#64748b !important;text-transform:uppercase !important;margin-bottom:8px !important;">To Do</div>
-        <div id="td-pending-list" style="display:flex !important;flex-direction:column !important;gap:6px !important;margin-bottom:16px !important;">
-          <div style="padding:20px !important;text-align:center !important;color:#94a3b8 !important;font-size:13px !important;">Loading...</div>
-        </div>
-
-        <!-- Done list -->
-        <div style="font-size:12px !important;font-weight:600 !important;color:#64748b !important;text-transform:uppercase !important;margin-bottom:8px !important;">Done</div>
-        <div id="td-done-list" style="display:flex !important;flex-direction:column !important;gap:6px !important;margin-bottom:16px !important;"></div>
-
-        <!-- Standalone link -->
-        <div style="margin-top:20px !important;padding:14px 16px !important;background:#f8fafc !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;">
-          <div style="font-size:12px !important;font-weight:600 !important;color:#64748b !important;margin-bottom:6px !important;">&#x1F517; Quick Access Link</div>
-          <div style="font-size:12px !important;color:#94a3b8 !important;margin-bottom:8px !important;">Use this URL in Apple Shortcuts to quick-add items</div>
-          <div style="display:flex !important;gap:8px !important;align-items:center !important;">
-            <input type="text" readonly id="td-link" style="flex:1 !important;padding:8px 10px !important;border:1px solid #e2e8f0 !important;border-radius:6px !important;font-size:11px !important;color:#475569 !important;background:white !important;">
-            <button class="am-btn" onclick="tdCopyLink()" style="padding:8px 12px !important;font-size:12px !important;white-space:nowrap !important;">Copy</button>
           </div>
         </div>
       </div>
@@ -1298,6 +1298,7 @@
     if(name === 'aislemate') amGo('home');
     if(name === 'medical') medGo('home');
     if(name === 'hometab') hmGo('home');
+    if(name === 'todo') tdLoad();
     if(name === 'habits') habRenderCustom();
     if(name === 'home') dashLoad();
   };
@@ -3157,7 +3158,6 @@
     document.querySelectorAll('#ch-hometab .am-subscreen').forEach(function(s){ s.classList.remove('active'); });
     document.getElementById('hm-' + sub).classList.add('active');
     if (sub === 'fiona') fiLoad();
-    if (sub === 'todo') tdLoad();
   };
 
   // ─── FIONA'S LIST ───
@@ -3271,7 +3271,6 @@
         var doneList = document.getElementById('td-done-list');
         var countEl = document.getElementById('td-task-count');
         var clearBtn = document.getElementById('td-clear-btn');
-        var badge = document.getElementById('hm-todo-badge');
         var filterDiv = document.getElementById('td-cat-filters');
 
         var pending = tasks.filter(function(t){ return !t.done; });
@@ -3279,7 +3278,6 @@
 
         countEl.textContent = pending.length + ' pending, ' + done.length + ' done';
         clearBtn.style.display = done.length > 0 ? 'inline-flex' : 'none';
-        if (badge) badge.textContent = pending.length + ' item' + (pending.length !== 1 ? 's' : '');
 
         // Build category filter buttons
         var cats = { 'All': tasks.length };

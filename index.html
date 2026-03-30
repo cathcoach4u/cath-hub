@@ -2824,19 +2824,22 @@
         wl.innerHTML = '<div class="hab-empty">No weekly medications yet. Tap + Add to get started.</div>';
       } else {
         var h = '';
-        weekly.forEach(function(med) {
-          h += '<div class="hab-med-row">';
-          h += '<div class="hab-med-name">'+esc(med.name)+'</div>';
-          h += '<div class="hab-days">';
-          wk.forEach(function(dk, i) {
-            var done = !!(logs[med.id] && logs[med.id][dk]);
-            var cls = 'hab-day-btn'+(done?' done':'')+(i===tIdx&&!done?' today':i===tIdx&&done?' today':'');
-            h += '<div class="'+cls+'" onclick="habToggleWeekly('+med.id+',\''+dk+'\')">'+DAY_LABELS[i]+'</div>';
-          });
+        for (var wi = 0; wi < weekly.length; wi++) {
+          var med = weekly[wi];
+          var takenThisWeek = wk.some(function(dk){ return logs[med.id] && logs[med.id][dk]; });
+          var takenToday = !!(logs[med.id] && logs[med.id][today]);
+          h += '<div class="hab-med-row" style="flex-wrap:wrap !important;">';
+          h += '<div onclick="habToggleWeekly('+med.id+',\''+today+'\')" style="width:22px !important;height:22px !important;border-radius:6px !important;border:2px solid '+(takenToday?'#10b981':'#cbd5e1')+' !important;background:'+(takenToday?'#10b981':'transparent')+' !important;cursor:pointer !important;display:flex !important;align-items:center !important;justify-content:center !important;flex-shrink:0 !important;color:white !important;font-size:13px !important;">'+(takenToday?'&#x2713;':'')+'</div>';
+          h += '<div style="flex:1 !important;"><div class="hab-med-name" style="margin-bottom:0 !important;">'+esc(med.name)+'</div>';
+          if (takenThisWeek) {
+            h += '<div style="font-size:10px !important;color:#10b981 !important;">&#x2713; Taken this week</div>';
+          } else {
+            h += '<div style="font-size:10px !important;color:#f59e0b !important;">Not yet taken this week</div>';
+          }
           h += '</div>';
           h += '<div class="hab-del" onclick="habDeleteMed('+med.id+')">&#x1F5D1;</div>';
           h += '</div>';
-        });
+        }
         wl.innerHTML = h;
       }
 

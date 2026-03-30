@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!-- Cath Hub -->
 <html lang="en-AU">
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Cath Hub</title></head>
 <body>
@@ -30,6 +29,7 @@
   #cathHub .nav-item.active { background: rgba(59,130,246,0.2) !important; border-right: 3px solid #3b82f6 !important; color: white !important; }
   #cathHub .nav-item .icon { font-size: 16px !important; width: 22px !important; text-align: center !important; }
   #cathHub .sidebar-footer { margin-top: auto !important; padding: 14px 20px !important; font-size: 10px !important; color: rgba(255,255,255,0.3) !important; }
+  #cathHub .mobile-nav-select { display: none !important; }
 
   /* ───── MAIN ───── */
   #cathHub .main { flex: 1 !important; overflow-y: auto !important; padding: 32px !important; }
@@ -372,15 +372,61 @@
   #cathHub .mi-store.belrosepharmacy { background: #ede9fe !important; color: #5b21b6 !important; }
   #cathHub .mi-store.amazon { background: #fff7ed !important; color: #9a3412 !important; }
 
+  /* ───── MEDICAL COMPACT ───── */
+  #cathHub .contact-grid { grid-template-columns: 1fr 1fr !important; gap: 10px !important; padding: 12px !important; }
+  #cathHub .contact-card { padding: 12px !important; }
+  #cathHub .contact-card-role { font-size: 9px !important; margin-bottom: 4px !important; }
+  #cathHub .contact-card-name { font-size: 13px !important; margin-bottom: 8px !important; }
+  #cathHub .contact-card-doctor { font-size: 12px !important; margin-bottom: 6px !important; }
+  #cathHub .contact-detail { font-size: 12px !important; margin-bottom: 4px !important; }
+  #cathHub .med-table th { padding: 8px 12px !important; font-size: 10px !important; }
+  #cathHub .med-table td { padding: 8px 12px !important; font-size: 12px !important; }
+  #cathHub .med-table tbody tr:nth-child(even) td { background: #f8fafc !important; }
+  #cathHub .med-section { margin-bottom: 14px !important; }
+  #cathHub .med-section-header { padding: 12px 16px !important; }
+  #cathHub .med-section-header h3 { font-size: 14px !important; }
+  #cathHub .med-stat { padding: 14px !important; }
+  #cathHub .med-stat .stat-num { font-size: 26px !important; }
+
+  /* ───── TRAVEL ───── */
+  #cathHub .trv-card { background: white !important; border: 1px solid #e2e8f0 !important; border-radius: 14px !important; padding: 20px !important; margin-bottom: 16px !important; }
+  #cathHub .trv-card h3 { font-size: 16px !important; font-weight: 700 !important; margin-bottom: 8px !important; }
+  #cathHub .trv-card p { font-size: 13px !important; color: #94a3b8 !important; }
+
+  /* ───── HOME ───── */
+  #cathHub .hm-card { background: white !important; border: 1px solid #e2e8f0 !important; border-radius: 14px !important; padding: 20px !important; margin-bottom: 16px !important; }
+  #cathHub .hm-card h3 { font-size: 16px !important; font-weight: 700 !important; margin-bottom: 8px !important; }
+  #cathHub .hm-card p { font-size: 13px !important; color: #94a3b8 !important; }
+
+  /* ───── DASHBOARD MENTAL HEALTH SUMMARY ───── */
+  #cathHub .dash-mh-summary { display: grid !important; grid-template-columns: repeat(3, 1fr) !important; gap: 10px !important; }
+  #cathHub .dash-mh-stat { text-align: center !important; }
+  #cathHub .dash-mh-stat .mh-num { font-size: 22px !important; font-weight: 700 !important; color: #7c3aed !important; }
+  #cathHub .dash-mh-stat .mh-label { font-size: 11px !important; color: #64748b !important; }
+
+  /* ───── HABITS HISTORY ───── */
+  #cathHub .hab-history-table { width: 100% !important; border-collapse: collapse !important; }
+  #cathHub .hab-history-table th { padding: 6px 10px !important; text-align: left !important; font-size: 10px !important; font-weight: 700 !important; color: #94a3b8 !important; text-transform: uppercase !important; background: #f8fafc !important; border-bottom: 1px solid #f1f5f9 !important; }
+  #cathHub .hab-history-table td { padding: 5px 10px !important; font-size: 12px !important; border-bottom: 1px solid #f8fafc !important; }
+  #cathHub .hab-history-table tbody tr:nth-child(even) td { background: #f8fafc !important; }
+
+  /* ───── HABITS DROPDOWN ───── */
+  #cathHub .hab-form-select { flex: 1 !important; padding: 9px 12px !important; border: 1px solid #e2e8f0 !important; border-radius: 8px !important; font-size: 13px !important; outline: none !important; font-family: inherit !important; background: white !important; }
+  #cathHub .hab-form-select:focus { border-color: #7c3aed !important; }
+
+  /* ───── MORNING REMINDER BANNER ───── */
+  #cathHub .hab-reminder-banner { background: #fef3c7 !important; border: 1px solid #f59e0b !important; border-radius: 10px !important; padding: 12px 16px !important; margin-bottom: 16px !important; display: flex !important; align-items: center !important; gap: 10px !important; font-size: 13px !important; font-weight: 600 !important; color: #92400e !important; }
+
   /* ───── RESPONSIVE ───── */
   @media (max-width: 900px) { #cathHub .dash-grid { grid-template-columns: 1fr 1fr !important; } }
-  @media (max-width: 600px) { #cathHub .dash-grid { grid-template-columns: 1fr !important; } }
+  @media (max-width: 600px) { #cathHub .dash-grid { grid-template-columns: 1fr !important; } #cathHub .screen#ch-medical > div:first-of-type { grid-template-columns: 1fr !important; } }
   @media (max-width: 480px) {
     #cathHub { flex-direction: column !important; }
-    #cathHub .sidebar { width: 100% !important; flex-direction: row !important; padding: 12px !important; align-items: center !important; flex-wrap: wrap !important; min-height: auto !important; }
-    #cathHub .sidebar h1 { margin-bottom: 0 !important; margin-right: 16px !important; }
-    #cathHub .nav-item { width: auto !important; padding: 8px 14px !important; }
+    #cathHub .sidebar { width: 100% !important; flex-direction: row !important; padding: 12px !important; align-items: center !important; flex-wrap: nowrap !important; min-height: auto !important; gap: 8px !important; }
+    #cathHub .sidebar h1 { margin-bottom: 0 !important; margin-right: 0 !important; flex-shrink: 0 !important; }
+    #cathHub .nav-item { display: none !important; }
     #cathHub .sidebar-footer { display: none !important; }
+    #cathHub .mobile-nav-select { display: block !important; flex: 1 !important; padding: 10px 12px !important; font-size: 14px !important; border: 1px solid rgba(255,255,255,0.2) !important; border-radius: 8px !important; background: rgba(255,255,255,0.1) !important; color: white !important; appearance: auto !important; -webkit-appearance: listbox !important; }
     #cathHub .dash-grid { grid-template-columns: 1fr !important; }
     #cathHub .am-grid { grid-template-columns: 1fr 1fr !important; }
     #cathHub .med-stats { grid-template-columns: 1fr 1fr !important; }
@@ -406,11 +452,24 @@
 <div id="cathHub">
   <div class="sidebar">
     <h1>&#x1F3E0; Cath Hub</h1>
+    <!-- Mobile: dropdown nav -->
+    <select class="mobile-nav-select" onchange="if(this.value){chNav(this.value);}">
+      <option value="home">&#x1F4CA; Dashboard</option>
+      <option value="aislemate">&#x1F6D2; AisleMate</option>
+      <option value="workout">&#x1F4AA; Workout Log</option>
+      <option value="medical">&#x1FA7A; Medical</option>
+      <option value="habits">&#x1F48A; Habits</option>
+      <option value="travel">&#x2708;&#xFE0F; Travel</option>
+      <option value="hometab">&#x1F3E0; Home</option>
+    </select>
+    <!-- Desktop: button nav -->
     <button class="nav-item active" onclick="chNav('home',this)"><span class="icon">&#x1F4CA;</span> Dashboard</button>
     <button class="nav-item" onclick="chNav('aislemate',this)"><span class="icon">&#x1F6D2;</span> AisleMate</button>
     <button class="nav-item" onclick="chNav('workout',this)"><span class="icon">&#x1F4AA;</span> Workout Log</button>
     <button class="nav-item" onclick="chNav('medical',this)"><span class="icon">&#x1FA7A;</span> Medical</button>
     <button class="nav-item" onclick="chNav('habits',this)"><span class="icon">&#x1F48A;</span> Habits</button>
+    <button class="nav-item" onclick="chNav('travel',this)"><span class="icon">&#x2708;&#xFE0F;</span> Travel</button>
+    <button class="nav-item" onclick="chNav('hometab',this)"><span class="icon">&#x1F3E0;</span> Home</button>
     <div class="sidebar-footer"><span>Cath Hub v2.0</span><br><a href="#" onclick="cathLogout();return false" style="color:rgba(255,255,255,0.5) !important;font-size:10px !important;text-decoration:underline !important;">Sign out</a></div>
   </div>
 
@@ -420,6 +479,18 @@
     <div class="screen active" id="ch-home">
       <h2 style="font-size:20px !important;margin-bottom:16px !important;">Dashboard</h2>
 
+      <!-- Quick navigation buttons -->
+      <div style="display:flex !important;flex-direction:column !important;gap:8px !important;margin-bottom:16px !important;">
+        <div style="display:flex !important;gap:8px !important;">
+          <button class="am-btn" onclick="dashQuickNav({value:'shopping'})" style="flex:1 !important;padding:12px 10px !important;font-size:13px !important;text-align:center !important;background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;color:#1e293b !important;">&#x1F6D2; Shopping List</button>
+          <button class="am-btn" onclick="dashQuickNav({value:'receipt'})" style="flex:1 !important;padding:12px 10px !important;font-size:13px !important;text-align:center !important;background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;color:#1e293b !important;">&#x1F9FE; Upload Receipt</button>
+        </div>
+        <div style="display:flex !important;gap:8px !important;">
+          <button class="am-btn" onclick="dashQuickNav({value:'mentalhealth'})" style="flex:1 !important;padding:12px 10px !important;font-size:13px !important;text-align:center !important;background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;color:#1e293b !important;">&#x1F9E0; Mental Health</button>
+          <button class="am-btn" onclick="dashQuickNav({value:'filing'})" style="flex:1 !important;padding:12px 10px !important;font-size:13px !important;text-align:center !important;background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;color:#1e293b !important;">&#x1F4C1; Filing System</button>
+        </div>
+      </div>
+
       <div class="dash-section">
         <div style="display:flex !important;justify-content:space-between !important;align-items:center !important;margin-bottom:12px !important;">
           <h3 style="margin-bottom:0 !important;">&#x1F6D2; Shopping List</h3>
@@ -428,15 +499,38 @@
         <div id="dash-shopping-list"></div>
       </div>
 
-      <div class="dash-section" style="cursor:pointer !important;" onclick="chNav('aislemate',document.querySelectorAll('#cathHub .nav-item')[1]);setTimeout(function(){amGo('receipts')},100)">
-        <div style="display:flex !important;align-items:center !important;gap:10px !important;">
-          <span style="font-size:24px !important;">&#x1F9FE;</span>
-          <div>
-            <div style="font-size:14px !important;font-weight:600 !important;">Upload Receipt</div>
-            <div style="font-size:12px !important;color:#94a3b8 !important;">Scan items &amp; prices automatically</div>
-          </div>
-          <span style="margin-left:auto !important;color:#3b82f6 !important;font-size:14px !important;">&rarr;</span>
+      <div class="dash-section">
+        <div style="display:flex !important;justify-content:space-between !important;align-items:center !important;margin-bottom:12px !important;">
+          <h3 style="margin-bottom:0 !important;">&#x1F9E0; Mental Health Summary</h3>
+          <span style="font-size:12px !important;color:#3b82f6 !important;cursor:pointer !important;" onclick="chNav('medical',document.querySelectorAll('#cathHub .nav-item')[3]);setTimeout(function(){medGo('mentalhealth')},100)">View all &rarr;</span>
         </div>
+        <div class="dash-mh-summary" id="dash-mh-summary">
+          <div class="dash-mh-stat"><div class="mh-num" id="dash-mh-total">-</div><div class="mh-label">Total Sessions</div></div>
+          <div class="dash-mh-stat"><div class="mh-num" id="dash-mh-last">-</div><div class="mh-label">Last Session</div></div>
+          <div class="dash-mh-stat"><div class="mh-num" id="dash-mh-plans">-</div><div class="mh-label">MHP / NDIS</div></div>
+        </div>
+      </div>
+
+      <div class="dash-section">
+        <div style="display:flex !important;justify-content:space-between !important;align-items:center !important;margin-bottom:12px !important;">
+          <h3 style="margin-bottom:0 !important;">&#x1F48A; Medication Today</h3>
+          <span style="font-size:12px !important;color:#3b82f6 !important;cursor:pointer !important;" onclick="chNav('habits');setTimeout(function(){habShowSection('meds')},100)">View all &rarr;</span>
+        </div>
+        <div id="dash-hab-summary" style="display:flex !important;gap:10px !important;flex-wrap:wrap !important;">
+          <div style="flex:1 !important;min-width:80px !important;text-align:center !important;background:#f0fdf4 !important;border:1px solid #bbf7d0 !important;border-radius:10px !important;padding:12px 8px !important;">
+            <div style="font-size:20px !important;font-weight:700 !important;color:#16a34a !important;" id="dash-hab-taken">-</div>
+            <div style="font-size:10px !important;color:#64748b !important;">Taken today</div>
+          </div>
+          <div style="flex:1 !important;min-width:80px !important;text-align:center !important;background:#fefce8 !important;border:1px solid #fde68a !important;border-radius:10px !important;padding:12px 8px !important;">
+            <div style="font-size:20px !important;font-weight:700 !important;color:#ca8a04 !important;" id="dash-hab-streak">-</div>
+            <div style="font-size:10px !important;color:#64748b !important;">Streak</div>
+          </div>
+          <div style="flex:1 !important;min-width:80px !important;text-align:center !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:12px 8px !important;">
+            <div style="font-size:20px !important;font-weight:700 !important;color:#7c3aed !important;" id="dash-hab-status">-</div>
+            <div style="font-size:10px !important;color:#64748b !important;">Status</div>
+          </div>
+        </div>
+        <div id="dash-hab-missed" style="display:none !important;margin-top:8px !important;background:#fef2f2 !important;border:1px solid #fecaca !important;border-radius:8px !important;padding:8px 12px !important;font-size:12px !important;color:#991b1b !important;"></div>
       </div>
 
     </div>
@@ -446,16 +540,27 @@
       <h2>&#x1F6D2; AisleMate</h2>
       <div class="am-subscreen active" id="am-home">
         <input class="am-search" type="text" placeholder="Search items to add...">
-        <div class="am-grid" style="grid-template-columns: repeat(4, 1fr) !important; gap:8px !important;">
-          <div class="am-tile" style="padding:14px 10px !important;" onclick="amGo('weekly')"><div class="tile-icon" style="font-size:20px !important;">&#x1F6D2;</div><div class="tile-title" style="font-size:12px !important;">Weekly Shop</div><div class="tile-sub" id="am-shop-count" style="font-size:10px !important;">0/0</div></div>
-          <div class="am-tile" style="padding:14px 10px !important;" onclick="amGo('select')"><div class="tile-icon" style="font-size:20px !important;">&#x2705;</div><div class="tile-title" style="font-size:12px !important;">Master List</div><div class="tile-sub" id="am-avail-count" style="font-size:10px !important;">100 items</div></div>
-          <div class="am-tile" style="padding:14px 10px !important;" onclick="amGo('shopinfo')"><div class="tile-icon" style="font-size:20px !important;">&#x2139;</div><div class="tile-title" style="font-size:12px !important;">Shop Info</div><div class="tile-sub" style="font-size:10px !important;">Links &amp; rewards</div></div>
-          <div class="am-tile" style="padding:14px 10px !important;" onclick="amGo('family')"><div class="tile-icon" style="font-size:20px !important;">&#x1F46A;</div><div class="tile-title" style="font-size:12px !important;">Family Items</div><div class="tile-sub" style="font-size:10px !important;">4 members</div></div>
-          <div class="am-tile" style="padding:14px 10px !important;" onclick="amGo('receipts')"><div class="tile-icon" style="font-size:20px !important;">&#x1F9FE;</div><div class="tile-title" style="font-size:12px !important;">Receipts</div><div class="tile-sub" style="font-size:10px !important;">Scan &amp; import</div></div>
-          <div class="am-tile" style="padding:14px 10px !important;" onclick="amGo('spending')"><div class="tile-icon" style="font-size:20px !important;">&#x1F4B0;</div><div class="tile-title" style="font-size:12px !important;">Spending</div><div class="tile-sub" style="font-size:10px !important;">By store</div></div>
-          <div class="am-tile" style="padding:14px 10px !important;" onclick="amGo('history')"><div class="tile-icon" style="font-size:20px !important;">&#x1F4C5;</div><div class="tile-title" style="font-size:12px !important;">History</div><div class="tile-sub" style="font-size:10px !important;">Past purchases</div></div>
-          <div class="am-tile" style="padding:14px 10px !important;" onclick="amGo('meals')"><div class="tile-icon" style="font-size:20px !important;">&#x1F372;</div><div class="tile-title" style="font-size:12px !important;">Meal Plan</div><div class="tile-sub" style="font-size:10px !important;">Weekly meals</div></div>
-          <div class="am-tile" style="padding:14px 10px !important;" onclick="amGo('qrcode')"><div class="tile-icon" style="font-size:20px !important;">&#x1F4F1;</div><div class="tile-title" style="font-size:12px !important;">QR Code</div><div class="tile-sub" style="font-size:10px !important;">Share list</div></div>
+        <div style="display:flex !important;flex-direction:column !important;gap:8px !important;margin-bottom:12px !important;">
+          <div style="display:flex !important;gap:8px !important;">
+            <button class="am-btn" onclick="amGo('weekly')" style="flex:1 !important;padding:12px 10px !important;font-size:13px !important;text-align:center !important;background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;color:#1e293b !important;">&#x1F6D2; Weekly Shop</button>
+            <button class="am-btn" onclick="amGo('select')" style="flex:1 !important;padding:12px 10px !important;font-size:13px !important;text-align:center !important;background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;color:#1e293b !important;">&#x2705; Master List</button>
+          </div>
+          <div style="display:flex !important;gap:8px !important;">
+            <button class="am-btn" onclick="amGo('shopinfo')" style="flex:1 !important;padding:12px 10px !important;font-size:13px !important;text-align:center !important;background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;color:#1e293b !important;">&#x2139; Shop Info</button>
+            <button class="am-btn" onclick="amGo('family')" style="flex:1 !important;padding:12px 10px !important;font-size:13px !important;text-align:center !important;background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;color:#1e293b !important;">&#x1F46A; Family</button>
+          </div>
+          <div style="display:flex !important;gap:8px !important;">
+            <button class="am-btn" onclick="amGo('receipts')" style="flex:1 !important;padding:12px 10px !important;font-size:13px !important;text-align:center !important;background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;color:#1e293b !important;">&#x1F9FE; Receipts</button>
+            <button class="am-btn" onclick="amGo('spending')" style="flex:1 !important;padding:12px 10px !important;font-size:13px !important;text-align:center !important;background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;color:#1e293b !important;">&#x1F4B0; Spending</button>
+          </div>
+          <div style="display:flex !important;gap:8px !important;">
+            <button class="am-btn" onclick="amGo('history')" style="flex:1 !important;padding:12px 10px !important;font-size:13px !important;text-align:center !important;background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;color:#1e293b !important;">&#x1F4C5; History</button>
+            <button class="am-btn" onclick="amGo('meals')" style="flex:1 !important;padding:12px 10px !important;font-size:13px !important;text-align:center !important;background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;color:#1e293b !important;">&#x1F372; Meal Plan</button>
+          </div>
+          <div style="display:flex !important;gap:8px !important;">
+            <button class="am-btn" onclick="amGo('qrcode')" style="flex:1 !important;padding:12px 10px !important;font-size:13px !important;text-align:center !important;background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;color:#1e293b !important;">&#x1F4F1; QR Code</button>
+            <div style="flex:1 !important;"></div>
+          </div>
         </div>
         <div class="am-progress">
           <span class="prog-label">Shopping Progress</span>
@@ -647,110 +752,306 @@
     <!-- ═══ MEDICAL ═══ -->
     <div class="screen" id="ch-medical">
       <h2>&#x1FA7A; Medical</h2>
-      <div class="med-stats">
-        <div class="med-stat"><div class="stat-num" id="med-total">11</div><div class="stat-label">Total Sessions</div></div>
-        <div class="med-stat"><div class="stat-num" id="med-mhp">10</div><div class="stat-label">Mental Health Plan</div></div>
-        <div class="med-stat"><div class="stat-num" id="med-ndis">1</div><div class="stat-label">NDIS Sessions</div></div>
-      </div>
-      <!-- Key Contacts -->
-      <div class="med-section">
-        <div class="med-section-header">
-          <h3>&#x1F4DE; Key Contacts</h3>
-        </div>
-        <div class="contact-grid">
-          <div class="contact-card">
-            <div class="contact-card-role">GP / Clinic</div>
-            <div class="contact-card-name">Belrose Medical Centre</div>
-            <div class="contact-detail"><span class="cd-icon">&#x1F4CD;</span><span>Shop MB2, Glencoe Village, 56–58 Glen Street, Belrose NSW 2085</span></div>
-            <div class="contact-detail"><span class="cd-icon">&#x1F4DE;</span><span><a href="tel:0283297830">02 8329 7830</a></span></div>
-            <div class="contact-detail"><span class="cd-icon">&#x1F4E0;</span><span>Fax: 02 8209 4880</span></div>
-            <div class="contact-detail"><span class="cd-icon">&#x2709;&#xFE0F;</span><span><a href="mailto:info@belrosemedical.com.au">info@belrosemedical.com.au</a></span></div>
-          </div>
-          <div class="contact-card">
-            <div class="contact-card-role">Neurologist / Clinic</div>
-            <div class="contact-card-name">Vertigo &amp; Neurology</div>
-            <div class="contact-card-doctor">Dr Chao Wang</div>
-            <div class="contact-detail"><span class="cd-icon">&#x2709;&#xFE0F;</span><span><a href="mailto:info@vertigoandneurology.com.au">info@vertigoandneurology.com.au</a></span></div>
-          </div>
+
+      <!-- HOME: Button navigation -->
+      <div class="am-subscreen active" id="med-home">
+        <div style="display:flex !important;flex-direction:column !important;gap:10px !important;">
+          <button class="am-btn" onclick="medGo('documents')" style="width:100% !important;padding:14px 16px !important;font-size:15px !important;text-align:left !important;background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;color:#1e293b !important;display:flex !important;align-items:center !important;gap:10px !important;">&#x1F4C1; Documents <span style="margin-left:auto !important;color:#94a3b8 !important;font-size:12px !important;">Upload &amp; file &rarr;</span></button>
+          <button class="am-btn" onclick="medGo('contacts')" style="width:100% !important;padding:14px 16px !important;font-size:15px !important;text-align:left !important;background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;color:#1e293b !important;display:flex !important;align-items:center !important;gap:10px !important;">&#x1F4DE; Contacts <span style="margin-left:auto !important;color:#94a3b8 !important;font-size:12px !important;">Doctors &amp; clinics &rarr;</span></button>
+          <button class="am-btn" onclick="medGo('medications')" style="width:100% !important;padding:14px 16px !important;font-size:15px !important;text-align:left !important;background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;color:#1e293b !important;display:flex !important;align-items:center !important;gap:10px !important;">&#x1F48A; Medications <span style="margin-left:auto !important;color:#94a3b8 !important;font-size:12px !important;">Current plan &rarr;</span></button>
+          <button class="am-btn" onclick="medGo('mentalhealth')" style="width:100% !important;padding:14px 16px !important;font-size:15px !important;text-align:left !important;background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;color:#1e293b !important;display:flex !important;align-items:center !important;gap:10px !important;">&#x1F9E0; Mental Health <span style="margin-left:auto !important;color:#94a3b8 !important;font-size:12px !important;">Sessions &rarr;</span></button>
+          <button class="am-btn" onclick="chNav('habits');setTimeout(function(){habShowSection('meds')},100)" style="width:100% !important;padding:14px 16px !important;font-size:15px !important;text-align:left !important;background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;color:#1e293b !important;display:flex !important;align-items:center !important;gap:10px !important;">&#x1F48A; Medication Habits <span style="margin-left:auto !important;color:#94a3b8 !important;font-size:12px !important;">Track daily &rarr;</span></button>
         </div>
       </div>
 
-      <!-- Current Medication Plan -->
-      <div class="med-section">
-        <div class="med-section-header">
-          <h3>&#x1F48A; Current Medication Plan</h3>
-        </div>
-        <table class="med-table">
-          <thead>
-            <tr>
-              <th>Medication</th>
-              <th>Dose</th>
-              <th>Schedule</th>
-              <th>Purpose</th>
-            </tr>
-          </thead>
-          <tbody id="med-meds-body"></tbody>
-        </table>
-      </div>
-
-      <div class="med-section">
-        <div class="med-section-header">
+      <!-- SUB: Documents -->
+      <div class="am-subscreen" id="med-documents">
+        <button class="am-back" onclick="medGo('home')">&#x2190; Back</button>
+        <div class="am-header-bar">
           <h3>&#x1F4C1; Documents</h3>
-          <a class="doc-sharepoint-btn" href="https://netorgft4053847.sharepoint.com/:f:/s/bakerpersonal-CathPersonal/IgAEdQrlyL4-Qa4rSlz4-SwPAWV2ALT9bZECNDOJyLgPUlU?e=mvuWfJ" target="_blank" rel="noopener">&#x1F4C2; Open Documents Folder &rarr;</a>
+          <a class="doc-sharepoint-btn" href="https://netorgft4053847.sharepoint.com/:f:/s/bakerpersonal-CathPersonal/IgAEdQrlyL4-Qa4rSlz4-SwPAWV2ALT9bZECNDOJyLgPUlU?e=mvuWfJ" target="_blank" rel="noopener" style="font-size:12px !important;padding:8px 14px !important;">&#x1F4C2; Open Folder &rarr;</a>
         </div>
-        <div class="doc-section-body">
-          <p class="doc-hint">Select or drop a file below — it will be renamed <strong>yyyymmdd filename.ext</strong> and downloaded, ready to upload to SharePoint.</p>
-          <div class="doc-drop-zone" id="med-drop" onclick="document.getElementById('med-file-input').click()">
-            <div class="doc-drop-icon">&#x1F4C4;</div>
-            <div class="doc-drop-title">Drop a file here or click to select</div>
-            <div class="doc-drop-sub" id="med-drop-sub">e.g. blood results.pdf &rarr; <strong id="med-date-preview"></strong> blood results.pdf</div>
+        <div class="med-section" style="margin-top:12px !important;">
+          <div class="doc-section-body">
+            <p class="doc-hint">Select a file, enter a name, and it will be renamed <strong>yyyymmdd yourname.ext</strong> then downloaded. The OneDrive folder opens automatically.</p>
+            <div style="display:flex !important;gap:8px !important;align-items:center !important;margin-bottom:12px !important;flex-wrap:wrap !important;">
+              <button class="am-btn" onclick="document.getElementById('med-file-input').click()" style="background:#3b82f6 !important;color:white !important;">&#x1F4C4; Choose File</button>
+              <span style="font-size:12px !important;color:#94a3b8 !important;" id="med-file-chosen">No file selected</span>
+            </div>
+            <div style="display:flex !important;gap:8px !important;align-items:center !important;margin-bottom:12px !important;">
+              <span style="font-size:13px !important;font-weight:600 !important;color:#64748b !important;white-space:nowrap !important;" id="med-date-preview"></span>
+              <input class="hab-form-input" id="med-custom-name" type="text" placeholder="Enter file name (e.g. blood results)" style="flex:1 !important;">
+              <button class="am-btn" onclick="docRenameAndDownload()" style="background:#10b981 !important;color:white !important;white-space:nowrap !important;">Rename &amp; Save</button>
+            </div>
+            <input type="file" id="med-file-input" style="display:none !important;" onchange="docFileSelected(this)">
+            <div class="doc-renamed-list" id="med-renamed-list"></div>
           </div>
-          <input type="file" id="med-file-input" multiple style="display:none !important;" onchange="docHandleFiles(this.files,'med')">
-          <div class="doc-renamed-list" id="med-renamed-list"></div>
         </div>
       </div>
 
-      <div class="med-section">
-        <div class="med-section-header">
-          <h3>&#x1F9E0; Mental Health Sessions</h3>
-          <span style="font-size:12px !important;color:#94a3b8 !important;">Most recent first</span>
+      <!-- SUB: Key Contacts -->
+      <div class="am-subscreen" id="med-contacts">
+        <button class="am-back" onclick="medGo('home')">&#x2190; Back</button>
+        <h3 style="font-size:18px !important;font-weight:700 !important;margin-bottom:16px !important;">&#x1F4DE; Key Contacts</h3>
+        <div class="med-section">
+          <div style="padding:20px !important;">
+            <div style="background:#f8fafc !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:16px !important;margin-bottom:12px !important;">
+              <div style="font-size:10px !important;font-weight:700 !important;text-transform:uppercase !important;color:#7c3aed !important;margin-bottom:6px !important;">GP / Clinic</div>
+              <div style="font-size:15px !important;font-weight:700 !important;margin-bottom:8px !important;">Belrose Medical Centre</div>
+              <div style="font-size:13px !important;color:#475569 !important;line-height:1.8 !important;">
+                &#x1F4CD; Shop MB2, Glencoe Village, 56&ndash;58 Glen Street, Belrose NSW 2085<br>
+                &#x1F4DE; <a href="tel:0283297830" style="color:#3b82f6 !important;">02 8329 7830</a><br>
+                &#x1F4E0; Fax: 02 8209 4880<br>
+                &#x2709;&#xFE0F; <a href="mailto:info@belrosemedical.com.au" style="color:#3b82f6 !important;">info@belrosemedical.com.au</a>
+              </div>
+            </div>
+            <div style="background:#f8fafc !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:16px !important;">
+              <div style="font-size:10px !important;font-weight:700 !important;text-transform:uppercase !important;color:#7c3aed !important;margin-bottom:6px !important;">Neurologist</div>
+              <div style="font-size:15px !important;font-weight:700 !important;margin-bottom:4px !important;">Vertigo &amp; Neurology</div>
+              <div style="font-size:13px !important;color:#475569 !important;font-style:italic !important;margin-bottom:6px !important;">Dr Chao Wang</div>
+              <div style="font-size:13px !important;">&#x2709;&#xFE0F; <a href="mailto:info@vertigoandneurology.com.au" style="color:#3b82f6 !important;">info@vertigoandneurology.com.au</a></div>
+            </div>
+          </div>
         </div>
-        <table class="med-table">
-          <thead><tr><th>Date</th><th>Duration</th><th>Plan</th><th>Practitioner</th></tr></thead>
-          <tbody id="med-sessions-body"></tbody>
-        </table>
       </div>
+
+      <!-- SUB: Medications -->
+      <div class="am-subscreen" id="med-medications">
+        <button class="am-back" onclick="medGo('home')">&#x2190; Back</button>
+        <h3 style="font-size:18px !important;font-weight:700 !important;margin-bottom:16px !important;">&#x1F48A; Current Medication Plan</h3>
+        <div class="med-section">
+          <div style="overflow-x:auto !important;">
+            <table class="med-table">
+              <thead>
+                <tr>
+                  <th>Medication</th>
+                  <th>Dose</th>
+                  <th>Schedule</th>
+                  <th>Conditions</th>
+                  <th>Purpose</th>
+                </tr>
+              </thead>
+              <tbody id="med-meds-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- SUB: Mental Health -->
+      <div class="am-subscreen" id="med-mentalhealth">
+        <button class="am-back" onclick="medGo('home')">&#x2190; Back</button>
+        <h3 style="font-size:18px !important;font-weight:700 !important;margin-bottom:16px !important;">&#x1F9E0; Mental Health</h3>
+        <div style="display:grid !important;grid-template-columns:repeat(3, 1fr) !important;gap:10px !important;margin-bottom:16px !important;">
+          <div style="text-align:center !important;background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:14px 8px !important;">
+            <div style="font-size:22px !important;font-weight:700 !important;color:#7c3aed !important;" id="med-total">-</div>
+            <div style="font-size:10px !important;color:#64748b !important;">Total</div>
+          </div>
+          <div style="text-align:center !important;background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:14px 8px !important;">
+            <div style="font-size:22px !important;font-weight:700 !important;color:#7c3aed !important;" id="med-mhp">-</div>
+            <div style="font-size:10px !important;color:#64748b !important;">MHP</div>
+          </div>
+          <div style="text-align:center !important;background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:14px 8px !important;">
+            <div style="font-size:22px !important;font-weight:700 !important;color:#7c3aed !important;" id="med-ndis">-</div>
+            <div style="font-size:10px !important;color:#64748b !important;">NDIS</div>
+          </div>
+        </div>
+
+        <!-- Add session form -->
+        <div class="med-section" style="margin-bottom:16px !important;">
+          <div class="med-section-header" style="cursor:pointer !important;" onclick="document.getElementById('mh-add-form').style.display=document.getElementById('mh-add-form').style.display==='none'?'block':'none'">
+            <h3 style="font-size:14px !important;">+ Add Session</h3>
+          </div>
+          <div id="mh-add-form" style="display:none !important;padding:14px 16px !important;">
+            <div style="display:flex !important;flex-direction:column !important;gap:10px !important;">
+              <div>
+                <label style="font-size:12px !important;font-weight:600 !important;color:#64748b !important;display:block !important;margin-bottom:4px !important;">Date</label>
+                <input type="date" id="mh-date" style="width:100% !important;padding:10px 12px !important;border:1px solid #e2e8f0 !important;border-radius:8px !important;font-size:14px !important;">
+              </div>
+              <div>
+                <label style="font-size:12px !important;font-weight:600 !important;color:#64748b !important;display:block !important;margin-bottom:4px !important;">Duration</label>
+                <select id="mh-duration" style="width:100% !important;padding:10px 12px !important;border:1px solid #e2e8f0 !important;border-radius:8px !important;font-size:14px !important;">
+                  <option value="30 min">30 min</option>
+                  <option value="45 min">45 min</option>
+                  <option value="1 hour" selected>1 hour</option>
+                  <option value="1.5 hours">1.5 hours</option>
+                  <option value="2 hours">2 hours</option>
+                </select>
+              </div>
+              <div>
+                <label style="font-size:12px !important;font-weight:600 !important;color:#64748b !important;display:block !important;margin-bottom:4px !important;">Plan</label>
+                <select id="mh-plan" style="width:100% !important;padding:10px 12px !important;border:1px solid #e2e8f0 !important;border-radius:8px !important;font-size:14px !important;">
+                  <option value="Mental Health Plan">Mental Health Plan</option>
+                  <option value="NDIS">NDIS</option>
+                  <option value="Private">Private</option>
+                </select>
+              </div>
+              <div>
+                <label style="font-size:12px !important;font-weight:600 !important;color:#64748b !important;display:block !important;margin-bottom:4px !important;">Practitioner</label>
+                <input type="text" id="mh-practitioner" placeholder="e.g. Dr Smith" style="width:100% !important;padding:10px 12px !important;border:1px solid #e2e8f0 !important;border-radius:8px !important;font-size:14px !important;box-sizing:border-box !important;">
+              </div>
+              <button class="am-btn" onclick="mhAddSession()" style="width:100% !important;padding:12px !important;background:#7c3aed !important;color:white !important;border-color:#7c3aed !important;font-size:14px !important;justify-content:center !important;border-radius:8px !important;">Save Session</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Session list (card layout for mobile) -->
+        <div class="med-section">
+          <div class="med-section-header">
+            <h3 style="font-size:14px !important;">Session History</h3>
+            <span style="font-size:12px !important;color:#94a3b8 !important;">Most recent first</span>
+          </div>
+          <div id="med-sessions-list" style="padding:0 !important;"></div>
+        </div>
+      </div>
+
     </div>
 
     <!-- ═══ HABITS ═══ -->
     <div class="screen" id="ch-habits">
       <h2>&#x1F48A; Habits</h2>
-      <div class="hab-summary">
-        <div class="hab-stat"><div class="hab-stat-num" id="hab-daily-done">0</div><div class="hab-stat-label">Daily taken today</div></div>
-        <div class="hab-stat"><div class="hab-stat-num" id="hab-weekly-done">0</div><div class="hab-stat-label">Weekly this week</div></div>
-        <div class="hab-stat"><div class="hab-stat-num" id="hab-streak">&#x1F525; 0</div><div class="hab-stat-label">Best streak (days)</div></div>
-      </div>
-      <div class="hab-section">
-        <div class="hab-section-header">
-          <h3>&#x2600; Daily Medications</h3>
-          <button class="hab-add-btn" onclick="habToggleForm('daily')">+ Add</button>
+
+      <!-- Missed yesterday alert (dismissable) -->
+      <div id="hab-missed-alert" style="display:none !important;background:#fef2f2 !important;border:1px solid #fecaca !important;border-radius:10px !important;padding:12px 16px !important;margin-bottom:12px !important;font-size:13px !important;color:#991b1b !important;">
+        <div style="display:flex !important;align-items:center !important;gap:8px !important;margin-bottom:6px !important;">
+          <div style="flex:1 !important;" id="hab-missed-text"></div>
+          <button onclick="habDismissMissed()" style="background:none !important;border:none !important;color:#991b1b !important;font-size:18px !important;cursor:pointer !important;padding:0 4px !important;line-height:1 !important;">&times;</button>
         </div>
-        <div id="hab-daily-list"></div>
-        <div class="hab-add-form" id="hab-daily-form">
-          <input class="hab-form-input" id="hab-daily-name" type="text" placeholder="Medication name..." onkeydown="if(event.key==='Enter')habAddMed('daily')">
-          <button class="hab-form-save" onclick="habAddMed('daily')">Add</button>
+        <div style="display:flex !important;gap:8px !important;">
+          <button onclick="habBackfillYesterday()" style="flex:1 !important;padding:8px 12px !important;font-size:12px !important;background:#10b981 !important;color:white !important;border:none !important;border-radius:6px !important;cursor:pointer !important;">I took them — mark as done</button>
+          <button onclick="habDismissMissed()" style="padding:8px 12px !important;font-size:12px !important;background:#94a3b8 !important;color:white !important;border:none !important;border-radius:6px !important;cursor:pointer !important;">Dismiss</button>
         </div>
       </div>
-      <div class="hab-section">
-        <div class="hab-section-header">
-          <h3>&#x1F4C5; Weekly Medications</h3>
-          <button class="hab-add-btn" onclick="habToggleForm('weekly')">+ Add</button>
+
+      <!-- Habit category buttons -->
+      <div style="display:flex !important;flex-direction:column !important;gap:10px !important;margin-bottom:16px !important;" id="hab-home">
+        <button class="am-btn" onclick="habShowSection('meds')" style="width:100% !important;padding:14px 16px !important;font-size:15px !important;text-align:left !important;background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;color:#1e293b !important;display:flex !important;align-items:center !important;gap:10px !important;">&#x1F48A; Medication <span style="margin-left:auto !important;color:#94a3b8 !important;font-size:12px !important;" id="hab-meds-badge">0/0 today</span></button>
+        <button class="am-btn" onclick="habShowSection('custom')" style="width:100% !important;padding:14px 16px !important;font-size:15px !important;text-align:left !important;background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;color:#1e293b !important;display:flex !important;align-items:center !important;gap:10px !important;">&#x2B50; My Habits <span style="margin-left:auto !important;color:#94a3b8 !important;font-size:12px !important;" id="hab-custom-badge">Custom habits &rarr;</span></button>
+      </div>
+
+      <!-- MEDICATION SECTION (hidden by default) -->
+      <div id="hab-meds-section" style="display:none !important;">
+        <button class="am-back" onclick="habShowSection('home')" style="background:none !important;border:none !important;color:#3b82f6 !important;font-size:14px !important;cursor:pointer !important;padding:0 0 12px 0 !important;">&#x2190; Back to Habits</button>
+
+        <!-- Morning banner (inside meds section) -->
+        <div id="hab-morning-banner"></div>
+
+        <!-- Daily tally calendar (meds + custom habits) -->
+        <div class="hab-section" style="margin-bottom:16px !important;">
+          <div class="med-section-header" style="padding:12px 16px !important;">
+            <h3 style="font-size:14px !important;">&#x1F4C5; Daily Tally</h3>
+            <span style="font-size:11px !important;color:#94a3b8 !important;">Last 14 days (all habits)</span>
+          </div>
+          <div id="hab-tally" style="padding:12px 16px !important;display:flex !important;gap:4px !important;flex-wrap:wrap !important;justify-content:center !important;"></div>
         </div>
-        <div id="hab-weekly-list"></div>
-        <div class="hab-add-form" id="hab-weekly-form">
-          <input class="hab-form-input" id="hab-weekly-name" type="text" placeholder="Medication name..." onkeydown="if(event.key==='Enter')habAddMed('weekly')">
-          <button class="hab-form-save" onclick="habAddMed('weekly')">Add</button>
+
+        <!-- Quick action: Take all morning meds + undo -->
+        <div style="display:flex !important;gap:8px !important;margin-bottom:16px !important;flex-wrap:wrap !important;">
+          <button class="am-btn" id="hab-take-all-btn" onclick="habTakeAllDaily()" style="flex:1 !important;justify-content:center !important;background:#10b981 !important;color:white !important;border-color:#10b981 !important;padding:12px 16px !important;font-size:14px !important;">&#x2600;&#xFE0F; Take All Morning Meds</button>
+          <button class="am-btn" id="hab-undo-btn" onclick="habUndoTakeAll()" style="display:none !important;background:#ef4444 !important;color:white !important;border-color:#ef4444 !important;padding:12px !important;font-size:12px !important;">Undo</button>
+          <button class="am-btn" id="hab-notify-btn" onclick="habRequestReminder()" style="background:#f59e0b !important;color:white !important;border-color:#f59e0b !important;padding:12px !important;">&#x1F514;</button>
         </div>
+
+        <div class="hab-summary">
+          <div class="hab-stat"><div class="hab-stat-num" id="hab-daily-done">0</div><div class="hab-stat-label">Daily taken today</div></div>
+          <div class="hab-stat"><div class="hab-stat-num" id="hab-weekly-done">0</div><div class="hab-stat-label">Weekly this week</div></div>
+          <div class="hab-stat"><div class="hab-stat-num" id="hab-streak">&#x1F525; 0</div><div class="hab-stat-label">Best streak (days)</div></div>
+        </div>
+
+        <div class="hab-section">
+          <div class="hab-section-header">
+            <h3>&#x2600; Daily Medications</h3>
+            <button class="hab-add-btn" onclick="habToggleForm('daily')">+ Add</button>
+          </div>
+          <div id="hab-daily-list"></div>
+          <div class="hab-add-form" id="hab-daily-form">
+            <select class="hab-form-select" id="hab-daily-select">
+              <option value="">-- Select medication --</option>
+              <option value="__custom">Custom habit...</option>
+            </select>
+            <input class="hab-form-input" id="hab-daily-name" type="text" placeholder="Custom habit name..." style="display:none !important;" onkeydown="if(event.key==='Enter')habAddMed('daily')">
+            <button class="hab-form-save" onclick="habAddMed('daily')">Add</button>
+          </div>
+        </div>
+        <div class="hab-section">
+          <div class="hab-section-header">
+            <h3>&#x1F4C5; Weekly Medications</h3>
+            <button class="hab-add-btn" onclick="habToggleForm('weekly')">+ Add</button>
+          </div>
+          <div id="hab-weekly-list"></div>
+          <div class="hab-add-form" id="hab-weekly-form">
+            <select class="hab-form-select" id="hab-weekly-select">
+              <option value="">-- Select medication --</option>
+              <option value="__custom">Custom habit...</option>
+            </select>
+            <input class="hab-form-input" id="hab-weekly-name" type="text" placeholder="Custom habit name..." style="display:none !important;" onkeydown="if(event.key==='Enter')habAddMed('weekly')">
+            <button class="hab-form-save" onclick="habAddMed('weekly')">Add</button>
+          </div>
+        </div>
+        <div class="hab-section">
+          <div class="hab-section-header">
+            <h3>&#x1F4DC; Medication History (Last 30 Days)</h3>
+          </div>
+          <div style="padding:12px !important;" id="hab-history-container">
+            <div class="hab-empty">Loading history...</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CUSTOM HABITS SECTION (hidden by default) -->
+      <div id="hab-custom-section" style="display:none !important;">
+        <button class="am-back" onclick="habShowSection('home')" style="background:none !important;border:none !important;color:#3b82f6 !important;font-size:14px !important;cursor:pointer !important;padding:0 0 12px 0 !important;">&#x2190; Back to Habits</button>
+        <h3 style="font-size:16px !important;font-weight:700 !important;margin-bottom:12px !important;">&#x2B50; My Habits</h3>
+        <div id="hab-custom-list" style="margin-bottom:16px !important;"></div>
+        <div class="hab-section">
+          <div class="med-section-header" style="cursor:pointer !important;" onclick="document.getElementById('hab-custom-form').style.display=document.getElementById('hab-custom-form').style.display==='none'?'block':'none'">
+            <h3 style="font-size:14px !important;">+ Add New Habit</h3>
+          </div>
+          <div id="hab-custom-form" style="display:none !important;padding:14px 16px !important;">
+            <div style="display:flex !important;flex-direction:column !important;gap:10px !important;">
+              <input type="text" id="hab-custom-name" placeholder="Habit name (e.g. Drink 2L water)" style="width:100% !important;padding:10px 12px !important;border:1px solid #e2e8f0 !important;border-radius:8px !important;font-size:14px !important;box-sizing:border-box !important;">
+              <select id="hab-custom-freq" style="width:100% !important;padding:10px 12px !important;border:1px solid #e2e8f0 !important;border-radius:8px !important;font-size:14px !important;">
+                <option value="daily">Daily</option>
+                <option value="weekly">Weekly</option>
+              </select>
+              <button class="am-btn" onclick="habAddCustom()" style="width:100% !important;padding:12px !important;background:#7c3aed !important;color:white !important;border-color:#7c3aed !important;font-size:14px !important;justify-content:center !important;border-radius:8px !important;">Save Habit</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ═══ TRAVEL ═══ -->
+    <div class="screen" id="ch-travel">
+      <h2>&#x2708;&#xFE0F; Travel</h2>
+      <div class="trv-card">
+        <h3>&#x1F4C5; Upcoming Trips</h3>
+        <p>No upcoming trips planned yet. Add your next adventure here.</p>
+      </div>
+      <div class="trv-card">
+        <h3>&#x1F9F3; Packing Lists</h3>
+        <p>Create and manage packing lists for your trips. Coming soon.</p>
+      </div>
+      <div class="trv-card">
+        <h3>&#x1F4C4; Travel Documents</h3>
+        <p>Store passport details, travel insurance, and booking confirmations. Coming soon.</p>
+      </div>
+    </div>
+
+    <!-- ═══ HOME ═══ -->
+    <div class="screen" id="ch-hometab">
+      <h2>&#x1F3E0; Home</h2>
+      <div class="hm-card">
+        <h3>&#x1F527; Maintenance Tasks</h3>
+        <p>Track home maintenance tasks and schedules. Coming soon.</p>
+      </div>
+      <div class="hm-card">
+        <h3>&#x1F4E6; Home Inventory</h3>
+        <p>Keep an inventory of appliances, warranties, and important items. Coming soon.</p>
+      </div>
+      <div class="hm-card">
+        <h3>&#x1F4DE; Important Contacts</h3>
+        <p>Plumber, electrician, real estate agent, and other home contacts. Coming soon.</p>
       </div>
     </div>
 
@@ -812,7 +1113,7 @@
     document.getElementById('cathHub').style.setProperty('display', 'flex', 'important');
     var params = new URLSearchParams(window.location.search);
     if (params.get('view') === 'shopping-list') {
-      chNav('aislemate', document.querySelectorAll('#cathHub .nav-item')[1]);
+      chNav('aislemate');
       setTimeout(function(){ amGo('weekly'); }, 100);
     }
   }
@@ -884,8 +1185,12 @@
     document.querySelectorAll('#cathHub .screen').forEach(function(s){ s.classList.remove('active'); });
     document.querySelectorAll('#cathHub .nav-item').forEach(function(n){ n.classList.remove('active'); });
     document.getElementById('ch-' + name).classList.add('active');
-    btn.classList.add('active');
+    if (btn) btn.classList.add('active');
+    // Sync mobile dropdown
+    var mobileSelect = document.querySelector('#cathHub .mobile-nav-select');
+    if (mobileSelect) mobileSelect.value = name;
     if(name === 'aislemate') amGo('home');
+    if(name === 'medical') medGo('home');
     if(name === 'home') dashLoad();
   };
 
@@ -917,6 +1222,8 @@
 
 
   }
+
+  // Mental health dashboard is updated by loadMedicalSessions()
 
   // Load dashboard on startup
   dashLoad();
@@ -1853,33 +2160,109 @@
 
   wlRender();
 
+  // ─── MEDICAL NAVIGATION ───
+  window.dashQuickNav = function(sel) {
+    var v = sel.value;
+    sel.value = '';
+    if (v === 'shopping') {
+      chNav('aislemate', document.querySelectorAll('#cathHub .nav-item')[1]);
+      setTimeout(function(){ amGo('weekly'); }, 100);
+    } else if (v === 'receipt') {
+      chNav('aislemate', document.querySelectorAll('#cathHub .nav-item')[1]);
+      setTimeout(function(){ amGo('receipts'); }, 100);
+    } else if (v === 'mentalhealth') {
+      chNav('medical', document.querySelectorAll('#cathHub .nav-item')[3]);
+      setTimeout(function(){ medGo('mentalhealth'); }, 100);
+    } else if (v === 'filing') {
+      window.open('https://netorgft4053847.sharepoint.com/:f:/s/bakerpersonal-CathPersonal/IgCDEd3wyYcYTYLNHVmG3vY6AXpwBUtDz6wYy2dclwLsNcw?e=671UAV', '_blank');
+    }
+  };
+
+  window.medGo = function(sub) {
+    document.querySelectorAll('#ch-medical .am-subscreen').forEach(function(s){ s.classList.remove('active'); });
+    document.getElementById('med-' + sub).classList.add('active');
+  };
+
   // ─── MEDICAL (from Supabase) ───
-  (async function loadMedical(){
-    // Load sessions
-    var { data: sessions } = await sb.from('medical_sessions').select('*');
+  async function loadMedicalSessions() {
+    var { data: sessions } = await sb.from('medical_sessions').select('*').order('date', { ascending: false });
     sessions = sessions || [];
-    var tbody = document.getElementById('med-sessions-body');
-    tbody.innerHTML = '';
+    var list = document.getElementById('med-sessions-list');
+    var h = '';
     sessions.forEach(function(s) {
       var cls = s.plan === 'NDIS' ? 'ndis' : s.plan === 'Mental Health Plan' ? 'mhp' : 'private';
-      tbody.innerHTML += '<tr><td style="font-weight:600 !important;">' + esc(s.date) + '</td><td>' + esc(s.duration) + ' session</td><td><span class="med-badge ' + cls + '">' + esc(s.plan) + '</span></td><td>' + esc(s.practitioner) + '</td></tr>';
+      h += '<div style="padding:14px 16px !important;border-bottom:1px solid #f1f5f9 !important;display:flex !important;flex-wrap:wrap !important;gap:6px 12px !important;align-items:center !important;">';
+      h += '<div style="font-weight:700 !important;font-size:14px !important;color:#1e293b !important;min-width:90px !important;">' + esc(s.date) + '</div>';
+      h += '<div style="font-size:13px !important;color:#64748b !important;">' + esc(s.duration) + '</div>';
+      h += '<span class="med-badge ' + cls + '">' + esc(s.plan) + '</span>';
+      h += '<div style="font-size:13px !important;color:#475569 !important;">' + esc(s.practitioner) + '</div>';
+      h += '<div style="margin-left:auto !important;"><span style="font-size:16px !important;cursor:pointer !important;color:#ef4444 !important;" onclick="mhDeleteSession(' + s.id + ')">&#x1F5D1;</span></div>';
+      h += '</div>';
     });
+    if (!sessions.length) h = '<div style="padding:16px !important;color:#94a3b8 !important;font-size:13px !important;">No sessions recorded yet.</div>';
+    list.innerHTML = h;
     document.getElementById('med-total').textContent = sessions.length;
     document.getElementById('med-mhp').textContent = sessions.filter(function(s){ return s.plan === 'Mental Health Plan'; }).length;
     document.getElementById('med-ndis').textContent = sessions.filter(function(s){ return s.plan === 'NDIS'; }).length;
+    // Also update dashboard
+    var dashTotal = document.getElementById('dash-mh-total');
+    if (dashTotal) dashTotal.textContent = sessions.length;
+    var dashLast = document.getElementById('dash-mh-last');
+    if (dashLast) dashLast.textContent = sessions.length ? sessions[0].date : '-';
+    var dashPlans = document.getElementById('dash-mh-plans');
+    if (dashPlans) {
+      var mhpCount = sessions.filter(function(s){ return s.plan === 'Mental Health Plan'; }).length;
+      var ndisCount = sessions.filter(function(s){ return s.plan === 'NDIS'; }).length;
+      dashPlans.textContent = mhpCount + ' / ' + ndisCount;
+    }
+  }
+
+  window.mhAddSession = async function() {
+    var date = document.getElementById('mh-date').value;
+    var duration = document.getElementById('mh-duration').value;
+    var plan = document.getElementById('mh-plan').value;
+    var practitioner = document.getElementById('mh-practitioner').value.trim();
+    if (!date) { alert('Please select a date.'); return; }
+    if (!practitioner) { alert('Please enter a practitioner.'); return; }
+    await sb.from('medical_sessions').insert({ date: date, duration: duration, plan: plan, practitioner: practitioner });
+    document.getElementById('mh-date').value = '';
+    document.getElementById('mh-practitioner').value = '';
+    document.getElementById('mh-add-form').style.display = 'none';
+    loadMedicalSessions();
+  };
+
+  window.mhDeleteSession = async function(id) {
+    if (!confirm('Delete this session?')) return;
+    await sb.from('medical_sessions').delete().eq('id', id);
+    loadMedicalSessions();
+  };
+
+  (async function loadMedical(){
+    loadMedicalSessions();
 
     // Load medication plan
     var { data: meds } = await sb.from('medications').select('*');
     var medsBody = document.getElementById('med-meds-body');
     medsBody.innerHTML = '';
-    var dailyMeds = ['Vyvanse', 'Valtrex', 'Levothyroxine'];
-    (meds || []).forEach(function(m) {
+    var dailyMeds = ['Vyvanse', 'Valtrex', 'Levothyroxine', 'Xobet'];
+    // Sort: daily first, then weekly
+    var sortedMeds = (meds || []).slice().sort(function(a, b) {
+      var aDaily = dailyMeds.some(function(d) { return a.name.toLowerCase().indexOf(d.toLowerCase()) !== -1; });
+      var bDaily = dailyMeds.some(function(d) { return b.name.toLowerCase().indexOf(d.toLowerCase()) !== -1; });
+      if (aDaily && !bDaily) return -1;
+      if (!aDaily && bDaily) return 1;
+      return 0;
+    });
+    sortedMeds.forEach(function(m) {
       var isDaily = dailyMeds.some(function(d) { return m.name.toLowerCase().indexOf(d.toLowerCase()) !== -1; });
       var freqBadge = isDaily
         ? '<span style="font-size:10px !important;background:#dbeafe !important;color:#1d4ed8 !important;padding:2px 6px !important;border-radius:4px !important;font-weight:600 !important;">DAILY</span> '
         : '<span style="font-size:10px !important;background:#fef3c7 !important;color:#92400e !important;padding:2px 6px !important;border-radius:4px !important;font-weight:600 !important;">WEEKLY</span> ';
-      medsBody.innerHTML += '<tr><td style="font-weight:600 !important;">' + freqBadge + esc(m.name) + '</td><td>' + esc(m.dose) + '</td><td>' + esc(m.schedule) + '</td><td class="meds-reason">' + esc(m.purpose) + '</td></tr>';
+      var conditions = m.conditions ? esc(m.conditions) : '-';
+      medsBody.innerHTML += '<tr><td style="font-weight:600 !important;">' + freqBadge + esc(m.name) + '</td><td>' + esc(m.dose) + '</td><td>' + esc(m.schedule) + '</td><td>' + conditions + '</td><td class="meds-reason">' + esc(m.purpose) + '</td></tr>';
     });
+    // Store meds globally for habits to use
+    window._cathMeds = meds || [];
   })();
 
   // ─── DOCUMENT FILE RENAMER ───
@@ -1895,38 +2278,52 @@
     var preview = document.getElementById('med-date-preview');
     if (preview) preview.textContent = datePrefix;
 
-    window.docHandleFiles = function(files, zoneId) {
-      var list = document.getElementById(zoneId + '-renamed-list');
-      Array.from(files).forEach(function(file) {
-        var newName = datePrefix + ' ' + file.name;
-        // Trigger download with new name
-        var url = URL.createObjectURL(file);
-        var a = document.createElement('a');
-        a.href = url;
-        a.download = newName;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        setTimeout(function(){ URL.revokeObjectURL(url); }, 2000);
-        // Show in list
-        var item = document.createElement('div');
-        item.className = 'doc-renamed-item';
-        item.innerHTML = '<span class="doc-renamed-tag">&#x2713; Renamed</span><span class="doc-renamed-name">' + esc(newName) + '</span>';
-        list.insertBefore(item, list.firstChild);
-      });
+    var docSelectedFile = null;
+
+    window.docFileSelected = function(input) {
+      if (input.files && input.files.length) {
+        docSelectedFile = input.files[0];
+        document.getElementById('med-file-chosen').textContent = docSelectedFile.name;
+        // Pre-fill name without extension
+        var nameParts = docSelectedFile.name.split('.');
+        nameParts.pop();
+        document.getElementById('med-custom-name').value = nameParts.join('.');
+        document.getElementById('med-custom-name').focus();
+      }
     };
 
-    // Drag and drop
-    var zone = document.getElementById('med-drop');
-    if (zone) {
-      zone.addEventListener('dragover', function(e){ e.preventDefault(); zone.classList.add('dragover'); });
-      zone.addEventListener('dragleave', function(){ zone.classList.remove('dragover'); });
-      zone.addEventListener('drop', function(e){
-        e.preventDefault();
-        zone.classList.remove('dragover');
-        docHandleFiles(e.dataTransfer.files, 'med');
-      });
-    }
+    window.docRenameAndDownload = function() {
+      if (!docSelectedFile) { alert('Please choose a file first.'); return; }
+      var customName = document.getElementById('med-custom-name').value.trim();
+      if (!customName) { alert('Please enter a file name.'); return; }
+      // Get extension from original file
+      var ext = docSelectedFile.name.split('.').pop();
+      var newName = datePrefix + ' ' + customName + '.' + ext;
+      // Download with new name
+      var url = URL.createObjectURL(docSelectedFile);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = newName;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(function(){ URL.revokeObjectURL(url); }, 2000);
+      // Show in list
+      var list = document.getElementById('med-renamed-list');
+      var item = document.createElement('div');
+      item.className = 'doc-renamed-item';
+      item.innerHTML = '<span class="doc-renamed-tag">&#x2713; Saved</span><span class="doc-renamed-name">' + esc(newName) + '</span>';
+      list.insertBefore(item, list.firstChild);
+      // Open OneDrive folder
+      setTimeout(function(){
+        window.open('https://netorgft4053847.sharepoint.com/:f:/s/bakerpersonal-CathPersonal/IgAEdQrlyL4-Qa4rSlz4-SwPAWV2ALT9bZECNDOJyLgPUlU?e=mvuWfJ', '_blank');
+      }, 500);
+      // Reset
+      docSelectedFile = null;
+      document.getElementById('med-file-chosen').textContent = 'No file selected';
+      document.getElementById('med-custom-name').value = '';
+      document.getElementById('med-file-input').value = '';
+    };
   })();
 
 
@@ -1974,17 +2371,197 @@
     window.habToggleForm = function(freq) {
       var f = document.getElementById('hab-'+freq+'-form');
       f.classList.toggle('show');
-      if (f.classList.contains('show')) document.getElementById('hab-'+freq+'-name').focus();
+      if (f.classList.contains('show')) habPopulateDropdown(freq);
     };
 
+    async function habPopulateDropdown(freq) {
+      var sel = document.getElementById('hab-'+freq+'-select');
+      var { data: existingMeds } = await sb.from('habit_meds').select('name');
+      var existingNames = (existingMeds || []).map(function(m){ return m.name.toLowerCase(); });
+      var { data: allMeds } = await sb.from('medications').select('name, schedule');
+      sel.innerHTML = '<option value="">-- Select medication --</option>';
+      (allMeds || []).forEach(function(m) {
+        if (existingNames.indexOf(m.name.toLowerCase()) === -1) {
+          sel.innerHTML += '<option value="' + esc(m.name) + '">' + esc(m.name) + ' (' + esc(m.schedule) + ')</option>';
+        }
+      });
+      sel.innerHTML += '<option value="__custom">Custom habit...</option>';
+      sel.onchange = function() {
+        var customInp = document.getElementById('hab-'+freq+'-name');
+        if (sel.value === '__custom') {
+          customInp.style.display = 'block';
+          customInp.focus();
+        } else {
+          customInp.style.display = 'none';
+        }
+      };
+    }
+
     window.habAddMed = async function(freq) {
+      var sel = document.getElementById('hab-'+freq+'-select');
       var inp = document.getElementById('hab-'+freq+'-name');
-      var name = inp.value.trim();
+      var name = '';
+      if (sel.value === '__custom') {
+        name = inp.value.trim();
+      } else if (sel.value) {
+        name = sel.value;
+      }
       if (!name) return;
       await sb.from('habit_meds').insert({ id: Date.now(), name: name, freq: freq });
       inp.value = '';
+      inp.style.display = 'none';
+      sel.value = '';
       document.getElementById('hab-'+freq+'-form').classList.remove('show');
       habRender();
+    };
+
+    window.habDismissMissed = function() {
+      var yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
+      var yk = yesterday.getFullYear()+'-'+String(yesterday.getMonth()+1).padStart(2,'0')+'-'+String(yesterday.getDate()).padStart(2,'0');
+      localStorage.setItem('cathHub_missedDismissed_' + yk, '1');
+      document.getElementById('hab-missed-alert').style.display = 'none';
+    };
+
+    window.habBackfillYesterday = async function() {
+      var yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
+      var yk = yesterday.getFullYear()+'-'+String(yesterday.getMonth()+1).padStart(2,'0')+'-'+String(yesterday.getDate()).padStart(2,'0');
+      var { data: allHabs } = await sb.from('habit_meds').select('*').eq('freq', 'daily');
+      var { data: medsList } = await sb.from('medications').select('name');
+      var medNames = (medsList || []).map(function(m){ return m.name.toLowerCase(); });
+      var dailyMeds = (allHabs || []).filter(function(h){ return medNames.indexOf(h.name.toLowerCase()) !== -1; });
+      var { data: existing } = await sb.from('habit_logs').select('med_id').eq('date', yk);
+      var doneIds = (existing || []).map(function(l){ return l.med_id; });
+      for (var i = 0; i < dailyMeds.length; i++) {
+        if (doneIds.indexOf(dailyMeds[i].id) === -1) {
+          await sb.from('habit_logs').insert({ med_id: dailyMeds[i].id, date: yk });
+        }
+      }
+      document.getElementById('hab-missed-alert').style.display = 'none';
+      habRender();
+    };
+
+    window.habShowSection = function(section) {
+      document.getElementById('hab-home').style.display = section === 'home' ? 'flex' : 'none';
+      document.getElementById('hab-meds-section').style.display = section === 'meds' ? 'block' : 'none';
+      document.getElementById('hab-custom-section').style.display = section === 'custom' ? 'block' : 'none';
+      if (section === 'custom') habRenderCustom();
+    };
+
+    window.habAddCustom = async function() {
+      var name = document.getElementById('hab-custom-name').value.trim();
+      var freq = document.getElementById('hab-custom-freq').value;
+      if (!name) { alert('Please enter a habit name.'); return; }
+      await sb.from('habit_meds').insert({ id: Date.now(), name: name, freq: freq });
+      document.getElementById('hab-custom-name').value = '';
+      document.getElementById('hab-custom-form').style.display = 'none';
+      habRenderCustom();
+    };
+
+    window.habToggleCustom = async function(id) {
+      var today = todayKey();
+      var { data } = await sb.from('habit_logs').select('*').eq('med_id', id).eq('date', today);
+      if (data && data.length) {
+        await sb.from('habit_logs').delete().eq('med_id', id).eq('date', today);
+      } else {
+        await sb.from('habit_logs').insert({ med_id: id, date: today });
+      }
+      habRenderCustom();
+    };
+
+    window.habDeleteCustom = async function(id) {
+      if (!confirm('Delete this habit?')) return;
+      await sb.from('habit_meds').delete().eq('id', id);
+      habRenderCustom();
+    };
+
+    async function habRenderCustom() {
+      var { data: allHabs } = await sb.from('habit_meds').select('*');
+      var { data: medsList } = await sb.from('medications').select('name');
+      var medNames = (medsList || []).map(function(m){ return m.name.toLowerCase(); });
+      var meds = (allHabs || []).filter(function(h) {
+        return medNames.indexOf(h.name.toLowerCase()) === -1;
+      });
+      var today = todayKey();
+      var container = document.getElementById('hab-custom-list');
+      if (!meds.length) {
+        container.innerHTML = '<div style="padding:16px !important;color:#94a3b8 !important;font-size:13px !important;text-align:center !important;">No custom habits yet. Tap "+ Add New Habit" to get started.</div>';
+        return;
+      }
+      var h = '';
+      for (var i = 0; i < meds.length; i++) {
+        var med = meds[i];
+        var { data: logs } = await sb.from('habit_logs').select('*').eq('med_id', med.id).eq('date', today);
+        var done = logs && logs.length > 0;
+        h += '<div style="display:flex !important;align-items:center !important;gap:10px !important;padding:12px 16px !important;background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;margin-bottom:8px !important;">';
+        h += '<div class="hab-check' + (done ? ' done' : '') + '" onclick="habToggleCustom(' + med.id + ')" style="cursor:pointer !important;"></div>';
+        h += '<div style="flex:1 !important;"><div style="font-size:14px !important;font-weight:600 !important;color:#1e293b !important;">' + esc(med.name) + '</div>';
+        h += '<div style="font-size:11px !important;color:#94a3b8 !important;">' + med.freq + '</div></div>';
+        h += '<span style="font-size:16px !important;cursor:pointer !important;color:#ef4444 !important;" onclick="habDeleteCustom(' + med.id + ')">&#x1F5D1;</span>';
+        h += '</div>';
+      }
+      container.innerHTML = h;
+    }
+
+    // #2: Take All only marks actual medications (not custom habits)
+    var habUndoIds = []; // track what was just marked for undo
+    var habUndoTimer = null;
+
+    window.habTakeAllDaily = async function() {
+      var { data: allHabs } = await sb.from('habit_meds').select('*').eq('freq', 'daily');
+      var { data: medsList } = await sb.from('medications').select('name');
+      var medNames = (medsList || []).map(function(m){ return m.name.toLowerCase(); });
+      // Only actual medications, not custom habits
+      var meds = (allHabs || []).filter(function(h){ return medNames.indexOf(h.name.toLowerCase()) !== -1; });
+      if (!meds.length) return;
+      var today = todayKey();
+      var { data: existing } = await sb.from('habit_logs').select('med_id').eq('date', today);
+      var doneIds = (existing || []).map(function(l){ return l.med_id; });
+      var toInsert = meds.filter(function(m){ return doneIds.indexOf(m.id) === -1; });
+      habUndoIds = [];
+      for (var i = 0; i < toInsert.length; i++) {
+        await sb.from('habit_logs').insert({ med_id: toInsert[i].id, date: today });
+        habUndoIds.push(toInsert[i].id);
+      }
+      habRender();
+      // #5: Show undo button for 10 seconds
+      if (habUndoIds.length > 0) {
+        var undoBtn = document.getElementById('hab-undo-btn');
+        undoBtn.style.display = 'block';
+        clearTimeout(habUndoTimer);
+        habUndoTimer = setTimeout(function() {
+          undoBtn.style.display = 'none';
+          habUndoIds = [];
+        }, 10000);
+      }
+    };
+
+    // #5: Undo Take All
+    window.habUndoTakeAll = async function() {
+      var today = todayKey();
+      for (var i = 0; i < habUndoIds.length; i++) {
+        await sb.from('habit_logs').delete().eq('med_id', habUndoIds[i]).eq('date', today);
+      }
+      habUndoIds = [];
+      clearTimeout(habUndoTimer);
+      document.getElementById('hab-undo-btn').style.display = 'none';
+      habRender();
+    };
+
+    // #6: Browser notification reminder instead of Apple Shortcuts
+    window.habRequestReminder = function() {
+      if (!('Notification' in window)) {
+        alert('Your browser does not support notifications.');
+        return;
+      }
+      Notification.requestPermission().then(function(perm) {
+        if (perm === 'granted') {
+          // Schedule a reminder check every morning at load
+          localStorage.setItem('cathHub_medReminder', 'true');
+          new Notification('Med Reminder Enabled', { body: 'You will get a reminder when you open Cath Hub and haven\'t taken your meds.', icon: '\uD83D\uDC8A' });
+        } else {
+          alert('Please allow notifications in your browser settings to receive reminders.');
+        }
+      });
     };
 
     window.habDeleteMed = async function(id) {
@@ -2013,15 +2590,108 @@
       habRender();
     };
 
+    async function habAutoPopulate() {
+      // Auto-populate habit_meds from medications table if not already present
+      try {
+        var { data: allMeds } = await sb.from('medications').select('name, schedule');
+        var { data: existingHabs } = await sb.from('habit_meds').select('id, name, freq');
+        var existingNames = (existingHabs || []).map(function(m){ return m.name.toLowerCase(); });
+        var dailyMedNames = ['Vyvanse', 'Valtrex', 'Levothyroxine', 'Xobet'];
+        for (var i = 0; i < (allMeds || []).length; i++) {
+          var m = allMeds[i];
+          if (existingNames.indexOf(m.name.toLowerCase()) === -1) {
+            var isDaily = dailyMedNames.some(function(d) { return m.name.toLowerCase().indexOf(d.toLowerCase()) !== -1; });
+            var freq = isDaily ? 'daily' : 'weekly';
+            await sb.from('habit_meds').insert({ id: Date.now() + i, name: m.name, freq: freq });
+          }
+        }
+        // Fix any meds that should be daily but are set to weekly (e.g. Xobet)
+        (existingHabs || []).forEach(function(h) {
+          var shouldBeDaily = dailyMedNames.some(function(d) { return h.name.toLowerCase().indexOf(d.toLowerCase()) !== -1; });
+          if (shouldBeDaily && h.freq === 'weekly') {
+            sb.from('habit_meds').update({ freq: 'daily' }).eq('id', h.id);
+          }
+        });
+      } catch(e) {}
+    }
+
+    // #3: AM/PM time labels for daily meds
+    var MED_TIMES = {
+      'vyvanse': 'Morning',
+      'valtrex': 'Morning',
+      'levothyroxine': 'Morning',
+      'xobet': 'Evening (apply)'
+    };
+
     async function habRender() {
       var { data: meds } = await sb.from('habit_meds').select('*');
       meds = meds || [];
+      var { data: medsList } = await sb.from('medications').select('name');
+      var medNames = (medsList || []).map(function(m){ return m.name.toLowerCase(); });
       var logs = await getLogsMap();
       var today = todayKey(), wk = weekKeys(), tIdx = todayIdx();
       var daily = meds.filter(function(m){ return m.freq==='daily'; });
       var weekly = meds.filter(function(m){ return m.freq==='weekly'; });
 
-      // Daily
+      // #1: Morning reminder banner (inside meds section)
+      var bannerEl = document.getElementById('hab-morning-banner');
+      var hour = new Date().getHours();
+      // Only count actual meds for the "all done" check
+      var dailyMeds = daily.filter(function(m){ return medNames.indexOf(m.name.toLowerCase()) !== -1; });
+      var allMedsDone = dailyMeds.length > 0 && dailyMeds.every(function(m){ return logs[m.id]&&logs[m.id][today]; });
+      if (hour < 12 && !allMedsDone && dailyMeds.length > 0) {
+        bannerEl.innerHTML = '<div class="hab-reminder-banner">&#x2600;&#xFE0F; Have you taken your morning meds?</div>';
+      } else {
+        bannerEl.innerHTML = '';
+      }
+
+      // #6: Browser notification if enabled and meds not taken
+      if (localStorage.getItem('cathHub_medReminder') === 'true' && !allMedsDone && dailyMeds.length > 0 && 'Notification' in window && Notification.permission === 'granted') {
+        var notifKey = 'cathHub_notifShown_' + today;
+        if (!localStorage.getItem(notifKey)) {
+          new Notification('Morning Meds Reminder', { body: 'You haven\'t taken your morning meds yet!', icon: '\uD83D\uDC8A' });
+          localStorage.setItem(notifKey, '1');
+        }
+      }
+
+      // #8: Missed yesterday indicator (dismissable per day)
+      var missedAlert = document.getElementById('hab-missed-alert');
+      var yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
+      var yk = yesterday.getFullYear()+'-'+String(yesterday.getMonth()+1).padStart(2,'0')+'-'+String(yesterday.getDate()).padStart(2,'0');
+      var missedYesterday = dailyMeds.filter(function(m){ return !(logs[m.id] && logs[m.id][yk]); });
+      var dismissKey = 'cathHub_missedDismissed_' + yk;
+      if (missedYesterday.length > 0 && dailyMeds.length > 0 && !localStorage.getItem(dismissKey)) {
+        var missedNames = missedYesterday.map(function(m){ return m.name; }).join(', ');
+        missedAlert.style.display = 'block';
+        document.getElementById('hab-missed-text').innerHTML = '&#x26A0;&#xFE0F; <strong>Missed yesterday:</strong> ' + esc(missedNames);
+      } else {
+        missedAlert.style.display = 'none';
+      }
+
+      // Update dashboard habits summary
+      var dashTaken = document.getElementById('dash-hab-taken');
+      var dashStreak = document.getElementById('dash-hab-streak');
+      var dashStatus = document.getElementById('dash-hab-status');
+      var dashMissed = document.getElementById('dash-hab-missed');
+      if (dashTaken) {
+        var medDailyDone = dailyMeds.filter(function(m){ return logs[m.id]&&logs[m.id][today]; }).length;
+        dashTaken.textContent = medDailyDone + '/' + dailyMeds.length;
+        var bestStreak = 0;
+        for (var si = 0; si < dailyMeds.length; si++) {
+          var ss = await streakFor(dailyMeds[si].id, logs);
+          if (ss > bestStreak) bestStreak = ss;
+        }
+        dashStreak.textContent = bestStreak + 'd';
+        dashStatus.textContent = allMedsDone ? '\u2705' : (hour < 12 ? '\u23F3' : '\u26A0');
+        if (missedYesterday.length > 0 && dailyMeds.length > 0) {
+          dashMissed.style.display = 'block';
+          dashMissed.innerHTML = '&#x26A0;&#xFE0F; Missed yesterday: ' + esc(missedYesterday.map(function(m){ return m.name; }).join(', '));
+        } else {
+          dashMissed.style.display = 'none';
+        }
+      }
+
+      // #3: Daily with AM/PM time labels
       var dl = document.getElementById('hab-daily-list');
       if (!daily.length) {
         dl.innerHTML = '<div class="hab-empty">No daily medications yet. Tap + Add to get started.</div>';
@@ -2031,10 +2701,13 @@
           var med = daily[i];
           var done = !!(logs[med.id] && logs[med.id][today]);
           var s = await streakFor(med.id, logs);
+          var timeLabel = MED_TIMES[med.name.toLowerCase()] || '';
           h += '<div class="hab-med-row">';
           h += '<div class="hab-check'+(done?' done':'')+'" onclick="habToggleDaily('+med.id+')"></div>';
-          h += '<div class="hab-med-name">'+esc(med.name)+'</div>';
-          if (s > 1) h += '<div class="hab-streak">&#x1F525; '+s+' days</div>';
+          h += '<div style="flex:1 !important;"><div class="hab-med-name" style="margin-bottom:0 !important;">'+esc(med.name)+'</div>';
+          if (timeLabel) h += '<div style="font-size:10px !important;color:#94a3b8 !important;">'+timeLabel+'</div>';
+          h += '</div>';
+          if (s > 1) h += '<div class="hab-streak">&#x1F525; '+s+'d</div>';
           h += '<div class="hab-del" onclick="habDeleteMed('+med.id+')">&#x1F5D1;</div>';
           h += '</div>';
         }
@@ -2076,9 +2749,105 @@
       document.getElementById('hab-daily-done').textContent = dailyDone+'/'+daily.length;
       document.getElementById('hab-weekly-done').textContent = weeklyDone;
       document.getElementById('hab-streak').textContent = '\uD83D\uDD25 '+best;
+      // Update badge on home button
+      var badge = document.getElementById('hab-meds-badge');
+      if (badge) badge.textContent = dailyDone + '/' + daily.length + ' today';
+
+      // Update Take All button state (only checks actual meds)
+      var takeBtn = document.getElementById('hab-take-all-btn');
+      if (allMedsDone && dailyMeds.length > 0) {
+        takeBtn.textContent = '\u2705 All Taken';
+        takeBtn.style.background = '#64748b';
+        takeBtn.style.borderColor = '#64748b';
+        takeBtn.disabled = true;
+      } else {
+        takeBtn.textContent = '\u2600\uFE0F Take All Morning Meds';
+        takeBtn.style.background = '#10b981';
+        takeBtn.style.borderColor = '#10b981';
+        takeBtn.disabled = false;
+      }
+
+      // #7: Render 14-day tally (ALL habits — meds + custom)
+      try {
+        var tallyEl = document.getElementById('hab-tally');
+        var fourteenAgo = new Date(); fourteenAgo.setDate(fourteenAgo.getDate() - 13);
+        var fromD = fourteenAgo.getFullYear()+'-'+String(fourteenAgo.getMonth()+1).padStart(2,'0')+'-'+String(fourteenAgo.getDate()).padStart(2,'0');
+        var { data: tallyLogs } = await sb.from('habit_logs').select('date, med_id').gte('date', fromD);
+        var tallyMap = {};
+        (tallyLogs || []).forEach(function(l) {
+          if (!tallyMap[l.date]) tallyMap[l.date] = {};
+          tallyMap[l.date][l.med_id] = true;
+        });
+        // Total daily habits = all daily meds + custom daily habits
+        var totalDailyAll = meds.filter(function(m){ return m.freq === 'daily'; }).length || 1;
+        var th = '';
+        var dayNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+        for (var d = 0; d < 14; d++) {
+          var dt = new Date(); dt.setDate(dt.getDate() - 13 + d);
+          var dk = dt.getFullYear()+'-'+String(dt.getMonth()+1).padStart(2,'0')+'-'+String(dt.getDate()).padStart(2,'0');
+          var count = tallyMap[dk] ? Object.keys(tallyMap[dk]).length : 0;
+          var color = count === 0 ? '#334155' : count >= totalDailyAll ? '#10b981' : '#f59e0b';
+          var label = dayNames[dt.getDay()] + ' ' + dt.getDate();
+          var isToday = dk === today;
+          th += '<div style="display:flex !important;flex-direction:column !important;align-items:center !important;gap:2px !important;">';
+          th += '<div style="width:28px !important;height:28px !important;border-radius:6px !important;background:'+color+' !important;display:flex !important;align-items:center !important;justify-content:center !important;font-size:11px !important;color:white !important;font-weight:'+(isToday?'700':'400')+' !important;border:'+(isToday?'2px solid white':'none')+' !important;">'+count+'</div>';
+          th += '<div style="font-size:9px !important;color:#94a3b8 !important;">'+label+'</div>';
+          th += '</div>';
+        }
+        tallyEl.innerHTML = th;
+      } catch(e) {}
+
+      // Load history
+      habLoadHistory();
     }
 
-    habRender();
+    // #4: Group history by date with card layout
+    async function habLoadHistory() {
+      try {
+        var thirtyAgo = new Date();
+        thirtyAgo.setDate(thirtyAgo.getDate() - 30);
+        var fromDate = thirtyAgo.getFullYear()+'-'+String(thirtyAgo.getMonth()+1).padStart(2,'0')+'-'+String(thirtyAgo.getDate()).padStart(2,'0');
+        var { data: logData } = await sb.from('habit_logs').select('date, med_id, created_at').gte('date', fromDate).order('date', { ascending: false });
+        var { data: habMeds } = await sb.from('habit_meds').select('id, name');
+        var medMap = {};
+        (habMeds || []).forEach(function(m){ medMap[m.id] = m.name; });
+        var container = document.getElementById('hab-history-container');
+        if (!logData || !logData.length) {
+          container.innerHTML = '<div class="hab-empty">No medication logs in the last 30 days.</div>';
+          return;
+        }
+        // Group by date
+        var grouped = {};
+        logData.forEach(function(l) {
+          if (!grouped[l.date]) grouped[l.date] = [];
+          grouped[l.date].push(l);
+        });
+        var h = '';
+        Object.keys(grouped).sort().reverse().forEach(function(date) {
+          var dateObj = new Date(date + 'T00:00:00');
+          var dayNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+          var dateLabel = dayNames[dateObj.getDay()] + ' ' + dateObj.getDate() + '/' + (dateObj.getMonth()+1) + '/' + dateObj.getFullYear();
+          h += '<div style="margin-bottom:12px !important;">';
+          h += '<div style="font-size:13px !important;font-weight:700 !important;color:#1e293b !important;padding:8px 0 4px !important;border-bottom:1px solid #e2e8f0 !important;margin-bottom:6px !important;">' + dateLabel + ' <span style="font-size:11px !important;color:#94a3b8 !important;font-weight:400 !important;">(' + grouped[date].length + ' taken)</span></div>';
+          grouped[date].forEach(function(l) {
+            var medName = medMap[l.med_id] || 'Unknown';
+            var time = l.created_at ? new Date(l.created_at).toLocaleTimeString('en-AU', { hour: '2-digit', minute: '2-digit' }) : '';
+            h += '<div style="display:flex !important;align-items:center !important;gap:8px !important;padding:4px 0 !important;">';
+            h += '<span style="color:#10b981 !important;font-size:14px !important;">&#x2713;</span>';
+            h += '<span style="font-size:13px !important;flex:1 !important;">' + esc(medName) + '</span>';
+            if (time) h += '<span style="font-size:11px !important;color:#94a3b8 !important;">' + esc(time) + '</span>';
+            h += '</div>';
+          });
+          h += '</div>';
+        });
+        container.innerHTML = h;
+      } catch(e) {
+        document.getElementById('hab-history-container').innerHTML = '<div class="hab-empty">Could not load history.</div>';
+      }
+    }
+
+    // Auto-populate then render
+    habAutoPopulate().then(function(){ habRender(); });
   })();
 
   // ─── FLOATING AI (with database tools) ───

@@ -1277,11 +1277,7 @@
       if (!total) {
         fiContainer.innerHTML = '<div style="text-align:center !important;padding:12px !important;color:#94a3b8 !important;font-size:13px !important;">No tasks for Fiona yet</div>';
       } else {
-        var fh = '<div style="display:flex !important;gap:10px !important;margin-bottom:10px !important;">';
-        fh += '<div style="flex:1 !important;text-align:center !important;background:#f5f3ff !important;border:1px solid #ddd6fe !important;border-radius:10px !important;padding:10px 8px !important;"><div style="font-size:18px !important;font-weight:700 !important;color:#7c3aed !important;">' + pending + '</div><div style="font-size:10px !important;color:#64748b !important;">Pending</div></div>';
-        fh += '<div style="flex:1 !important;text-align:center !important;background:#f0fdf4 !important;border:1px solid #bbf7d0 !important;border-radius:10px !important;padding:10px 8px !important;"><div style="font-size:18px !important;font-weight:700 !important;color:#16a34a !important;">' + done + '</div><div style="font-size:10px !important;color:#64748b !important;">Done</div></div>';
-        fh += '<div style="flex:1 !important;text-align:center !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:10px 8px !important;"><div style="font-size:18px !important;font-weight:700 !important;color:#1e293b !important;">' + total + '</div><div style="font-size:10px !important;color:#64748b !important;">Total</div></div>';
-        fh += '</div>';
+        var fh = '<div style="font-size:12px !important;color:#64748b !important;margin-bottom:8px !important;">' + pending + ' pending, ' + done + ' done</div>';
         var pendingTasks = fiTasks.filter(function(t){ return !t.done; });
         if (pendingTasks.length) {
           pendingTasks.slice(0, 5).forEach(function(t) {

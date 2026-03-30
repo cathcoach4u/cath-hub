@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IAS Project Scope - Clarity Document</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f2f5; color: #333; padding: 40px 20px; }
+        .container { max-width: 1200px; margin: 0 auto; }
+
+        h1 { text-align: center; font-size: 28px; margin-bottom: 8px; color: #1a1a2e; }
+        .subtitle { text-align: center; font-size: 16px; color: #666; margin-bottom: 40px; }
+
+        .scope-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 40px; }
+
+        .scope-box { border-radius: 12px; padding: 28px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+
+        .box-1 { background: linear-gradient(135deg, #e8f5e9, #c8e6c9); border-left: 6px solid #2e7d32; }
+        .box-2 { background: linear-gradient(135deg, #fff3e0, #ffe0b2); border-left: 6px solid #ef6c00; }
+        .box-3 { background: linear-gradient(135deg, #e3f2fd, #bbdefb); border-left: 6px solid #1565c0; }
+
+        .box-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+        .box-number { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; font-size: 18px; }
+        .box-1 .box-number { background: #2e7d32; }
+        .box-2 .box-number { background: #ef6c00; }
+        .box-3 .box-number { background: #1565c0; }
+
+        .box-title { font-size: 18px; font-weight: 700; }
+        .box-1 .box-title { color: #2e7d32; }
+        .box-2 .box-title { color: #ef6c00; }
+        .box-3 .box-title { color: #1565c0; }
+
+        .box-status { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; margin-bottom: 16px; }
+        .status-active { background: #2e7d32; color: white; }
+        .status-separate { background: #ef6c00; color: white; }
+        .status-product { background: #1565c0; color: white; }
+
+        .scope-box ul { list-style: none; padding: 0; }
+        .scope-box li { padding: 6px 0; padding-left: 20px; position: relative; font-size: 14px; line-height: 1.5; }
+        .scope-box li::before { content: ''; position: absolute; left: 0; top: 13px; width: 8px; height: 8px; border-radius: 50%; }
+        .box-1 li::before { background: #2e7d32; }
+        .box-2 li::before { background: #ef6c00; }
+        .box-3 li::before { background: #1565c0; }
+
+        .price-tag { font-size: 22px; font-weight: 700; margin: 12px 0; }
+        .box-1 .price-tag { color: #2e7d32; }
+        .box-2 .price-tag { color: #ef6c00; }
+        .box-3 .price-tag { color: #1565c0; }
+
+        .funding-note { font-size: 13px; padding: 10px 14px; border-radius: 8px; margin-top: 12px; font-style: italic; }
+        .box-1 .funding-note { background: rgba(46,125,50,0.1); }
+        .box-2 .funding-note { background: rgba(239,108,0,0.1); }
+        .box-3 .funding-note { background: rgba(21,101,192,0.1); }
+
+        .confusion-section { background: white; border-radius: 12px; padding: 32px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin-bottom: 30px; }
+        .confusion-title { font-size: 22px; font-weight: 700; color: #c62828; margin-bottom: 20px; }
+
+        .comparison { display: grid; grid-template-columns: 1fr auto 1fr; gap: 20px; align-items: start; }
+        .their-view, .your-view { padding: 20px; border-radius: 10px; }
+        .their-view { background: #fce4ec; border: 2px solid #e57373; }
+        .your-view { background: #e8f5e9; border: 2px solid #81c784; }
+        .view-title { font-weight: 700; font-size: 16px; margin-bottom: 12px; }
+        .their-view .view-title { color: #c62828; }
+        .your-view .view-title { color: #2e7d32; }
+        .vs-circle { width: 50px; height: 50px; background: #ff9800; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 16px; margin-top: 30px; }
+        .comparison ul { padding-left: 18px; font-size: 14px; line-height: 1.8; }
+
+        .strategy-section { background: white; border-radius: 12px; padding: 32px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin-bottom: 30px; }
+        .strategy-title { font-size: 22px; font-weight: 700; color: #1a1a2e; margin-bottom: 20px; }
+
+        .key-points { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .key-point { padding: 16px; border-radius: 10px; background: #f5f5f5; }
+        .key-point h4 { font-size: 14px; color: #666; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
+        .key-point p { font-size: 14px; line-height: 1.6; }
+
+        .financial { background: #1a1a2e; color: white; border-radius: 12px; padding: 32px; margin-bottom: 30px; }
+        .financial h2 { font-size: 22px; margin-bottom: 20px; }
+        .fin-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        .fin-item { text-align: center; padding: 20px; background: rgba(255,255,255,0.08); border-radius: 10px; }
+        .fin-item .label { font-size: 13px; color: #aaa; margin-bottom: 8px; }
+        .fin-item .amount { font-size: 28px; font-weight: 700; }
+        .fin-item .detail { font-size: 12px; color: #aaa; margin-top: 6px; }
+        .fin-1 .amount { color: #81c784; }
+        .fin-2 .amount { color: #ffb74d; }
+        .fin-3 .amount { color: #64b5f6; }
+
+        @media (max-width: 900px) {
+            .scope-grid { grid-template-columns: 1fr; }
+            .comparison { grid-template-columns: 1fr; }
+            .vs-circle { margin: 0 auto; }
+            .key-points { grid-template-columns: 1fr; }
+            .fin-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>IAS Project Scope - Clarity Breakdown</h1>
+        <p class="subtitle">Three distinct workstreams - understanding what's in scope and what's separate</p>
+
+        <!-- THREE BOXES -->
+        <div class="scope-grid">
+            <!-- BOX 1: Current AI Work -->
+            <div class="scope-box box-1">
+                <div class="box-header">
+                    <div class="box-number">1</div>
+                    <div class="box-title">AI Efficiency & Integration</div>
+                </div>
+                <span class="box-status status-active">IN SCOPE - CURRENT ENGAGEMENT</span>
+                <p class="price-tag">$2,345/mo (ex GST)</p>
+                <ul>
+                    <li>Redirected from coaching sessions (Jo's visionary + Group Leadership)</li>
+                    <li>Weekly AI sessions with Lou (1hr/week = 4hrs/month)</li>
+                    <li>IAS-specific efficiency tools & AI agents</li>
+                    <li>Automated workflows for IAS operations</li>
+                    <li>Security-first approach</li>
+                    <li>Training & enablement for Leah and Lou</li>
+                    <li>IAS Efficiencies App</li>
+                </ul>
+                <div class="funding-note">
+                    Funded by redirected coaching fees. This is what IAS is currently paying for.
+                </div>
+            </div>
+
+            <!-- BOX 2: Filing Challenge -->
+            <div class="scope-box box-2">
+                <div class="box-header">
+                    <div class="box-number">2</div>
+                    <div class="box-title">Filing System Project</div>
+                </div>
+                <span class="box-status status-separate">SEPARATE PROJECT - NOT IN SCOPE</span>
+                <p class="price-tag">$2,200 (scoped)</p>
+                <ul>
+                    <li>Specific filing challenge IAS has</li>
+                    <li>Separately scoped and quoted</li>
+                    <li>Not covered by current monthly engagement</li>
+                    <li>Additional project with defined deliverables</li>
+                </ul>
+                <div class="funding-note">
+                    This is a standalone project. Additional cost on top of the monthly engagement.
+                </div>
+            </div>
+
+            <!-- BOX 3: Coach4U App -->
+            <div class="scope-box box-3">
+                <div class="box-header">
+                    <div class="box-number">3</div>
+                    <div class="box-title">Coach4U Business Coaching App</div>
+                </div>
+                <span class="box-status status-product">SEPARATE PRODUCT - NOT IN SCOPE</span>
+                <p class="price-tag">TBD - Product Licence/Fee</p>
+                <ul>
+                    <li>Cath's own product / intellectual property</li>
+                    <li>Business coaching & planning application</li>
+                    <li>Developed independently by Coach4U</li>
+                    <li>Presented to IAS as a technology demonstration</li>
+                    <li>Available to IAS (and other clients) as a paid product</li>
+                    <li>NOT built using IAS engagement time or fees</li>
+                </ul>
+                <div class="funding-note">
+                    This is YOUR product. IAS can choose to purchase/licence it, but it was not built for them under their engagement.
+                </div>
+            </div>
+        </div>
+
+        <!-- WHERE THE CONFUSION IS -->
+        <div class="confusion-section">
+            <div class="confusion-title">Where The Confusion Is</div>
+            <div class="comparison">
+                <div class="their-view">
+                    <div class="view-title">What IAS Thinks:</div>
+                    <ul>
+                        <li>"Business Planning tool" falls within AI project scope</li>
+                        <li>They're already paying for it via redirected coaching fees</li>
+                        <li>Building tools & efficiencies was the agreed scope - so this is included</li>
+                        <li>Feels like scope is shifting from "building for us" to "buy our separate product"</li>
+                    </ul>
+                </div>
+                <div class="vs-circle">VS</div>
+                <div class="your-view">
+                    <div class="view-title">The Reality:</div>
+                    <ul>
+                        <li>Coach4U app is a pre-existing/independent product</li>
+                        <li>It was NOT built during IAS engagement time</li>
+                        <li>It was shown as a demo of what's possible with AI</li>
+                        <li>IAS engagement covers IAS-specific tools, not Coach4U's product</li>
+                        <li>Two different things: custom IAS tools vs. off-the-shelf Coach4U product</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- FINANCIAL SUMMARY -->
+        <div class="financial">
+            <h2>Financial Summary</h2>
+            <div class="fin-grid">
+                <div class="fin-item fin-1">
+                    <div class="label">Current Monthly Engagement</div>
+                    <div class="amount">$2,345</div>
+                    <div class="detail">per month (ex GST) - AI & Efficiency Work</div>
+                </div>
+                <div class="fin-item fin-2">
+                    <div class="label">Filing Project (Separate)</div>
+                    <div class="amount">$2,200</div>
+                    <div class="detail">one-off project - scoped separately</div>
+                </div>
+                <div class="fin-item fin-3">
+                    <div class="label">Coach4U App (Separate)</div>
+                    <div class="amount">TBD</div>
+                    <div class="detail">product licence - if IAS chooses to use it</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RESPONSE STRATEGY -->
+        <div class="strategy-section">
+            <div class="strategy-title">Key Points for Your Response</div>
+            <div class="key-points">
+                <div class="key-point">
+                    <h4>Acknowledge</h4>
+                    <p>Thank them for raising this. Agree that clarity is important. Show you value the relationship and transparency.</p>
+                </div>
+                <div class="key-point">
+                    <h4>Clarify the Distinction</h4>
+                    <p>The AI sessions are building IAS-specific tools and efficiencies (Box 1). The Coach4U app (Box 3) is a separate product built independently - it was demoed to show capability, not as a deliverable.</p>
+                </div>
+                <div class="key-point">
+                    <h4>Reaffirm Box 1 Scope</h4>
+                    <p>Confirm what IS included: IAS efficiency tools, AI agents, automated workflows, training. These are custom-built for IAS within the engagement.</p>
+                </div>
+                <div class="key-point">
+                    <h4>Separate the Products</h4>
+                    <p>Coach4U app = off-the-shelf product (like buying software). IAS AI work = custom consulting (like hiring a builder). Two completely different things.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

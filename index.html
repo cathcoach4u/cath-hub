@@ -455,21 +455,21 @@
     <!-- Mobile: dropdown nav -->
     <select class="mobile-nav-select" onchange="if(this.value){chNav(this.value);}">
       <option value="home">&#x1F4CA; Dashboard</option>
+      <option value="todo">&#x2705; To-Do</option>
       <option value="aislemate">&#x1F6D2; AisleMate</option>
       <option value="workout">&#x1F4AA; Workout Log</option>
       <option value="medical">&#x1FA7A; Medical</option>
       <option value="habits">&#x2B50; My Habits</option>
-      <option value="todo">&#x2705; To-Do</option>
       <option value="travel">&#x2708;&#xFE0F; Travel</option>
       <option value="hometab">&#x1F3E0; Home</option>
     </select>
     <!-- Desktop: button nav -->
     <button class="nav-item active" onclick="chNav('home',this)"><span class="icon">&#x1F4CA;</span> Dashboard</button>
+    <button class="nav-item" onclick="chNav('todo',this)"><span class="icon">&#x2705;</span> To-Do</button>
     <button class="nav-item" onclick="chNav('aislemate',this)"><span class="icon">&#x1F6D2;</span> AisleMate</button>
     <button class="nav-item" onclick="chNav('workout',this)"><span class="icon">&#x1F4AA;</span> Workout Log</button>
     <button class="nav-item" onclick="chNav('medical',this)"><span class="icon">&#x1FA7A;</span> Medical</button>
     <button class="nav-item" onclick="chNav('habits',this)"><span class="icon">&#x2B50;</span> My Habits</button>
-    <button class="nav-item" onclick="chNav('todo',this)"><span class="icon">&#x2705;</span> To-Do</button>
     <button class="nav-item" onclick="chNav('travel',this)"><span class="icon">&#x2708;&#xFE0F;</span> Travel</button>
     <button class="nav-item" onclick="chNav('hometab',this)"><span class="icon">&#x1F3E0;</span> Home</button>
     <div class="sidebar-footer"><span>Cath Hub v2.0</span><br><a href="#" onclick="cathLogout();return false" style="color:rgba(255,255,255,0.5) !important;font-size:10px !important;text-decoration:underline !important;">Sign out</a></div>
@@ -489,7 +489,7 @@
       <div class="dash-section">
         <div style="display:flex !important;justify-content:space-between !important;align-items:center !important;margin-bottom:12px !important;">
           <h3 style="margin-bottom:0 !important;">&#x2705; My To-Do</h3>
-          <span style="font-size:12px !important;color:#3b82f6 !important;cursor:pointer !important;" onclick="chNav('todo',document.querySelectorAll('#cathHub .nav-item')[6])">View all &rarr;</span>
+          <span style="font-size:12px !important;color:#3b82f6 !important;cursor:pointer !important;" onclick="chNav('todo',document.querySelectorAll('#cathHub .nav-item')[1])">View all &rarr;</span>
         </div>
         <div id="dash-todo-summary">
           <div style="font-size:13px !important;color:#94a3b8 !important;">Loading...</div>

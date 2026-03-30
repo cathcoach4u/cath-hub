@@ -2919,7 +2919,7 @@
             // Count how many times taken today
             var todayCount = 0;
             try {
-              var { data: todayLogs } = await sb.from('habit_logs').select('created_at').eq('med_id', med.id).eq('date', today);
+              var { data: todayLogs } = await sb.from('habit_logs').select('*').eq('med_id', med.id).eq('date', today);
               todayCount = (todayLogs || []).length;
             } catch(e) {}
             h += '<div class="hab-med-row">';
@@ -3006,7 +3006,7 @@
         var thirtyAgo = new Date();
         thirtyAgo.setDate(thirtyAgo.getDate() - 30);
         var fromDate = thirtyAgo.getFullYear()+'-'+String(thirtyAgo.getMonth()+1).padStart(2,'0')+'-'+String(thirtyAgo.getDate()).padStart(2,'0');
-        var { data: logData } = await sb.from('habit_logs').select('date, med_id, created_at').gte('date', fromDate).order('date', { ascending: false });
+        var { data: logData } = await sb.from('habit_logs').select('*').gte('date', fromDate).order('date', { ascending: false });
         var { data: habMeds } = await sb.from('habit_meds').select('id, name');
         var medMap = {};
         (habMeds || []).forEach(function(m){ medMap[m.id] = m.name; });

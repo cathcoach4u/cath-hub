@@ -839,10 +839,32 @@
                   <th>Schedule</th>
                   <th>Conditions</th>
                   <th>Purpose</th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody id="med-meds-body"></tbody>
             </table>
+          </div>
+        </div>
+
+        <!-- Add medication form -->
+        <div class="med-section" style="margin-top:12px !important;">
+          <div class="med-section-header" style="cursor:pointer !important;" onclick="document.getElementById('med-add-form').style.display=document.getElementById('med-add-form').style.display==='none'?'block':'none'">
+            <h3 style="font-size:14px !important;">+ Add Medication</h3>
+          </div>
+          <div id="med-add-form" style="display:none !important;padding:14px 16px !important;">
+            <div style="display:flex !important;flex-direction:column !important;gap:10px !important;">
+              <input type="text" id="med-add-name" placeholder="Medication name" style="width:100% !important;padding:10px 12px !important;border:1px solid #e2e8f0 !important;border-radius:8px !important;font-size:14px !important;box-sizing:border-box !important;">
+              <input type="text" id="med-add-dose" placeholder="Dose (e.g. 2 tablets)" style="width:100% !important;padding:10px 12px !important;border:1px solid #e2e8f0 !important;border-radius:8px !important;font-size:14px !important;box-sizing:border-box !important;">
+              <select id="med-add-schedule" style="width:100% !important;padding:10px 12px !important;border:1px solid #e2e8f0 !important;border-radius:8px !important;font-size:14px !important;">
+                <option value="As needed">As needed</option>
+                <option value="1 tablet daily">1 tablet daily</option>
+                <option value="Once weekly">Once weekly</option>
+                <option value="Apply as directed">Apply as directed</option>
+              </select>
+              <input type="text" id="med-add-purpose" placeholder="Purpose (optional)" style="width:100% !important;padding:10px 12px !important;border:1px solid #e2e8f0 !important;border-radius:8px !important;font-size:14px !important;box-sizing:border-box !important;">
+              <button class="am-btn" onclick="medAddMedication()" style="width:100% !important;padding:12px !important;background:#7c3aed !important;color:white !important;border-color:#7c3aed !important;font-size:14px !important;justify-content:center !important;border-radius:8px !important;">Save Medication</button>
+            </div>
           </div>
         </div>
       </div>
@@ -985,16 +1007,22 @@
           <div id="hab-weekly-list"></div>
         </div>
 
+        <!-- Quick links -->
+        <div style="display:flex !important;gap:8px !important;margin-bottom:12px !important;">
+          <button class="am-btn" onclick="document.getElementById('hab-history-section').scrollIntoView({behavior:'smooth'})" style="flex:1 !important;justify-content:center !important;padding:10px !important;font-size:13px !important;background:white !important;border:1px solid #e2e8f0 !important;color:#1e293b !important;">&#x1F4DC; View Medication Log</button>
+        </div>
+
         <!-- 14-day overview -->
         <div class="hab-section" style="margin-top:8px !important;">
           <div class="med-section-header" style="padding:12px 16px !important;">
             <h3 style="font-size:14px !important;">&#x1F4CA; 14-Day Overview</h3>
           </div>
+          <p style="font-size:11px !important;color:#94a3b8 !important;padding:0 16px 4px !important;">How many medications you took each day. Green = all taken, amber = some, dark = none.</p>
           <div id="hab-tally" style="padding:12px 16px !important;display:flex !important;gap:4px !important;flex-wrap:wrap !important;justify-content:center !important;"></div>
         </div>
 
         <!-- Medication Log -->
-        <div class="hab-section">
+        <div class="hab-section" id="hab-history-section">
           <div class="hab-section-header">
             <h3>&#x1F4DC; Medication Log</h3>
             <span style="font-size:11px !important;color:#94a3b8 !important;">Last 30 days</span>
@@ -2257,6 +2285,7 @@
     document.querySelectorAll('#ch-medical .am-subscreen').forEach(function(s){ s.classList.remove('active'); });
     document.getElementById('med-' + sub).classList.add('active');
     if (sub === 'tracking') { habRender(); habLoadHistory(); }
+    if (sub === 'medications') { loadMedicationPlan(); }
   };
 
   // ─── MEDICAL (from Supabase) ───
@@ -2313,32 +2342,65 @@
     loadMedicalSessions();
   };
 
-  (async function loadMedical(){
-    loadMedicalSessions();
+  var DAILY_MED_NAMES = ['Vyvanse', 'Valtrex', 'Levothyroxine', 'Xobet'];
+  var AS_NEEDED_NAMES = ['Nurofen', 'Panadol', 'Nexium'];
 
-    // Load medication plan
+  async function loadMedicationPlan() {
     var { data: meds } = await sb.from('medications').select('*');
     var medsBody = document.getElementById('med-meds-body');
     medsBody.innerHTML = '';
-    var dailyMeds = ['Vyvanse', 'Valtrex', 'Levothyroxine', 'Xobet'];
-    // Sort: daily first, then weekly
+    // Sort: daily first, then as-needed, then weekly
     var sortedMeds = (meds || []).slice().sort(function(a, b) {
-      var aDaily = dailyMeds.some(function(d) { return a.name.toLowerCase().indexOf(d.toLowerCase()) !== -1; });
-      var bDaily = dailyMeds.some(function(d) { return b.name.toLowerCase().indexOf(d.toLowerCase()) !== -1; });
-      if (aDaily && !bDaily) return -1;
-      if (!aDaily && bDaily) return 1;
-      return 0;
+      function rank(m) {
+        if (DAILY_MED_NAMES.some(function(d){ return m.name.toLowerCase().indexOf(d.toLowerCase()) !== -1; })) return 0;
+        if (AS_NEEDED_NAMES.some(function(d){ return m.name.toLowerCase().indexOf(d.toLowerCase()) !== -1; })) return 1;
+        return 2;
+      }
+      return rank(a) - rank(b);
     });
     sortedMeds.forEach(function(m) {
-      var isDaily = dailyMeds.some(function(d) { return m.name.toLowerCase().indexOf(d.toLowerCase()) !== -1; });
-      var freqBadge = isDaily
-        ? '<span style="font-size:10px !important;background:#dbeafe !important;color:#1d4ed8 !important;padding:2px 6px !important;border-radius:4px !important;font-weight:600 !important;">DAILY</span> '
-        : '<span style="font-size:10px !important;background:#fef3c7 !important;color:#92400e !important;padding:2px 6px !important;border-radius:4px !important;font-weight:600 !important;">WEEKLY</span> ';
+      var isDaily = DAILY_MED_NAMES.some(function(d){ return m.name.toLowerCase().indexOf(d.toLowerCase()) !== -1; });
+      var isAsNeeded = AS_NEEDED_NAMES.some(function(d){ return m.name.toLowerCase().indexOf(d.toLowerCase()) !== -1; }) || (m.schedule && m.schedule.toLowerCase().indexOf('as needed') !== -1);
+      var freqBadge;
+      if (isDaily) {
+        freqBadge = '<span style="font-size:10px !important;background:#dbeafe !important;color:#1d4ed8 !important;padding:2px 6px !important;border-radius:4px !important;font-weight:600 !important;">DAILY</span> ';
+      } else if (isAsNeeded) {
+        freqBadge = '<span style="font-size:10px !important;background:#f0fdf4 !important;color:#15803d !important;padding:2px 6px !important;border-radius:4px !important;font-weight:600 !important;">AS NEEDED</span> ';
+      } else {
+        freqBadge = '<span style="font-size:10px !important;background:#fef3c7 !important;color:#92400e !important;padding:2px 6px !important;border-radius:4px !important;font-weight:600 !important;">WEEKLY</span> ';
+      }
       var conditions = m.conditions ? esc(m.conditions) : '-';
-      medsBody.innerHTML += '<tr><td style="font-weight:600 !important;">' + freqBadge + esc(m.name) + '</td><td>' + esc(m.dose) + '</td><td>' + esc(m.schedule) + '</td><td>' + conditions + '</td><td class="meds-reason">' + esc(m.purpose) + '</td></tr>';
+      medsBody.innerHTML += '<tr><td style="font-weight:600 !important;">' + freqBadge + esc(m.name) + '</td><td>' + esc(m.dose || '-') + '</td><td>' + esc(m.schedule) + '</td><td>' + conditions + '</td><td class="meds-reason">' + esc(m.purpose || '-') + '</td><td><span onclick="medDeleteMedication(\''+m.id+'\')" style="cursor:pointer !important;color:#94a3b8 !important;font-size:14px !important;" title="Remove">&#x1F5D1;</span></td></tr>';
     });
-    // Store meds globally for habits to use
     window._cathMeds = meds || [];
+  }
+
+  window.medAddMedication = async function() {
+    var name = document.getElementById('med-add-name').value.trim();
+    var dose = document.getElementById('med-add-dose').value.trim();
+    var schedule = document.getElementById('med-add-schedule').value;
+    var purpose = document.getElementById('med-add-purpose').value.trim();
+    if (!name) { alert('Please enter a medication name.'); return; }
+    await sb.from('medications').insert({ name: name, dose: dose, schedule: schedule, purpose: purpose });
+    // Also add to tracking
+    var freq = schedule.toLowerCase().indexOf('daily') !== -1 ? 'daily' : (schedule.toLowerCase().indexOf('weekly') !== -1 ? 'weekly' : 'asneeded');
+    try { await sb.from('habit_meds').insert({ id: Date.now(), name: name, freq: freq }); } catch(e) {}
+    document.getElementById('med-add-name').value = '';
+    document.getElementById('med-add-dose').value = '';
+    document.getElementById('med-add-purpose').value = '';
+    document.getElementById('med-add-form').style.display = 'none';
+    loadMedicationPlan();
+  };
+
+  window.medDeleteMedication = async function(id) {
+    if (!confirm('Remove this medication from your plan?')) return;
+    await sb.from('medications').delete().eq('id', id);
+    loadMedicationPlan();
+  };
+
+  (async function loadMedical(){
+    loadMedicalSessions();
+    loadMedicationPlan();
   })();
 
   // ─── DOCUMENT FILE RENAMER ───

@@ -516,21 +516,9 @@
           <h3 style="margin-bottom:0 !important;">&#x1F48A; Medication Today</h3>
           <span style="font-size:12px !important;color:#3b82f6 !important;cursor:pointer !important;" onclick="chNav('medical');setTimeout(function(){medGo('tracking')},100)">View all &rarr;</span>
         </div>
-        <div id="dash-hab-summary" style="display:flex !important;gap:10px !important;flex-wrap:wrap !important;">
-          <div style="flex:1 !important;min-width:80px !important;text-align:center !important;background:#f0fdf4 !important;border:1px solid #bbf7d0 !important;border-radius:10px !important;padding:12px 8px !important;">
-            <div style="font-size:20px !important;font-weight:700 !important;color:#16a34a !important;" id="dash-hab-taken">-</div>
-            <div style="font-size:10px !important;color:#64748b !important;">Taken today</div>
-          </div>
-          <div style="flex:1 !important;min-width:80px !important;text-align:center !important;background:#fefce8 !important;border:1px solid #fde68a !important;border-radius:10px !important;padding:12px 8px !important;">
-            <div style="font-size:20px !important;font-weight:700 !important;color:#ca8a04 !important;" id="dash-hab-streak">-</div>
-            <div style="font-size:10px !important;color:#64748b !important;">Streak</div>
-          </div>
-          <div style="flex:1 !important;min-width:80px !important;text-align:center !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:12px 8px !important;">
-            <div style="font-size:20px !important;font-weight:700 !important;color:#7c3aed !important;" id="dash-hab-status">-</div>
-            <div style="font-size:10px !important;color:#64748b !important;">Status</div>
-          </div>
+        <div id="dash-med-today">
+          <div style="font-size:13px !important;color:#94a3b8 !important;">Loading...</div>
         </div>
-        <div id="dash-hab-missed" style="display:none !important;margin-top:8px !important;background:#fef2f2 !important;border:1px solid #fecaca !important;border-radius:8px !important;padding:8px 12px !important;font-size:12px !important;color:#991b1b !important;"></div>
       </div>
 
       <div class="dash-section">
@@ -1012,15 +1000,6 @@
           <button class="am-btn" onclick="document.getElementById('hab-history-section').scrollIntoView({behavior:'smooth'})" style="flex:1 !important;justify-content:center !important;padding:10px !important;font-size:13px !important;background:white !important;border:1px solid #e2e8f0 !important;color:#1e293b !important;">&#x1F4DC; View Medication Log</button>
         </div>
 
-        <!-- 14-day overview -->
-        <div class="hab-section" style="margin-top:8px !important;">
-          <div class="med-section-header" style="padding:12px 16px !important;">
-            <h3 style="font-size:14px !important;">&#x1F4CA; 14-Day Overview</h3>
-          </div>
-          <p style="font-size:11px !important;color:#94a3b8 !important;padding:0 16px 4px !important;">How many medications you took each day. Green = all taken, amber = some, dark = none.</p>
-          <div id="hab-tally" style="padding:12px 16px !important;display:flex !important;gap:4px !important;flex-wrap:wrap !important;justify-content:center !important;"></div>
-        </div>
-
         <!-- Medication Log -->
         <div class="hab-section" id="hab-history-section">
           <div class="hab-section-header">
@@ -1320,6 +1299,56 @@
       }
     } catch(e) {
       document.getElementById('dash-fiona-summary').innerHTML = '<div style="text-align:center !important;padding:12px !important;color:#94a3b8 !important;font-size:13px !important;">Could not load tasks</div>';
+    }
+
+    // Medication today
+    try {
+      var today = new Date();
+      var todayStr = today.getFullYear()+'-'+String(today.getMonth()+1).padStart(2,'0')+'-'+String(today.getDate()).padStart(2,'0');
+      var { data: todayLogs } = await sb.from('habit_logs').select('*').eq('date', todayStr);
+      var { data: allMeds } = await sb.from('habit_meds').select('id, name, freq');
+      var medContainer = document.getElementById('dash-med-today');
+      var medMap = {};
+      (allMeds || []).forEach(function(m){ medMap[m.id] = m; });
+      var dailyMeds = (allMeds || []).filter(function(m){ return m.freq === 'daily'; });
+      var takenIds = {};
+      (todayLogs || []).forEach(function(l){ takenIds[l.med_id] = l; });
+
+      var mh = '';
+      // Show daily meds with taken/not taken
+      dailyMeds.forEach(function(m) {
+        var taken = !!takenIds[m.id];
+        var time = taken && takenIds[m.id].created_at ? new Date(takenIds[m.id].created_at).toLocaleTimeString('en-AU', { hour: '2-digit', minute: '2-digit' }) : '';
+        mh += '<div style="display:flex !important;align-items:center !important;gap:8px !important;padding:5px 0 !important;">';
+        mh += '<span style="font-size:14px !important;">' + (taken ? '&#x2705;' : '&#x2B1C;') + '</span>';
+        mh += '<span style="font-size:13px !important;flex:1 !important;' + (taken ? '' : 'color:#94a3b8 !important;') + '">' + esc(m.name) + '</span>';
+        if (time) mh += '<span style="font-size:11px !important;color:#94a3b8 !important;">' + esc(time) + '</span>';
+        mh += '</div>';
+      });
+
+      // Show as-needed doses taken today
+      var asNeededToday = (todayLogs || []).filter(function(l) {
+        var med = medMap[l.med_id];
+        return med && med.freq === 'asneeded';
+      });
+      if (asNeededToday.length) {
+        asNeededToday.forEach(function(l) {
+          var med = medMap[l.med_id];
+          var time = l.created_at ? new Date(l.created_at).toLocaleTimeString('en-AU', { hour: '2-digit', minute: '2-digit' }) : '';
+          mh += '<div style="display:flex !important;align-items:center !important;gap:8px !important;padding:5px 0 !important;">';
+          mh += '<span style="font-size:14px !important;">&#x1F48A;</span>';
+          mh += '<span style="font-size:13px !important;flex:1 !important;">' + esc(med ? med.name : 'Unknown') + '</span>';
+          if (time) mh += '<span style="font-size:11px !important;color:#94a3b8 !important;">' + esc(time) + '</span>';
+          mh += '</div>';
+        });
+      }
+
+      if (!mh) {
+        mh = '<div style="text-align:center !important;padding:12px !important;color:#94a3b8 !important;font-size:13px !important;">No medications tracked yet</div>';
+      }
+      medContainer.innerHTML = mh;
+    } catch(e) {
+      document.getElementById('dash-med-today').innerHTML = '<div style="text-align:center !important;padding:12px !important;color:#94a3b8 !important;font-size:13px !important;">Could not load medications</div>';
     }
 
   }
@@ -2859,28 +2888,7 @@
         missedAlert.style.display = 'none';
       }
 
-      // Update dashboard medication summary
-      var dashTaken = document.getElementById('dash-hab-taken');
-      var dashStreak = document.getElementById('dash-hab-streak');
-      var dashStatus = document.getElementById('dash-hab-status');
-      var dashMissed = document.getElementById('dash-hab-missed');
-      if (dashTaken) {
-        var medDailyDone = dailyMeds.filter(function(m){ return logs[m.id]&&logs[m.id][today]; }).length;
-        dashTaken.textContent = medDailyDone + '/' + dailyMeds.length;
-        var bestStreak = 0;
-        for (var si = 0; si < dailyMeds.length; si++) {
-          var ss = await streakFor(dailyMeds[si].id, logs);
-          if (ss > bestStreak) bestStreak = ss;
-        }
-        dashStreak.textContent = bestStreak + 'd';
-        dashStatus.textContent = allMedsDone ? '\u2705' : (hour < 12 ? '\u23F3' : '\u26A0');
-        if (missedYesterday.length > 0 && dailyMeds.length > 0) {
-          dashMissed.style.display = 'block';
-          dashMissed.innerHTML = '&#x26A0;&#xFE0F; Missed yesterday: ' + esc(missedYesterday.map(function(m){ return m.name; }).join(', '));
-        } else {
-          dashMissed.style.display = 'none';
-        }
-      }
+
 
       // #3: Daily with AM/PM time labels
       var dl = document.getElementById('hab-daily-list');
@@ -3011,36 +3019,6 @@
         takeBtn.disabled = false;
       }
 
-      // #7: Render 14-day tally
-      try {
-        var tallyEl = document.getElementById('hab-tally');
-        var fourteenAgo = new Date(); fourteenAgo.setDate(fourteenAgo.getDate() - 13);
-        var fromD = fourteenAgo.getFullYear()+'-'+String(fourteenAgo.getMonth()+1).padStart(2,'0')+'-'+String(fourteenAgo.getDate()).padStart(2,'0');
-        var { data: tallyLogs } = await sb.from('habit_logs').select('date, med_id').gte('date', fromD);
-        var tallyMap = {};
-        (tallyLogs || []).forEach(function(l) {
-          if (!tallyMap[l.date]) tallyMap[l.date] = {};
-          tallyMap[l.date][l.med_id] = true;
-        });
-        // Total daily medications
-        var totalDailyAll = meds.filter(function(m){ return m.freq === 'daily'; }).length || 1;
-        var th = '';
-        var dayNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-        for (var d = 0; d < 14; d++) {
-          var dt = new Date(); dt.setDate(dt.getDate() - 13 + d);
-          var dk = dt.getFullYear()+'-'+String(dt.getMonth()+1).padStart(2,'0')+'-'+String(dt.getDate()).padStart(2,'0');
-          var count = tallyMap[dk] ? Object.keys(tallyMap[dk]).length : 0;
-          var color = count === 0 ? '#334155' : count >= totalDailyAll ? '#10b981' : '#f59e0b';
-          var label = dayNames[dt.getDay()] + ' ' + dt.getDate();
-          var isToday = dk === today;
-          th += '<div style="display:flex !important;flex-direction:column !important;align-items:center !important;gap:2px !important;">';
-          th += '<div style="width:28px !important;height:28px !important;border-radius:6px !important;background:'+color+' !important;display:flex !important;align-items:center !important;justify-content:center !important;font-size:11px !important;color:white !important;font-weight:'+(isToday?'700':'400')+' !important;border:'+(isToday?'2px solid white':'none')+' !important;">'+count+'</div>';
-          th += '<div style="font-size:9px !important;color:#94a3b8 !important;">'+label+'</div>';
-          th += '</div>';
-        }
-        tallyEl.innerHTML = th;
-      } catch(e) {}
-
       // Load history
       habLoadHistory();
     }
@@ -3068,6 +3046,12 @@
         });
         var h = '';
         Object.keys(grouped).sort().reverse().forEach(function(date) {
+          // Sort entries by time within each day
+          grouped[date].sort(function(a, b) {
+            var ta = a.created_at ? new Date(a.created_at).getTime() : 0;
+            var tb = b.created_at ? new Date(b.created_at).getTime() : 0;
+            return ta - tb;
+          });
           var dateObj = new Date(date + 'T00:00:00');
           var dayNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
           var dateLabel = dayNames[dateObj.getDay()] + ' ' + dateObj.getDate() + '/' + (dateObj.getMonth()+1) + '/' + dateObj.getFullYear();

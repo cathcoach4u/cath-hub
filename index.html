@@ -965,7 +965,6 @@
         <div style="display:flex !important;gap:8px !important;margin-bottom:16px !important;flex-wrap:wrap !important;">
           <button class="am-btn" id="hab-take-all-btn" onclick="habTakeAllDaily()" style="flex:1 !important;justify-content:center !important;background:#10b981 !important;color:white !important;border-color:#10b981 !important;padding:12px 16px !important;font-size:14px !important;">&#x2600;&#xFE0F; Take All Daily Meds</button>
           <button class="am-btn" id="hab-undo-btn" onclick="habUndoTakeAll()" style="display:none !important;background:#ef4444 !important;color:white !important;border-color:#ef4444 !important;padding:12px !important;font-size:12px !important;">Undo</button>
-          <button class="am-btn" id="hab-notify-btn" onclick="habRequestReminder()" style="background:#f59e0b !important;color:white !important;border-color:#f59e0b !important;padding:12px !important;" title="Enable reminder">&#x1F514;</button>
         </div>
 
         <!-- DAILY Medications -->
@@ -993,11 +992,6 @@
             <span style="font-size:11px !important;color:#94a3b8 !important;">Mon&ndash;Sun</span>
           </div>
           <div id="hab-weekly-list"></div>
-        </div>
-
-        <!-- Quick links -->
-        <div style="display:flex !important;gap:8px !important;margin-bottom:12px !important;">
-          <button class="am-btn" onclick="document.getElementById('hab-history-section').scrollIntoView({behavior:'smooth'})" style="flex:1 !important;justify-content:center !important;padding:10px !important;font-size:13px !important;background:white !important;border:1px solid #e2e8f0 !important;color:#1e293b !important;">&#x1F4DC; View Medication Log</button>
         </div>
 
         <!-- Medication Log -->
@@ -2716,23 +2710,6 @@
       habRender();
     };
 
-    // #6: Browser notification reminder instead of Apple Shortcuts
-    window.habRequestReminder = function() {
-      if (!('Notification' in window)) {
-        alert('Your browser does not support notifications.');
-        return;
-      }
-      Notification.requestPermission().then(function(perm) {
-        if (perm === 'granted') {
-          // Schedule a reminder check every morning at load
-          localStorage.setItem('cathHub_medReminder', 'true');
-          new Notification('Med Reminder Enabled', { body: 'You will get a reminder when you open Cath Hub and haven\'t taken your meds.', icon: '\uD83D\uDC8A' });
-        } else {
-          alert('Please allow notifications in your browser settings to receive reminders.');
-        }
-      });
-    };
-
     window.habDeleteMed = async function(id) {
       await sb.from('habit_meds').delete().eq('id', id);
       habRender();
@@ -2781,7 +2758,11 @@
         var dailyMedNames = ['Vyvanse', 'Valtrex', 'Levothyroxine', 'Xobet'];
         for (var i = 0; i < (allMeds || []).length; i++) {
           var m = allMeds[i];
-          if (existingNames.indexOf(m.name.toLowerCase()) === -1) {
+          // Check if any existing entry partially matches this med name
+          var alreadyExists = existingNames.some(function(en) {
+            return m.name.toLowerCase().indexOf(en) !== -1 || en.indexOf(m.name.toLowerCase()) !== -1;
+          });
+          if (!alreadyExists) {
             var isDaily = dailyMedNames.some(function(d) { return m.name.toLowerCase().indexOf(d.toLowerCase()) !== -1; });
             var freq = isDaily ? 'daily' : 'weekly';
             await sb.from('habit_meds').insert({ id: Date.now() + i, name: m.name, freq: freq });
@@ -2795,22 +2776,15 @@
             await sb.from('habit_meds').insert({ id: Date.now() + 100 + j, name: AS_NEEDED_MEDS[j].name, freq: 'asneeded' });
           }
         }
-        // Fix frequencies
-        for (var fi = 0; fi < (existingHabs || []).length; fi++) {
-          var h = existingHabs[fi];
-          var shouldBeDaily = dailyMedNames.some(function(d) { return h.name.toLowerCase().indexOf(d.toLowerCase()) !== -1; });
-          if (shouldBeDaily && h.freq !== 'daily') {
-            await sb.from('habit_meds').update({ freq: 'daily' }).eq('id', h.id);
-          }
-          var shouldBeAsNeeded = AS_NEEDED_MEDS.some(function(a) { return h.name.toLowerCase() === a.name.toLowerCase(); });
-          if (shouldBeAsNeeded && h.freq !== 'asneeded') {
-            await sb.from('habit_meds').update({ freq: 'asneeded' }).eq('id', h.id);
-          }
-        }
       } catch(e) {}
     }
 
     // Record an as-needed dose (always inserts — multiple doses per day allowed)
+    window.habDeleteDose = async function(logId) {
+      await sb.from('habit_logs').delete().eq('id', logId);
+      habRender();
+    };
+
     window.habRecordAsNeeded = async function(id) {
       var today = todayKey();
       await sb.from('habit_logs').insert({ med_id: id, date: today, created_at: new Date().toISOString() });
@@ -2865,16 +2839,7 @@
         bannerEl.innerHTML = '';
       }
 
-      // #6: Browser notification if enabled and meds not taken
-      if (localStorage.getItem('cathHub_medReminder') === 'true' && !allMedsDone && dailyMeds.length > 0 && 'Notification' in window && Notification.permission === 'granted') {
-        var notifKey = 'cathHub_notifShown_' + today;
-        if (!localStorage.getItem(notifKey)) {
-          new Notification('Morning Meds Reminder', { body: 'You haven\'t taken your morning meds yet!', icon: '\uD83D\uDC8A' });
-          localStorage.setItem(notifKey, '1');
-        }
-      }
-
-      // #8: Missed yesterday indicator (dismissable per day)
+      // Missed yesterday indicator (dismissable per day)
       var missedAlert = document.getElementById('hab-missed-alert');
       var yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
       var yk = yesterday.getFullYear()+'-'+String(yesterday.getMonth()+1).padStart(2,'0')+'-'+String(yesterday.getDate()).padStart(2,'0');
@@ -2975,11 +2940,14 @@
             h += '<button class="am-btn" onclick="habRecordAsNeeded(' + med.id + ')" style="background:#3b82f6 !important;color:white !important;border-color:#3b82f6 !important;padding:6px 12px !important;font-size:12px !important;">Record dose</button>';
             h += '<div style="flex:1 !important;"><div class="hab-med-name" style="margin-bottom:0 !important;">' + esc(med.name) + esc(doseLabel) + '</div>';
             if (todayLogs.length > 0) {
-              var doseTexts = todayLogs.map(function(tl) {
+              h += '<div style="font-size:11px !important;color:#10b981 !important;">' + todayLogs.length + ' dose' + (todayLogs.length > 1 ? 's' : '') + ' today</div>';
+              todayLogs.forEach(function(tl) {
                 var t = tl.created_at ? new Date(tl.created_at).toLocaleTimeString('en-AU', { hour: '2-digit', minute: '2-digit' }) : 'no time';
-                return '<span onclick="habChangeTime(\'' + tl.id + '\')" style="cursor:pointer !important;" title="Tap to change time">' + t + ' &#x270F;</span>';
+                h += '<div style="display:flex !important;align-items:center !important;gap:6px !important;font-size:11px !important;color:#64748b !important;padding:2px 0 !important;">';
+                h += '<span onclick="habChangeTime(\'' + tl.id + '\')" style="cursor:pointer !important;color:#3b82f6 !important;">' + t + ' &#x270F;</span>';
+                h += '<span onclick="habDeleteDose(\'' + tl.id + '\')" style="cursor:pointer !important;color:#ef4444 !important;" title="Remove dose">&#x2715;</span>';
+                h += '</div>';
               });
-              h += '<div style="font-size:11px !important;color:#10b981 !important;">' + todayLogs.length + ' dose' + (todayLogs.length > 1 ? 's' : '') + ' today: ' + doseTexts.join(', ') + '</div>';
             }
             h += '</div>';
             h += '</div>';

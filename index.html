@@ -907,6 +907,8 @@
       <!-- SUB: Medication Tracking -->
       <div class="am-subscreen" id="med-tracking">
         <button class="am-back" onclick="medGo('home')">&#x2190; Back</button>
+        <h3 style="font-size:18px !important;font-weight:700 !important;margin-bottom:4px !important;">&#x1F48A; Medication Tracker</h3>
+        <p style="font-size:12px !important;color:#94a3b8 !important;margin-bottom:16px !important;">Track your daily, weekly, and as-needed medications. Every dose is logged with a timestamp.</p>
 
         <!-- Missed yesterday alert -->
         <div id="hab-missed-alert" style="display:none !important;background:#fef2f2 !important;border:1px solid #fecaca !important;border-radius:10px !important;padding:12px 16px !important;margin-bottom:12px !important;font-size:13px !important;color:#991b1b !important;">
@@ -923,57 +925,69 @@
         <!-- Morning banner -->
         <div id="hab-morning-banner"></div>
 
-        <!-- Quick actions -->
+        <!-- Today's Status -->
+        <div style="display:grid !important;grid-template-columns:1fr 1fr 1fr !important;gap:8px !important;margin-bottom:16px !important;">
+          <div style="text-align:center !important;background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:14px 8px !important;">
+            <div style="font-size:22px !important;font-weight:700 !important;color:#10b981 !important;" id="hab-daily-done">0</div>
+            <div style="font-size:10px !important;color:#64748b !important;">Taken today</div>
+          </div>
+          <div style="text-align:center !important;background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:14px 8px !important;">
+            <div style="font-size:22px !important;font-weight:700 !important;color:#3b82f6 !important;" id="hab-weekly-done">0</div>
+            <div style="font-size:10px !important;color:#64748b !important;">Weekly this week</div>
+          </div>
+          <div style="text-align:center !important;background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:14px 8px !important;">
+            <div style="font-size:22px !important;font-weight:700 !important;color:#f59e0b !important;" id="hab-streak">0</div>
+            <div style="font-size:10px !important;color:#64748b !important;">Day streak</div>
+          </div>
+        </div>
+
+        <!-- Quick action -->
         <div style="display:flex !important;gap:8px !important;margin-bottom:16px !important;flex-wrap:wrap !important;">
           <button class="am-btn" id="hab-take-all-btn" onclick="habTakeAllDaily()" style="flex:1 !important;justify-content:center !important;background:#10b981 !important;color:white !important;border-color:#10b981 !important;padding:12px 16px !important;font-size:14px !important;">&#x2600;&#xFE0F; Take All Daily Meds</button>
           <button class="am-btn" id="hab-undo-btn" onclick="habUndoTakeAll()" style="display:none !important;background:#ef4444 !important;color:white !important;border-color:#ef4444 !important;padding:12px !important;font-size:12px !important;">Undo</button>
-          <button class="am-btn" id="hab-notify-btn" onclick="habRequestReminder()" style="background:#f59e0b !important;color:white !important;border-color:#f59e0b !important;padding:12px !important;">&#x1F514;</button>
-        </div>
-
-        <!-- 14-day tally -->
-        <div class="hab-section" style="margin-bottom:16px !important;">
-          <div class="med-section-header" style="padding:12px 16px !important;">
-            <h3 style="font-size:14px !important;">&#x1F4C5; 14-Day Tally</h3>
-          </div>
-          <div id="hab-tally" style="padding:12px 16px !important;display:flex !important;gap:4px !important;flex-wrap:wrap !important;justify-content:center !important;"></div>
-        </div>
-
-        <!-- Stats -->
-        <div class="hab-summary">
-          <div class="hab-stat"><div class="hab-stat-num" id="hab-daily-done">0</div><div class="hab-stat-label">Daily today</div></div>
-          <div class="hab-stat"><div class="hab-stat-num" id="hab-weekly-done">0</div><div class="hab-stat-label">Weekly this week</div></div>
-          <div class="hab-stat"><div class="hab-stat-num" id="hab-streak">&#x1F525; 0</div><div class="hab-stat-label">Best streak</div></div>
+          <button class="am-btn" id="hab-notify-btn" onclick="habRequestReminder()" style="background:#f59e0b !important;color:white !important;border-color:#f59e0b !important;padding:12px !important;" title="Enable reminder">&#x1F514;</button>
         </div>
 
         <!-- DAILY Medications -->
         <div class="hab-section">
           <div class="hab-section-header">
-            <h3>&#x2600; Daily Medications</h3>
+            <h3>&#x2600; Daily</h3>
+            <span style="font-size:11px !important;color:#94a3b8 !important;">Tap to mark as taken</span>
           </div>
           <div id="hab-daily-list"></div>
-        </div>
-
-        <!-- WEEKLY Medications -->
-        <div class="hab-section">
-          <div class="hab-section-header">
-            <h3>&#x1F4C5; Weekly Medications</h3>
-          </div>
-          <div id="hab-weekly-list"></div>
         </div>
 
         <!-- AS NEEDED Medications -->
         <div class="hab-section">
           <div class="hab-section-header">
             <h3>&#x1F48A; As Needed</h3>
+            <span style="font-size:11px !important;color:#94a3b8 !important;">Record each dose</span>
           </div>
-          <p style="padding:0 16px !important;font-size:12px !important;color:#94a3b8 !important;margin-bottom:8px !important;">Tap to record when taken. Each dose is logged with a timestamp.</p>
           <div id="hab-asneeded-list"></div>
         </div>
 
-        <!-- Medication Log (History) -->
+        <!-- WEEKLY Medications -->
         <div class="hab-section">
           <div class="hab-section-header">
-            <h3>&#x1F4DC; Medication Log (Last 30 Days)</h3>
+            <h3>&#x1F4C5; Weekly</h3>
+            <span style="font-size:11px !important;color:#94a3b8 !important;">Mon&ndash;Sun</span>
+          </div>
+          <div id="hab-weekly-list"></div>
+        </div>
+
+        <!-- 14-day overview -->
+        <div class="hab-section" style="margin-top:8px !important;">
+          <div class="med-section-header" style="padding:12px 16px !important;">
+            <h3 style="font-size:14px !important;">&#x1F4CA; 14-Day Overview</h3>
+          </div>
+          <div id="hab-tally" style="padding:12px 16px !important;display:flex !important;gap:4px !important;flex-wrap:wrap !important;justify-content:center !important;"></div>
+        </div>
+
+        <!-- Medication Log -->
+        <div class="hab-section">
+          <div class="hab-section-header">
+            <h3>&#x1F4DC; Medication Log</h3>
+            <span style="font-size:11px !important;color:#94a3b8 !important;">Last 30 days</span>
           </div>
           <div style="padding:12px !important;" id="hab-history-container">
             <div class="hab-empty">Loading...</div>
@@ -2374,7 +2388,7 @@
           sel.innerHTML += '<option value="' + esc(m.name) + '">' + esc(m.name) + ' (' + esc(m.schedule) + ')</option>';
         }
       });
-      sel.innerHTML += '<option value="__custom">Custom habit...</option>';
+      sel.innerHTML += '<option value="__custom">Custom medication...</option>';
       sel.onchange = function() {
         var customInp = document.getElementById('hab-'+freq+'-name');
         if (sel.value === '__custom') {
@@ -2493,7 +2507,7 @@
       container.innerHTML = h;
     }
 
-    // #2: Take All only marks actual medications (not custom habits)
+    // #2: Take All marks actual medications only
     var habUndoIds = []; // track what was just marked for undo
     var habUndoTimer = null;
 
@@ -2501,7 +2515,7 @@
       var { data: allHabs } = await sb.from('habit_meds').select('*').eq('freq', 'daily');
       var { data: medsList } = await sb.from('medications').select('name');
       var medNames = (medsList || []).map(function(m){ return m.name.toLowerCase(); });
-      // Only actual medications, not custom habits
+      // Only actual medications
       var meds = (allHabs || []).filter(function(h){ return medNames.indexOf(h.name.toLowerCase()) !== -1; });
       if (!meds.length) return;
       var today = todayKey();
@@ -2684,7 +2698,7 @@
         missedAlert.style.display = 'none';
       }
 
-      // Update dashboard habits summary
+      // Update dashboard medication summary
       var dashTaken = document.getElementById('dash-hab-taken');
       var dashStreak = document.getElementById('dash-hab-streak');
       var dashStatus = document.getElementById('dash-hab-status');
@@ -2794,7 +2808,7 @@
 
       document.getElementById('hab-daily-done').textContent = dailyDone+'/'+daily.length;
       document.getElementById('hab-weekly-done').textContent = weeklyDone;
-      document.getElementById('hab-streak').textContent = '\uD83D\uDD25 '+best;
+      document.getElementById('hab-streak').textContent = best;
       // Update badge on home button
       var badge = document.getElementById('hab-meds-badge');
       if (badge) badge.textContent = dailyDone + '/' + daily.length + ' today';
@@ -2813,7 +2827,7 @@
         takeBtn.disabled = false;
       }
 
-      // #7: Render 14-day tally (ALL habits — meds + custom)
+      // #7: Render 14-day tally
       try {
         var tallyEl = document.getElementById('hab-tally');
         var fourteenAgo = new Date(); fourteenAgo.setDate(fourteenAgo.getDate() - 13);
@@ -2824,7 +2838,7 @@
           if (!tallyMap[l.date]) tallyMap[l.date] = {};
           tallyMap[l.date][l.med_id] = true;
         });
-        // Total daily habits = all daily meds + custom daily habits
+        // Total daily medications
         var totalDailyAll = meds.filter(function(m){ return m.freq === 'daily'; }).length || 1;
         var th = '';
         var dayNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];

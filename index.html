@@ -458,7 +458,7 @@
       <option value="aislemate">&#x1F6D2; AisleMate</option>
       <option value="workout">&#x1F4AA; Workout Log</option>
       <option value="medical">&#x1FA7A; Medical</option>
-      <option value="habits">&#x1F48A; Habits</option>
+      <option value="habits">&#x2B50; My Habits</option>
       <option value="travel">&#x2708;&#xFE0F; Travel</option>
       <option value="hometab">&#x1F3E0; Home</option>
     </select>
@@ -467,7 +467,7 @@
     <button class="nav-item" onclick="chNav('aislemate',this)"><span class="icon">&#x1F6D2;</span> AisleMate</button>
     <button class="nav-item" onclick="chNav('workout',this)"><span class="icon">&#x1F4AA;</span> Workout Log</button>
     <button class="nav-item" onclick="chNav('medical',this)"><span class="icon">&#x1FA7A;</span> Medical</button>
-    <button class="nav-item" onclick="chNav('habits',this)"><span class="icon">&#x1F48A;</span> Habits</button>
+    <button class="nav-item" onclick="chNav('habits',this)"><span class="icon">&#x2B50;</span> My Habits</button>
     <button class="nav-item" onclick="chNav('travel',this)"><span class="icon">&#x2708;&#xFE0F;</span> Travel</button>
     <button class="nav-item" onclick="chNav('hometab',this)"><span class="icon">&#x1F3E0;</span> Home</button>
     <div class="sidebar-footer"><span>Cath Hub v2.0</span><br><a href="#" onclick="cathLogout();return false" style="color:rgba(255,255,255,0.5) !important;font-size:10px !important;text-decoration:underline !important;">Sign out</a></div>
@@ -514,7 +514,7 @@
       <div class="dash-section">
         <div style="display:flex !important;justify-content:space-between !important;align-items:center !important;margin-bottom:12px !important;">
           <h3 style="margin-bottom:0 !important;">&#x1F48A; Medication Today</h3>
-          <span style="font-size:12px !important;color:#3b82f6 !important;cursor:pointer !important;" onclick="chNav('habits');setTimeout(function(){habShowSection('meds')},100)">View all &rarr;</span>
+          <span style="font-size:12px !important;color:#3b82f6 !important;cursor:pointer !important;" onclick="chNav('medical');setTimeout(function(){medGo('tracking')},100)">View all &rarr;</span>
         </div>
         <div id="dash-hab-summary" style="display:flex !important;gap:10px !important;flex-wrap:wrap !important;">
           <div style="flex:1 !important;min-width:80px !important;text-align:center !important;background:#f0fdf4 !important;border:1px solid #bbf7d0 !important;border-radius:10px !important;padding:12px 8px !important;">
@@ -760,7 +760,7 @@
           <button class="am-btn" onclick="medGo('contacts')" style="width:100% !important;padding:14px 16px !important;font-size:15px !important;text-align:left !important;background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;color:#1e293b !important;display:flex !important;align-items:center !important;gap:10px !important;">&#x1F4DE; Contacts <span style="margin-left:auto !important;color:#94a3b8 !important;font-size:12px !important;">Doctors &amp; clinics &rarr;</span></button>
           <button class="am-btn" onclick="medGo('medications')" style="width:100% !important;padding:14px 16px !important;font-size:15px !important;text-align:left !important;background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;color:#1e293b !important;display:flex !important;align-items:center !important;gap:10px !important;">&#x1F48A; Medications <span style="margin-left:auto !important;color:#94a3b8 !important;font-size:12px !important;">Current plan &rarr;</span></button>
           <button class="am-btn" onclick="medGo('mentalhealth')" style="width:100% !important;padding:14px 16px !important;font-size:15px !important;text-align:left !important;background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;color:#1e293b !important;display:flex !important;align-items:center !important;gap:10px !important;">&#x1F9E0; Mental Health <span style="margin-left:auto !important;color:#94a3b8 !important;font-size:12px !important;">Sessions &rarr;</span></button>
-          <button class="am-btn" onclick="chNav('habits');setTimeout(function(){habShowSection('meds')},100)" style="width:100% !important;padding:14px 16px !important;font-size:15px !important;text-align:left !important;background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;color:#1e293b !important;display:flex !important;align-items:center !important;gap:10px !important;">&#x1F48A; Medication Habits <span style="margin-left:auto !important;color:#94a3b8 !important;font-size:12px !important;">Track daily &rarr;</span></button>
+          <button class="am-btn" onclick="medGo('tracking')" style="width:100% !important;padding:14px 16px !important;font-size:15px !important;text-align:left !important;background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;color:#1e293b !important;display:flex !important;align-items:center !important;gap:10px !important;">&#x1F4CA; Medication Tracking <span style="margin-left:auto !important;color:#94a3b8 !important;font-size:12px !important;" id="hab-meds-badge">0/0 today</span></button>
         </div>
       </div>
 
@@ -904,42 +904,30 @@
         </div>
       </div>
 
-    </div>
+      <!-- SUB: Medication Tracking -->
+      <div class="am-subscreen" id="med-tracking">
+        <button class="am-back" onclick="medGo('home')">&#x2190; Back</button>
 
-    <!-- ═══ HABITS ═══ -->
-    <div class="screen" id="ch-habits">
-      <h2>&#x1F48A; Habits</h2>
-
-      <!-- Missed yesterday alert (dismissable) -->
-      <div id="hab-missed-alert" style="display:none !important;background:#fef2f2 !important;border:1px solid #fecaca !important;border-radius:10px !important;padding:12px 16px !important;margin-bottom:12px !important;font-size:13px !important;color:#991b1b !important;">
-        <div style="display:flex !important;align-items:center !important;gap:8px !important;margin-bottom:6px !important;">
-          <div style="flex:1 !important;" id="hab-missed-text"></div>
-          <button onclick="habDismissMissed()" style="background:none !important;border:none !important;color:#991b1b !important;font-size:18px !important;cursor:pointer !important;padding:0 4px !important;line-height:1 !important;">&times;</button>
+        <!-- Missed yesterday alert (dismissable) -->
+        <div id="hab-missed-alert" style="display:none !important;background:#fef2f2 !important;border:1px solid #fecaca !important;border-radius:10px !important;padding:12px 16px !important;margin-bottom:12px !important;font-size:13px !important;color:#991b1b !important;">
+          <div style="display:flex !important;align-items:center !important;gap:8px !important;margin-bottom:6px !important;">
+            <div style="flex:1 !important;" id="hab-missed-text"></div>
+            <button onclick="habDismissMissed()" style="background:none !important;border:none !important;color:#991b1b !important;font-size:18px !important;cursor:pointer !important;padding:0 4px !important;line-height:1 !important;">&times;</button>
+          </div>
+          <div style="display:flex !important;gap:8px !important;">
+            <button onclick="habBackfillYesterday()" style="flex:1 !important;padding:8px 12px !important;font-size:12px !important;background:#10b981 !important;color:white !important;border:none !important;border-radius:6px !important;cursor:pointer !important;">I took them — mark as done</button>
+            <button onclick="habDismissMissed()" style="padding:8px 12px !important;font-size:12px !important;background:#94a3b8 !important;color:white !important;border:none !important;border-radius:6px !important;cursor:pointer !important;">Dismiss</button>
+          </div>
         </div>
-        <div style="display:flex !important;gap:8px !important;">
-          <button onclick="habBackfillYesterday()" style="flex:1 !important;padding:8px 12px !important;font-size:12px !important;background:#10b981 !important;color:white !important;border:none !important;border-radius:6px !important;cursor:pointer !important;">I took them — mark as done</button>
-          <button onclick="habDismissMissed()" style="padding:8px 12px !important;font-size:12px !important;background:#94a3b8 !important;color:white !important;border:none !important;border-radius:6px !important;cursor:pointer !important;">Dismiss</button>
-        </div>
-      </div>
 
-      <!-- Habit category buttons -->
-      <div style="display:flex !important;flex-direction:column !important;gap:10px !important;margin-bottom:16px !important;" id="hab-home">
-        <button class="am-btn" onclick="habShowSection('meds')" style="width:100% !important;padding:14px 16px !important;font-size:15px !important;text-align:left !important;background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;color:#1e293b !important;display:flex !important;align-items:center !important;gap:10px !important;">&#x1F48A; Medication <span style="margin-left:auto !important;color:#94a3b8 !important;font-size:12px !important;" id="hab-meds-badge">0/0 today</span></button>
-        <button class="am-btn" onclick="habShowSection('custom')" style="width:100% !important;padding:14px 16px !important;font-size:15px !important;text-align:left !important;background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;color:#1e293b !important;display:flex !important;align-items:center !important;gap:10px !important;">&#x2B50; My Habits <span style="margin-left:auto !important;color:#94a3b8 !important;font-size:12px !important;" id="hab-custom-badge">Custom habits &rarr;</span></button>
-      </div>
-
-      <!-- MEDICATION SECTION (hidden by default) -->
-      <div id="hab-meds-section" style="display:none !important;">
-        <button class="am-back" onclick="habShowSection('home')" style="background:none !important;border:none !important;color:#3b82f6 !important;font-size:14px !important;cursor:pointer !important;padding:0 0 12px 0 !important;">&#x2190; Back to Habits</button>
-
-        <!-- Morning banner (inside meds section) -->
+        <!-- Morning banner -->
         <div id="hab-morning-banner"></div>
 
-        <!-- Daily tally calendar (meds + custom habits) -->
+        <!-- Daily tally calendar -->
         <div class="hab-section" style="margin-bottom:16px !important;">
           <div class="med-section-header" style="padding:12px 16px !important;">
             <h3 style="font-size:14px !important;">&#x1F4C5; Daily Tally</h3>
-            <span style="font-size:11px !important;color:#94a3b8 !important;">Last 14 days (all habits)</span>
+            <span style="font-size:11px !important;color:#94a3b8 !important;">Last 14 days</span>
           </div>
           <div id="hab-tally" style="padding:12px 16px !important;display:flex !important;gap:4px !important;flex-wrap:wrap !important;justify-content:center !important;"></div>
         </div>
@@ -997,24 +985,25 @@
         </div>
       </div>
 
-      <!-- CUSTOM HABITS SECTION (hidden by default) -->
-      <div id="hab-custom-section" style="display:none !important;">
-        <button class="am-back" onclick="habShowSection('home')" style="background:none !important;border:none !important;color:#3b82f6 !important;font-size:14px !important;cursor:pointer !important;padding:0 0 12px 0 !important;">&#x2190; Back to Habits</button>
-        <h3 style="font-size:16px !important;font-weight:700 !important;margin-bottom:12px !important;">&#x2B50; My Habits</h3>
-        <div id="hab-custom-list" style="margin-bottom:16px !important;"></div>
-        <div class="hab-section">
-          <div class="med-section-header" style="cursor:pointer !important;" onclick="document.getElementById('hab-custom-form').style.display=document.getElementById('hab-custom-form').style.display==='none'?'block':'none'">
-            <h3 style="font-size:14px !important;">+ Add New Habit</h3>
-          </div>
-          <div id="hab-custom-form" style="display:none !important;padding:14px 16px !important;">
-            <div style="display:flex !important;flex-direction:column !important;gap:10px !important;">
-              <input type="text" id="hab-custom-name" placeholder="Habit name (e.g. Drink 2L water)" style="width:100% !important;padding:10px 12px !important;border:1px solid #e2e8f0 !important;border-radius:8px !important;font-size:14px !important;box-sizing:border-box !important;">
-              <select id="hab-custom-freq" style="width:100% !important;padding:10px 12px !important;border:1px solid #e2e8f0 !important;border-radius:8px !important;font-size:14px !important;">
-                <option value="daily">Daily</option>
-                <option value="weekly">Weekly</option>
-              </select>
-              <button class="am-btn" onclick="habAddCustom()" style="width:100% !important;padding:12px !important;background:#7c3aed !important;color:white !important;border-color:#7c3aed !important;font-size:14px !important;justify-content:center !important;border-radius:8px !important;">Save Habit</button>
-            </div>
+    </div>
+
+    <!-- ═══ HABITS ═══ -->
+    <div class="screen" id="ch-habits">
+      <h2>&#x2B50; My Habits</h2>
+
+      <div id="hab-custom-list" style="margin-bottom:16px !important;"></div>
+      <div class="hab-section">
+        <div class="med-section-header" style="cursor:pointer !important;" onclick="document.getElementById('hab-custom-form').style.display=document.getElementById('hab-custom-form').style.display==='none'?'block':'none'">
+          <h3 style="font-size:14px !important;">+ Add New Habit</h3>
+        </div>
+        <div id="hab-custom-form" style="display:none !important;padding:14px 16px !important;">
+          <div style="display:flex !important;flex-direction:column !important;gap:10px !important;">
+            <input type="text" id="hab-custom-name" placeholder="Habit name (e.g. Drink 2L water)" style="width:100% !important;padding:10px 12px !important;border:1px solid #e2e8f0 !important;border-radius:8px !important;font-size:14px !important;box-sizing:border-box !important;">
+            <select id="hab-custom-freq" style="width:100% !important;padding:10px 12px !important;border:1px solid #e2e8f0 !important;border-radius:8px !important;font-size:14px !important;">
+              <option value="daily">Daily</option>
+              <option value="weekly">Weekly</option>
+            </select>
+            <button class="am-btn" onclick="habAddCustom()" style="width:100% !important;padding:12px !important;background:#7c3aed !important;color:white !important;border-color:#7c3aed !important;font-size:14px !important;justify-content:center !important;border-radius:8px !important;">Save Habit</button>
           </div>
         </div>
       </div>
@@ -1191,6 +1180,7 @@
     if (mobileSelect) mobileSelect.value = name;
     if(name === 'aislemate') amGo('home');
     if(name === 'medical') medGo('home');
+    if(name === 'habits') habRenderCustom();
     if(name === 'home') dashLoad();
   };
 
@@ -2183,6 +2173,7 @@
   window.medGo = function(sub) {
     document.querySelectorAll('#ch-medical .am-subscreen').forEach(function(s){ s.classList.remove('active'); });
     document.getElementById('med-' + sub).classList.add('active');
+    if (sub === 'tracking') { habRender(); habLoadHistory(); }
   };
 
   // ─── MEDICAL (from Supabase) ───
@@ -2443,10 +2434,12 @@
     };
 
     window.habShowSection = function(section) {
-      document.getElementById('hab-home').style.display = section === 'home' ? 'flex' : 'none';
-      document.getElementById('hab-meds-section').style.display = section === 'meds' ? 'block' : 'none';
-      document.getElementById('hab-custom-section').style.display = section === 'custom' ? 'block' : 'none';
-      if (section === 'custom') habRenderCustom();
+      // Medication tracking now lives in Medical tab
+      if (section === 'meds') {
+        chNav('medical');
+        setTimeout(function(){ medGo('tracking'); }, 100);
+        return;
+      }
     };
 
     window.habAddCustom = async function() {

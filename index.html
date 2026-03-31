@@ -481,9 +481,10 @@
     <div class="screen active" id="ch-home">
       <h2 style="font-size:20px !important;margin-bottom:16px !important;">Dashboard</h2>
 
-      <div style="display:flex !important;gap:8px !important;margin-bottom:16px !important;">
+      <div style="display:flex !important;gap:8px !important;margin-bottom:16px !important;flex-wrap:wrap !important;">
         <button class="am-btn" onclick="dashQuickNav({value:'receipt'})" style="flex:1 !important;padding:12px 10px !important;font-size:13px !important;text-align:center !important;background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;color:#1e293b !important;">&#x1F9FE; Upload Receipt</button>
         <button class="am-btn" onclick="dashQuickNav({value:'filing'})" style="flex:1 !important;padding:12px 10px !important;font-size:13px !important;text-align:center !important;background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;color:#1e293b !important;">&#x1F4C1; Filing System</button>
+        <button class="am-btn" id="dash-meds-btn" onclick="dashTakeMorningMeds()" style="flex:1 !important;padding:12px 10px !important;font-size:13px !important;text-align:center !important;background:#10b981 !important;border:1px solid #10b981 !important;border-radius:10px !important;color:white !important;">&#x2600;&#xFE0F; Morning Meds</button>
       </div>
 
       <div class="dash-section">
@@ -1482,6 +1483,8 @@
       document.getElementById('dash-med-today').innerHTML = '<div style="text-align:center !important;padding:12px !important;color:#94a3b8 !important;font-size:13px !important;">Could not load medications</div>';
     }
 
+    // Update morning meds quick-access button state
+    dashUpdateMedsBtn();
   }
 
   // Mental health dashboard is updated by loadMedicalSessions()
@@ -2431,6 +2434,66 @@
   wlRender();
 
   // ─── MEDICAL NAVIGATION ───
+  window.dashTakeMorningMeds = async function() {
+    var btn = document.getElementById('dash-meds-btn');
+    btn.textContent = 'Recording...';
+    btn.disabled = true;
+    try {
+      var { data: allHabs } = await sb.from('habit_meds').select('*').eq('freq', 'daily');
+      var { data: medsList } = await sb.from('medications').select('name');
+      var medNames = (medsList || []).map(function(m){ return m.name.toLowerCase(); });
+      var meds = (allHabs || []).filter(function(h){ return medNames.indexOf(h.name.toLowerCase()) !== -1; });
+      if (!meds.length) { btn.textContent = 'No meds found'; return; }
+      var today = new Date();
+      var todayStr = today.getFullYear()+'-'+String(today.getMonth()+1).padStart(2,'0')+'-'+String(today.getDate()).padStart(2,'0');
+      var { data: existing } = await sb.from('habit_logs').select('med_id').eq('date', todayStr);
+      var doneIds = (existing || []).map(function(l){ return l.med_id; });
+      var toInsert = meds.filter(function(m){ return doneIds.indexOf(m.id) === -1; });
+      for (var i = 0; i < toInsert.length; i++) {
+        await sb.from('habit_logs').insert({ med_id: toInsert[i].id, date: todayStr, created_at: new Date().toISOString() });
+      }
+      btn.textContent = '\u2705 All Taken';
+      btn.style.background = '#64748b';
+      btn.style.borderColor = '#64748b';
+      btn.disabled = true;
+      // Refresh medication section on dashboard
+      dashLoad();
+    } catch(e) {
+      btn.textContent = 'Error - tap to retry';
+      btn.style.background = '#ef4444';
+      btn.style.borderColor = '#ef4444';
+      btn.disabled = false;
+    }
+  };
+
+  window.dashUpdateMedsBtn = async function() {
+    var btn = document.getElementById('dash-meds-btn');
+    if (!btn) return;
+    try {
+      var today = new Date();
+      var todayStr = today.getFullYear()+'-'+String(today.getMonth()+1).padStart(2,'0')+'-'+String(today.getDate()).padStart(2,'0');
+      var { data: allHabs } = await sb.from('habit_meds').select('*').eq('freq', 'daily');
+      var { data: medsList } = await sb.from('medications').select('name');
+      var medNames = (medsList || []).map(function(m){ return m.name.toLowerCase(); });
+      var meds = (allHabs || []).filter(function(h){ return medNames.indexOf(h.name.toLowerCase()) !== -1; });
+      if (!meds.length) return;
+      var { data: existing } = await sb.from('habit_logs').select('med_id').eq('date', todayStr);
+      var doneIds = (existing || []).map(function(l){ return l.med_id; });
+      var allDone = meds.every(function(m){ return doneIds.indexOf(m.id) !== -1; });
+      if (allDone) {
+        btn.textContent = '\u2705 All Taken';
+        btn.style.background = '#64748b';
+        btn.style.borderColor = '#64748b';
+        btn.disabled = true;
+      } else {
+        btn.textContent = '\u2600\uFE0F Morning Meds';
+        btn.style.background = '#10b981';
+        btn.style.borderColor = '#10b981';
+        btn.disabled = false;
+      }
+    } catch(e) {}
+  };
+
   window.dashQuickNav = function(sel) {
     var v = sel.value;
     sel.value = '';

@@ -604,6 +604,11 @@
           <select class="am-add-select" id="am-add-store">
             <option>Aldi</option><option>Woolworths</option><option>Coles</option><option>Bakers Delight</option><option>Belrose Pharmacy</option><option>Other</option>
           </select>
+          <div style="display:flex !important;align-items:center !important;gap:4px !important;background:white !important;border:1px solid #e2e8f0 !important;border-radius:8px !important;padding:2px 6px !important;">
+            <button class="am-btn" onclick="amQtyChange(-1)" style="padding:4px 8px !important;font-size:16px !important;font-weight:700 !important;color:#64748b !important;">&minus;</button>
+            <span id="am-add-qty" style="font-size:14px !important;font-weight:600 !important;min-width:20px !important;text-align:center !important;">1</span>
+            <button class="am-btn" onclick="amQtyChange(1)" style="padding:4px 8px !important;font-size:16px !important;font-weight:700 !important;color:#64748b !important;">+</button>
+          </div>
           <button class="am-btn" onclick="amAddItem()" style="background:#3b82f6 !important;color:white !important;">Add</button>
         </div>
         <button class="am-btn" id="am-repeat-btn" onclick="amRepeatLastShop()" style="margin-top:12px !important;width:100% !important;justify-content:center !important;background:#fef3c7 !important;border:1px solid #f59e0b !important;color:#92400e !important;padding:10px !important;font-weight:600 !important;">&#x1F504; Same as Last Week</button>
@@ -1568,9 +1573,11 @@
 
   function renderShopItem(item) {
     var storeCls = (item.store || '').toLowerCase().replace(/[^a-z]/g,'');
+    var qty = item.qty && item.qty > 1 ? item.qty : null;
     var h = '<div class="shop-item" data-id="' + item.id + '" style="' + (item.checked ? 'opacity:0.5 !important;' : '') + '">';
     h += '<div class="shop-check' + (item.checked ? ' done' : '') + '" onclick="amCheck(this)"></div>';
     h += '<span class="shop-name' + (item.checked ? ' checked' : '') + '">' + esc(item.name) + '</span>';
+    if (qty) h += '<span style="font-size:11px !important;background:#e0e7ff !important;color:#4338ca !important;padding:1px 6px !important;border-radius:4px !important;font-weight:600 !important;">x' + qty + '</span>';
     if (item.store) h += '<span class="store-tag ' + storeCls + '">' + esc(item.store) + '</span>';
     h += '<button class="shop-delete" onclick="amDeleteItem(\'' + item.id + '\')">&#x1F5D1;</button>';
     h += '</div>';
@@ -1668,13 +1675,25 @@
     }
   };
 
+  window.amQtyChange = function(delta) {
+    var el = document.getElementById('am-add-qty');
+    var qty = parseInt(el.textContent) + delta;
+    if (qty < 1) qty = 1;
+    if (qty > 99) qty = 99;
+    el.textContent = qty;
+  };
+
   window.amAddItem = async function() {
     var name = document.getElementById('am-add-name').value.trim();
     if (!name) return;
     var cat = document.getElementById('am-add-cat').value;
     var store = document.getElementById('am-add-store').value;
-    await sb.from('shopping_items').insert({ name: name, category: cat, store: store });
+    var qty = parseInt(document.getElementById('am-add-qty').textContent) || 1;
+    var row = { name: name, category: cat, store: store };
+    if (qty > 1) row.qty = qty;
+    await sb.from('shopping_items').insert(row);
     document.getElementById('am-add-name').value = '';
+    document.getElementById('am-add-qty').textContent = '1';
     document.getElementById('am-add-form').style.display = 'none';
     amLoadItems();
   };
@@ -2434,7 +2453,12 @@
   wlRender();
 
   // ─── MEDICAL NAVIGATION ───
+  // Shared lock to prevent double-recording from dashboard + habits page
+  var _medRecordingLock = false;
+
   window.dashTakeMorningMeds = async function() {
+    if (_medRecordingLock) return;
+    _medRecordingLock = true;
     var btn = document.getElementById('dash-meds-btn');
     btn.textContent = 'Recording...';
     btn.disabled = true;
@@ -2443,9 +2467,10 @@
       var { data: medsList } = await sb.from('medications').select('name');
       var medNames = (medsList || []).map(function(m){ return m.name.toLowerCase(); });
       var meds = (allHabs || []).filter(function(h){ return medNames.indexOf(h.name.toLowerCase()) !== -1; });
-      if (!meds.length) { btn.textContent = 'No meds found'; return; }
+      if (!meds.length) { btn.textContent = 'No meds found'; _medRecordingLock = false; return; }
       var today = new Date();
       var todayStr = today.getFullYear()+'-'+String(today.getMonth()+1).padStart(2,'0')+'-'+String(today.getDate()).padStart(2,'0');
+      // Re-check right before insert to avoid race conditions
       var { data: existing } = await sb.from('habit_logs').select('med_id').eq('date', todayStr);
       var doneIds = (existing || []).map(function(l){ return l.med_id; });
       var toInsert = meds.filter(function(m){ return doneIds.indexOf(m.id) === -1; });
@@ -2456,7 +2481,6 @@
       btn.style.background = '#64748b';
       btn.style.borderColor = '#64748b';
       btn.disabled = true;
-      // Refresh medication section on dashboard
       dashLoad();
     } catch(e) {
       btn.textContent = 'Error - tap to retry';
@@ -2464,6 +2488,7 @@
       btn.style.borderColor = '#ef4444';
       btn.disabled = false;
     }
+    _medRecordingLock = false;
   };
 
   window.dashUpdateMedsBtn = async function() {
@@ -2877,13 +2902,17 @@
     var habUndoTimer = null;
 
     window.habTakeAllDaily = async function() {
+      if (_medRecordingLock) return;
+      _medRecordingLock = true;
+      try {
       var { data: allHabs } = await sb.from('habit_meds').select('*').eq('freq', 'daily');
       var { data: medsList } = await sb.from('medications').select('name');
       var medNames = (medsList || []).map(function(m){ return m.name.toLowerCase(); });
       // Only actual medications
       var meds = (allHabs || []).filter(function(h){ return medNames.indexOf(h.name.toLowerCase()) !== -1; });
-      if (!meds.length) return;
+      if (!meds.length) { _medRecordingLock = false; return; }
       var today = todayKey();
+      // Re-check right before insert to avoid race conditions
       var { data: existing } = await sb.from('habit_logs').select('med_id').eq('date', today);
       var doneIds = (existing || []).map(function(l){ return l.med_id; });
       var toInsert = meds.filter(function(m){ return doneIds.indexOf(m.id) === -1; });
@@ -2903,6 +2932,7 @@
           habUndoIds = [];
         }, 10000);
       }
+      } finally { _medRecordingLock = false; }
     };
 
     // #5: Undo Take All
@@ -3009,20 +3039,21 @@
             await sb.from('habit_meds').insert({ id: Date.now() + 100 + j, name: AS_NEEDED_MEDS[j].name, freq: 'asneeded' });
           }
         }
-        // Clean up duplicates: if multiple habit_meds match the same as-needed med, keep only one
+        // Clean up ALL duplicate habit_meds (same name appearing more than once)
         var { data: allHabs } = await sb.from('habit_meds').select('id, name, freq');
-        for (var k = 0; k < AS_NEEDED_MEDS.length; k++) {
-          var target = AS_NEEDED_MEDS[k].name.toLowerCase();
-          var matches = (allHabs || []).filter(function(h) {
-            return h.name.toLowerCase().indexOf(target) !== -1 || target.indexOf(h.name.toLowerCase()) !== -1;
-          });
-          if (matches.length > 1) {
-            // Keep the one with freq=asneeded or the first one, delete the rest
-            var keep = matches.find(function(m){ return m.freq === 'asneeded'; }) || matches[0];
-            for (var d = 0; d < matches.length; d++) {
-              if (matches[d].id !== keep.id) {
-                await sb.from('habit_meds').delete().eq('id', matches[d].id);
-              }
+        var seen = {};
+        for (var k = 0; k < (allHabs || []).length; k++) {
+          var key = allHabs[k].name.toLowerCase();
+          if (!seen[key]) seen[key] = [];
+          seen[key].push(allHabs[k]);
+        }
+        var seenKeys = Object.keys(seen);
+        for (var sk = 0; sk < seenKeys.length; sk++) {
+          var dupes = seen[seenKeys[sk]];
+          if (dupes.length > 1) {
+            // Keep the first one, delete the rest
+            for (var d = 1; d < dupes.length; d++) {
+              await sb.from('habit_meds').delete().eq('id', dupes[d].id);
             }
           }
         }

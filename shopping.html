@@ -66,6 +66,11 @@
 <div class="container">
   <div class="add-bar">
     <input class="add-input" id="add-input" type="text" placeholder="Add an item..." autocomplete="off">
+    <div style="display:flex;align-items:center;gap:2px;background:white;border:1px solid #e2e8f0;border-radius:8px;padding:2px 4px;">
+      <button onclick="shopQtyChange(-1)" style="border:none;background:none;font-size:16px;font-weight:700;color:#64748b;cursor:pointer;padding:4px 6px;">&minus;</button>
+      <span id="add-qty" style="font-size:14px;font-weight:600;min-width:18px;text-align:center;">1</span>
+      <button onclick="shopQtyChange(1)" style="border:none;background:none;font-size:16px;font-weight:700;color:#64748b;cursor:pointer;padding:4px 6px;">+</button>
+    </div>
     <button class="add-btn" id="add-btn" onclick="addItem()">Add</button>
   </div>
   <div class="suggest-list" id="suggest-list"></div>
@@ -165,9 +170,11 @@
 
   function renderItem(item) {
     var storeCls = (item.store || '').toLowerCase().replace(/[^a-z]/g, '');
+    var qty = item.qty && item.qty > 1 ? item.qty : null;
     var h = '<div class="shop-item" data-id="' + item.id + '" style="' + (item.checked ? 'opacity:0.5;' : '') + '">';
     h += '<div class="shop-check' + (item.checked ? ' done' : '') + '" onclick="toggleItem(this)"></div>';
     h += '<span class="shop-name' + (item.checked ? ' checked' : '') + '">' + esc(item.name) + '</span>';
+    if (qty) h += '<span style="font-size:11px;background:#e0e7ff;color:#4338ca;padding:1px 6px;border-radius:4px;font-weight:600;">x' + qty + '</span>';
     if (item.store) h += '<span class="store-tag ' + storeCls + '">' + esc(item.store) + '</span>';
     h += '</div>';
     return h;
@@ -179,6 +186,15 @@
     var isDone = !el.classList.contains('done');
     await sb.from('shopping_items').update({ checked: isDone }).eq('id', id);
     loadItems();
+  };
+
+  // ─── QUANTITY ───
+  window.shopQtyChange = function(delta) {
+    var el = document.getElementById('add-qty');
+    var qty = parseInt(el.textContent) + delta;
+    if (qty < 1) qty = 1;
+    if (qty > 99) qty = 99;
+    el.textContent = qty;
   };
 
   // ─── ADD ITEM ───
@@ -196,9 +212,12 @@
       row.category = match[0].category || 'Other';
       row.store = match[0].store || 'Other';
     }
+    var qty = parseInt(document.getElementById('add-qty').textContent) || 1;
+    if (qty > 1) row.qty = qty;
 
     await sb.from('shopping_items').insert(row);
     input.value = '';
+    document.getElementById('add-qty').textContent = '1';
     document.getElementById('suggest-list').classList.remove('visible');
     document.getElementById('add-btn').disabled = false;
     loadItems();

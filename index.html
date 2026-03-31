@@ -2947,7 +2947,7 @@
     var AS_NEEDED_MEDS = [
       { name: 'Nurofen', dose: '2 tablets' },
       { name: 'Panadol', dose: '2 tablets' },
-      { name: 'Nexium Antacid', dose: '' }
+      { name: 'Nexium Antacid', dose: '', brands: ['Nexium'] }
     ];
 
     var MED_TIMES = {
@@ -2992,10 +2992,30 @@
       habRender();
     };
 
-    window.habRecordAsNeeded = async function(id) {
+    window.habRecordAsNeeded = async function(id, brand) {
       var today = todayKey();
-      await sb.from('habit_logs').insert({ med_id: id, date: today, created_at: new Date().toISOString() });
+      var logData = { med_id: id, date: today, created_at: new Date().toISOString() };
+      if (brand) {
+        logData.note = brand;
+        var { error } = await sb.from('habit_logs').insert(logData);
+        if (error && error.message && error.message.indexOf('note') !== -1) {
+          // note column doesn't exist yet, insert without it
+          delete logData.note;
+          await sb.from('habit_logs').insert(logData);
+        }
+      } else {
+        await sb.from('habit_logs').insert(logData);
+      }
       habRender();
+    };
+
+    window.habShowBrandPicker = function(medId, brands) {
+      if (brands.length === 1) {
+        habRecordAsNeeded(medId, brands[0]);
+        return;
+      }
+      var picker = document.getElementById('brand-picker-' + medId);
+      if (picker) picker.style.display = picker.style.display === 'none' ? 'flex' : 'none';
     };
 
     window.habChangeTime = async function(logId) {
@@ -3137,6 +3157,7 @@
             var med = asneeded[a];
             var asInfo = AS_NEEDED_MEDS.find(function(x){ return x.name.toLowerCase() === med.name.toLowerCase(); });
             var doseLabel = asInfo && asInfo.dose ? ' (' + asInfo.dose + ')' : '';
+            var hasBrands = asInfo && asInfo.brands && asInfo.brands.length > 0;
             // Count how many times taken today
             var todayLogs = [];
             try {
@@ -3144,14 +3165,26 @@
               todayLogs = tl || [];
             } catch(e) {}
             h += '<div class="hab-med-row" style="flex-wrap:wrap !important;">';
-            h += '<button class="am-btn" onclick="habRecordAsNeeded(' + med.id + ')" style="background:#3b82f6 !important;color:white !important;border-color:#3b82f6 !important;padding:6px 12px !important;font-size:12px !important;">Record dose</button>';
+            if (hasBrands) {
+              h += '<button class="am-btn" onclick="habShowBrandPicker(' + med.id + ',' + JSON.stringify(asInfo.brands).replace(/"/g, '&quot;') + ')" style="background:#3b82f6 !important;color:white !important;border-color:#3b82f6 !important;padding:6px 12px !important;font-size:12px !important;">Record dose</button>';
+            } else {
+              h += '<button class="am-btn" onclick="habRecordAsNeeded(' + med.id + ')" style="background:#3b82f6 !important;color:white !important;border-color:#3b82f6 !important;padding:6px 12px !important;font-size:12px !important;">Record dose</button>';
+            }
             h += '<div style="flex:1 !important;"><div class="hab-med-name" style="margin-bottom:0 !important;">' + esc(med.name) + esc(doseLabel) + '</div>';
+            if (hasBrands && asInfo.brands.length > 1) {
+              h += '<div id="brand-picker-' + med.id + '" style="display:none !important;gap:6px !important;flex-wrap:wrap !important;padding:6px 0 !important;">';
+              for (var b = 0; b < asInfo.brands.length; b++) {
+                h += '<button class="am-btn" onclick="habRecordAsNeeded(' + med.id + ',\'' + esc(asInfo.brands[b]) + '\')" style="background:#eff6ff !important;color:#2563eb !important;border-color:#bfdbfe !important;padding:4px 10px !important;font-size:11px !important;">' + esc(asInfo.brands[b]) + '</button>';
+              }
+              h += '</div>';
+            }
             if (todayLogs.length > 0) {
               h += '<div style="font-size:11px !important;color:#10b981 !important;">' + todayLogs.length + ' dose' + (todayLogs.length > 1 ? 's' : '') + ' today</div>';
               todayLogs.forEach(function(tl) {
                 var t = tl.created_at ? new Date(tl.created_at).toLocaleTimeString('en-AU', { hour: '2-digit', minute: '2-digit' }) : 'no time';
+                var noteLabel = tl.note ? ' (' + tl.note + ')' : '';
                 h += '<div style="display:flex !important;align-items:center !important;gap:6px !important;font-size:11px !important;color:#64748b !important;padding:2px 0 !important;">';
-                h += '<span onclick="habChangeTime(\'' + tl.id + '\')" style="cursor:pointer !important;color:#3b82f6 !important;">' + t + ' &#x270F;</span>';
+                h += '<span onclick="habChangeTime(\'' + tl.id + '\')" style="cursor:pointer !important;color:#3b82f6 !important;">' + t + noteLabel + ' &#x270F;</span>';
                 h += '<span onclick="habDeleteDose(\'' + tl.id + '\')" style="cursor:pointer !important;color:#ef4444 !important;" title="Remove dose">&#x2715;</span>';
                 h += '</div>';
               });

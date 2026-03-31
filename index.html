@@ -1573,11 +1573,9 @@
 
   function renderShopItem(item) {
     var storeCls = (item.store || '').toLowerCase().replace(/[^a-z]/g,'');
-    var qty = item.qty && item.qty > 1 ? item.qty : null;
     var h = '<div class="shop-item" data-id="' + item.id + '" style="' + (item.checked ? 'opacity:0.5 !important;' : '') + '">';
     h += '<div class="shop-check' + (item.checked ? ' done' : '') + '" onclick="amCheck(this)"></div>';
     h += '<span class="shop-name' + (item.checked ? ' checked' : '') + '">' + esc(item.name) + '</span>';
-    if (qty) h += '<span style="font-size:11px !important;background:#e0e7ff !important;color:#4338ca !important;padding:1px 6px !important;border-radius:4px !important;font-weight:600 !important;">x' + qty + '</span>';
     if (item.store) h += '<span class="store-tag ' + storeCls + '">' + esc(item.store) + '</span>';
     h += '<button class="shop-delete" onclick="amDeleteItem(\'' + item.id + '\')">&#x1F5D1;</button>';
     h += '</div>';
@@ -1689,9 +1687,8 @@
     var cat = document.getElementById('am-add-cat').value;
     var store = document.getElementById('am-add-store').value;
     var qty = parseInt(document.getElementById('am-add-qty').textContent) || 1;
-    var row = { name: name, category: cat, store: store };
-    if (qty > 1) row.qty = qty;
-    await sb.from('shopping_items').insert(row);
+    var displayName = qty > 1 ? name + ' x' + qty : name;
+    await sb.from('shopping_items').insert({ name: displayName, category: cat, store: store });
     document.getElementById('am-add-name').value = '';
     document.getElementById('am-add-qty').textContent = '1';
     document.getElementById('am-add-form').style.display = 'none';
@@ -2475,7 +2472,7 @@
       var doneIds = (existing || []).map(function(l){ return l.med_id; });
       var toInsert = meds.filter(function(m){ return doneIds.indexOf(m.id) === -1; });
       for (var i = 0; i < toInsert.length; i++) {
-        await sb.from('habit_logs').insert({ med_id: toInsert[i].id, date: todayStr, created_at: new Date().toISOString() });
+        await safeDailyInsert(toInsert[i].id, todayStr, new Date().toISOString());
       }
       btn.textContent = '\u2705 All Taken';
       btn.style.background = '#64748b';
@@ -2826,7 +2823,7 @@
       var doneIds = (existing || []).map(function(l){ return l.med_id; });
       for (var i = 0; i < dailyMeds.length; i++) {
         if (doneIds.indexOf(dailyMeds[i].id) === -1) {
-          await sb.from('habit_logs').insert({ med_id: dailyMeds[i].id, date: yk, created_at: new Date(yk + 'T08:00:00').toISOString() });
+          await safeDailyInsert(dailyMeds[i].id, yk, new Date(yk + 'T08:00:00').toISOString());
         }
       }
       document.getElementById('hab-missed-alert').style.display = 'none';
@@ -2918,8 +2915,8 @@
       var toInsert = meds.filter(function(m){ return doneIds.indexOf(m.id) === -1; });
       habUndoIds = [];
       for (var i = 0; i < toInsert.length; i++) {
-        await sb.from('habit_logs').insert({ med_id: toInsert[i].id, date: today, created_at: new Date().toISOString() });
-        habUndoIds.push(toInsert[i].id);
+        var inserted = await safeDailyInsert(toInsert[i].id, today, new Date().toISOString());
+        if (inserted) habUndoIds.push(toInsert[i].id);
       }
       habRender();
       // #5: Show undo button for 10 seconds
@@ -2958,7 +2955,7 @@
       if (data && data.length) {
         await sb.from('habit_logs').delete().eq('med_id', id).eq('date', today);
       } else {
-        await sb.from('habit_logs').insert({ med_id: id, date: today, created_at: new Date().toISOString() });
+        await safeDailyInsert(id, today, new Date().toISOString());
       }
       habRender();
     };
@@ -3051,13 +3048,41 @@
         for (var sk = 0; sk < seenKeys.length; sk++) {
           var dupes = seen[seenKeys[sk]];
           if (dupes.length > 1) {
-            // Keep the first one, delete the rest
             for (var d = 1; d < dupes.length; d++) {
               await sb.from('habit_meds').delete().eq('id', dupes[d].id);
             }
           }
         }
+        // Clean up duplicate habit_logs for daily meds (only one entry per med per day)
+        var dailyHabs = (allHabs || []).filter(function(h){ return h.freq === 'daily'; });
+        for (var dl = 0; dl < dailyHabs.length; dl++) {
+          var { data: allLogs } = await sb.from('habit_logs').select('id, date, created_at').eq('med_id', dailyHabs[dl].id).order('created_at', { ascending: true });
+          if (!allLogs || allLogs.length < 2) continue;
+          var logsByDate = {};
+          allLogs.forEach(function(l) {
+            if (!logsByDate[l.date]) logsByDate[l.date] = [];
+            logsByDate[l.date].push(l);
+          });
+          var logDates = Object.keys(logsByDate);
+          for (var ld = 0; ld < logDates.length; ld++) {
+            var dayLogs = logsByDate[logDates[ld]];
+            if (dayLogs.length > 1) {
+              // Keep the first, delete the rest
+              for (var dl2 = 1; dl2 < dayLogs.length; dl2++) {
+                await sb.from('habit_logs').delete().eq('id', dayLogs[dl2].id);
+              }
+            }
+          }
+        }
       } catch(e) {}
+    }
+
+    // Safe insert for daily meds - guarantees only one entry per med per day
+    async function safeDailyInsert(medId, date, createdAt) {
+      var { data: check } = await sb.from('habit_logs').select('id').eq('med_id', medId).eq('date', date);
+      if (check && check.length > 0) return false; // already recorded
+      await sb.from('habit_logs').insert({ med_id: medId, date: date, created_at: createdAt });
+      return true;
     }
 
     // Record an as-needed dose (always inserts — multiple doses per day allowed)

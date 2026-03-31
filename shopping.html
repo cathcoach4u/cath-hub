@@ -170,11 +170,9 @@
 
   function renderItem(item) {
     var storeCls = (item.store || '').toLowerCase().replace(/[^a-z]/g, '');
-    var qty = item.qty && item.qty > 1 ? item.qty : null;
     var h = '<div class="shop-item" data-id="' + item.id + '" style="' + (item.checked ? 'opacity:0.5;' : '') + '">';
     h += '<div class="shop-check' + (item.checked ? ' done' : '') + '" onclick="toggleItem(this)"></div>';
     h += '<span class="shop-name' + (item.checked ? ' checked' : '') + '">' + esc(item.name) + '</span>';
-    if (qty) h += '<span style="font-size:11px;background:#e0e7ff;color:#4338ca;padding:1px 6px;border-radius:4px;font-weight:600;">x' + qty + '</span>';
     if (item.store) h += '<span class="store-tag ' + storeCls + '">' + esc(item.store) + '</span>';
     h += '</div>';
     return h;
@@ -213,7 +211,7 @@
       row.store = match[0].store || 'Other';
     }
     var qty = parseInt(document.getElementById('add-qty').textContent) || 1;
-    if (qty > 1) row.qty = qty;
+    if (qty > 1) row.name = row.name + ' x' + qty;
 
     await sb.from('shopping_items').insert(row);
     input.value = '';

@@ -1053,21 +1053,54 @@
     <div class="screen" id="ch-habits">
       <h2>&#x2B50; My Habits</h2>
 
-      <div id="hab-custom-list" style="margin-bottom:16px !important;"></div>
-      <div class="hab-section">
-        <div class="med-section-header" style="cursor:pointer !important;" onclick="document.getElementById('hab-custom-form').style.display=document.getElementById('hab-custom-form').style.display==='none'?'block':'none'">
-          <h3 style="font-size:14px !important;">+ Add New Habit</h3>
-        </div>
-        <div id="hab-custom-form" style="display:none !important;padding:14px 16px !important;">
-          <div style="display:flex !important;flex-direction:column !important;gap:10px !important;">
-            <input type="text" id="hab-custom-name" placeholder="Habit name (e.g. Drink 2L water)" style="width:100% !important;padding:10px 12px !important;border:1px solid #e2e8f0 !important;border-radius:8px !important;font-size:14px !important;box-sizing:border-box !important;">
-            <select id="hab-custom-freq" style="width:100% !important;padding:10px 12px !important;border:1px solid #e2e8f0 !important;border-radius:8px !important;font-size:14px !important;">
-              <option value="daily">Daily</option>
-              <option value="weekly">Weekly</option>
-            </select>
-            <button class="am-btn" onclick="habAddCustom()" style="width:100% !important;padding:12px !important;background:#7c3aed !important;color:white !important;border-color:#7c3aed !important;font-size:14px !important;justify-content:center !important;border-radius:8px !important;">Save Habit</button>
+      <!-- Habits tab bar -->
+      <div style="display:flex !important;gap:6px !important;margin-bottom:16px !important;flex-wrap:wrap !important;">
+        <button class="am-btn zb-tab active" onclick="zbTab('custom')" id="zb-tab-custom" style="padding:8px 14px !important;font-size:12px !important;background:#3b82f6 !important;color:white !important;border-color:#3b82f6 !important;">My Habits</button>
+        <button class="am-btn zb-tab" onclick="zbTab('rhythms')" id="zb-tab-rhythms" style="padding:8px 14px !important;font-size:12px !important;">Rhythm Cards</button>
+        <button class="am-btn zb-tab" onclick="zbTab('zones')" id="zb-tab-zones" style="padding:8px 14px !important;font-size:12px !important;">Zone Buddy</button>
+      </div>
+
+      <!-- TAB: Custom Habits -->
+      <div id="zb-panel-custom">
+        <div id="hab-custom-list" style="margin-bottom:16px !important;"></div>
+        <div class="hab-section">
+          <div class="med-section-header" style="cursor:pointer !important;" onclick="document.getElementById('hab-custom-form').style.display=document.getElementById('hab-custom-form').style.display==='none'?'block':'none'">
+            <h3 style="font-size:14px !important;">+ Add New Habit</h3>
+          </div>
+          <div id="hab-custom-form" style="display:none !important;padding:14px 16px !important;">
+            <div style="display:flex !important;flex-direction:column !important;gap:10px !important;">
+              <input type="text" id="hab-custom-name" placeholder="Habit name (e.g. Drink 2L water)" style="width:100% !important;padding:10px 12px !important;border:1px solid #e2e8f0 !important;border-radius:8px !important;font-size:14px !important;box-sizing:border-box !important;">
+              <select id="hab-custom-freq" style="width:100% !important;padding:10px 12px !important;border:1px solid #e2e8f0 !important;border-radius:8px !important;font-size:14px !important;">
+                <option value="daily">Daily</option>
+                <option value="weekly">Weekly</option>
+              </select>
+              <button class="am-btn" onclick="habAddCustom()" style="width:100% !important;padding:12px !important;background:#7c3aed !important;color:white !important;border-color:#7c3aed !important;font-size:14px !important;justify-content:center !important;border-radius:8px !important;">Save Habit</button>
+            </div>
           </div>
         </div>
+      </div>
+
+      <!-- TAB: Rhythm Cards -->
+      <div id="zb-panel-rhythms" style="display:none !important;">
+        <!-- Rhythm sub-nav -->
+        <div style="display:flex !important;gap:6px !important;margin-bottom:16px !important;flex-wrap:wrap !important;">
+          <button class="am-btn zb-rhythm-tab active" onclick="zbRhythm('daily')" id="zb-rt-daily" style="padding:6px 12px !important;font-size:11px !important;background:#10b981 !important;color:white !important;border-color:#10b981 !important;">&#x2600;&#xFE0F; Daily</button>
+          <button class="am-btn zb-rhythm-tab" onclick="zbRhythm('weekly')" id="zb-rt-weekly" style="padding:6px 12px !important;font-size:11px !important;">&#x1F4C5; Weekly</button>
+          <button class="am-btn zb-rhythm-tab" onclick="zbRhythm('fortnightly')" id="zb-rt-fortnightly" style="padding:6px 12px !important;font-size:11px !important;">&#x1F504; Fortnightly</button>
+          <button class="am-btn zb-rhythm-tab" onclick="zbRhythm('6monthly')" id="zb-rt-6monthly" style="padding:6px 12px !important;font-size:11px !important;">&#x1F4C6; 6-Monthly</button>
+          <button class="am-btn zb-rhythm-tab" onclick="zbRhythm('annual')" id="zb-rt-annual" style="padding:6px 12px !important;font-size:11px !important;">&#x1F389; Annual</button>
+        </div>
+        <div id="zb-rhythm-content"></div>
+      </div>
+
+      <!-- TAB: Zone Buddy -->
+      <div id="zb-panel-zones" style="display:none !important;">
+        <!-- Zone info banner -->
+        <div style="background:#fefce8 !important;border:1px solid #fde68a !important;border-radius:10px !important;padding:12px 16px !important;margin-bottom:16px !important;font-size:12px !important;color:#92400e !important;">
+          <strong>Zone Buddy</strong> &mdash; One zone at a time. Containment before sorting. Functional &ldquo;done enough&rdquo; is the goal.
+        </div>
+        <div id="zb-zone-grid" style="display:grid !important;grid-template-columns:1fr 1fr !important;gap:10px !important;margin-bottom:16px !important;"></div>
+        <div id="zb-zone-detail" style="display:none !important;"></div>
       </div>
 
     </div>
@@ -4195,6 +4228,416 @@
       }
     });
   })();
+
+  // ═══════════════════════════════════════════
+  // ZONE BUDDY + RHYTHM CARDS
+  // ═══════════════════════════════════════════
+
+  // ─── Tab switching ───
+  window.zbTab = function(tab) {
+    ['custom','rhythms','zones'].forEach(function(t) {
+      var panel = document.getElementById('zb-panel-' + t);
+      var btn = document.getElementById('zb-tab-' + t);
+      if (t === tab) {
+        panel.style.display = 'block';
+        btn.style.background = '#3b82f6';
+        btn.style.color = 'white';
+        btn.style.borderColor = '#3b82f6';
+      } else {
+        panel.style.display = 'none';
+        btn.style.background = 'white';
+        btn.style.color = '#1e293b';
+        btn.style.borderColor = '#e2e8f0';
+      }
+    });
+    if (tab === 'rhythms') zbRhythm('daily');
+    if (tab === 'zones') zbRenderZoneGrid();
+    if (tab === 'custom') habRenderCustom();
+  };
+
+  // ─── localStorage helpers ───
+  function zbKey(prefix) {
+    var d = new Date();
+    return prefix + '_' + d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+  }
+  function zbWeekKey(prefix) {
+    var d = new Date();
+    var day = d.getDay() || 7;
+    var mon = new Date(d);
+    mon.setDate(d.getDate() - day + 1);
+    return prefix + '_w' + mon.getFullYear() + '-' + String(mon.getMonth()+1).padStart(2,'0') + '-' + String(mon.getDate()).padStart(2,'0');
+  }
+  function zbGetChecked(key) {
+    try { return JSON.parse(localStorage.getItem(key)) || {}; } catch(e) { return {}; }
+  }
+  function zbSetChecked(key, obj) {
+    localStorage.setItem(key, JSON.stringify(obj));
+  }
+
+  // ─── Fortnightly calculation ───
+  function zbGetFortnightWeek() {
+    var refA = new Date(2026, 2, 16); // 16 Mar 2026 = Week A
+    var now = new Date();
+    var diff = Math.floor((now - refA) / (7 * 24 * 60 * 60 * 1000));
+    return (diff % 2 === 0) ? 'A' : 'B';
+  }
+
+  // ─── ThriveHQ session block check ───
+  function zbInThriveBlock() {
+    var now = new Date();
+    var y = now.getFullYear();
+    var blocks = [
+      [new Date(y,0,27), new Date(y,3,3)],
+      [new Date(y,3,20), new Date(y,6,3)],
+      [new Date(y,6,20), new Date(y,8,25)],
+      [new Date(y,9,12), new Date(y,11,12)]
+    ];
+    for (var i = 0; i < blocks.length; i++) {
+      if (now >= blocks[i][0] && now <= blocks[i][1]) return true;
+    }
+    return false;
+  }
+
+  // ─── RHYTHM CARD DATA ───
+  var ZB_RHYTHMS = {
+    daily: {
+      title: 'Daily Rhythm Card',
+      subtitle: 'Keep the home and body running with simple, repeatable, low-decision actions.',
+      done: 'Essentials are moving. It does not need to be perfect.',
+      sections: [
+        { name: 'Morning \u2014 on waking, before work', icon: '\u2600\uFE0F', items: [
+          { id: 'wake', label: 'Wake anchor \u2014 out of bed \u2014 weekdays by 7am' },
+          { id: 'hydration_am', label: 'Hydration \u2014 first water of the day' },
+          { id: 'mouthguard_am', label: 'Mouthguard \u2014 put away' },
+          { id: 'eat', label: 'Eat anchor \u2014 do not skip breakfast' },
+          { id: 'cats_am', label: 'Cats \u2014 feed and refresh water' },
+          { id: 'env_reset', label: 'Environment reset \u2014 open blinds, reset main space' }
+        ]},
+        { name: 'Through the Day \u2014 flexible, anytime', icon: '\u{1F31F}', items: [
+          { id: 'movement', label: 'Movement anchor \u2014 at least 10 min walking' },
+          { id: 'regulation', label: 'Regulation anchor \u2014 2\u20135 min breathing/mindfulness' },
+          { id: 'kitchen', label: 'Kitchen reset \u2014 dishes, benches, sink' },
+          { id: 'laundry', label: 'One laundry action \u2014 start, switch, fold, or put away' },
+          { id: 'clutter', label: 'Clutter containment \u2014 clear surfaces 2\u20135 min' },
+          { id: 'hydration_day', label: 'Hydration target \u2014 1.5\u20132 litres across the day' },
+          { id: 'food', label: 'Food default \u2014 use a default meal if decision-making is low' },
+          { id: 'caffeine', label: 'Caffeine cut-off \u2014 stop by 1pm' }
+        ]},
+        { name: 'Evening \u2014 wind-down', icon: '\u{1F319}', items: [
+          { id: 'cats_pm', label: 'Cats \u2014 feed evening meal' },
+          { id: 'body_pm', label: 'Extra body support \u2014 5 min movement or stretching' },
+          { id: 'mouthguard_pm', label: 'Mouthguard \u2014 put in' },
+          { id: 'bedtime', label: 'Bedtime support \u2014 screens off ~1 hour before bed' }
+        ]}
+      ]
+    },
+    weekly: {
+      title: 'Weekly Rhythm Card',
+      subtitle: 'Support weekly wellbeing, connection, and practical stability.',
+      done: 'The week has moved forward in the areas that matter most.',
+      sections: [
+        { name: 'Core Weekly Anchors', icon: '\u{1F3CB}\uFE0F', items: [
+          { id: 'gym_weights', label: 'Gym \u2014 Weight circuit' },
+          { id: 'gym_cardio', label: 'Gym \u2014 Cardio circuit' },
+          { id: 'andrew_rel', label: 'Andrew \u2014 Relationship check-in' },
+          { id: 'andrew_admin', label: 'Andrew \u2014 Life and admin conversation' },
+          { id: 'cashflow_personal', label: 'Personal cash flow \u2014 Review' },
+          { id: 'cashflow_coach', label: 'Coach4U cash flow \u2014 Review' },
+          { id: 'thrivehq', label: 'ThriveHQ \u2014 Thursday body doubling session', conditional: 'thrive' }
+        ]},
+        { name: 'Weekly Support Actions', icon: '\u{1F49A}', items: [
+          { id: 'relaxation', label: 'Schedule 3 short relaxation sessions this week' },
+          { id: 'migraine_checkin', label: 'Weekly migraine prevention check-in' }
+        ]}
+      ]
+    },
+    fortnightly: {
+      title: 'Fortnightly Rhythm Card',
+      subtitle: 'Hold commitments that occur every second week.',
+      done: 'The correct fortnight activity has been attended or prepared for.',
+      sections: [] // Dynamic based on week
+    },
+    '6monthly': {
+      title: '6-Monthly Rhythm Card',
+      subtitle: 'Hold health appointments that occur every six months.',
+      done: 'The appointment has been attended or is booked for the correct period.',
+      sections: [
+        { name: '6-Monthly Anchors', icon: '\u{1F3E5}', items: [
+          { id: 'gp', label: 'GP appointment \u2014 March and September' },
+          { id: 'blood', label: 'Blood tests \u2014 after GP visit' },
+          { id: 'dental', label: 'Dental clean \u2014 May and November' }
+        ]}
+      ]
+    },
+    annual: {
+      title: 'Annual Rhythm Card',
+      subtitle: 'Hold health checks and system reviews that occur once a year.',
+      done: 'The appointment or review has been attended or scheduled.',
+      sections: [
+        { name: 'Annual Anchors', icon: '\u{1F4CB}', items: [
+          { id: 'eye', label: 'Eye check' },
+          { id: 'glasses', label: 'New glasses \u2014 if needed' },
+          { id: 'skin', label: 'Skin check' },
+          { id: 'rhythm_review', label: 'Annual rhythm system review \u2014 check all cards are current' }
+        ]}
+      ]
+    }
+  };
+
+  // ─── ZONE DATA ───
+  var ZB_ZONES = [
+    { id: 'z1', name: 'Front Living Hub', icon: '\u{1F6CB}\uFE0F', purpose: 'Main social and relaxation space. Needs to feel calm and welcoming.',
+      daily: ['Remove items that don\'t belong','Clear main surfaces','Cushions and throws back in place','Floor walkable'],
+      deeper: ['Dust surfaces','Vacuum or sweep floor','Wipe marks on furniture','Check behind cushions'],
+      done: 'Surfaces clear, floor walkable, cushions reset', doneEnough: 'Main surface clear, obvious clutter removed' },
+    { id: 'z2', name: 'Front Landing + Entry', icon: '\u{1F6AA}', purpose: 'Transition zone. First impression of the home.',
+      daily: ['Shoes contained or put away','Bags and coats to correct spots','Entry surface clear','Path clear inside and outside'],
+      deeper: ['Sweep or wipe entry floor','Check outdoor area \u2014 bins, furniture','Wipe door handles and light switches'],
+      done: 'Path clear, shoes away, entry surface clear', doneEnough: 'Path walkable, obvious items moved' },
+    { id: 'z3', name: 'Family Room + Clothes Hub', icon: '\u{1F455}', purpose: 'Shared family space and primary clothes management zone.',
+      daily: ['Stray clothes off floor and surfaces','Dirty clothes to laundry','Clean clothes folded or set aside','Main surface clear'],
+      deeper: ['All clean laundry folded and put away','Vacuum or sweep floor','Wipe surfaces','Check drawers or shelves for overflow'],
+      done: 'No stray clothes, floor clear, laundry cycle complete', doneEnough: 'Stray clothes contained, floor walkable' },
+    { id: 'z4', name: 'Small Office Zone', icon: '\u{1F4BB}', purpose: 'Cath\'s work zone. Support focus and low distraction.',
+      daily: ['Non-work items off desk','Papers sorted \u2014 action, file, or bin','Desk surface wiped','Chair clear','Floor walkable'],
+      deeper: ['File or archive completed papers','Cables and tech tidied','Dust screen and surfaces','Check shelves for overflow'],
+      done: 'Desk clear, papers sorted, surface wiped', doneEnough: 'Desk surface clear, non-work items removed' },
+    { id: 'z5', name: 'Laundry + Bathroom + Cat Litter', icon: '\u{1F9F9}', purpose: 'Utility zone. Keeps laundry moving, bathroom functional, cat litter maintained.',
+      daily: ['One laundry action \u2014 start, switch, fold, or put away','Toilet wiped','Basin wiped and rinsed','Cat litter scooped','Floor clear'],
+      deeper: ['Full litter change if due','Shower wipe down','Floor mopped or scrubbed','Bin emptied','Surfaces wiped'],
+      done: 'Laundry moving, toilet and basin wiped, litter scooped', doneEnough: 'Laundry at correct stage, toilet wiped, litter scooped' },
+    { id: 'z6', name: 'Outdoor Utility', icon: '\u{1F5D1}\uFE0F', purpose: 'Storage and utility area outside.',
+      daily: ['Bins in correct position','Bin lids secure','Tools returned to storage','Ground clear','Loose rubbish collected'],
+      deeper: ['Sweep or hose down area','Check storage for overflow','Dispose of unneeded items'],
+      done: 'Bins placed, tools stored, ground clear', doneEnough: 'Bins placed, obvious items removed' },
+    { id: 'z7', name: 'Pool + Outdoor Area', icon: '\u{1F3CA}', purpose: 'Outdoor living and pool area. Safe, functional, pleasant.',
+      daily: ['Outdoor furniture in place','Pool area clear of items','Gate secure'],
+      deeper: ['Sweep or blow leaves from area','Wipe outdoor furniture','Check pool equipment and chemicals'],
+      done: 'Area clear, furniture placed, pool checked', doneEnough: 'Area clear, furniture placed' },
+    { id: 'z8', name: 'Hallway + Linen Cupboard', icon: '\u{1F3E0}', purpose: 'Transition zone. Linen cupboard is the storage hub.',
+      daily: ['Hallway clear and walkable','Stray items returned to correct zones'],
+      deeper: ['Remove anything from linen cupboard that doesn\'t belong','Towels folded and stacked','Sheets folded and sorted','Spare linen organised','Discard anything worn out'],
+      done: 'Hallway clear, linen cupboard ordered', doneEnough: 'Hallway walkable, linen accessible' },
+    { id: 'z9', name: 'Bedrooms + Main Bathroom', icon: '\u{1F6CF}\uFE0F', purpose: 'Sleep and personal care zone. Connected to morning and evening routines.',
+      daily: ['Bed made','Surfaces clear','Dirty clothes to laundry','Floor clear','Basin wiped','Towels hung','Toilet wiped'],
+      deeper: ['Dust surfaces','Vacuum floor','Scrub shower or bath','Mop bathroom floor','Change bed linen if due'],
+      done: 'Bed made, surfaces clear, bathroom wiped, floor clear', doneEnough: 'Bed made, basin wiped, floor walkable' },
+    { id: 'z10', name: 'Car Zone', icon: '\u{1F697}', purpose: 'Keep the car functional, clean, and stocked.',
+      daily: ['Rubbish removed','Items belonging inside returned','Boot clear','Fuel level adequate'],
+      deeper: ['Vacuum interior','Wipe dashboard and surfaces','Clean windows inside','Check tyre pressure if due','Restock items (umbrella, bags, medication)'],
+      done: 'Rubbish out, items removed, fuel checked', doneEnough: 'Rubbish out, boot clear' }
+  ];
+
+  // ─── Render Rhythm Card ───
+  window.zbRhythm = function(rhythm) {
+    // Update sub-tab styling
+    ['daily','weekly','fortnightly','6monthly','annual'].forEach(function(r) {
+      var btn = document.getElementById('zb-rt-' + r);
+      if (r === rhythm) {
+        btn.style.background = '#10b981';
+        btn.style.color = 'white';
+        btn.style.borderColor = '#10b981';
+      } else {
+        btn.style.background = 'white';
+        btn.style.color = '#1e293b';
+        btn.style.borderColor = '#e2e8f0';
+      }
+    });
+
+    var card = ZB_RHYTHMS[rhythm];
+    var container = document.getElementById('zb-rhythm-content');
+
+    // Determine storage key based on rhythm frequency
+    var storageKey;
+    if (rhythm === 'daily') storageKey = zbKey('rhythm_daily');
+    else if (rhythm === 'weekly') storageKey = zbWeekKey('rhythm_weekly');
+    else if (rhythm === 'fortnightly') storageKey = zbWeekKey('rhythm_fn');
+    else if (rhythm === '6monthly') {
+      var m = new Date().getMonth();
+      var half = m < 6 ? 'H1' : 'H2';
+      storageKey = 'rhythm_6m_' + new Date().getFullYear() + '_' + half;
+    } else {
+      storageKey = 'rhythm_annual_' + new Date().getFullYear();
+    }
+
+    var checked = zbGetChecked(storageKey);
+
+    // Build sections (handle fortnightly dynamically)
+    var sections = card.sections;
+    if (rhythm === 'fortnightly') {
+      var week = zbGetFortnightWeek();
+      sections = [
+        { name: 'Current Week: Week ' + week, icon: '\u{1F504}', items: week === 'A'
+          ? [{ id: 'fn_jojo', label: 'Jo Jo appointment' }]
+          : [{ id: 'fn_daniel', label: 'Daniel \u2014 Chiropractor' }]
+        },
+        { name: 'Preparation', icon: '\u{1F4DD}', items: [
+          { id: 'fn_cal', label: 'Check calendar time' },
+          { id: 'fn_notes', label: 'Prepare any notes about body symptoms' },
+          { id: 'fn_items', label: 'Bring required items' },
+          { id: 'fn_rec', label: 'Note any recommendations' },
+          { id: 'fn_next', label: 'Schedule the next visit if needed' }
+        ]}
+      ];
+    }
+
+    var h = '';
+    // Card header
+    h += '<div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:12px !important;padding:16px !important;margin-bottom:16px !important;">';
+    h += '<div style="font-size:16px !important;font-weight:700 !important;margin-bottom:4px !important;">' + esc(card.title) + '</div>';
+    h += '<div style="font-size:12px !important;color:#64748b !important;margin-bottom:8px !important;">' + esc(card.subtitle) + '</div>';
+    h += '<div style="font-size:11px !important;color:#10b981 !important;font-weight:600 !important;">Done means: ' + esc(card.done) + '</div>';
+
+    if (rhythm === 'fortnightly') {
+      h += '<div style="font-size:11px !important;color:#6366f1 !important;margin-top:6px !important;">Reference: Week A starts 16 March 2026. Currently <strong>Week ' + zbGetFortnightWeek() + '</strong></div>';
+    }
+    if (rhythm === '6monthly') {
+      var mon = new Date().getMonth();
+      var hints = [];
+      if (mon >= 2 && mon <= 3) hints.push('GP + blood tests due now (Mar)');
+      if (mon >= 8 && mon <= 9) hints.push('GP + blood tests due now (Sep)');
+      if (mon >= 4 && mon <= 5) hints.push('Dental clean due now (May)');
+      if (mon >= 10 && mon <= 11) hints.push('Dental clean due now (Nov)');
+      if (hints.length) {
+        h += '<div style="font-size:11px !important;color:#f59e0b !important;margin-top:6px !important;font-weight:600 !important;">\u26A0\uFE0F ' + hints.join(' | ') + '</div>';
+      }
+    }
+
+    // Progress
+    var totalItems = 0, doneItems = 0;
+    sections.forEach(function(s) {
+      s.items.forEach(function(item) {
+        if (item.conditional === 'thrive' && !zbInThriveBlock()) return;
+        totalItems++;
+        if (checked[item.id]) doneItems++;
+      });
+    });
+    var pct = totalItems ? Math.round((doneItems / totalItems) * 100) : 0;
+    h += '<div style="display:flex !important;align-items:center !important;gap:10px !important;margin-top:12px !important;">';
+    h += '<div style="flex:1 !important;height:6px !important;background:#e2e8f0 !important;border-radius:3px !important;overflow:hidden !important;"><div style="height:100% !important;background:#10b981 !important;border-radius:3px !important;width:' + pct + '% !important;transition:width 0.3s !important;"></div></div>';
+    h += '<span style="font-size:12px !important;color:#64748b !important;white-space:nowrap !important;">' + doneItems + ' / ' + totalItems + '</span>';
+    h += '</div>';
+    h += '</div>';
+
+    // Sections
+    sections.forEach(function(sec) {
+      h += '<div class="hab-section" style="margin-bottom:12px !important;">';
+      h += '<div class="hab-section-header"><h3 style="font-size:14px !important;">' + sec.icon + ' ' + esc(sec.name) + '</h3></div>';
+      sec.items.forEach(function(item) {
+        if (item.conditional === 'thrive' && !zbInThriveBlock()) return;
+        var isDone = checked[item.id];
+        h += '<div style="display:flex !important;align-items:center !important;gap:10px !important;padding:10px 16px !important;border-top:1px solid #f1f5f9 !important;cursor:pointer !important;" onclick="zbToggleRhythm(\'' + rhythm + '\',\'' + storageKey + '\',\'' + item.id + '\')">';
+        h += '<div class="hab-check' + (isDone ? ' done' : '') + '" style="cursor:pointer !important;"></div>';
+        h += '<span style="font-size:13px !important;' + (isDone ? 'text-decoration:line-through !important;color:#94a3b8 !important;' : '') + '">' + esc(item.label) + '</span>';
+        h += '</div>';
+      });
+      h += '</div>';
+    });
+
+    container.innerHTML = h;
+  };
+
+  window.zbToggleRhythm = function(rhythm, storageKey, itemId) {
+    var checked = zbGetChecked(storageKey);
+    checked[itemId] = !checked[itemId];
+    zbSetChecked(storageKey, checked);
+    zbRhythm(rhythm);
+  };
+
+  // ─── Render Zone Grid ───
+  window.zbRenderZoneGrid = function() {
+    var grid = document.getElementById('zb-zone-grid');
+    var detail = document.getElementById('zb-zone-detail');
+    grid.style.display = 'grid';
+    detail.style.display = 'none';
+    var h = '';
+    ZB_ZONES.forEach(function(zone) {
+      var key = zbKey('zone_' + zone.id);
+      var checked = zbGetChecked(key);
+      var total = zone.daily.length;
+      var done = 0;
+      zone.daily.forEach(function(item, i) { if (checked['d' + i]) done++; });
+      var pct = total ? Math.round((done / total) * 100) : 0;
+      var statusColor = pct === 100 ? '#10b981' : pct > 0 ? '#f59e0b' : '#e2e8f0';
+      h += '<div onclick="zbOpenZone(\'' + zone.id + '\')" style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:12px !important;padding:16px 12px !important;cursor:pointer !important;text-align:center !important;transition:all 0.15s !important;border-left:4px solid ' + statusColor + ' !important;">';
+      h += '<div style="font-size:24px !important;margin-bottom:6px !important;">' + zone.icon + '</div>';
+      h += '<div style="font-size:12px !important;font-weight:700 !important;margin-bottom:4px !important;">' + esc(zone.name) + '</div>';
+      h += '<div style="height:4px !important;background:#e2e8f0 !important;border-radius:2px !important;overflow:hidden !important;"><div style="height:100% !important;background:#10b981 !important;width:' + pct + '% !important;"></div></div>';
+      h += '<div style="font-size:10px !important;color:#64748b !important;margin-top:4px !important;">' + done + '/' + total + '</div>';
+      h += '</div>';
+    });
+    grid.innerHTML = h;
+  };
+
+  // ─── Open Zone Detail ───
+  window.zbOpenZone = function(zoneId) {
+    var zone = ZB_ZONES.find(function(z) { return z.id === zoneId; });
+    if (!zone) return;
+    var grid = document.getElementById('zb-zone-grid');
+    var detail = document.getElementById('zb-zone-detail');
+    grid.style.display = 'none';
+    detail.style.display = 'block';
+
+    var dailyKey = zbKey('zone_' + zone.id);
+    var deeperKey = zbWeekKey('zone_deep_' + zone.id);
+    var dailyChecked = zbGetChecked(dailyKey);
+    var deeperChecked = zbGetChecked(deeperKey);
+
+    var h = '';
+    h += '<button class="am-back" onclick="zbRenderZoneGrid()" style="margin-bottom:12px !important;">\u2190 All Zones</button>';
+
+    // Zone header
+    h += '<div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:12px !important;padding:16px !important;margin-bottom:16px !important;">';
+    h += '<div style="font-size:24px !important;margin-bottom:6px !important;">' + zone.icon + '</div>';
+    h += '<div style="font-size:18px !important;font-weight:700 !important;margin-bottom:4px !important;">' + esc(zone.name) + '</div>';
+    h += '<div style="font-size:12px !important;color:#64748b !important;margin-bottom:8px !important;">' + esc(zone.purpose) + '</div>';
+    h += '<div style="display:flex !important;gap:8px !important;flex-wrap:wrap !important;">';
+    h += '<div style="font-size:10px !important;padding:4px 10px !important;border-radius:99px !important;background:#f0fdf4 !important;color:#16a34a !important;font-weight:600 !important;">Done: ' + esc(zone.done) + '</div>';
+    h += '<div style="font-size:10px !important;padding:4px 10px !important;border-radius:99px !important;background:#fefce8 !important;color:#ca8a04 !important;font-weight:600 !important;">Done enough: ' + esc(zone.doneEnough) + '</div>';
+    h += '</div></div>';
+
+    // Daily Reset
+    var dailyTotal = zone.daily.length, dailyDone = 0;
+    zone.daily.forEach(function(item, i) { if (dailyChecked['d' + i]) dailyDone++; });
+    var dailyPct = dailyTotal ? Math.round((dailyDone / dailyTotal) * 100) : 0;
+
+    h += '<div class="hab-section" style="margin-bottom:12px !important;">';
+    h += '<div class="hab-section-header"><h3 style="font-size:14px !important;">\u{1F504} Daily Reset</h3>';
+    h += '<span style="font-size:11px !important;color:' + (dailyPct === 100 ? '#10b981' : '#94a3b8') + ' !important;">' + dailyDone + '/' + dailyTotal + '</span></div>';
+    zone.daily.forEach(function(item, i) {
+      var isDone = dailyChecked['d' + i];
+      h += '<div style="display:flex !important;align-items:center !important;gap:10px !important;padding:10px 16px !important;border-top:1px solid #f1f5f9 !important;cursor:pointer !important;" onclick="zbToggleZone(\'' + zone.id + '\',\'daily\',\'d' + i + '\')">';
+      h += '<div class="hab-check' + (isDone ? ' done' : '') + '" style="cursor:pointer !important;"></div>';
+      h += '<span style="font-size:13px !important;' + (isDone ? 'text-decoration:line-through !important;color:#94a3b8 !important;' : '') + '">' + esc(item) + '</span>';
+      h += '</div>';
+    });
+    h += '</div>';
+
+    // Deeper Reset
+    h += '<div class="hab-section" style="margin-bottom:12px !important;">';
+    h += '<div class="hab-section-header"><h3 style="font-size:14px !important;">\u2728 Deeper Reset</h3>';
+    h += '<span style="font-size:10px !important;color:#94a3b8 !important;">Weekly</span></div>';
+    zone.deeper.forEach(function(item, i) {
+      var isDone = deeperChecked['dp' + i];
+      h += '<div style="display:flex !important;align-items:center !important;gap:10px !important;padding:10px 16px !important;border-top:1px solid #f1f5f9 !important;cursor:pointer !important;" onclick="zbToggleZone(\'' + zone.id + '\',\'deeper\',\'dp' + i + '\')">';
+      h += '<div class="hab-check' + (isDone ? ' done' : '') + '" style="cursor:pointer !important;"></div>';
+      h += '<span style="font-size:13px !important;' + (isDone ? 'text-decoration:line-through !important;color:#94a3b8 !important;' : '') + '">' + esc(item) + '</span>';
+      h += '</div>';
+    });
+    h += '</div>';
+
+    detail.innerHTML = h;
+  };
+
+  window.zbToggleZone = function(zoneId, type, itemKey) {
+    var zone = ZB_ZONES.find(function(z) { return z.id === zoneId; });
+    if (!zone) return;
+    var storageKey = type === 'daily' ? zbKey('zone_' + zoneId) : zbWeekKey('zone_deep_' + zoneId);
+    var checked = zbGetChecked(storageKey);
+    checked[itemKey] = !checked[itemKey];
+    zbSetChecked(storageKey, checked);
+    zbOpenZone(zoneId);
+  };
 
 })();
 </script>

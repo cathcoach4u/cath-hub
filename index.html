@@ -822,7 +822,7 @@
           <button class="am-btn" onclick="medGo('medications')" style="width:100% !important;padding:14px 16px !important;font-size:15px !important;text-align:left !important;background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;color:#1e293b !important;display:flex !important;align-items:center !important;gap:10px !important;">&#x1F48A; Medications <span style="margin-left:auto !important;color:#94a3b8 !important;font-size:12px !important;">Current plan &rarr;</span></button>
           <button class="am-btn" onclick="medGo('tracking')" style="width:100% !important;padding:14px 16px !important;font-size:15px !important;text-align:left !important;background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;color:#1e293b !important;display:flex !important;align-items:center !important;gap:10px !important;">&#x1F4CA; Medication Tracking <span style="margin-left:auto !important;color:#94a3b8 !important;font-size:12px !important;" id="hab-meds-badge">0/0 today</span></button>
           <button class="am-btn" onclick="medGo('documents')" style="width:100% !important;padding:14px 16px !important;font-size:15px !important;text-align:left !important;background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;color:#1e293b !important;display:flex !important;align-items:center !important;gap:10px !important;">&#x1F4C1; Documents <span style="margin-left:auto !important;color:#94a3b8 !important;font-size:12px !important;">Upload &amp; file &rarr;</span></button>
-          <button class="am-btn" onclick="medGo('contacts')" style="width:100% !important;padding:14px 16px !important;font-size:15px !important;text-align:left !important;background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;color:#1e293b !important;display:flex !important;align-items:center !important;gap:10px !important;">&#x1F4DE; Contacts <span style="margin-left:auto !important;color:#94a3b8 !important;font-size:12px !important;">Doctors &amp; clinics &rarr;</span></button>
+
           <button class="am-btn" onclick="medGo('mentalhealth')" style="width:100% !important;padding:14px 16px !important;font-size:15px !important;text-align:left !important;background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;color:#1e293b !important;display:flex !important;align-items:center !important;gap:10px !important;">&#x1F4C5; Session History <span style="margin-left:auto !important;color:#94a3b8 !important;font-size:12px !important;">All sessions &rarr;</span></button>
         </div>
       </div>
@@ -852,70 +852,6 @@
         </div>
       </div>
 
-      <!-- SUB: Key Contacts -->
-      <div class="am-subscreen" id="med-contacts">
-        <button class="am-back" onclick="medGo('home')">&#x2190; Back</button>
-        <h3 style="font-size:18px !important;font-weight:700 !important;margin-bottom:16px !important;">&#x1F4DE; Key Contacts</h3>
-        <div class="med-section">
-          <div style="padding:20px !important;">
-            <div style="background:#f8fafc !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:16px !important;margin-bottom:12px !important;">
-              <div style="font-size:10px !important;font-weight:700 !important;text-transform:uppercase !important;color:#7c3aed !important;margin-bottom:6px !important;">GP / Clinic</div>
-              <div style="font-size:15px !important;font-weight:700 !important;margin-bottom:8px !important;">Belrose Medical Centre</div>
-              <div style="font-size:13px !important;color:#475569 !important;line-height:1.8 !important;">
-                &#x1F4CD; Shop MB2, Glencoe Village, 56&ndash;58 Glen Street, Belrose NSW 2085<br>
-                &#x1F4DE; <a href="tel:0283297830" style="color:#3b82f6 !important;">02 8329 7830</a><br>
-                &#x1F4E0; Fax: 02 8209 4880<br>
-                &#x2709;&#xFE0F; <a href="mailto:info@belrosemedical.com.au" style="color:#3b82f6 !important;">info@belrosemedical.com.au</a>
-              </div>
-            </div>
-            <div style="background:#f8fafc !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:16px !important;">
-              <div style="font-size:10px !important;font-weight:700 !important;text-transform:uppercase !important;color:#7c3aed !important;margin-bottom:6px !important;">Neurologist</div>
-              <div style="font-size:15px !important;font-weight:700 !important;margin-bottom:4px !important;">Vertigo &amp; Neurology</div>
-              <div style="font-size:13px !important;color:#475569 !important;font-style:italic !important;margin-bottom:6px !important;">Dr Chao Wang</div>
-              <div style="font-size:13px !important;">&#x2709;&#xFE0F; <a href="mailto:info@vertigoandneurology.com.au" style="color:#3b82f6 !important;">info@vertigoandneurology.com.au</a></div>
-            </div>
-            <div style="background:#f8fafc !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:16px !important;">
-              <div style="font-size:10px !important;font-weight:700 !important;text-transform:uppercase !important;color:#7c3aed !important;margin-bottom:6px !important;">Psychologist</div>
-              <div style="font-size:15px !important;font-weight:700 !important;margin-bottom:4px !important;">CCT Psychology</div>
-              <div style="font-size:13px !important;color:#475569 !important;font-style:italic !important;margin-bottom:6px !important;">Tamsen</div>
-              <div style="font-size:13px !important;">&#x1F517; <a href="https://clientportal.zandahealth.com/clientportal/cctpsychology/login/f-0" target="_blank" rel="noopener" style="color:#3b82f6 !important;">Client Portal</a></div>
-            </div>
-            <div style="background:#f8fafc !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:16px !important;">
-              <div style="font-size:10px !important;font-weight:700 !important;text-transform:uppercase !important;color:#7c3aed !important;margin-bottom:6px !important;">Appointments</div>
-              <div style="font-size:15px !important;font-weight:700 !important;margin-bottom:4px !important;">HotDoc</div>
-              <div style="font-size:13px !important;">&#x1F517; <a href="https://www.hotdoc.com.au" target="_blank" rel="noopener" style="color:#3b82f6 !important;">Book Appointment</a></div>
-            </div>
-            <div style="background:#f8fafc !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:16px !important;">
-              <div style="font-size:10px !important;font-weight:700 !important;text-transform:uppercase !important;color:#7c3aed !important;margin-bottom:6px !important;">Pathology</div>
-              <div style="font-size:15px !important;font-weight:700 !important;margin-bottom:4px !important;">myPRP</div>
-              <div style="font-size:13px !important;">&#x1F517; <a href="https://www.myprp.com.au" target="_blank" rel="noopener" style="color:#3b82f6 !important;">View Results</a></div>
-            </div>
-            <div style="background:#f8fafc !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:16px !important;">
-              <div style="font-size:10px !important;font-weight:700 !important;text-transform:uppercase !important;color:#7c3aed !important;margin-bottom:6px !important;">Psychology</div>
-              <div style="font-size:15px !important;font-weight:700 !important;margin-bottom:4px !important;">Centre for Clinical Therapy</div>
-              <div style="font-size:13px !important;color:#475569 !important;font-style:italic !important;margin-bottom:6px !important;">Tamsen St Clare</div>
-              <div style="font-size:13px !important;">&#x1F4DE; <a href="tel:99082950" style="color:#3b82f6 !important;">9908 2950</a></div>
-            </div>
-            <div style="background:#f8fafc !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:16px !important;">
-              <div style="font-size:10px !important;font-weight:700 !important;text-transform:uppercase !important;color:#ef4444 !important;margin-bottom:6px !important;">Dermatologist</div>
-              <div style="font-size:15px !important;font-weight:700 !important;margin-bottom:4px !important;">Chatswood Dermatology Centre</div>
-              <div style="font-size:13px !important;color:#475569 !important;font-style:italic !important;margin-bottom:6px !important;">Dr. Gottschalk</div>
-              <div style="font-size:13px !important;">&#x1F4DE; <a href="tel:0294195148" style="color:#3b82f6 !important;">02 9419 5148</a></div>
-            </div>
-            <div style="background:#f8fafc !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:16px !important;">
-              <div style="font-size:10px !important;font-weight:700 !important;text-transform:uppercase !important;color:#ef4444 !important;margin-bottom:6px !important;">Psychiatrist</div>
-              <div style="font-size:15px !important;font-weight:700 !important;margin-bottom:4px !important;">Dr Dulip Wettasinghe</div>
-              <div style="font-size:13px !important;">&#x1F4DE; <a href="tel:94333750" style="color:#3b82f6 !important;">9433 3750</a></div>
-            </div>
-            <div style="background:#f8fafc !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:16px !important;">
-              <div style="font-size:10px !important;font-weight:700 !important;text-transform:uppercase !important;color:#ef4444 !important;margin-bottom:6px !important;">Chiropractor</div>
-              <div style="font-size:15px !important;font-weight:700 !important;margin-bottom:4px !important;">Alignment Health Co.</div>
-              <div style="font-size:13px !important;color:#475569 !important;font-style:italic !important;margin-bottom:6px !important;">Daniel Murray</div>
-              <div style="font-size:13px !important;">&#x1F4DE; <a href="tel:0475852878" style="color:#3b82f6 !important;">0475 852 878</a></div>
-            </div>
-          </div>
-        </div>
-      </div>
 
       <!-- SUB: Medications -->
       <div class="am-subscreen" id="med-medications">

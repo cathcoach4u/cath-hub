@@ -487,6 +487,29 @@
         <button class="am-btn" id="dash-meds-btn" onclick="dashTakeMorningMeds()" style="flex:1 !important;padding:12px 10px !important;font-size:13px !important;text-align:center !important;background:#10b981 !important;border:1px solid #10b981 !important;border-radius:10px !important;color:white !important;">&#x2600;&#xFE0F; Morning Meds</button>
       </div>
 
+      <!-- Word of the Year -->
+      <div style="text-align:center !important;padding:16px !important;margin-bottom:16px !important;background:linear-gradient(135deg, #f0f4f8, #e0e7ff) !important;border-radius:12px !important;border:1px solid #c7d2fe !important;">
+        <div style="font-size:10px !important;font-weight:700 !important;text-transform:uppercase !important;letter-spacing:2px !important;color:#6366f1 !important;margin-bottom:4px !important;">Word of the Year</div>
+        <div style="font-size:32px !important;font-weight:700 !important;color:#1e293b !important;letter-spacing:3px !important;">Calm</div>
+      </div>
+
+      <!-- Gallup CliftonStrengths -->
+      <div class="dash-section" style="margin-bottom:16px !important;">
+        <h3 style="margin-bottom:10px !important;">&#x1F4AA; My Strengths</h3>
+        <div style="display:flex !important;flex-wrap:wrap !important;gap:6px !important;">
+          <span style="font-size:11px !important;font-weight:600 !important;padding:4px 10px !important;border-radius:99px !important;background:#ede9fe !important;color:#6d28d9 !important;">Connectedness</span>
+          <span style="font-size:11px !important;font-weight:600 !important;padding:4px 10px !important;border-radius:99px !important;background:#ede9fe !important;color:#6d28d9 !important;">Includer</span>
+          <span style="font-size:11px !important;font-weight:600 !important;padding:4px 10px !important;border-radius:99px !important;background:#dbeafe !important;color:#1d4ed8 !important;">Ideation</span>
+          <span style="font-size:11px !important;font-weight:600 !important;padding:4px 10px !important;border-radius:99px !important;background:#dbeafe !important;color:#1d4ed8 !important;">Activator</span>
+          <span style="font-size:11px !important;font-weight:600 !important;padding:4px 10px !important;border-radius:99px !important;background:#fce7f3 !important;color:#be185d !important;">Restorative</span>
+          <span style="font-size:11px !important;font-weight:600 !important;padding:4px 10px !important;border-radius:99px !important;background:#ede9fe !important;color:#6d28d9 !important;">Relator</span>
+          <span style="font-size:11px !important;font-weight:600 !important;padding:4px 10px !important;border-radius:99px !important;background:#dbeafe !important;color:#1d4ed8 !important;">Arranger</span>
+          <span style="font-size:11px !important;font-weight:600 !important;padding:4px 10px !important;border-radius:99px !important;background:#dbeafe !important;color:#1d4ed8 !important;">Input</span>
+          <span style="font-size:11px !important;font-weight:600 !important;padding:4px 10px !important;border-radius:99px !important;background:#ede9fe !important;color:#6d28d9 !important;">Positivity</span>
+          <span style="font-size:11px !important;font-weight:600 !important;padding:4px 10px !important;border-radius:99px !important;background:#ede9fe !important;color:#6d28d9 !important;">Empathy</span>
+        </div>
+      </div>
+
       <div class="dash-section">
         <div style="display:flex !important;justify-content:space-between !important;align-items:center !important;margin-bottom:12px !important;">
           <h3 style="margin-bottom:0 !important;">&#x2705; My To-Do</h3>
@@ -1825,7 +1848,7 @@
       var cats = {};
       unchecked.forEach(function(item) {
         var isMaster = masterNames.indexOf(item.name.toLowerCase()) !== -1;
-        var cat = isMaster ? (item.category || 'Other') : '✏ Quick Adds';
+        var cat = isMaster ? (item.category || 'Other') : 'Other';
         if (!cats[cat]) cats[cat] = [];
         cats[cat].push(item);
       });
@@ -1837,13 +1860,6 @@
         cats[cat].forEach(function(item) { html += renderShopItem(item); });
         html += '</div>';
       });
-      // Quick adds
-      if (cats['✏ Quick Adds'] && cats['✏ Quick Adds'].length) {
-        html += '<div class="cat-group" style="border-left:3px solid #f59e0b !important;padding-left:8px !important;">';
-        html += '<div class="cat-header"><span>&#x270F; Quick Adds</span><span class="cat-count">' + cats['✏ Quick Adds'].length + '</span></div>';
-        cats['✏ Quick Adds'].forEach(function(item) { html += renderShopItem(item); });
-        html += '</div>';
-      }
     }
 
     // Render checked items at bottom

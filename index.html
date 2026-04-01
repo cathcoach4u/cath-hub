@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en-AU">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Cath Hub"><meta name="theme-color" content="#16a34a"><link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" sizes="180x180" href="icon-180.png"><link rel="icon" type="image/png" sizes="192x192" href="icon-192.png"><link rel="icon" href="icon.svg" type="image/svg+xml"><title>Cath Hub</title></head>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Cath Hub"><meta name="theme-color" content="#0d9488"><link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="icon-192.svg"><link rel="icon" type="image/svg+xml" href="icon-192.svg"><title>Cath Hub</title></head>
 <body>
 <style>
   /* ───── LOGIN SCREEN ───── */
-  #cathHub-login { display: flex; align-items: center; justify-content: center; min-height: 100vh; background: #1e293b; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
+  #cathHub-login { display: flex; align-items: center; justify-content: center; min-height: 100vh; background: #0d9488; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
   #cathHub-login .login-card { background: white; border-radius: 16px; padding: 40px; width: 100%; max-width: 380px; text-align: center; box-shadow: 0 8px 30px rgba(0,0,0,0.3); }
   #cathHub-login .login-icon { font-size: 48px; margin-bottom: 8px; }
   #cathHub-login h1 { font-size: 24px; font-weight: 700; color: #1e293b; margin: 0 0 4px 0; }
@@ -16,24 +16,23 @@
   #cathHub-login .login-error { color: #ef4444; font-size: 13px; margin-bottom: 12px; display: none; }
 
   #cathHub, #cathHub * { margin: 0 !important; padding: 0 !important; box-sizing: border-box !important; line-height: 1.5 !important; }
-  #cathHub { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif !important; background: #f0f4f8 !important; color: #1e293b !important; display: none; min-height: 100vh !important; }
+  #cathHub { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif !important; background: #f8fafc !important; color: #1e293b !important; display: none; min-height: 100vh !important; }
   #cathHub a, #cathHub a:hover, #cathHub a:visited { text-decoration: none !important; color: inherit !important; }
   #cathHub button { border: none !important; background: none !important; cursor: pointer !important; font-family: inherit !important; }
   #cathHub input { font-family: inherit !important; }
 
   /* ───── SIDEBAR ───── */
-  #cathHub .sidebar { width: 220px !important; background: #1e293b !important; color: white !important; padding: 24px 0 !important; flex-shrink: 0 !important; display: flex !important; flex-direction: column !important; min-height: 100vh !important; }
+  #cathHub .sidebar { width: 240px !important; background: #0d9488 !important; color: white !important; padding: 24px 0 !important; flex-shrink: 0 !important; display: flex !important; flex-direction: column !important; min-height: 100vh !important; }
   #cathHub .sidebar h1 { font-size: 20px !important; font-weight: 700 !important; padding: 0 20px !important; margin-bottom: 32px !important; color: white !important; }
   #cathHub .nav-item { display: flex !important; align-items: center !important; gap: 10px !important; padding: 12px 20px !important; font-size: 13px !important; cursor: pointer !important; transition: background 0.15s !important; color: rgba(255,255,255,0.7) !important; width: 100% !important; text-align: left !important; }
   #cathHub .nav-item:hover { background: rgba(59,130,246,0.15) !important; color: white !important; }
-  #cathHub .nav-item.active { background: rgba(59,130,246,0.2) !important; border-right: 3px solid #3b82f6 !important; color: white !important; }
+  #cathHub .nav-item.active { background: rgba(59,130,246,0.3) !important; border-right: 3px solid #3b82f6 !important; color: white !important; }
   #cathHub .nav-item .icon { font-size: 16px !important; width: 22px !important; text-align: center !important; }
   #cathHub .sidebar-footer { margin-top: auto !important; padding: 14px 20px !important; font-size: 10px !important; color: rgba(255,255,255,0.3) !important; }
-  #cathHub .mobile-nav-select { display: none !important; }
 
   /* ───── MAIN ───── */
   #cathHub .main { flex: 1 !important; overflow-y: auto !important; padding: 32px !important; }
-  #cathHub .main h2 { font-size: 24px !important; font-weight: 700 !important; margin-bottom: 24px !important; color: #1e293b !important; }
+  #cathHub .main h2 { font-size: 22px !important; font-weight: 700 !important; margin-bottom: 24px !important; color: #1e293b !important; }
   #cathHub .screen { display: none !important; }
   #cathHub .screen.active { display: block !important; }
 
@@ -176,13 +175,13 @@
   #cathHub .wl-notes-strip { padding: 0 20px 14px !important; font-size: 12px !important; color: #94a3b8 !important; font-style: italic !important; border-top: 1px solid #f8fafc !important; padding-top: 10px !important; }
 
   /* Add Exercise button */
-  #cathHub .wl-add-btn { width: 100% !important; padding: 14px !important; background: #1e293b !important; color: white !important; border-radius: 12px !important; font-size: 14px !important; font-weight: 700 !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 8px !important; margin-bottom: 32px !important; }
-  #cathHub .wl-add-btn:hover { background: #334155 !important; }
+  #cathHub .wl-add-btn { width: 100% !important; padding: 14px !important; background: #0d9488 !important; color: white !important; border-radius: 12px !important; font-size: 14px !important; font-weight: 700 !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 8px !important; margin-bottom: 32px !important; }
+  #cathHub .wl-add-btn:hover { background: #0f766e !important; }
 
   /* Exercise Picker (bottom sheet) */
   #cathHub .wl-overlay { position: fixed !important; inset: 0 !important; background: rgba(0,0,0,0.35) !important; z-index: 200 !important; display: none !important; }
   #cathHub .wl-overlay.open { display: block !important; }
-  #cathHub .wl-picker { position: fixed !important; bottom: 0 !important; left: 220px !important; right: 0 !important; background: white !important; border-radius: 20px 20px 0 0 !important; box-shadow: 0 -8px 32px rgba(0,0,0,0.15) !important; max-height: 72vh !important; overflow-y: auto !important; z-index: 201 !important; transform: translateY(100%) !important; transition: transform 0.3s cubic-bezier(0.32,0.72,0,1) !important; }
+  #cathHub .wl-picker { position: fixed !important; bottom: 0 !important; left: 240px !important; right: 0 !important; background: white !important; border-radius: 20px 20px 0 0 !important; box-shadow: 0 -8px 32px rgba(0,0,0,0.15) !important; max-height: 72vh !important; overflow-y: auto !important; z-index: 201 !important; transform: translateY(100%) !important; transition: transform 0.3s cubic-bezier(0.32,0.72,0,1) !important; }
   #cathHub .wl-picker.open { transform: translateY(0) !important; }
   #cathHub .wl-picker-drag { width: 40px !important; height: 4px !important; background: #e2e8f0 !important; border-radius: 2px !important; margin: 12px auto 0 !important; }
   #cathHub .wl-picker-top { padding: 16px 20px !important; position: sticky !important; top: 0 !important; background: white !important; z-index: 1 !important; border-bottom: 1px solid #f1f5f9 !important; }
@@ -417,21 +416,31 @@
   /* ───── MORNING REMINDER BANNER ───── */
   #cathHub .hab-reminder-banner { background: #fef3c7 !important; border: 1px solid #f59e0b !important; border-radius: 10px !important; padding: 12px 16px !important; margin-bottom: 16px !important; display: flex !important; align-items: center !important; gap: 10px !important; font-size: 13px !important; font-weight: 600 !important; color: #92400e !important; }
 
+  /* ───── MOBILE TOP BAR & HAMBURGER ───── */
+  #cathHub .mobile-top-bar { display: none !important; }
+  #cathHub .mobile-nav-dropdown { display: none !important; position: absolute !important; top: 100% !important; left: 0 !important; right: 0 !important; background: #0d9488 !important; z-index: 100 !important; box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important; }
+  #cathHub .mobile-nav-dropdown.open { display: block !important; }
+  #cathHub .mobile-nav-dropdown .mobile-nav-item { display: flex !important; align-items: center !important; gap: 10px !important; padding: 14px 20px !important; font-size: 15px !important; color: rgba(255,255,255,0.85) !important; cursor: pointer !important; border-bottom: 1px solid rgba(255,255,255,0.1) !important; background: none !important; width: 100% !important; text-align: left !important; }
+  #cathHub .mobile-nav-dropdown .mobile-nav-item:hover { background: rgba(255,255,255,0.1) !important; color: white !important; }
+  #cathHub .mobile-nav-dropdown .mobile-nav-item.active { background: rgba(59,130,246,0.3) !important; border-left: 3px solid #3b82f6 !important; color: white !important; }
+  #cathHub .mobile-nav-dropdown .mobile-nav-item .icon { font-size: 18px !important; width: 24px !important; text-align: center !important; }
+
   /* ───── RESPONSIVE ───── */
   @media (max-width: 900px) { #cathHub .dash-grid { grid-template-columns: 1fr 1fr !important; } }
   @media (max-width: 600px) { #cathHub .dash-grid { grid-template-columns: 1fr !important; } #cathHub .screen#ch-medical > div:first-of-type { grid-template-columns: 1fr !important; } }
-  @media (max-width: 480px) {
+  @media (max-width: 768px) {
     #cathHub { flex-direction: column !important; }
-    #cathHub .sidebar { width: 100% !important; flex-direction: row !important; padding: 12px !important; align-items: center !important; flex-wrap: nowrap !important; min-height: auto !important; gap: 8px !important; }
-    #cathHub .sidebar h1 { margin-bottom: 0 !important; margin-right: 0 !important; flex-shrink: 0 !important; }
-    #cathHub .nav-item { display: none !important; }
-    #cathHub .sidebar-footer { display: none !important; }
-    #cathHub .mobile-nav-select { display: block !important; flex: 1 !important; padding: 10px 12px !important; font-size: 14px !important; border: 1px solid rgba(255,255,255,0.2) !important; border-radius: 8px !important; background: rgba(255,255,255,0.1) !important; color: white !important; appearance: auto !important; -webkit-appearance: listbox !important; }
+    #cathHub .sidebar { display: none !important; }
+    #cathHub .mobile-top-bar { display: flex !important; align-items: center !important; justify-content: space-between !important; background: #0d9488 !important; padding: 16px 20px !important; padding-top: calc(16px + env(safe-area-inset-top)) !important; position: sticky !important; top: 0 !important; z-index: 99 !important; }
+    #cathHub .mobile-top-bar h1 { font-size: 18px !important; font-weight: 700 !important; color: white !important; }
+    #cathHub .mobile-top-bar .hamburger-btn { min-width: 48px !important; min-height: 48px !important; display: flex !important; align-items: center !important; justify-content: center !important; background: none !important; border: none !important; cursor: pointer !important; color: white !important; font-size: 28px !important; padding: 0 !important; line-height: 1 !important; }
+    #cathHub .mobile-nav-select { display: none !important; }
     #cathHub .dash-grid { grid-template-columns: 1fr !important; }
     #cathHub .am-grid { grid-template-columns: 1fr 1fr !important; }
     #cathHub .med-stats { grid-template-columns: 1fr 1fr !important; }
     #cathHub .contact-grid { grid-template-columns: 1fr !important; }
     #cathHub .wl-picker { left: 0 !important; }
+    #cathHub .main { padding: 16px !important; }
   }
 
   /* ───── PIN LOCK ───── */
@@ -446,7 +455,7 @@
   body.dark-mode #cathHub { background: #0f172a !important; color: #e2e8f0 !important; }
   body.dark-mode #cathHub .main { background: #0f172a !important; }
   body.dark-mode #cathHub .main h2 { color: #f1f5f9 !important; }
-  body.dark-mode #cathHub .sidebar { background: #020617 !important; }
+  body.dark-mode #cathHub .sidebar { background: #0f766e !important; }
   body.dark-mode #cathHub .dash-section,
   body.dark-mode #cathHub .hab-section,
   body.dark-mode #cathHub .cat-group,
@@ -473,6 +482,8 @@
   body.dark-mode #cathHub .hab-section-header { border-color: #334155 !important; }
   body.dark-mode #cathHub .nav-item { color: rgba(255,255,255,0.6) !important; }
   body.dark-mode #cathHub .nav-item.active { color: white !important; }
+  body.dark-mode #cathHub .mobile-top-bar { background: #0f766e !important; }
+  body.dark-mode #cathHub .mobile-nav-dropdown { background: #0f766e !important; }
 </style>
 
 <div id="cathHub-login">
@@ -490,7 +501,7 @@
 </div>
 
 <!-- PIN Lock Screen -->
-<div id="cathHub-pin" style="display:none;align-items:center;justify-content:center;min-height:100vh;background:#1e293b;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;">
+<div id="cathHub-pin" style="display:none;align-items:center;justify-content:center;min-height:100vh;background:#0d9488;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;">
   <div style="background:white;border-radius:16px;padding:40px;width:100%;max-width:320px;text-align:center;box-shadow:0 8px 30px rgba(0,0,0,0.3);">
     <div style="font-size:48px;margin-bottom:8px;">&#x1F512;</div>
     <h2 style="font-size:20px;font-weight:700;color:#1e293b;margin:0 0 4px;">Welcome back</h2>
@@ -523,20 +534,26 @@
 </div>
 
 <div id="cathHub">
+  <!-- Mobile top bar with hamburger -->
+  <div class="mobile-top-bar" style="position:relative !important;">
+    <h1>&#x1F3E0; Cath Hub</h1>
+    <button class="hamburger-btn" onclick="toggleMobileNav()" aria-label="Menu">&#x2630;</button>
+    <div class="mobile-nav-dropdown" id="mobile-nav-dropdown">
+      <button class="mobile-nav-item active" data-nav="home" onclick="chNavMobile('home',this)"><span class="icon">&#x1F4CA;</span> Dashboard</button>
+      <button class="mobile-nav-item" data-nav="todo" onclick="chNavMobile('todo',this)"><span class="icon">&#x2705;</span> To-Do</button>
+      <button class="mobile-nav-item" data-nav="aislemate" onclick="chNavMobile('aislemate',this)"><span class="icon">&#x1F6D2;</span> AisleMate</button>
+      <button class="mobile-nav-item" data-nav="workout" onclick="chNavMobile('workout',this)"><span class="icon">&#x1F4AA;</span> Workout Log</button>
+      <button class="mobile-nav-item" data-nav="medical" onclick="chNavMobile('medical',this)"><span class="icon">&#x1FA7A;</span> Medical</button>
+      <button class="mobile-nav-item" data-nav="habits" onclick="chNavMobile('habits',this)"><span class="icon">&#x2B50;</span> My Habits</button>
+      <button class="mobile-nav-item" data-nav="travel" onclick="chNavMobile('travel',this)"><span class="icon">&#x2708;&#xFE0F;</span> Travel</button>
+      <button class="mobile-nav-item" data-nav="hometab" onclick="chNavMobile('hometab',this)"><span class="icon">&#x1F3E0;</span> Home</button>
+      <button class="mobile-nav-item" data-nav="about" onclick="chNavMobile('about',this)"><span class="icon">&#x2139;&#xFE0F;</span> About</button>
+      <button class="mobile-nav-item" onclick="cathLogout()"><span class="icon">&#x1F6AA;</span> Sign Out</button>
+    </div>
+  </div>
+
   <div class="sidebar">
     <h1>&#x1F3E0; Cath Hub</h1>
-    <!-- Mobile: dropdown nav -->
-    <select class="mobile-nav-select" onchange="if(this.value){chNav(this.value);}">
-      <option value="home">&#x1F4CA; Dashboard</option>
-      <option value="todo">&#x2705; To-Do</option>
-      <option value="aislemate">&#x1F6D2; AisleMate</option>
-      <option value="workout">&#x1F4AA; Workout Log</option>
-      <option value="medical">&#x1FA7A; Medical</option>
-      <option value="habits">&#x2B50; My Habits</option>
-      <option value="travel">&#x2708;&#xFE0F; Travel</option>
-      <option value="hometab">&#x1F3E0; Home</option>
-      <option value="about">&#x2139;&#xFE0F; About</option>
-    </select>
     <!-- Desktop: button nav -->
     <button class="nav-item active" onclick="chNav('home',this)"><span class="icon">&#x1F4CA;</span> Dashboard</button>
     <button class="nav-item" onclick="chNav('todo',this)"><span class="icon">&#x2705;</span> To-Do</button>
@@ -1643,7 +1660,7 @@
     <div class="screen" id="ch-about">
       <h2>&#x2139;&#xFE0F; About Cath Hub</h2>
 
-      <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:14px !important;padding:20px !important;margin-bottom:16px !important;">
+      <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:20px !important;margin-bottom:16px !important;">
         <div style="font-size:16px !important;font-weight:700 !important;margin-bottom:4px !important;">cathcoach4u/personal-cath-hub</div>
         <div style="font-size:12px !important;color:#64748b !important;margin-bottom:16px !important;">Personal health &amp; household management app</div>
 
@@ -1676,13 +1693,50 @@
         </div>
       </div>
 
-      <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:14px !important;padding:20px !important;">
+      <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:20px !important;margin-bottom:16px !important;">
         <div style="font-size:13px !important;font-weight:700 !important;margin-bottom:10px !important;">Stack</div>
         <div style="font-size:12px !important;color:#64748b !important;line-height:1.8 !important;">
           &bull; Vanilla HTML / CSS / JavaScript (no frameworks)<br>
           &bull; Supabase for auth, database &amp; storage<br>
           &bull; GitHub Pages for hosting<br>
-          &bull; Claude Code for AI-assisted development
+          &bull; Claude Code for AI-assisted development<br>
+          &bull; PWA (installable, standalone mode)
+        </div>
+      </div>
+
+      <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:20px !important;margin-bottom:16px !important;">
+        <div style="font-size:13px !important;font-weight:700 !important;margin-bottom:10px !important;">Features</div>
+        <div style="font-size:12px !important;color:#64748b !important;line-height:1.8 !important;">
+          &bull; Dashboard with quick stats &amp; navigation cards<br>
+          &bull; To-Do lists with categories &amp; due dates<br>
+          &bull; AisleMate shopping system (lists, master items, receipts, meal plans, QR share)<br>
+          &bull; Workout logging with exercise library &amp; custom exercises<br>
+          &bull; Medical records (medications, sessions, contacts, mental health)<br>
+          &bull; Daily habit tracking with 7-day view &amp; streaks<br>
+          &bull; Travel planning<br>
+          &bull; Home management with zone cleaning cards<br>
+          &bull; AI assistant (floating chat via Anthropic API)<br>
+          &bull; Dark mode<br>
+          &bull; PIN lock for quick re-entry<br>
+          &bull; Responsive design (desktop sidebar, mobile hamburger menu)
+        </div>
+      </div>
+
+      <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:20px !important;">
+        <div style="font-size:13px !important;font-weight:700 !important;margin-bottom:10px !important;">Supabase Tables</div>
+        <div style="font-size:12px !important;color:#64748b !important;line-height:1.8 !important;">
+          &bull; <strong style="color:#1e293b !important;">shopping_items</strong> &mdash; name, category, store, checked<br>
+          &bull; <strong style="color:#1e293b !important;">personal_todos</strong> &mdash; task, done, category, due_date<br>
+          &bull; <strong style="color:#1e293b !important;">fiona_tasks</strong> &mdash; task, done<br>
+          &bull; <strong style="color:#1e293b !important;">habit_meds</strong> &mdash; name, freq (daily/asneeded)<br>
+          &bull; <strong style="color:#1e293b !important;">habit_logs</strong> &mdash; med_id, date<br>
+          &bull; <strong style="color:#1e293b !important;">medications</strong> &mdash; name, dose, schedule, purpose<br>
+          &bull; <strong style="color:#1e293b !important;">medical_sessions</strong> &mdash; date, duration, plan, practitioner<br>
+          &bull; <strong style="color:#1e293b !important;">master_items</strong> &mdash; name, category, store, family_member, last_price<br>
+          &bull; <strong style="color:#1e293b !important;">receipts</strong> &mdash; store, receipt_date, total<br>
+          &bull; <strong style="color:#1e293b !important;">receipt_items</strong> &mdash; item_name, price, receipt_id<br>
+          &bull; <strong style="color:#1e293b !important;">meal_plans</strong> &mdash; day_index, meal data<br>
+          &bull; <strong style="color:#1e293b !important;">ai_memory</strong> &mdash; fact, created_at
         </div>
       </div>
     </div>
@@ -1813,18 +1867,43 @@
   });
 
   // ─── NAVIGATION ───
+  // ─── MOBILE HAMBURGER NAV ───
+  window.toggleMobileNav = function() {
+    var dd = document.getElementById('mobile-nav-dropdown');
+    if (dd) dd.classList.toggle('open');
+  };
+
+  window.chNavMobile = function(name, btn) {
+    // Close dropdown
+    var dd = document.getElementById('mobile-nav-dropdown');
+    if (dd) dd.classList.remove('open');
+    // Update mobile nav active state
+    document.querySelectorAll('#cathHub .mobile-nav-item').forEach(function(n){ n.classList.remove('active'); });
+    if (btn) btn.classList.add('active');
+    // Delegate to main nav
+    chNav(name);
+  };
+
   window.chNav = function(name, btn){
     document.querySelectorAll('#cathHub .screen').forEach(function(s){ s.classList.remove('active'); });
     document.querySelectorAll('#cathHub .nav-item').forEach(function(n){ n.classList.remove('active'); });
     document.getElementById('ch-' + name).classList.add('active');
     if (btn) btn.classList.add('active');
+    else {
+      // Find and highlight the matching desktop nav-item
+      document.querySelectorAll('#cathHub .nav-item').forEach(function(n){
+        if (n.textContent.trim() && n.getAttribute('onclick') && n.getAttribute('onclick').indexOf("'" + name + "'") !== -1) n.classList.add('active');
+      });
+    }
+    // Sync mobile nav active state
+    document.querySelectorAll('#cathHub .mobile-nav-item').forEach(function(n){
+      n.classList.remove('active');
+      if (n.getAttribute('data-nav') === name) n.classList.add('active');
+    });
     // Scroll to top when switching tabs
     var mainEl = document.querySelector('#cathHub .main');
     if (mainEl) mainEl.scrollTop = 0;
     window.scrollTo(0, 0);
-    // Sync mobile dropdown
-    var mobileSelect = document.querySelector('#cathHub .mobile-nav-select');
-    if (mobileSelect) mobileSelect.value = name;
     if(name === 'aislemate') amGo('home');
     if(name === 'medical') medGo('home');
     if(name === 'hometab') hmGo('home');

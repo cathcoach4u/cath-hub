@@ -783,12 +783,22 @@
 
       <!-- HOME: Button navigation -->
       <div class="am-subscreen active" id="med-home">
+        <!-- Quick Actions - Upload & Search -->
+        <div style="display:flex !important;gap:8px !important;margin-bottom:16px !important;">
+          <button class="am-btn" onclick="medGo('documents')" style="flex:1 !important;padding:14px 10px !important;font-size:13px !important;text-align:center !important;background:#7c3aed !important;border:1px solid #7c3aed !important;border-radius:10px !important;color:white !important;">&#x1F4E4; Upload Document</button>
+          <a class="am-btn" href="https://netorgft4053847.sharepoint.com/:f:/s/bakerpersonal-CathPersonal/IgAEdQrlyL4-Qa4rSlz4-SwPAWV2ALT9bZECNDOJyLgPUlU?e=mvuWfJ" target="_blank" rel="noopener" style="flex:1 !important;padding:14px 10px !important;font-size:13px !important;text-align:center !important;background:#3b82f6 !important;border:1px solid #3b82f6 !important;border-radius:10px !important;color:white !important;text-decoration:none !important;">&#x1F50D; Search Files</a>
+        </div>
+
         <div style="display:flex !important;flex-direction:column !important;gap:10px !important;">
+          <button class="am-btn" onclick="medGo('mhplan')" style="width:100% !important;padding:14px 16px !important;font-size:15px !important;text-align:left !important;background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;color:#1e293b !important;display:flex !important;align-items:center !important;gap:10px !important;">&#x1F9E0; Mental Health Plan <span style="margin-left:auto !important;color:#94a3b8 !important;font-size:12px !important;">Sessions &amp; tracker &rarr;</span></button>
+          <button class="am-btn" onclick="medGo('migraine')" style="width:100% !important;padding:14px 16px !important;font-size:15px !important;text-align:left !important;background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;color:#1e293b !important;display:flex !important;align-items:center !important;gap:10px !important;">&#x1F4A0; Migraine Care Plan <span style="margin-left:auto !important;color:#94a3b8 !important;font-size:12px !important;">Treatment &amp; prevention &rarr;</span></button>
+          <button class="am-btn" onclick="medGo('cdm')" style="width:100% !important;padding:14px 16px !important;font-size:15px !important;text-align:left !important;background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;color:#1e293b !important;display:flex !important;align-items:center !important;gap:10px !important;">&#x1F4CB; Chronic Disease Management <span style="margin-left:auto !important;color:#94a3b8 !important;font-size:12px !important;">CDM plans &rarr;</span></button>
+          <button class="am-btn" onclick="medGo('medicare')" style="width:100% !important;padding:14px 16px !important;font-size:15px !important;text-align:left !important;background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;color:#1e293b !important;display:flex !important;align-items:center !important;gap:10px !important;">&#x1F3E5; Medicare <span style="margin-left:auto !important;color:#94a3b8 !important;font-size:12px !important;">Claims &amp; history &rarr;</span></button>
+          <button class="am-btn" onclick="medGo('medications')" style="width:100% !important;padding:14px 16px !important;font-size:15px !important;text-align:left !important;background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;color:#1e293b !important;display:flex !important;align-items:center !important;gap:10px !important;">&#x1F48A; Medications <span style="margin-left:auto !important;color:#94a3b8 !important;font-size:12px !important;">Current plan &rarr;</span></button>
+          <button class="am-btn" onclick="medGo('tracking')" style="width:100% !important;padding:14px 16px !important;font-size:15px !important;text-align:left !important;background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;color:#1e293b !important;display:flex !important;align-items:center !important;gap:10px !important;">&#x1F4CA; Medication Tracking <span style="margin-left:auto !important;color:#94a3b8 !important;font-size:12px !important;" id="hab-meds-badge">0/0 today</span></button>
           <button class="am-btn" onclick="medGo('documents')" style="width:100% !important;padding:14px 16px !important;font-size:15px !important;text-align:left !important;background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;color:#1e293b !important;display:flex !important;align-items:center !important;gap:10px !important;">&#x1F4C1; Documents <span style="margin-left:auto !important;color:#94a3b8 !important;font-size:12px !important;">Upload &amp; file &rarr;</span></button>
           <button class="am-btn" onclick="medGo('contacts')" style="width:100% !important;padding:14px 16px !important;font-size:15px !important;text-align:left !important;background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;color:#1e293b !important;display:flex !important;align-items:center !important;gap:10px !important;">&#x1F4DE; Contacts <span style="margin-left:auto !important;color:#94a3b8 !important;font-size:12px !important;">Doctors &amp; clinics &rarr;</span></button>
-          <button class="am-btn" onclick="medGo('medications')" style="width:100% !important;padding:14px 16px !important;font-size:15px !important;text-align:left !important;background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;color:#1e293b !important;display:flex !important;align-items:center !important;gap:10px !important;">&#x1F48A; Medications <span style="margin-left:auto !important;color:#94a3b8 !important;font-size:12px !important;">Current plan &rarr;</span></button>
-          <button class="am-btn" onclick="medGo('mentalhealth')" style="width:100% !important;padding:14px 16px !important;font-size:15px !important;text-align:left !important;background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;color:#1e293b !important;display:flex !important;align-items:center !important;gap:10px !important;">&#x1F9E0; Mental Health <span style="margin-left:auto !important;color:#94a3b8 !important;font-size:12px !important;">Sessions &rarr;</span></button>
-          <button class="am-btn" onclick="medGo('tracking')" style="width:100% !important;padding:14px 16px !important;font-size:15px !important;text-align:left !important;background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;color:#1e293b !important;display:flex !important;align-items:center !important;gap:10px !important;">&#x1F4CA; Medication Tracking <span style="margin-left:auto !important;color:#94a3b8 !important;font-size:12px !important;" id="hab-meds-badge">0/0 today</span></button>
+          <button class="am-btn" onclick="medGo('mentalhealth')" style="width:100% !important;padding:14px 16px !important;font-size:15px !important;text-align:left !important;background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;color:#1e293b !important;display:flex !important;align-items:center !important;gap:10px !important;">&#x1F4C5; Session History <span style="margin-left:auto !important;color:#94a3b8 !important;font-size:12px !important;">All sessions &rarr;</span></button>
         </div>
       </div>
 
@@ -968,6 +978,221 @@
           </div>
           <div id="med-sessions-list" style="padding:0 !important;"></div>
         </div>
+      </div>
+
+      <!-- SUB: Mental Health Plan -->
+      <div class="am-subscreen" id="med-mhplan">
+        <button class="am-back" onclick="medGo('home')">&#x2190; Back</button>
+        <h3 style="font-size:18px !important;font-weight:700 !important;margin-bottom:16px !important;">&#x1F9E0; Mental Health Plan &ndash; At a Glance</h3>
+
+        <!-- Current Plan Summary -->
+        <div class="med-section" style="margin-bottom:12px !important;">
+          <div style="padding:16px !important;">
+            <div style="font-size:12px !important;font-weight:700 !important;text-transform:uppercase !important;color:#7c3aed !important;margin-bottom:10px !important;">Current Plan</div>
+            <div style="display:grid !important;grid-template-columns:1fr 1fr !important;gap:8px !important;font-size:13px !important;">
+              <div style="color:#64748b !important;">Plan prepared</div><div style="font-weight:600 !important;">20 October 2025</div>
+              <div style="color:#64748b !important;">GP</div><div style="font-weight:600 !important;">Dr Yasmin Trinidad</div>
+              <div style="color:#64748b !important;">Medicare Item</div><div style="font-weight:600 !important;">2715</div>
+              <div style="color:#64748b !important;">Total sessions</div><div style="font-weight:600 !important;">10</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Status -->
+        <div style="display:grid !important;grid-template-columns:1fr 1fr !important;gap:8px !important;margin-bottom:12px !important;">
+          <div style="text-align:center !important;background:#f0fdf4 !important;border:1px solid #bbf7d0 !important;border-radius:10px !important;padding:14px 8px !important;">
+            <div style="font-size:24px !important;font-weight:700 !important;color:#16a34a !important;">2 of 10</div>
+            <div style="font-size:11px !important;color:#64748b !important;">Sessions used</div>
+          </div>
+          <div style="text-align:center !important;background:#eff6ff !important;border:1px solid #bfdbfe !important;border-radius:10px !important;padding:14px 8px !important;">
+            <div style="font-size:24px !important;font-weight:700 !important;color:#2563eb !important;">8</div>
+            <div style="font-size:11px !important;color:#64748b !important;">Remaining</div>
+          </div>
+        </div>
+
+        <!-- Key Actions -->
+        <div class="med-section" style="margin-bottom:12px !important;background:#fef3c7 !important;border-color:#fde68a !important;">
+          <div style="padding:14px 16px !important;">
+            <div style="font-size:12px !important;font-weight:700 !important;color:#92400e !important;margin-bottom:8px !important;">KEY ACTIONS</div>
+            <div style="font-size:13px !important;color:#78350f !important;line-height:1.8 !important;">
+              After Session 6 (16 Feb 2026): Book GP appointment for Mental Health Plan Review<br>
+              After Session 10 (30 Mar 2026): Book GP for Chronic Disease Management Plan
+            </div>
+            <div style="font-size:12px !important;color:#92400e !important;margin-top:8px !important;padding:8px !important;background:#fef9c3 !important;border-radius:6px !important;font-weight:600 !important;">
+              Billing note: Use my own Mental Health Treatment Plan up to session 10. Do not use Jo's Mental Health Plan.
+            </div>
+          </div>
+        </div>
+
+        <!-- Session Tracker Table -->
+        <div class="med-section">
+          <div class="med-section-header"><h3 style="font-size:14px !important;">Session Tracker</h3></div>
+          <div style="overflow-x:auto !important;padding:0 !important;">
+            <table class="med-table" style="font-size:12px !important;">
+              <thead>
+                <tr><th>#</th><th>Date</th><th>Provider</th><th>Notes</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>1</td><td>20 Oct 2025</td><td>Tamsen</td><td>Video</td></tr>
+                <tr><td>2</td><td>31 Oct 2025</td><td>Amanda</td><td>In rooms</td></tr>
+                <tr><td>3</td><td>19 Jan 2026</td><td>Tamsen</td><td style="color:#16a34a !important;font-weight:600 !important;">Completed</td></tr>
+                <tr><td>4</td><td>02 Feb 2026</td><td>Tamsen</td><td>Booked</td></tr>
+                <tr><td>5</td><td>06 Feb 2026</td><td>Amanda</td><td>Booked</td></tr>
+                <tr style="background:#fef3c7 !important;"><td>6</td><td>16 Feb 2026</td><td>Tamsen</td><td style="color:#92400e !important;font-weight:600 !important;">After: book GP review</td></tr>
+                <tr><td>7</td><td>02 Mar 2026</td><td>Tamsen</td><td>Booked</td></tr>
+                <tr><td>8</td><td>16 Mar 2026</td><td>Tamsen</td><td>Booked</td></tr>
+                <tr><td>9</td><td>26 Mar 2026</td><td>Amanda</td><td>Booked</td></tr>
+                <tr style="background:#fef3c7 !important;"><td>10</td><td>30 Mar 2026</td><td>Tamsen</td><td style="color:#92400e !important;font-weight:600 !important;">After: organise CDMP</td></tr>
+                <tr style="color:#94a3b8 !important;"><td>11</td><td>13 Apr 2026</td><td>Tamsen</td><td>Planned</td></tr>
+                <tr style="color:#94a3b8 !important;"><td>12</td><td>16 Apr 2026</td><td>Amanda</td><td>Planned</td></tr>
+                <tr style="color:#94a3b8 !important;"><td>13</td><td>27 Apr 2026</td><td>Tamsen</td><td>Planned</td></tr>
+                <tr style="color:#94a3b8 !important;"><td>14</td><td>11 May 2026</td><td>Tamsen</td><td>Planned</td></tr>
+                <tr style="color:#94a3b8 !important;"><td>15</td><td>25 May 2026</td><td>Tamsen</td><td>Planned</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- SUB: Migraine Care Plan -->
+      <div class="am-subscreen" id="med-migraine">
+        <button class="am-back" onclick="medGo('home')">&#x2190; Back</button>
+        <h3 style="font-size:18px !important;font-weight:700 !important;margin-bottom:16px !important;">&#x1F4A0; Vestibular Migraine Care Plan</h3>
+
+        <!-- 1. Acute Treatment -->
+        <div class="med-section" style="margin-bottom:12px !important;">
+          <div style="padding:16px !important;">
+            <div style="font-size:14px !important;font-weight:700 !important;margin-bottom:10px !important;">1. Acute Treatment (During an Attack)</div>
+            <div style="font-size:12px !important;font-weight:700 !important;color:#7c3aed !important;margin-bottom:6px !important;">FOR DIZZINESS</div>
+            <div style="font-size:13px !important;line-height:1.8 !important;margin-bottom:10px !important;">
+              &bull; Prochlorperazine 5&ndash;10mg up to 3x daily as needed<br>
+              &bull; If ineffective: Cizinate (cinnarizine/dimenhydrinate) 20/40mg up to 3x daily
+            </div>
+            <div style="font-size:12px !important;font-weight:700 !important;color:#7c3aed !important;margin-bottom:6px !important;">FOR NAUSEA</div>
+            <div style="font-size:13px !important;line-height:1.8 !important;margin-bottom:10px !important;">
+              &bull; Ondansetron 8mg wafers up to 3x daily as needed
+            </div>
+            <div style="font-size:11px !important;color:#94a3b8 !important;background:#f8fafc !important;padding:8px 10px !important;border-radius:6px !important;line-height:1.6 !important;">
+              <strong>Side effects:</strong> Drowsiness, nausea, headache, dry mouth. Rare Parkinson-like symptoms if Cizinate taken daily for 4+ weeks.
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Prevention -->
+        <div class="med-section" style="margin-bottom:12px !important;">
+          <div style="padding:16px !important;">
+            <div style="font-size:14px !important;font-weight:700 !important;margin-bottom:10px !important;">2. Migraine Prevention</div>
+            <div style="font-size:12px !important;font-weight:700 !important;color:#16a34a !important;margin-bottom:6px !important;">FIRST LINE (PREFERRED)</div>
+            <div style="font-size:13px !important;line-height:1.8 !important;margin-bottom:10px !important;">
+              &bull; Magnesium: 400&ndash;600mg daily<br>
+              &bull; Riboflavin (Vitamin B2): 400mg daily<br>
+              &bull; Optional: CoQ10 150&ndash;300mg daily
+            </div>
+            <div style="font-size:12px !important;font-weight:700 !important;color:#f59e0b !important;margin-bottom:6px !important;">IF SYMPTOMS CONTINUE</div>
+            <div style="font-size:13px !important;line-height:1.8 !important;margin-bottom:10px !important;">
+              &bull; Amitriptyline: Start 10mg nightly, increase to 20mg if needed
+            </div>
+            <div style="font-size:11px !important;color:#94a3b8 !important;background:#f8fafc !important;padding:8px 10px !important;border-radius:6px !important;line-height:1.6 !important;">
+              <strong>Side effects:</strong> Drowsiness, dry mouth, dry eyes, weight gain.
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Weekly Check-In -->
+        <div class="med-section" style="margin-bottom:12px !important;">
+          <div style="padding:16px !important;">
+            <div style="font-size:14px !important;font-weight:700 !important;margin-bottom:10px !important;">3. Weekly Migraine Check-In (10 min)</div>
+            <div style="font-size:13px !important;line-height:2 !important;">
+              <strong>Sleep:</strong> Regular bedtime, screens off 1hr before, caffeine cut-off 3pm<br>
+              <strong>Diet:</strong> Regular meals, note trigger foods<br>
+              <strong>Hydration:</strong> 1.5&ndash;2L daily, anchors: morning, mid-morning, mid-afternoon<br>
+              <strong>Caffeine:</strong> Confirm max daily, reduce gradually if needed<br>
+              <strong>Exercise:</strong> 3&ndash;4 sessions/week, 30&ndash;40 min (walking works)<br>
+              <strong>Ergonomics:</strong> Screen breaks, reduce glare, avoid strong scents<br>
+              <strong>Relaxation:</strong> 3 sessions/week, 5&ndash;10 min (meditation, yoga, breathing)
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. Daily Baseline -->
+        <div class="med-section" style="margin-bottom:12px !important;">
+          <div style="padding:16px !important;">
+            <div style="font-size:14px !important;font-weight:700 !important;margin-bottom:10px !important;">4. Daily Baseline (2 min)</div>
+            <div style="font-size:13px !important;line-height:1.8 !important;">
+              &bull; Keep wake time consistent<br>
+              &bull; Do not skip meals<br>
+              &bull; Start hydration early<br>
+              &bull; Move your body (minimum 10 min)<br>
+              &bull; 2&ndash;5 min relaxation
+            </div>
+          </div>
+        </div>
+
+        <!-- 5. Migraine Day Plan -->
+        <div class="med-section" style="background:#fef2f2 !important;border-color:#fecaca !important;">
+          <div style="padding:16px !important;">
+            <div style="font-size:14px !important;font-weight:700 !important;color:#991b1b !important;margin-bottom:10px !important;">5. Migraine-Day Plan</div>
+            <div style="font-size:13px !important;line-height:1.8 !important;color:#78350f !important;">
+              &bull; Hydrate with small sips regularly<br>
+              &bull; Eat small, steady snacks<br>
+              &bull; Skip exercise if it worsens symptoms<br>
+              &bull; Dim lights, limit screens, reduce noise, avoid strong scents<br>
+              &bull; Slow breathing, short grounding exercises
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SUB: Chronic Disease Management -->
+      <div class="am-subscreen" id="med-cdm">
+        <button class="am-back" onclick="medGo('home')">&#x2190; Back</button>
+        <h3 style="font-size:18px !important;font-weight:700 !important;margin-bottom:16px !important;">&#x1F4CB; Chronic Disease Management (CDM)</h3>
+
+        <div class="med-section" style="margin-bottom:12px !important;">
+          <div style="padding:16px !important;">
+            <div style="font-size:12px !important;font-weight:700 !important;text-transform:uppercase !important;color:#7c3aed !important;margin-bottom:8px !important;">Purpose</div>
+            <div style="font-size:13px !important;line-height:1.6 !important;margin-bottom:12px !important;">
+              Documents related to GP-managed care plans for ongoing conditions. Reviewed once a year.
+            </div>
+            <div style="font-size:12px !important;font-weight:700 !important;text-transform:uppercase !important;color:#7c3aed !important;margin-bottom:8px !important;">Summary for Cath</div>
+            <div style="font-size:13px !important;line-height:1.6 !important;margin-bottom:12px !important;">
+              6th March &ndash; 5 sessions with Daniel. No sessions used yet.
+            </div>
+            <div style="font-size:12px !important;font-weight:700 !important;text-transform:uppercase !important;color:#7c3aed !important;margin-bottom:8px !important;">Expected Documents</div>
+            <div style="font-size:13px !important;line-height:1.8 !important;">
+              &bull; GP Chronic Disease Management Plans<br>
+              &bull; Team Care Arrangements<br>
+              &bull; Review documents (3-month or 6-month reviews)<br>
+              &bull; Allied health referrals issued under CDM<br>
+              &bull; Progress summaries from allied health providers
+            </div>
+          </div>
+        </div>
+
+        <a class="am-btn" href="https://netorgft4053847.sharepoint.com/:f:/s/bakerpersonal-CathPersonal/IgAEdQrlyL4-Qa4rSlz4-SwPAWV2ALT9bZECNDOJyLgPUlU?e=mvuWfJ" target="_blank" rel="noopener" style="width:100% !important;padding:12px !important;justify-content:center !important;background:#3b82f6 !important;color:white !important;border-color:#3b82f6 !important;text-decoration:none !important;margin-bottom:12px !important;">&#x1F4C2; Open Pathology Requests Folder</a>
+      </div>
+
+      <!-- SUB: Medicare -->
+      <div class="am-subscreen" id="med-medicare">
+        <button class="am-back" onclick="medGo('home')">&#x2190; Back</button>
+        <h3 style="font-size:18px !important;font-weight:700 !important;margin-bottom:16px !important;">&#x1F3E5; Medicare</h3>
+
+        <div class="med-section" style="margin-bottom:12px !important;">
+          <div style="padding:16px !important;">
+            <div style="font-size:13px !important;line-height:1.6 !important;margin-bottom:12px !important;">
+              Official Medicare records confirming claims that have been processed. These documents form the official history of services accessed through Medicare.
+            </div>
+            <div style="font-size:12px !important;font-weight:700 !important;text-transform:uppercase !important;color:#7c3aed !important;margin-bottom:8px !important;">How It Supports Migraine Prevention</div>
+            <div style="font-size:13px !important;line-height:1.8 !important;">
+              &bull; Track frequency of medical appointments<br>
+              &bull; Spot patterns in healthcare use (e.g. when migraines worsen)<br>
+              &bull; Evidence of ongoing treatment if you change providers<br>
+              &bull; Timeline of your medical care through Medicare
+            </div>
+          </div>
+        </div>
+
+        <a class="am-btn" href="https://netorgft4053847.sharepoint.com/:f:/s/bakerpersonal-CathPersonal/IgAEdQrlyL4-Qa4rSlz4-SwPAWV2ALT9bZECNDOJyLgPUlU?e=mvuWfJ" target="_blank" rel="noopener" style="width:100% !important;padding:12px !important;justify-content:center !important;background:#3b82f6 !important;color:white !important;border-color:#3b82f6 !important;text-decoration:none !important;">&#x1F4C2; Open Medicare Folder in OneDrive</a>
       </div>
 
       <!-- SUB: Medication Tracking -->
@@ -2595,7 +2820,7 @@
   };
 
   var DAILY_MED_NAMES = ['Vyvanse', 'Valtrex', 'Levothyroxine', 'Xobet'];
-  var AS_NEEDED_NAMES = ['Nurofen', 'Panadol', 'Nexium'];
+  var AS_NEEDED_NAMES = ['Nurofen', 'Panadol', 'Nexium', 'Prochlorperazine', 'Cizinate', 'Ondansetron'];
 
   async function loadMedicationPlan() {
     var { data: meds } = await sb.from('medications').select('*');
@@ -2974,7 +3199,10 @@
     var AS_NEEDED_MEDS = [
       { name: 'Nurofen', dose: '2 tablets' },
       { name: 'Panadol', dose: '2 tablets' },
-      { name: 'Nexium Antacid', dose: '', hasBrands: true }
+      { name: 'Nexium Antacid', dose: '', hasBrands: true },
+      { name: 'Prochlorperazine', dose: '5-10mg up to 3x daily' },
+      { name: 'Cizinate', dose: '20/40mg up to 3x daily' },
+      { name: 'Ondansetron', dose: '8mg wafer up to 3x daily' }
     ];
 
     // Load antacid brands from localStorage (user can add more via UI)

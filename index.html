@@ -5740,16 +5740,23 @@
     try {
       var today = new Date();
       var todayStr = today.getFullYear()+'-'+String(today.getMonth()+1).padStart(2,'0')+'-'+String(today.getDate()).padStart(2,'0');
+      var { data: allHabs } = await sb.from('habit_meds').select('*').eq('freq', 'daily');
+      var { data: medsList } = await sb.from('medications').select('name');
+      var medNames = (medsList || []).map(function(m){ return m.name.toLowerCase(); });
+      // Only check habits that match actual medications (same logic as dashTakeMorningMeds)
+      var meds = (allHabs || []).filter(function(h){ return medNames.indexOf(h.name.toLowerCase()) !== -1; });
+      if (!meds.length) { banner.style.setProperty('display', 'none', 'important'); return; }
       var { data: logs } = await sb.from('habit_logs').select('med_id').eq('date', todayStr);
-      var { data: dailyMeds } = await sb.from('habit_meds').select('id').eq('freq', 'daily');
       var loggedIds = (logs || []).map(function(l) { return l.med_id; });
-      var missed = (dailyMeds || []).filter(function(m) { return loggedIds.indexOf(m.id) === -1; });
+      var missed = meds.filter(function(m) { return loggedIds.indexOf(m.id) === -1; });
       if (missed.length > 0) {
         banner.style.setProperty('display', 'block', 'important');
       } else {
         banner.style.setProperty('display', 'none', 'important');
       }
     } catch(e) { banner.style.setProperty('display', 'none', 'important'); }
+    // Also sync the button state
+    dashUpdateMedsBtn();
   }
 
   // ═══════════════════════════════════════════════════

@@ -626,19 +626,6 @@
         <div id="dash-bin-badge" style="flex:1 !important;text-align:center !important;padding:10px 12px !important;background:#fefce8 !important;border:1px solid #fde68a !important;border-radius:10px !important;font-size:12px !important;color:#92400e !important;font-weight:600 !important;"></div>
       </div>
 
-      <!-- Bulky Waste & Council Events -->
-      <div id="dash-bulky-section" style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:14px 16px !important;margin-bottom:12px !important;">
-        <div style="display:flex !important;align-items:center !important;justify-content:space-between !important;margin-bottom:8px !important;">
-          <h3 style="font-size:13px !important;font-weight:700 !important;margin-bottom:0 !important;">&#x1F69A; Bulky Waste &amp; Council</h3>
-          <span style="font-size:11px !important;color:#94a3b8 !important;" id="dash-bulky-used">0/2 used this year</span>
-        </div>
-        <div id="dash-bulky-info" style="font-size:12px !important;color:#64748b !important;line-height:1.7 !important;"></div>
-        <div style="display:flex !important;gap:8px !important;margin-top:10px !important;">
-          <button onclick="dashBookBulky()" style="flex:1 !important;padding:8px 12px !important;font-size:12px !important;background:#7c3aed !important;color:white !important;border:none !important;border-radius:8px !important;cursor:pointer !important;">&#x1F4C5; Log a Booking</button>
-          <button onclick="dashResetBulky()" style="padding:8px 12px !important;font-size:12px !important;background:#f1f5f9 !important;color:#64748b !important;border:none !important;border-radius:8px !important;cursor:pointer !important;">Reset</button>
-        </div>
-      </div>
-
       <!-- Water Tracker -->
       <div class="dash-section" style="margin-bottom:12px !important;">
         <div style="display:flex !important;align-items:center !important;justify-content:space-between !important;margin-bottom:8px !important;">
@@ -5778,60 +5765,6 @@
   }
 
   // ═══════════════════════════════════════════════════
-  // FEATURE: Bulky Waste Tracker
-  // Northern Beaches: 2 free booked collections per 12 months
-  // Chemical CleanOut: 27-28 June 2026, Mona Vale Beach car park
-  // ═══════════════════════════════════════════════════
-  function dashRenderBulky() {
-    var info = document.getElementById('dash-bulky-info');
-    var usedEl = document.getElementById('dash-bulky-used');
-    if (!info) return;
-
-    var bookings = [];
-    try { bookings = JSON.parse(localStorage.getItem('bulky_bookings') || '[]'); } catch(e) {}
-    if (usedEl) usedEl.textContent = bookings.length + '/2 used this year';
-
-    var html = '';
-    if (bookings.length > 0) {
-      html += '<div style="margin-bottom:6px !important;"><strong>Your bookings:</strong></div>';
-      bookings.forEach(function(b, i) {
-        html += '<div style="display:flex !important;align-items:center !important;gap:6px !important;padding:4px 0 !important;">';
-        html += '<span>&#x2705;</span> ' + b.date + (b.notes ? ' — ' + esc(b.notes) : '');
-        html += '</div>';
-      });
-    }
-    if (bookings.length < 2) {
-      html += '<div style="margin-top:4px !important;">&#x2139;&#xFE0F; ' + (2 - bookings.length) + ' free collection' + (2 - bookings.length > 1 ? 's' : '') + ' remaining. <a href="https://www.northernbeaches.nsw.gov.au/services/rubbish-and-recycling/bulky-goods-collection/book-your-collection" target="_blank" rel="noopener" style="color:#3b82f6 !important;text-decoration:underline !important;">Book online</a></div>';
-    } else {
-      html += '<div style="margin-top:4px !important;color:#ef4444 !important;">No free collections remaining this period.</div>';
-    }
-    // Upcoming council events
-    html += '<div style="margin-top:8px !important;padding-top:8px !important;border-top:1px solid #f1f5f9 !important;">';
-    html += '<strong>&#x1F4C5; Upcoming:</strong><br>';
-    html += '&#x2622;&#xFE0F; Chemical CleanOut — 27-28 Jun 2026, Mona Vale Beach car park (9am-3:30pm)';
-    html += '</div>';
-    info.innerHTML = html;
-  }
-
-  window.dashBookBulky = function() {
-    var date = prompt('Enter booking date (DD/MM/YYYY):');
-    if (!date) return;
-    var notes = prompt('Notes (optional, e.g. "mattress + old furniture"):') || '';
-    var bookings = [];
-    try { bookings = JSON.parse(localStorage.getItem('bulky_bookings') || '[]'); } catch(e) {}
-    if (bookings.length >= 2) { alert('You have already used both free collections. Reset to start a new period.'); return; }
-    bookings.push({ date: date, notes: notes });
-    localStorage.setItem('bulky_bookings', JSON.stringify(bookings));
-    dashRenderBulky();
-  };
-
-  window.dashResetBulky = function() {
-    if (!confirm('Reset bulky waste tracker? (Use when your 12-month period renews)')) return;
-    localStorage.removeItem('bulky_bookings');
-    dashRenderBulky();
-  };
-
-  // ═══════════════════════════════════════════════════
   // FEATURE: Water Tracker
   // ═══════════════════════════════════════════════════
   var WATER_TARGET = 8; // glasses per day
@@ -6161,7 +6094,7 @@
     dashRenderRhythm();
     dashRenderFortnight();
     dashRenderBinNight();
-    dashRenderBulky();
+
     dashRenderWater();
     dashCheckMedReminder();
     // Set migraine diary date to today

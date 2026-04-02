@@ -604,10 +604,12 @@
     <div class="screen active" id="ch-home">
       <h2 style="font-size:20px !important;margin-bottom:16px !important;">Dashboard</h2>
 
-      <!-- Fortnightly Week Badge -->
-      <div style="display:flex !important;gap:8px !important;margin-bottom:12px !important;flex-wrap:wrap !important;">
-        <div id="dash-fortnight-badge" style="flex:1 !important;text-align:center !important;padding:10px 12px !important;background:#f0fdf4 !important;border:1px solid #bbf7d0 !important;border-radius:10px !important;font-size:12px !important;color:#166534 !important;font-weight:600 !important;"></div>
+      <!-- Fortnightly Week Indicator -->
+      <div style="display:flex !important;align-items:center !important;justify-content:space-between !important;margin-bottom:12px !important;">
+        <span id="dash-fortnight-pill" style="display:inline-block !important;padding:6px 16px !important;border-radius:99px !important;font-size:13px !important;font-weight:700 !important;background:#f0fdf4 !important;color:#166534 !important;border:1px solid #bbf7d0 !important;"></span>
+        <button onclick="dashSwapWeek()" style="background:none !important;border:none !important;font-size:12px !important;color:#3b82f6 !important;cursor:pointer !important;font-weight:500 !important;text-decoration:underline !important;font-family:inherit !important;">Wrong week? Swap</button>
       </div>
+      <div id="dash-fortnight-cards" style="display:flex !important;flex-direction:column !important;gap:8px !important;margin-bottom:16px !important;"></div>
 
       <div style="display:flex !important;gap:8px !important;margin-bottom:16px !important;flex-wrap:wrap !important;">
         <button class="am-btn" onclick="dashQuickNav({value:'receipt'})" style="flex:1 !important;padding:12px 10px !important;font-size:13px !important;text-align:center !important;background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;color:#1e293b !important;">&#x1F9FE; Upload Receipt</button>
@@ -5672,26 +5674,60 @@
   // ═══════════════════════════════════════════════════
   // FEATURE: Fortnightly Week A/B Indicator
   // ═══════════════════════════════════════════════════
-  function dashRenderFortnight() {
-    var badge = document.getElementById('dash-fortnight-badge');
-    if (!badge) return;
+  var fortnightOverride = null; // null = auto, 'A' or 'B' = manual
+
+  function dashGetCurrentWeek() {
+    if (fortnightOverride) return fortnightOverride;
     var refDate = new Date(2026, 2, 16); // 16 March 2026 = Week A start
     var now = new Date();
     var diffDays = Math.floor((now - refDate) / 86400000);
     var weekNum = Math.floor(diffDays / 7);
-    var isWeekA = weekNum % 2 === 0;
-    if (isWeekA) {
-      badge.innerHTML = '&#x1F4C5; <strong>Week A</strong> — Jo Jo appointment';
-      badge.style.setProperty('background', '#f0fdf4', 'important');
-      badge.style.setProperty('border-color', '#bbf7d0', 'important');
-      badge.style.setProperty('color', '#166534', 'important');
-    } else {
-      badge.innerHTML = '&#x1F4C5; <strong>Week B</strong> — Daniel chiropractor';
-      badge.style.setProperty('background', '#eff6ff', 'important');
-      badge.style.setProperty('border-color', '#bfdbfe', 'important');
-      badge.style.setProperty('color', '#1e40af', 'important');
-    }
+    return weekNum % 2 === 0 ? 'A' : 'B';
   }
+
+  var fortnightItems = {
+    A: [
+      { icon: '&#x1F9D1;&#x200D;&#x2695;&#xFE0F;', title: 'Jo Jo appointment', desc: 'Fortnightly session' }
+    ],
+    B: [
+      { icon: '&#x1F9B4;', title: 'Daniel chiropractor', desc: 'Fortnightly session' }
+    ]
+  };
+
+  function dashRenderFortnight() {
+    var pill = document.getElementById('dash-fortnight-pill');
+    var cards = document.getElementById('dash-fortnight-cards');
+    if (!pill || !cards) return;
+    var week = dashGetCurrentWeek();
+
+    pill.textContent = 'Week ' + week;
+    if (week === 'A') {
+      pill.style.setProperty('background', '#f0fdf4', 'important');
+      pill.style.setProperty('border-color', '#bbf7d0', 'important');
+      pill.style.setProperty('color', '#166534', 'important');
+    } else {
+      pill.style.setProperty('background', '#eff6ff', 'important');
+      pill.style.setProperty('border-color', '#bfdbfe', 'important');
+      pill.style.setProperty('color', '#1e40af', 'important');
+    }
+
+    var items = fortnightItems[week] || [];
+    var html = '';
+    items.forEach(function(item) {
+      html += '<div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:12px 16px !important;display:flex !important;align-items:center !important;gap:12px !important;">';
+      html += '<span style="font-size:20px !important;">' + item.icon + '</span>';
+      html += '<div><div style="font-size:13px !important;font-weight:600 !important;color:#1e293b !important;">' + item.title + '</div>';
+      html += '<div style="font-size:11px !important;color:#64748b !important;">' + item.desc + '</div></div>';
+      html += '</div>';
+    });
+    cards.innerHTML = html;
+  }
+
+  window.dashSwapWeek = function() {
+    var current = dashGetCurrentWeek();
+    fortnightOverride = current === 'A' ? 'B' : 'A';
+    dashRenderFortnight();
+  };
 
   // ═══════════════════════════════════════════════════
   // FEATURE: Medication Reminder Banner

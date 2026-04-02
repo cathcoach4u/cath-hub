@@ -33,6 +33,7 @@
   .med-time { font-size: 12px; color: #94a3b8; }
 
   .time-display { font-size: 13px; color: #64748b; margin-top: 8px; }
+  .login-link { display: inline-block; margin-top: 16px; font-size: 13px; color: #3b82f6; text-decoration: underline; }
 </style>
 </head>
 <body>
@@ -70,6 +71,19 @@
   var statusText = document.getElementById('status-text');
   var timeDisplay = document.getElementById('time-display');
 
+  // Check for existing auth session (shared via localStorage from main app)
+  var { data: sessionData } = await sb.auth.getSession();
+  if (!sessionData || !sessionData.session) {
+    statusEl.className = 'status error';
+    statusText.textContent = 'Not signed in — open Cath Hub first to log in';
+    var link = document.createElement('a');
+    link.className = 'login-link';
+    link.href = './index.html';
+    link.textContent = 'Open Cath Hub to sign in';
+    statusEl.parentNode.appendChild(link);
+    return;
+  }
+
   var now = new Date();
   var today = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0');
   var timeStr = now.toLocaleTimeString('en-AU', { hour: '2-digit', minute: '2-digit' });
@@ -88,6 +102,7 @@
     }
 
     var recorded = 0;
+    var errors = [];
     for (var i = 0; i < morningMeds.length; i++) {
       var med = morningMeds[i];
       var medKey = MORNING_MEDS.find(function(mm) { return med.name.toLowerCase().indexOf(mm) !== -1; });
@@ -103,18 +118,27 @@
         document.getElementById(timeIds[medKey]).textContent = existingTime;
         recorded++;
       } else {
-        // Record it
-        await sb.from('habit_logs').insert({ med_id: med.id, date: today, created_at: now.toISOString() });
-        document.getElementById(checkIds[medKey]).className = 'med-check done';
-        document.getElementById(checkIds[medKey]).textContent = '\u2713';
-        document.getElementById(timeIds[medKey]).textContent = timeStr;
-        recorded++;
+        // Record it — check for errors
+        var { error } = await sb.from('habit_logs').insert({ med_id: med.id, date: today, created_at: now.toISOString() });
+        if (error) {
+          errors.push(med.name + ': ' + error.message);
+        } else {
+          document.getElementById(checkIds[medKey]).className = 'med-check done';
+          document.getElementById(checkIds[medKey]).textContent = '\u2713';
+          document.getElementById(timeIds[medKey]).textContent = timeStr;
+          recorded++;
+        }
       }
     }
 
-    statusEl.className = 'status done';
-    statusText.textContent = recorded + ' of ' + morningMeds.length + ' recorded';
-    timeDisplay.textContent = 'Recorded at ' + timeStr;
+    if (errors.length > 0) {
+      statusEl.className = 'status error';
+      statusText.textContent = 'Failed to save: ' + errors.join(', ');
+    } else {
+      statusEl.className = 'status done';
+      statusText.textContent = recorded + ' of ' + morningMeds.length + ' recorded';
+      timeDisplay.textContent = 'Recorded at ' + timeStr;
+    }
 
   } catch(e) {
     statusEl.className = 'status error';

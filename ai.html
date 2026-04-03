@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0d9488">
+<title>Cath AI</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: #f8fafc; color: #1e293b; height: 100vh; display: flex; flex-direction: column; }
+.header { background: #0d9488; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; padding-top: env(safe-area-inset-top, 16px); }
+.header h1 { color: white; font-size: 18px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+.header a { color: rgba(255,255,255,0.8); font-size: 13px; text-decoration: none; }
+.header a:hover { color: white; }
+.login-wrap { flex: 1; display: flex; align-items: center; justify-content: center; padding: 20px; }
+.login-card { background: white; border-radius: 16px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); max-width: 380px; width: 100%; padding: 32px 24px; text-align: center; }
+.login-card h2 { font-size: 20px; margin-bottom: 4px; }
+.login-card .sub { font-size: 13px; color: #94a3b8; margin-bottom: 24px; }
+.login-card input { width: 100%; padding: 12px 16px; border: 1px solid #e2e8f0; border-radius: 10px; font-size: 14px; margin-bottom: 12px; outline: none; font-family: inherit; }
+.login-card input:focus { border-color: #0d9488; }
+.login-card button { width: 100%; padding: 14px; background: #0d9488; color: white; border: none; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; font-family: inherit; }
+.login-card button:hover { background: #0f766e; }
+.login-card .error { color: #dc2626; font-size: 13px; margin-top: 8px; }
+.chat-wrap { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+.messages { flex: 1; overflow-y: auto; padding: 16px; }
+.welcome { text-align: center; padding: 40px 20px; color: #94a3b8; }
+.welcome-icon { font-size: 48px; margin-bottom: 12px; }
+.welcome h3 { font-size: 16px; color: #64748b; margin-bottom: 8px; }
+.welcome p { font-size: 13px; }
+.msg { margin-bottom: 14px; display: flex; }
+.msg.user { justify-content: flex-end; }
+.msg.assistant { justify-content: flex-start; }
+.bubble { max-width: 80%; padding: 12px 16px; font-size: 14px; line-height: 1.5; word-wrap: break-word; }
+.msg.user .bubble { background: #7c3aed; color: white; border-radius: 14px 14px 4px 14px; }
+.msg.assistant .bubble { background: #f1f5f9; color: #1e293b; border-radius: 14px 14px 14px 4px; }
+.typing { color: #94a3b8; font-size: 20px; letter-spacing: 4px; }
+@keyframes blink { 0%,100%{opacity:.2} 50%{opacity:1} }
+.typing span { animation: blink 1.4s infinite; }
+.typing span:nth-child(2) { animation-delay: 0.2s; }
+.typing span:nth-child(3) { animation-delay: 0.4s; }
+.input-row { padding: 12px 16px; border-top: 1px solid #e2e8f0; display: flex; gap: 10px; align-items: flex-end; flex-shrink: 0; background: white; padding-bottom: max(12px, env(safe-area-inset-bottom)); }
+.input-row textarea { flex: 1; padding: 12px 16px; border: 1px solid #e2e8f0; border-radius: 12px; font-size: 14px; outline: none; resize: none; font-family: inherit; max-height: 100px; }
+.input-row textarea:focus { border-color: #7c3aed; box-shadow: 0 0 0 2px rgba(124,58,237,0.1); }
+.send-btn { width: 46px; height: 46px; background: #7c3aed; color: white; border-radius: 12px; font-size: 20px; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; border: none; }
+.send-btn:hover { background: #6d28d9; }
+.send-btn:disabled { background: #e2e8f0; cursor: default; }
+.hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>&#x1F916; Cath AI</h1>
+  <a href="./index.html">&#x2190; Cath Hub</a>
+</div>
+
+<!-- Login -->
+<div class="login-wrap" id="login-screen">
+  <div class="login-card">
+    <h2>&#x1F916; Cath AI</h2>
+    <div class="sub">Sign in to chat</div>
+    <input type="email" id="login-email" placeholder="Email">
+    <input type="password" id="login-pass" placeholder="Password">
+    <button onclick="doLogin()">Sign In</button>
+    <div class="error hidden" id="login-error"></div>
+  </div>
+</div>
+
+<!-- Chat -->
+<div class="chat-wrap hidden" id="chat-screen">
+  <div class="messages" id="messages">
+    <div class="welcome">
+      <div class="welcome-icon">&#x1F916;</div>
+      <h3>Hi Cath!</h3>
+      <p>Ask me anything about your shopping, meds, habits, todos, or meals.</p>
+    </div>
+  </div>
+  <div class="input-row">
+    <textarea id="chat-input" rows="1" placeholder="Ask me anything..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMsg();}"></textarea>
+    <button class="send-btn" id="send-btn" onclick="sendMsg()">&#x27A4;</button>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+(function(){
+  var SB_URL = 'https://ziwycymhaqghdiznyhhw.supabase.co';
+  var SB_KEY = 'sb_publishable_n-xBxzqdGySGh-JWHuI40g_Hb5Qf8mg';
+  var sb = window.supabase.createClient(SB_URL, SB_KEY);
+  var messages = [];
+
+  function esc(s) { var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+
+  var _today = new Date();
+  var todayStr = _today.getFullYear()+'-'+String(_today.getMonth()+1).padStart(2,'0')+'-'+String(_today.getDate()).padStart(2,'0');
+
+  var systemPrompt = "Today's date is " + todayStr + " (DD/MM/YYYY: " + todayStr.split('-').reverse().join('/') + ").\n\nYou are Cath's warm and practical personal AI assistant built into Cath Hub. Cath is an Australian woman who runs a coaching business called Coach4U. She uses Cath Hub to manage her personal life \u2014 shopping, workouts, medical appointments, and habits. Be friendly, concise, and helpful. Use Australian English. Currency is AUD ($). Dates in DD/MM/YYYY format. Don't be overly formal.\n\nYou have tools to manage the Supabase database:\n- search_items: search the master item list\n- update_items: update category, store, family_member, or name for items matching a filter\n- delete_items: delete items matching a filter\n- add_item: add a new item to the master list\n\nValid categories: Fruit & Veg, Meat, Dairy, Pantry, Frozen, Drinks, Household, Other\nValid family members: Cath, Andrew, Sarah, Russell (or empty string to unassign)\n\nWhen Cath asks to change items, use the tools. Always confirm what you did after.\n\nWhen Cath asks to add something to the shopping list (e.g. 'add milk'):\n1. First use search_items to check if it's in the master list\n2. If found, use add_to_shopping_list with the master list details (name, category, store). Just do it, don't ask for confirmation.\n3. If not found, add it as a quick-add with category Other and no store (leave store empty).\n4. NEVER offer to add items to the master list. The master list is populated automatically from scanned receipts \u2014 receipts are the source of truth.\n\nYou can also:\n- View the shopping list and remove items\n- Repeat last shop (add all items from most recent receipt)\n- Add all of a family member's items at once\n- Add multiple items in one go\n- Suggest items Cath might be low on based on purchase frequency\n- Show spending summaries by store or date range\n- Compare prices for items across stores and dates\n\nBe proactive \u2014 if Cath asks to add items, handle it. If she asks about spending, use the tools. Always be concise in responses.\n\nMEAL PLANNING:\nCath's family: Cath, Andrew, Sarah, Russell. When asked to plan meals:\n1. Ask who will be home each night (Mon-Sun)\n2. Suggest practical meals based on what's in the master list\n3. Use set_meal_plan tool to save each day's meal\n4. Offer to add missing ingredients to the shopping list\n\nSHOPPING LIST REVIEW:\nWhen Cath says the list is finalised or asks you to review it, use view_shopping_list to check it, then suggest anything obviously missing.\n\nTO-DO LIST:\nYou can add, complete, and remove tasks from Cath's personal to-do list and Fiona's cleaning list.\n\nMEDICATIONS & MEDICAL:\nYou can view and manage medications, medical sessions, and habit/medication logs.\nCath's daily meds: Vyvanse, Valtrex, Levothyroxine. As-needed: Nurofen, Panadol, Nexium Antacid, Prochlorperazine, Cizinate, Ondansetron.\n\nGENERAL DATABASE:\nYou have db_query (SELECT from any table) and db_write (INSERT/UPDATE/DELETE on any table). Tables: personal_todos, fiona_tasks, shopping_items, master_items, receipts, receipt_items, medications, habit_meds, habit_logs, medical_sessions, meal_plans, ai_memory.";
+
+
+  var tools = [
+    { name: 'search_items', description: 'Search master items by name, category, or store.', input_schema: { type: 'object', properties: { query: { type: 'string', description: 'Search term (case-insensitive partial match)' }, category: { type: 'string', description: 'Filter by category' }, store: { type: 'string', description: 'Filter by store' } } } },
+    { name: 'update_items', description: 'Update fields on master items matching a filter.', input_schema: { type: 'object', properties: { filter_name: { type: 'string', description: 'Match items whose name contains this' }, set_category: { type: 'string' }, set_store: { type: 'string' }, set_family_member: { type: 'string' }, set_name: { type: 'string' } }, required: ['filter_name'] } },
+    { name: 'delete_items', description: 'Delete master items matching a name filter.', input_schema: { type: 'object', properties: { filter_name: { type: 'string' } }, required: ['filter_name'] } },
+    { name: 'add_item', description: 'Add a new item to the master list.', input_schema: { type: 'object', properties: { name: { type: 'string' }, category: { type: 'string' }, store: { type: 'string' }, last_price: { type: 'number' } }, required: ['name', 'category', 'store'] } },
+    { name: 'add_to_shopping_list', description: 'Add an item to the weekly shopping list.', input_schema: { type: 'object', properties: { name: { type: 'string' }, category: { type: 'string' }, store: { type: 'string' } }, required: ['name'] } },
+    { name: 'view_shopping_list', description: 'View the current weekly shopping list.', input_schema: { type: 'object', properties: {} } },
+    { name: 'remove_from_shopping_list', description: 'Remove an item from the shopping list by name.', input_schema: { type: 'object', properties: { name: { type: 'string' } }, required: ['name'] } },
+    { name: 'repeat_last_shop', description: 'Add all items from the most recent receipt to the shopping list.', input_schema: { type: 'object', properties: {} } },
+    { name: 'add_family_member_items', description: 'Add all items assigned to a family member to the shopping list.', input_schema: { type: 'object', properties: { family_member: { type: 'string' } }, required: ['family_member'] } },
+    { name: 'add_multiple_to_shopping_list', description: 'Add multiple items to the shopping list at once.', input_schema: { type: 'object', properties: { items: { type: 'array', items: { type: 'string' } } }, required: ['items'] } },
+    { name: 'suggest_low_items', description: 'Suggest items Cath usually buys but hasnt bought recently.', input_schema: { type: 'object', properties: {} } },
+    { name: 'spending_summary', description: 'Calculate total spending from receipts.', input_schema: { type: 'object', properties: { store: { type: 'string' }, from_date: { type: 'string' }, to_date: { type: 'string' } } } },
+    { name: 'compare_prices', description: 'Compare prices for an item across stores.', input_schema: { type: 'object', properties: { item_name: { type: 'string' } }, required: ['item_name'] } },
+    { name: 'save_memory', description: 'Save a fact to persistent memory.', input_schema: { type: 'object', properties: { fact: { type: 'string' } }, required: ['fact'] } },
+    { name: 'forget_memory', description: 'Remove a fact from memory.', input_schema: { type: 'object', properties: { search: { type: 'string' } }, required: ['search'] } },
+    { name: 'list_memories', description: 'List all saved memories.', input_schema: { type: 'object', properties: {} } },
+    { name: 'set_meal_plan', description: 'Set meal for a day. 0=Monday..6=Sunday.', input_schema: { type: 'object', properties: { day_index: { type: 'number' }, meal: { type: 'string' }, who_home: { type: 'string' }, notes: { type: 'string' } }, required: ['day_index', 'meal'] } },
+    { name: 'get_meal_plan', description: 'Get the current meal plan.', input_schema: { type: 'object', properties: {} } },
+    { name: 'analyse_shopping_list', description: 'Review the shopping list and suggest missing items.', input_schema: { type: 'object', properties: {} } },
+    { name: 'list_todos', description: 'List all personal to-do tasks.', input_schema: { type: 'object', properties: {} } },
+    { name: 'add_todo', description: 'Add a task to the to-do list.', input_schema: { type: 'object', properties: { task: { type: 'string' } }, required: ['task'] } },
+    { name: 'complete_todo', description: 'Mark a to-do as done/not done.', input_schema: { type: 'object', properties: { id: { type: 'string' }, done: { type: 'boolean' } }, required: ['id', 'done'] } },
+    { name: 'delete_todo', description: 'Delete a to-do task.', input_schema: { type: 'object', properties: { id: { type: 'string' } }, required: ['id'] } },
+    { name: 'list_fiona_tasks', description: 'List Fiona cleaning tasks.', input_schema: { type: 'object', properties: {} } },
+    { name: 'add_fiona_task', description: 'Add a Fiona task.', input_schema: { type: 'object', properties: { task: { type: 'string' } }, required: ['task'] } },
+    { name: 'complete_fiona_task', description: 'Mark Fiona task done/not done.', input_schema: { type: 'object', properties: { id: { type: 'string' }, done: { type: 'boolean' } }, required: ['id', 'done'] } },
+    { name: 'delete_fiona_task', description: 'Delete a Fiona task.', input_schema: { type: 'object', properties: { id: { type: 'string' } }, required: ['id'] } },
+    { name: 'list_medications', description: 'List all medications.', input_schema: { type: 'object', properties: {} } },
+    { name: 'add_medication', description: 'Add a medication.', input_schema: { type: 'object', properties: { name: { type: 'string' }, dose: { type: 'string' }, schedule: { type: 'string' }, purpose: { type: 'string' } }, required: ['name'] } },
+    { name: 'delete_medication', description: 'Delete a medication by ID.', input_schema: { type: 'object', properties: { id: { type: 'string' } }, required: ['id'] } },
+    { name: 'list_medical_sessions', description: 'List medical sessions.', input_schema: { type: 'object', properties: {} } },
+    { name: 'add_medical_session', description: 'Add a medical session.', input_schema: { type: 'object', properties: { date: { type: 'string' }, duration: { type: 'number' }, plan: { type: 'string' }, practitioner: { type: 'string' } }, required: ['date'] } },
+    { name: 'delete_medical_session', description: 'Delete a medical session.', input_schema: { type: 'object', properties: { id: { type: 'string' } }, required: ['id'] } },
+    { name: 'view_med_logs', description: 'View medication/habit logs. ALWAYS pass from_date and to_date for specific days.', input_schema: { type: 'object', properties: { from_date: { type: 'string' }, to_date: { type: 'string' } } } },
+    { name: 'db_query', description: 'General SELECT from any Supabase table.', input_schema: { type: 'object', properties: { table: { type: 'string' }, select: { type: 'string' }, filters: { type: 'array', items: { type: 'object', properties: { column: { type: 'string' }, op: { type: 'string' }, value: { type: 'string' } } } }, order_by: { type: 'string' }, ascending: { type: 'boolean' }, limit: { type: 'number' } }, required: ['table'] } },
+    { name: 'db_write', description: 'General INSERT/UPDATE/DELETE on any Supabase table.', input_schema: { type: 'object', properties: { table: { type: 'string' }, action: { type: 'string' }, data: { type: 'object' }, filters: { type: 'array', items: { type: 'object', properties: { column: { type: 'string' }, op: { type: 'string' }, value: { type: 'string' } } } } }, required: ['table', 'action'] } }
+  ];
+
+
+  async function runTool(toolName, toolInput) {
+    if (toolName === 'search_items') {
+      var q = sb.from('master_items').select('id, name, category, store, family_member, last_price');
+      if (toolInput.query) q = q.ilike('name', '%' + toolInput.query + '%');
+      if (toolInput.category) q = q.eq('category', toolInput.category);
+      if (toolInput.store) q = q.eq('store', toolInput.store);
+      var { data } = await q.order('name').limit(50);
+      return JSON.stringify(data || []);
+    }
+    if (toolName === 'update_items') {
+      var updates = {};
+      if (toolInput.set_category) updates.category = toolInput.set_category;
+      if (toolInput.set_store) updates.store = toolInput.set_store;
+      if (toolInput.set_family_member !== undefined) updates.family_member = toolInput.set_family_member;
+      if (toolInput.set_name) updates.name = toolInput.set_name;
+      var { data } = await sb.from('master_items').update(updates).ilike('name', '%' + toolInput.filter_name + '%').select();
+      return JSON.stringify({ updated: (data || []).length, items: (data || []).map(function(i){ return i.name; }) });
+    }
+    if (toolName === 'delete_items') {
+      var { data } = await sb.from('master_items').delete().ilike('name', '%' + toolInput.filter_name + '%').select();
+      return JSON.stringify({ deleted: (data || []).length, items: (data || []).map(function(i){ return i.name; }) });
+    }
+    if (toolName === 'add_item') {
+      var row = { name: toolInput.name, category: toolInput.category, store: toolInput.store };
+      if (toolInput.last_price) row.last_price = toolInput.last_price;
+      await sb.from('master_items').insert(row);
+      return JSON.stringify({ added: toolInput.name });
+    }
+    if (toolName === 'add_to_shopping_list') {
+      var row = { name: toolInput.name, category: toolInput.category || 'Other', store: toolInput.store || '' };
+      await sb.from('shopping_items').insert(row);
+      return JSON.stringify({ added: toolInput.name, category: row.category, store: row.store });
+    }
+    if (toolName === 'view_shopping_list') {
+      var { data } = await sb.from('shopping_items').select('name, category, store, checked').order('created_at');
+      return JSON.stringify(data || []);
+    }
+    if (toolName === 'remove_from_shopping_list') {
+      var { data } = await sb.from('shopping_items').delete().ilike('name', '%' + toolInput.name + '%').select();
+      return JSON.stringify({ removed: (data || []).length, items: (data || []).map(function(i){ return i.name; }) });
+    }
+    if (toolName === 'repeat_last_shop') {
+      var { data: recs } = await sb.from('receipts').select('*, receipt_items(*)').order('uploaded_at', { ascending: false }).limit(1);
+      if (!recs || !recs.length || !recs[0].receipt_items.length) return '{"error":"No previous receipt found"}';
+      var rec = recs[0];
+      var { data: ml } = await sb.from('master_items').select('name, category, store');
+      var mm = {}; (ml || []).forEach(function(m){ mm[m.name.toLowerCase()] = m; });
+      var rows = [], seen = {};
+      rec.receipt_items.forEach(function(ri) {
+        if (ri.price <= 0) return;
+        var k = ri.item_name.toLowerCase();
+        if (seen[k]) return; seen[k] = true;
+        var mi = mm[k];
+        rows.push({ name: ri.item_name, category: mi ? mi.category : 'Other', store: mi ? mi.store : (rec.store || '') });
+      });
+      if (rows.length) await sb.from('shopping_items').insert(rows);
+      return JSON.stringify({ added: rows.length, store: rec.store, date: rec.receipt_date, items: rows.map(function(r){ return r.name; }) });
+    }
+    if (toolName === 'add_family_member_items') {
+      var { data: fi } = await sb.from('master_items').select('name, category, store').eq('family_member', toolInput.family_member);
+      if (!fi || !fi.length) return JSON.stringify({ added: 0, message: 'No items assigned to ' + toolInput.family_member });
+      var rows = fi.map(function(i){ return { name: i.name, category: i.category, store: i.store }; });
+      await sb.from('shopping_items').insert(rows);
+      return JSON.stringify({ added: rows.length, family_member: toolInput.family_member, items: rows.map(function(r){ return r.name; }) });
+    }
+    if (toolName === 'add_multiple_to_shopping_list') {
+      var { data: ml } = await sb.from('master_items').select('name, category, store');
+      var rows = [], matched = [], unmatched = [];
+      toolInput.items.forEach(function(itemName) {
+        var found = null;
+        (ml || []).forEach(function(m) {
+          if (!found && m.name.toLowerCase().indexOf(itemName.toLowerCase()) !== -1) found = m;
+        });
+        if (found) { rows.push({ name: found.name, category: found.category, store: found.store }); matched.push(found.name); }
+        else { rows.push({ name: itemName, category: 'Other', store: '' }); unmatched.push(itemName); }
+      });
+      if (rows.length) await sb.from('shopping_items').insert(rows);
+      return JSON.stringify({ added: rows.length, matched_from_master: matched, quick_adds: unmatched });
+    }
+    if (toolName === 'suggest_low_items') {
+      var { data: allReceipts } = await sb.from('receipts').select('receipt_date, receipt_items(item_name)').order('uploaded_at', { ascending: false });
+      if (!allReceipts || !allReceipts.length) return '{"suggestions":[],"message":"No receipt history yet"}';
+      var itemCount = {};
+      (allReceipts || []).forEach(function(r) { var seen = {}; (r.receipt_items || []).forEach(function(ri) { var k = ri.item_name.toLowerCase(); if (!seen[k]) { seen[k] = true; itemCount[k] = (itemCount[k] || { name: ri.item_name, count: 0 }); itemCount[k].count++; } }); });
+      var { data: current } = await sb.from('shopping_items').select('name');
+      var currentNames = (current || []).map(function(c){ return c.name.toLowerCase(); });
+      var suggestions = [];
+      Object.keys(itemCount).forEach(function(k) { if (itemCount[k].count >= 2 && currentNames.indexOf(k) === -1) suggestions.push({ name: itemCount[k].name, bought_times: itemCount[k].count }); });
+      suggestions.sort(function(a,b){ return b.bought_times - a.bought_times; });
+      return JSON.stringify({ suggestions: suggestions.slice(0, 15) });
+    }
+    if (toolName === 'spending_summary') {
+      var q = sb.from('receipts').select('store, receipt_date, total');
+      if (toolInput.store) q = q.ilike('store', '%' + toolInput.store + '%');
+      if (toolInput.from_date) q = q.gte('uploaded_at', toolInput.from_date);
+      if (toolInput.to_date) q = q.lte('uploaded_at', toolInput.to_date + 'T23:59:59');
+      var { data: recs } = await q;
+      if (!recs || !recs.length) return '{"total":0,"message":"No receipts found"}';
+      var total = 0, byStore = {};
+      recs.forEach(function(r) { total += Number(r.total) || 0; var s = r.store || 'Unknown'; byStore[s] = (byStore[s] || 0) + (Number(r.total) || 0); });
+      return JSON.stringify({ total: Math.round(total * 100) / 100, receipt_count: recs.length, by_store: byStore });
+    }
+    if (toolName === 'compare_prices') {
+      var { data: ri } = await sb.from('receipt_items').select('item_name, price, receipt_id, receipts(store, receipt_date)').ilike('item_name', '%' + toolInput.item_name + '%').order('item_name');
+      if (!ri || !ri.length) return '{"message":"No price history found"}';
+      return JSON.stringify({ prices: ri.map(function(r) { return { item: r.item_name, price: r.price, store: r.receipts ? r.receipts.store : '', date: r.receipts ? r.receipts.receipt_date : '' }; }) });
+    }
+    if (toolName === 'save_memory') { await sb.from('ai_memory').insert({ fact: toolInput.fact }); return JSON.stringify({ saved: toolInput.fact }); }
+    if (toolName === 'forget_memory') { var { data } = await sb.from('ai_memory').delete().ilike('fact', '%' + toolInput.search + '%').select(); return JSON.stringify({ removed: (data || []).length }); }
+    if (toolName === 'list_memories') { var { data } = await sb.from('ai_memory').select('*').order('created_at'); return JSON.stringify(data || []); }
+    if (toolName === 'set_meal_plan') {
+      var row = { day_index: toolInput.day_index, meal: toolInput.meal, who_home: toolInput.who_home || '', notes: toolInput.notes || '' };
+      await sb.from('meal_plans').delete().eq('day_index', toolInput.day_index);
+      await sb.from('meal_plans').insert(row);
+      var days = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+      return JSON.stringify({ set: days[toolInput.day_index], meal: toolInput.meal });
+    }
+    if (toolName === 'get_meal_plan') {
+      var { data } = await sb.from('meal_plans').select('*').order('day_index');
+      var days = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+      return JSON.stringify(days.map(function(d, i) { var m = (data || []).find(function(r) { return r.day_index === i; }); return { day: d, meal: m ? m.meal : 'Not planned', who_home: m ? m.who_home : '' }; }));
+    }
+    if (toolName === 'analyse_shopping_list') {
+      var { data: shopItems } = await sb.from('shopping_items').select('name, category');
+      var { data: masterItems } = await sb.from('master_items').select('name, category');
+      var categories = {};
+      (shopItems || []).forEach(function(i) { var cat = i.category || 'Other'; if (!categories[cat]) categories[cat] = []; categories[cat].push(i.name); });
+      return JSON.stringify({ current_list: categories, total_items: (shopItems || []).length, master_list_size: (masterItems || []).length });
+    }
+    if (toolName === 'list_todos') { var { data } = await sb.from('personal_todos').select('*').order('created_at'); return JSON.stringify(data || []); }
+    if (toolName === 'add_todo') { await sb.from('personal_todos').insert({ task: toolInput.task, done: false }); return JSON.stringify({ added: toolInput.task }); }
+    if (toolName === 'complete_todo') { await sb.from('personal_todos').update({ done: toolInput.done }).eq('id', toolInput.id); return JSON.stringify({ id: toolInput.id, done: toolInput.done }); }
+    if (toolName === 'delete_todo') { await sb.from('personal_todos').delete().eq('id', toolInput.id); return JSON.stringify({ deleted: toolInput.id }); }
+    if (toolName === 'list_fiona_tasks') { var { data } = await sb.from('fiona_tasks').select('*').order('created_at'); return JSON.stringify(data || []); }
+    if (toolName === 'add_fiona_task') { await sb.from('fiona_tasks').insert({ task: toolInput.task, done: false }); return JSON.stringify({ added: toolInput.task }); }
+    if (toolName === 'complete_fiona_task') { await sb.from('fiona_tasks').update({ done: toolInput.done }).eq('id', toolInput.id); return JSON.stringify({ id: toolInput.id, done: toolInput.done }); }
+    if (toolName === 'delete_fiona_task') { await sb.from('fiona_tasks').delete().eq('id', toolInput.id); return JSON.stringify({ deleted: toolInput.id }); }
+    if (toolName === 'list_medications') { var { data } = await sb.from('medications').select('*'); return JSON.stringify(data || []); }
+    if (toolName === 'add_medication') { await sb.from('medications').insert({ name: toolInput.name, dose: toolInput.dose || '', schedule: toolInput.schedule || '', purpose: toolInput.purpose || '' }); return JSON.stringify({ added: toolInput.name }); }
+    if (toolName === 'delete_medication') { await sb.from('medications').delete().eq('id', toolInput.id); return JSON.stringify({ deleted: toolInput.id }); }
+    if (toolName === 'list_medical_sessions') { var { data } = await sb.from('medical_sessions').select('*').order('date', { ascending: false }); return JSON.stringify(data || []); }
+    if (toolName === 'add_medical_session') { await sb.from('medical_sessions').insert({ date: toolInput.date, duration: toolInput.duration || 0, plan: toolInput.plan || '', practitioner: toolInput.practitioner || '' }); return JSON.stringify({ added: toolInput.date }); }
+    if (toolName === 'delete_medical_session') { await sb.from('medical_sessions').delete().eq('id', toolInput.id); return JSON.stringify({ deleted: toolInput.id }); }
+    if (toolName === 'view_med_logs') {
+      var q = sb.from('habit_logs').select('*, habit_meds(name)').order('created_at', { ascending: false });
+      if (toolInput.from_date) q = q.gte('date', toolInput.from_date);
+      if (toolInput.to_date) q = q.lte('date', toolInput.to_date);
+      var { data } = await q.limit(100);
+      return JSON.stringify(data || []);
+    }
+    if (toolName === 'db_query') {
+      var q = sb.from(toolInput.table).select(toolInput.select || '*');
+      if (toolInput.filters) { toolInput.filters.forEach(function(f) {
+        if (f.op === 'eq') q = q.eq(f.column, f.value);
+        else if (f.op === 'neq') q = q.neq(f.column, f.value);
+        else if (f.op === 'gt') q = q.gt(f.column, f.value);
+        else if (f.op === 'gte') q = q.gte(f.column, f.value);
+        else if (f.op === 'lt') q = q.lt(f.column, f.value);
+        else if (f.op === 'lte') q = q.lte(f.column, f.value);
+        else if (f.op === 'like') q = q.like(f.column, f.value);
+        else if (f.op === 'ilike') q = q.ilike(f.column, f.value);
+      }); }
+      if (toolInput.order_by) q = q.order(toolInput.order_by, { ascending: toolInput.ascending !== false });
+      var { data, error } = await q.limit(toolInput.limit || 50);
+      if (error) return JSON.stringify({ error: error.message });
+      return JSON.stringify(data || []);
+    }
+    if (toolName === 'db_write') {
+      var tbl = toolInput.table, act = toolInput.action;
+      if (act === 'insert') { var { data, error } = await sb.from(tbl).insert(toolInput.data || {}).select(); if (error) return JSON.stringify({ error: error.message }); return JSON.stringify({ inserted: (data || []).length, rows: data }); }
+      if (act === 'update') { var q = sb.from(tbl).update(toolInput.data || {}); if (toolInput.filters) { toolInput.filters.forEach(function(f) { if (f.op === 'eq') q = q.eq(f.column, f.value); else if (f.op === 'neq') q = q.neq(f.column, f.value); else if (f.op === 'ilike') q = q.ilike(f.column, f.value); }); } var { data, error } = await q.select(); if (error) return JSON.stringify({ error: error.message }); return JSON.stringify({ updated: (data || []).length, rows: data }); }
+      if (act === 'delete') { var q = sb.from(tbl).delete(); if (toolInput.filters) { toolInput.filters.forEach(function(f) { if (f.op === 'eq') q = q.eq(f.column, f.value); else if (f.op === 'neq') q = q.neq(f.column, f.value); else if (f.op === 'ilike') q = q.ilike(f.column, f.value); }); } var { data, error } = await q.select(); if (error) return JSON.stringify({ error: error.message }); return JSON.stringify({ deleted: (data || []).length, rows: data }); }
+    }
+    return '{"error":"Unknown tool: ' + toolName + '"}';
+  }
+
+
+  // ─── API + UI ───
+  async function callAPI(msgs) {
+    var memCtx = systemPrompt;
+    try {
+      var { data: memories } = await sb.from('ai_memory').select('fact').order('created_at');
+      if (memories && memories.length) {
+        memCtx += '\n\nYour saved memories about Cath:\n';
+        memories.forEach(function(m) { memCtx += '- ' + m.fact + '\n'; });
+      }
+    } catch(e) {}
+    var resp = await fetch('https://ziwycymhaqghdiznyhhw.supabase.co/functions/v1/claude-proxy', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model: 'claude-haiku-4-5', max_tokens: 1024, system: memCtx, tools: tools, messages: msgs })
+    });
+    if (!resp.ok) { var err = await resp.json().catch(function(){ return {}; }); throw new Error(err.error && err.error.message ? err.error.message : 'API error ' + resp.status); }
+    return await resp.json();
+  }
+
+  function render() {
+    var container = document.getElementById('messages');
+    if (!messages.length) {
+      container.innerHTML = '<div class="welcome"><div class="welcome-icon">&#x1F916;</div><h3>Hi Cath!</h3><p>Ask me anything about your shopping, meds, habits, todos, or meals.</p></div>';
+      return;
+    }
+    var html = '';
+    messages.forEach(function(msg) {
+      if (msg.role === 'user' && msg.content) html += '<div class="msg user"><div class="bubble">' + esc(msg.content).replace(/\n/g,'<br>') + '</div></div>';
+      else if (msg.role === 'assistant' && msg.content) html += '<div class="msg assistant"><div class="bubble">' + esc(msg.content).replace(/\n/g,'<br>') + '</div></div>';
+    });
+    container.innerHTML = html;
+    container.scrollTop = container.scrollHeight;
+  }
+
+  window.sendMsg = async function() {
+    var input = document.getElementById('chat-input');
+    var text = input.value.trim();
+    if (!text) return;
+    input.value = '';
+    messages.push({ role: 'user', content: text });
+    render();
+
+    var container = document.getElementById('messages');
+    var typing = document.createElement('div');
+    typing.className = 'msg assistant';
+    typing.id = 'typing';
+    typing.innerHTML = '<div class="bubble"><div class="typing"><span>&#x25CF;</span><span>&#x25CF;</span><span>&#x25CF;</span></div></div>';
+    container.appendChild(typing);
+    container.scrollTop = container.scrollHeight;
+
+    var btn = document.getElementById('send-btn');
+    btn.disabled = true;
+
+    try {
+      var apiMsgs = [];
+      messages.forEach(function(m) {
+        if (m.apiContent) apiMsgs.push({ role: m.role, content: m.apiContent });
+        else if (m.content) apiMsgs.push({ role: m.role, content: m.content });
+      });
+      var data = await callAPI(apiMsgs);
+
+      while (data.stop_reason === 'tool_use') {
+        var assistantContent = data.content;
+        messages.push({ role: 'assistant', content: '', apiContent: assistantContent });
+        var toolResults = [];
+        for (var i = 0; i < assistantContent.length; i++) {
+          var block = assistantContent[i];
+          if (block.type === 'tool_use') {
+            var result = await runTool(block.name, block.input);
+            toolResults.push({ type: 'tool_result', tool_use_id: block.id, content: result });
+          }
+        }
+        messages.push({ role: 'user', content: '', apiContent: toolResults });
+        apiMsgs = [];
+        messages.forEach(function(m) {
+          if (m.apiContent) apiMsgs.push({ role: m.role, content: m.apiContent });
+          else if (m.content) apiMsgs.push({ role: m.role, content: m.content });
+        });
+        data = await callAPI(apiMsgs);
+      }
+
+      var reply = '';
+      if (data.content) data.content.forEach(function(b) { if (b.type === 'text') reply += b.text; });
+      messages.push({ role: 'assistant', content: reply || 'Done!' });
+    } catch(e) {
+      messages.push({ role: 'assistant', content: '\u26A0\uFE0F ' + e.message });
+    }
+
+    var ind = document.getElementById('typing');
+    if (ind) ind.remove();
+    btn.disabled = false;
+    render();
+    input.focus();
+  };
+
+  // ─── LOGIN ───
+  window.doLogin = async function() {
+    var email = document.getElementById('login-email').value.trim();
+    var pass = document.getElementById('login-pass').value;
+    var errEl = document.getElementById('login-error');
+    errEl.classList.add('hidden');
+    if (!email || !pass) { errEl.textContent = 'Enter email and password'; errEl.classList.remove('hidden'); return; }
+    var { error } = await sb.auth.signInWithPassword({ email: email, password: pass });
+    if (error) { errEl.textContent = error.message; errEl.classList.remove('hidden'); return; }
+    showChat();
+  };
+
+  function showChat() {
+    document.getElementById('login-screen').classList.add('hidden');
+    document.getElementById('chat-screen').classList.remove('hidden');
+    setTimeout(function(){ document.getElementById('chat-input').focus(); }, 200);
+  }
+
+  // Check existing session
+  sb.auth.getSession().then(function(result) {
+    if (result.data.session) showChat();
+  });
+
+})();
+</script>
+</body>
+</html>

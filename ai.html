@@ -298,14 +298,14 @@ You have db_query (SELECT from any table) and db_write (INSERT/UPDATE/DELETE on 
       (shopItems || []).forEach(function(i) { var cat = i.category || 'Other'; if (!categories[cat]) categories[cat] = []; categories[cat].push(i.name); });
       return JSON.stringify({ current_list: categories, total_items: (shopItems || []).length, master_list_size: (masterItems || []).length });
     }
-    if (toolName === 'list_todos') { var { data } = await sb.from('personal_todos').select('*').order('created_at'); return JSON.stringify(data || []); }
-    if (toolName === 'add_todo') { await sb.from('personal_todos').insert({ task: toolInput.task, done: false }); return JSON.stringify({ added: toolInput.task }); }
-    if (toolName === 'complete_todo') { await sb.from('personal_todos').update({ done: toolInput.done }).eq('id', toolInput.id); return JSON.stringify({ id: toolInput.id, done: toolInput.done }); }
-    if (toolName === 'delete_todo') { await sb.from('personal_todos').delete().eq('id', toolInput.id); return JSON.stringify({ deleted: toolInput.id }); }
-    if (toolName === 'list_fiona_tasks') { var { data } = await sb.from('fiona_tasks').select('*').order('created_at'); return JSON.stringify(data || []); }
-    if (toolName === 'add_fiona_task') { await sb.from('fiona_tasks').insert({ task: toolInput.task, done: false }); return JSON.stringify({ added: toolInput.task }); }
-    if (toolName === 'complete_fiona_task') { await sb.from('fiona_tasks').update({ done: toolInput.done }).eq('id', toolInput.id); return JSON.stringify({ id: toolInput.id, done: toolInput.done }); }
-    if (toolName === 'delete_fiona_task') { await sb.from('fiona_tasks').delete().eq('id', toolInput.id); return JSON.stringify({ deleted: toolInput.id }); }
+    if (toolName === 'list_todos') { var { data, error } = await sb.from('personal_todos').select('*').order('created_at'); if (error) return JSON.stringify({ error: error.message }); return JSON.stringify(data || []); }
+    if (toolName === 'add_todo') { var { data, error } = await sb.from('personal_todos').insert({ task: toolInput.task, done: false, category: toolInput.category || 'General' }).select(); if (error) return JSON.stringify({ error: 'Failed to add todo: ' + error.message }); return JSON.stringify({ added: toolInput.task, id: data && data[0] ? data[0].id : null }); }
+    if (toolName === 'complete_todo') { var { error } = await sb.from('personal_todos').update({ done: toolInput.done }).eq('id', toolInput.id); if (error) return JSON.stringify({ error: 'Failed: ' + error.message }); return JSON.stringify({ id: toolInput.id, done: toolInput.done }); }
+    if (toolName === 'delete_todo') { var { error } = await sb.from('personal_todos').delete().eq('id', toolInput.id); if (error) return JSON.stringify({ error: 'Failed: ' + error.message }); return JSON.stringify({ deleted: toolInput.id }); }
+    if (toolName === 'list_fiona_tasks') { var { data, error } = await sb.from('fiona_tasks').select('*').order('created_at'); if (error) return JSON.stringify({ error: error.message }); return JSON.stringify(data || []); }
+    if (toolName === 'add_fiona_task') { var { data, error } = await sb.from('fiona_tasks').insert({ task: toolInput.task, done: false }).select(); if (error) return JSON.stringify({ error: 'Failed: ' + error.message }); return JSON.stringify({ added: toolInput.task }); }
+    if (toolName === 'complete_fiona_task') { var { error } = await sb.from('fiona_tasks').update({ done: toolInput.done }).eq('id', toolInput.id); if (error) return JSON.stringify({ error: 'Failed: ' + error.message }); return JSON.stringify({ id: toolInput.id, done: toolInput.done }); }
+    if (toolName === 'delete_fiona_task') { var { error } = await sb.from('fiona_tasks').delete().eq('id', toolInput.id); if (error) return JSON.stringify({ error: 'Failed: ' + error.message }); return JSON.stringify({ deleted: toolInput.id }); }
     if (toolName === 'list_medications') { var { data } = await sb.from('medications').select('*'); return JSON.stringify(data || []); }
     if (toolName === 'add_medication') { await sb.from('medications').insert({ name: toolInput.name, dose: toolInput.dose || '', schedule: toolInput.schedule || '', purpose: toolInput.purpose || '' }); return JSON.stringify({ added: toolInput.name }); }
     if (toolName === 'delete_medication') { await sb.from('medications').delete().eq('id', toolInput.id); return JSON.stringify({ deleted: toolInput.id }); }

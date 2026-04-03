@@ -4904,32 +4904,39 @@
       }
       // ─── TO-DO ───
       if (toolName === 'list_todos') {
-        var { data } = await sb.from('personal_todos').select('*').order('created_at');
+        var { data, error } = await sb.from('personal_todos').select('*').order('created_at');
+        if (error) return JSON.stringify({ error: error.message });
         return JSON.stringify(data || []);
       }
       if (toolName === 'add_todo') {
-        await sb.from('personal_todos').insert({ task: toolInput.task, done: false });
-        return JSON.stringify({ added: toolInput.task });
+        var { data, error } = await sb.from('personal_todos').insert({ task: toolInput.task, done: false, category: toolInput.category || 'General' }).select();
+        if (error) return JSON.stringify({ error: 'Failed to add todo: ' + error.message });
+        return JSON.stringify({ added: toolInput.task, id: data && data[0] ? data[0].id : null });
       }
       if (toolName === 'complete_todo') {
-        await sb.from('personal_todos').update({ done: toolInput.done }).eq('id', toolInput.id);
+        var { error } = await sb.from('personal_todos').update({ done: toolInput.done }).eq('id', toolInput.id);
+        if (error) return JSON.stringify({ error: 'Failed to update todo: ' + error.message });
         return JSON.stringify({ id: toolInput.id, done: toolInput.done });
       }
       if (toolName === 'delete_todo') {
-        await sb.from('personal_todos').delete().eq('id', toolInput.id);
+        var { error } = await sb.from('personal_todos').delete().eq('id', toolInput.id);
+        if (error) return JSON.stringify({ error: 'Failed to delete todo: ' + error.message });
         return JSON.stringify({ deleted: toolInput.id });
       }
       // ─── FIONA ───
       if (toolName === 'list_fiona_tasks') {
-        var { data } = await sb.from('fiona_tasks').select('*').order('created_at');
+        var { data, error } = await sb.from('fiona_tasks').select('*').order('created_at');
+        if (error) return JSON.stringify({ error: error.message });
         return JSON.stringify(data || []);
       }
       if (toolName === 'add_fiona_task') {
-        await sb.from('fiona_tasks').insert({ task: toolInput.task, done: false });
+        var { data, error } = await sb.from('fiona_tasks').insert({ task: toolInput.task, done: false }).select();
+        if (error) return JSON.stringify({ error: 'Failed to add task: ' + error.message });
         return JSON.stringify({ added: toolInput.task });
       }
       if (toolName === 'complete_fiona_task') {
-        await sb.from('fiona_tasks').update({ done: toolInput.done }).eq('id', toolInput.id);
+        var { error } = await sb.from('fiona_tasks').update({ done: toolInput.done }).eq('id', toolInput.id);
+        if (error) return JSON.stringify({ error: 'Failed to update task: ' + error.message });
         return JSON.stringify({ id: toolInput.id, done: toolInput.done });
       }
       if (toolName === 'delete_fiona_task') {

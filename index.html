@@ -5101,7 +5101,7 @@
         return JSON.stringify(data || []);
       }
       if (toolName === 'add_fiona_task') {
-        var { data, error } = await sb.from('fiona_tasks').insert({ task: toolInput.task, done: false }).select();
+        var { data, error } = await sb.from('fiona_tasks').insert({ id: Date.now(), task: toolInput.task, done: false }).select();
         if (error) return JSON.stringify({ error: 'Failed to add task: ' + error.message });
         return JSON.stringify({ added: toolInput.task });
       }

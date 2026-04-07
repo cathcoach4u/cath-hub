@@ -3986,11 +3986,17 @@
     };
 
     window.habAddNote = async function(logId) {
-      var note = prompt('Add a note for this dose:');
+      // Fetch existing note to show in prompt
+      var existing = '';
+      try {
+        var { data: row } = await sb.from('habit_logs').select('note').eq('id', logId).limit(1);
+        if (row && row[0] && row[0].note) existing = row[0].note;
+      } catch(e) {}
+      var note = prompt('Add a note for this dose:', existing);
       if (note === null) return;
       var { error } = await sb.from('habit_logs').update({ note: note.trim() || null }).eq('id', logId);
       if (error) {
-        alert('Could not save note. The notes feature may need a database update.\n\nError: ' + error.message);
+        alert('Could not save note. You may need to add a "note" column (type: text) to the habit_logs table in Supabase.\n\nError: ' + error.message);
         return;
       }
       habRender();
@@ -4252,13 +4258,19 @@
           grouped[date].forEach(function(l) {
             var medName = medMap[l.med_id] || 'Unknown';
             var time = l.created_at ? new Date(l.created_at).toLocaleTimeString('en-AU', { hour: '2-digit', minute: '2-digit' }) : '';
-            h += '<div style="display:flex !important;align-items:center !important;gap:8px !important;padding:4px 0 !important;">';
+            h += '<div style="display:flex !important;align-items:flex-start !important;gap:8px !important;padding:4px 0 !important;flex-wrap:wrap !important;">';
             h += '<span style="color:#10b981 !important;font-size:14px !important;">&#x2713;</span>';
             h += '<span style="font-size:13px !important;flex:1 !important;">' + esc(medName) + '</span>';
             if (time) {
               h += '<span style="font-size:11px !important;color:#3b82f6 !important;cursor:pointer !important;" onclick="habChangeTime(\'' + l.id + '\')" title="Tap to change time">' + esc(time) + ' &#x270F;</span>';
             } else {
               h += '<span style="font-size:11px !important;color:#94a3b8 !important;cursor:pointer !important;" onclick="habChangeTime(\'' + l.id + '\')" title="Tap to set time">set time &#x270F;</span>';
+            }
+            // Note display + add/edit
+            if (l.note) {
+              h += '<div style="width:100% !important;padding-left:22px !important;font-size:11px !important;color:#64748b !important;font-style:italic !important;">' + esc(l.note) + ' <span onclick="habAddNote(\'' + l.id + '\')" style="cursor:pointer !important;color:#3b82f6 !important;font-style:normal !important;">edit</span></div>';
+            } else {
+              h += '<div style="width:100% !important;padding-left:22px !important;"><span onclick="habAddNote(\'' + l.id + '\')" style="cursor:pointer !important;color:#3b82f6 !important;font-size:11px !important;">+ add note</span></div>';
             }
             h += '</div>';
           });

@@ -621,8 +621,15 @@
         <div style="font-size:32px !important;font-weight:700 !important;color:#1e293b !important;letter-spacing:3px !important;">Calm</div>
       </div>
 
-      <!-- Morning Meds - prominent button -->
-      <button class="am-btn" id="dash-meds-btn" onclick="dashTakeMorningMeds()" style="width:100% !important;padding:16px 20px !important;font-size:16px !important;font-weight:700 !important;text-align:center !important;background:#10b981 !important;border:2px solid #10b981 !important;border-radius:12px !important;color:white !important;margin-bottom:12px !important;display:flex !important;align-items:center !important;justify-content:center !important;gap:8px !important;">Take Morning Meds</button>
+      <!-- Morning Meds Reminder -->
+      <div id="dash-meds-btn" onclick="dashTakeMorningMeds()" style="display:flex !important;align-items:center !important;gap:10px !important;padding:12px 16px !important;background:#f0fdf4 !important;border:1px solid #bbf7d0 !important;border-radius:10px !important;margin-bottom:12px !important;cursor:pointer !important;">
+        <span style="font-size:20px !important;">&#x1F48A;</span>
+        <div style="flex:1 !important;">
+          <div style="font-size:14px !important;font-weight:600 !important;color:#166534 !important;">Take Morning Meds</div>
+          <div style="font-size:11px !important;color:#15803d !important;">Tap to log today's medication</div>
+        </div>
+        <span style="font-size:14px !important;color:#86efac !important;">&#x276F;</span>
+      </div>
 
       <!-- Gallup CliftonStrengths -->
       <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:12px !important;padding:14px 16px !important;margin-bottom:12px !important;">
@@ -3182,14 +3189,14 @@
       var doneIds = (existing || []).map(function(l){ return l.med_id; });
       var allDone = meds.every(function(m){ return doneIds.indexOf(m.id) !== -1; });
       if (allDone) {
-        btn.innerHTML = '\uD83D\uDC8A All Meds Taken';
-        btn.style.setProperty('background', '#64748b', 'important');
-        btn.style.setProperty('border-color', '#64748b', 'important');
-        btn.disabled = true;
+        btn.style.setProperty('background', '#f1f5f9', 'important');
+        btn.style.setProperty('border-color', '#e2e8f0', 'important');
+        btn.style.cursor = 'default';
+        btn.onclick = null;
+        btn.innerHTML = '<span style="font-size:20px !important;">\u2705</span><div style="flex:1 !important;"><div style="font-size:14px !important;font-weight:600 !important;color:#64748b !important;">All Meds Taken</div><div style="font-size:11px !important;color:#94a3b8 !important;">Logged for today</div></div>';
       } else {
-        btn.innerHTML = 'Take Morning Meds';
-        btn.style.setProperty('background', '#10b981', 'important');
-        btn.style.setProperty('border-color', '#10b981', 'important');
+        btn.style.setProperty('background', '#f0fdf4', 'important');
+        btn.style.setProperty('border-color', '#bbf7d0', 'important');
         btn.disabled = false;
       }
     } catch(e) {}

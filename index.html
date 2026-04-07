@@ -3852,6 +3852,7 @@
       h += '<button class="am-btn" onclick="habRecordAsNeededWithTime(' + medId + ',\'lastnight\',' + hasBrands + ')" style="background:#6366f1 !important;color:white !important;border-color:#6366f1 !important;padding:6px 12px !important;font-size:12px !important;">Last night</button>';
       h += '<button class="am-btn" onclick="habRecordAsNeededWithTime(' + medId + ',\'custom\',' + hasBrands + ')" style="background:#f59e0b !important;color:white !important;border-color:#f59e0b !important;padding:6px 12px !important;font-size:12px !important;">Other time</button>';
       h += '</div>';
+      h += '<input type="text" id="dose-note-' + medId + '" placeholder="Add a note (optional)" style="width:100% !important;padding:8px 10px !important;border:1px solid #e2e8f0 !important;border-radius:8px !important;font-size:12px !important;box-sizing:border-box !important;color:#1e293b !important;">';
       panel.innerHTML = h;
       panel.style.display = 'block';
     };
@@ -3864,13 +3865,8 @@
         logDate = todayKey();
         logCreatedAt = now.toISOString();
       } else if (when === 'lastnight') {
-        // If it's before 4am, "last night" = yesterday evening 9pm; otherwise today-1 at 9pm
         var lastNight = new Date(now);
-        if (now.getHours() < 4) {
-          lastNight.setDate(lastNight.getDate() - 1);
-        } else {
-          lastNight.setDate(lastNight.getDate() - 1);
-        }
+        lastNight.setDate(lastNight.getDate() - 1);
         lastNight.setHours(21, 0, 0, 0);
         logDate = lastNight.getFullYear() + '-' + String(lastNight.getMonth()+1).padStart(2,'0') + '-' + String(lastNight.getDate()).padStart(2,'0');
         logCreatedAt = lastNight.toISOString();
@@ -3882,10 +3878,13 @@
         logDate = parsed.date;
         logCreatedAt = parsed.iso;
       }
+      // Get optional note
+      var noteEl = document.getElementById('dose-note-' + medId);
+      var note = noteEl ? noteEl.value.trim() : '';
       if (hasBrands) {
-        habShowBrandButtons(medId, logDate, logCreatedAt);
+        habShowBrandButtons(medId, logDate, logCreatedAt, note);
       } else {
-        habInsertDose(medId, logDate, logCreatedAt);
+        habInsertDose(medId, logDate, logCreatedAt, note || undefined);
       }
     };
 
@@ -3922,18 +3921,26 @@
     }
 
     // Show brand buttons after time is selected
-    window.habShowBrandButtons = function(medId, logDate, logCreatedAt) {
+    window.habShowBrandButtons = function(medId, logDate, logCreatedAt, userNote) {
+      window._pendingDoseNote = userNote || '';
       var brands = getAntacidBrands();
       var panel = document.getElementById('record-panel-' + medId);
       if (!panel) return;
       var h = '<div style="font-size:12px !important;font-weight:600 !important;color:#475569 !important;margin-bottom:8px !important;">Which brand?</div>';
       h += '<div style="display:flex !important;gap:6px !important;flex-wrap:wrap !important;">';
       for (var i = 0; i < brands.length; i++) {
-        h += '<button class="am-btn" onclick="habInsertDose(' + medId + ',\'' + logDate + '\',\'' + logCreatedAt + '\',\'' + esc(brands[i]) + '\')" style="background:#eff6ff !important;color:#2563eb !important;border-color:#bfdbfe !important;padding:6px 12px !important;font-size:12px !important;">' + esc(brands[i]) + '</button>';
+        h += '<button class="am-btn" onclick="habInsertDoseWithBrand(' + medId + ',\'' + logDate + '\',\'' + logCreatedAt + '\',\'' + esc(brands[i]) + '\')" style="background:#eff6ff !important;color:#2563eb !important;border-color:#bfdbfe !important;padding:6px 12px !important;font-size:12px !important;">' + esc(brands[i]) + '</button>';
       }
       h += '<button class="am-btn" onclick="habAddBrand(' + medId + ',\'' + logDate + '\',\'' + logCreatedAt + '\')" style="background:#f8fafc !important;color:#64748b !important;border-color:#e2e8f0 !important;padding:6px 12px !important;font-size:12px !important;">+ Add brand</button>';
       h += '</div>';
       panel.innerHTML = h;
+    };
+
+    window.habInsertDoseWithBrand = function(medId, logDate, logCreatedAt, brand) {
+      var note = brand;
+      if (window._pendingDoseNote) note = brand + ' — ' + window._pendingDoseNote;
+      window._pendingDoseNote = '';
+      habInsertDose(medId, logDate, logCreatedAt, note);
     };
 
     window.habAddBrand = function(medId, logDate, logCreatedAt) {
@@ -3945,13 +3952,16 @@
         brands.push(name);
         saveAntacidBrands(brands);
       }
-      habInsertDose(medId, logDate, logCreatedAt, name);
+      var note = name;
+      if (window._pendingDoseNote) note = name + ' — ' + window._pendingDoseNote;
+      window._pendingDoseNote = '';
+      habInsertDose(medId, logDate, logCreatedAt, note);
     };
 
-    window.habInsertDose = async function(medId, logDate, logCreatedAt, brand) {
+    window.habInsertDose = async function(medId, logDate, logCreatedAt, noteText) {
       var logData = { med_id: medId, date: logDate, created_at: logCreatedAt };
-      if (brand) {
-        logData.note = brand;
+      if (noteText) {
+        logData.note = noteText;
         var { error } = await sb.from('habit_logs').insert(logData);
         if (error && error.message && error.message.indexOf('note') !== -1) {
           delete logData.note;
@@ -3972,6 +3982,13 @@
         return;
       }
       await sb.from('habit_logs').update({ date: parsed.date, created_at: parsed.iso }).eq('id', logId);
+      habRender();
+    };
+
+    window.habAddNote = async function(logId) {
+      var note = prompt('Add a note for this dose:');
+      if (note === null) return;
+      await sb.from('habit_logs').update({ note: note.trim() || null }).eq('id', logId);
       habRender();
     };
 
@@ -4041,12 +4058,14 @@
           // Get time taken today
           var takenTime = '';
           var takenLogId = '';
+          var takenNote = '';
           if (done) {
             try {
-              var { data: tLog } = await sb.from('habit_logs').select('id, created_at').eq('med_id', med.id).eq('date', today).limit(1);
-              if (tLog && tLog[0] && tLog[0].created_at) {
-                takenTime = new Date(tLog[0].created_at).toLocaleTimeString('en-AU', { hour: '2-digit', minute: '2-digit' });
+              var { data: tLog } = await sb.from('habit_logs').select('id, created_at, note').eq('med_id', med.id).eq('date', today).limit(1);
+              if (tLog && tLog[0]) {
+                if (tLog[0].created_at) takenTime = new Date(tLog[0].created_at).toLocaleTimeString('en-AU', { hour: '2-digit', minute: '2-digit' });
                 takenLogId = tLog[0].id;
+                takenNote = tLog[0].note || '';
               }
             } catch(e) {}
           }
@@ -4056,7 +4075,13 @@
           var doseStr = medInfo && medInfo.dose ? medInfo.dose : '';
           h += '<div style="flex:1 !important;"><div class="hab-med-name" style="margin-bottom:0 !important;">'+esc(med.name)+(doseStr ? ' <span style="font-size:10px !important;color:#94a3b8 !important;font-weight:400 !important;">'+esc(doseStr)+'</span>' : '')+'</div>';
           if (done && takenTime) {
-            h += '<div style="font-size:10px !important;color:#10b981 !important;cursor:pointer !important;" onclick="habChangeTime(\''+takenLogId+'\')" title="Tap to change time">Taken at '+esc(takenTime)+' &#x270F;</div>';
+            h += '<div style="font-size:10px !important;color:#10b981 !important;">';
+            h += '<span onclick="habChangeTime(\''+takenLogId+'\')" style="cursor:pointer !important;" title="Tap to change time">Taken at '+esc(takenTime)+' &#x270F;</span>';
+            if (takenNote) {
+              h += ' <span style="color:#64748b !important;">— '+esc(takenNote)+'</span>';
+            }
+            h += ' <span onclick="habAddNote(\''+takenLogId+'\')" style="cursor:pointer !important;color:#3b82f6 !important;font-size:10px !important;" title="Add/edit note">&#x1F4DD;</span>';
+            h += '</div>';
           } else if (timeLabel) {
             h += '<div style="font-size:10px !important;color:#94a3b8 !important;">'+timeLabel+'</div>';
           }
@@ -4132,7 +4157,9 @@
                 var t = tl.created_at ? new Date(tl.created_at).toLocaleTimeString('en-AU', { hour: '2-digit', minute: '2-digit' }) : 'no time';
                 var noteLabel = tl.note ? ' (' + tl.note + ')' : '';
                 h += '<div style="display:flex !important;align-items:center !important;gap:6px !important;font-size:11px !important;color:#64748b !important;padding:2px 0 !important;">';
-                h += '<span onclick="habChangeTime(\'' + tl.id + '\')" style="cursor:pointer !important;color:#3b82f6 !important;">' + t + noteLabel + ' &#x270F;</span>';
+                h += '<span onclick="habChangeTime(\'' + tl.id + '\')" style="cursor:pointer !important;color:#3b82f6 !important;">' + t + ' &#x270F;</span>';
+                if (tl.note) h += '<span style="color:#64748b !important;"> — ' + esc(tl.note) + '</span>';
+                h += '<span onclick="habAddNote(\'' + tl.id + '\')" style="cursor:pointer !important;color:#3b82f6 !important;" title="Add/edit note">&#x1F4DD;</span>';
                 h += '<span onclick="habDeleteDose(\'' + tl.id + '\')" style="cursor:pointer !important;color:#ef4444 !important;" title="Remove dose">&#x2715;</span>';
                 h += '</div>';
               });

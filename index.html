@@ -608,27 +608,48 @@
     <div class="screen active" id="ch-home">
       <h2 style="font-size:20px !important;margin-bottom:16px !important;">Dashboard</h2>
 
-      <!-- Fortnightly Week Indicator -->
-      <div style="display:flex !important;align-items:center !important;justify-content:space-between !important;margin-bottom:12px !important;">
-        <span id="dash-fortnight-pill" style="display:inline-block !important;padding:6px 16px !important;border-radius:99px !important;font-size:13px !important;font-weight:700 !important;background:#f0fdf4 !important;color:#166534 !important;border:1px solid #bbf7d0 !important;"></span>
-        <button onclick="dashSwapWeek()" style="background:none !important;border:none !important;font-size:12px !important;color:#3b82f6 !important;cursor:pointer !important;font-weight:500 !important;text-decoration:underline !important;font-family:inherit !important;">Wrong week? Swap</button>
-      </div>
-      <div id="dash-fortnight-cards" style="display:flex !important;flex-direction:column !important;gap:8px !important;margin-bottom:16px !important;"></div>
-
       <!-- Word of the Year -->
       <div style="text-align:center !important;padding:16px !important;margin-bottom:12px !important;background:linear-gradient(135deg, #f0f4f8, #e0e7ff) !important;border-radius:12px !important;border:1px solid #c7d2fe !important;">
         <div style="font-size:10px !important;font-weight:700 !important;text-transform:uppercase !important;letter-spacing:2px !important;color:#6366f1 !important;margin-bottom:4px !important;">Word of the Year</div>
         <div style="font-size:32px !important;font-weight:700 !important;color:#1e293b !important;letter-spacing:3px !important;">Calm</div>
       </div>
 
-      <!-- Morning Meds Reminder -->
-      <div id="dash-meds-btn" onclick="chNav('habits');setTimeout(function(){zbTab('meds')},100)" style="display:flex !important;align-items:center !important;gap:10px !important;padding:12px 16px !important;background:#f0fdf4 !important;border:1px solid #bbf7d0 !important;border-radius:10px !important;margin-bottom:12px !important;cursor:pointer !important;">
-        <span style="font-size:20px !important;">&#x1F48A;</span>
-        <div style="flex:1 !important;">
-          <div style="font-size:14px !important;font-weight:600 !important;color:#166534 !important;">Take Morning Meds</div>
-          <div style="font-size:11px !important;color:#15803d !important;">Tap to log in My Habits</div>
+      <!-- Daily Habits Box -->
+      <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:12px !important;padding:16px !important;margin-bottom:12px !important;">
+        <div style="font-size:13px !important;font-weight:700 !important;color:#1e293b !important;margin-bottom:12px !important;">&#x2600;&#xFE0F; Daily Habits</div>
+
+        <!-- Fortnightly Week Indicator -->
+        <div style="display:flex !important;align-items:center !important;justify-content:space-between !important;margin-bottom:10px !important;">
+          <span id="dash-fortnight-pill" style="display:inline-block !important;padding:6px 16px !important;border-radius:99px !important;font-size:13px !important;font-weight:700 !important;background:#f0fdf4 !important;color:#166534 !important;border:1px solid #bbf7d0 !important;"></span>
+          <button onclick="dashSwapWeek()" style="background:none !important;border:none !important;font-size:12px !important;color:#3b82f6 !important;cursor:pointer !important;font-weight:500 !important;text-decoration:underline !important;font-family:inherit !important;">Wrong week? Swap</button>
         </div>
-        <span style="font-size:14px !important;color:#86efac !important;">&#x276F;</span>
+        <div id="dash-fortnight-cards" style="display:flex !important;flex-direction:column !important;gap:8px !important;margin-bottom:12px !important;"></div>
+
+        <!-- Morning Meds Reminder -->
+        <div id="dash-meds-btn" onclick="chNav('habits');setTimeout(function(){zbTab('meds')},100)" style="display:flex !important;align-items:center !important;gap:10px !important;padding:12px 16px !important;background:#f0fdf4 !important;border:1px solid #bbf7d0 !important;border-radius:10px !important;margin-bottom:10px !important;cursor:pointer !important;">
+          <span style="font-size:20px !important;">&#x1F48A;</span>
+          <div style="flex:1 !important;">
+            <div style="font-size:14px !important;font-weight:600 !important;color:#166534 !important;">Take Morning Meds</div>
+            <div style="font-size:11px !important;color:#15803d !important;">Tap to log in My Habits</div>
+          </div>
+          <span style="font-size:14px !important;color:#86efac !important;">&#x276F;</span>
+        </div>
+
+        <!-- Water Tracker -->
+        <div style="margin-bottom:0 !important;">
+          <div style="display:flex !important;align-items:center !important;justify-content:space-between !important;margin-bottom:8px !important;">
+            <div style="font-size:13px !important;font-weight:600 !important;color:#1e293b !important;">&#x1F4A7; Water Tracker</div>
+            <span style="font-size:12px !important;color:#64748b !important;" id="dash-water-label">0 / 8 glasses</span>
+          </div>
+          <div style="display:flex !important;gap:4px !important;align-items:center !important;">
+            <div id="dash-water-glasses" style="display:flex !important;gap:4px !important;flex:1 !important;flex-wrap:wrap !important;"></div>
+            <button onclick="dashAddWater()" style="padding:8px 12px !important;background:#3b82f6 !important;color:white !important;border:none !important;border-radius:8px !important;font-size:18px !important;cursor:pointer !important;line-height:1 !important;">+</button>
+            <button onclick="dashRemoveWater()" style="padding:8px 10px !important;background:#e2e8f0 !important;color:#64748b !important;border:none !important;border-radius:8px !important;font-size:18px !important;cursor:pointer !important;line-height:1 !important;">&minus;</button>
+          </div>
+          <div style="height:6px !important;background:#e2e8f0 !important;border-radius:3px !important;margin-top:8px !important;overflow:hidden !important;">
+            <div id="dash-water-bar" style="height:100% !important;background:#3b82f6 !important;border-radius:3px !important;transition:width 0.3s !important;width:0% !important;"></div>
+          </div>
+        </div>
       </div>
 
       <!-- Gallup CliftonStrengths -->
@@ -649,26 +670,7 @@
       </div>
 
       <div style="display:flex !important;gap:8px !important;margin-bottom:16px !important;flex-wrap:wrap !important;">
-        <!-- ARCHIVED: Upload Receipt moved to Baker Hub
-        <button class="am-btn" onclick="dashQuickNav({value:'receipt'})" style="flex:1 !important;padding:12px 10px !important;font-size:13px !important;text-align:center !important;background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;color:#1e293b !important;">&#x1F9FE; Upload Receipt</button>
-        -->
         <button class="am-btn" onclick="dashQuickNav({value:'filing'})" style="flex:1 !important;padding:12px 10px !important;font-size:13px !important;text-align:center !important;background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;color:#1e293b !important;">&#x1F4C1; Filing System</button>
-      </div>
-
-      <!-- Water Tracker -->
-      <div class="dash-section" style="margin-bottom:12px !important;">
-        <div style="display:flex !important;align-items:center !important;justify-content:space-between !important;margin-bottom:8px !important;">
-          <h3 style="margin-bottom:0 !important;">&#x1F4A7; Water Tracker</h3>
-          <span style="font-size:12px !important;color:#64748b !important;" id="dash-water-label">0 / 8 glasses</span>
-        </div>
-        <div style="display:flex !important;gap:4px !important;align-items:center !important;">
-          <div id="dash-water-glasses" style="display:flex !important;gap:4px !important;flex:1 !important;flex-wrap:wrap !important;"></div>
-          <button onclick="dashAddWater()" style="padding:8px 12px !important;background:#3b82f6 !important;color:white !important;border:none !important;border-radius:8px !important;font-size:18px !important;cursor:pointer !important;line-height:1 !important;">+</button>
-          <button onclick="dashRemoveWater()" style="padding:8px 10px !important;background:#e2e8f0 !important;color:#64748b !important;border:none !important;border-radius:8px !important;font-size:18px !important;cursor:pointer !important;line-height:1 !important;">&minus;</button>
-        </div>
-        <div style="height:6px !important;background:#e2e8f0 !important;border-radius:3px !important;margin-top:8px !important;overflow:hidden !important;">
-          <div id="dash-water-bar" style="height:100% !important;background:#3b82f6 !important;border-radius:3px !important;transition:width 0.3s !important;width:0% !important;"></div>
-        </div>
       </div>
 
       <!-- Daily Rhythm Checklist -->

@@ -1522,13 +1522,22 @@
           <span onclick="dashBackfillMeds()" style="font-size:12px !important;color:#3b82f6 !important;cursor:pointer !important;text-decoration:underline !important;">Missed a day? Log it</span>
         </div>
 
-        <!-- DAILY Medications -->
+        <!-- DAILY MORNING Medications -->
         <div class="hab-section" style="margin-bottom:10px !important;">
           <div class="hab-section-header" style="padding:12px 16px !important;cursor:pointer !important;" onclick="habToggleSection(this)">
-            <h3 style="font-size:14px !important;">&#x2600; Daily</h3>
+            <h3 style="font-size:14px !important;">&#x2600; Daily &mdash; Morning</h3>
             <span style="font-size:11px !important;color:#94a3b8 !important;">Tap to mark as taken <span class="hab-chevron" style="margin-left:6px !important;">&#x25B2;</span></span>
           </div>
-          <div id="hab-daily-list"></div>
+          <div id="hab-daily-morning-list"></div>
+        </div>
+
+        <!-- DAILY OINTMENTS -->
+        <div class="hab-section" style="margin-bottom:10px !important;">
+          <div class="hab-section-header" style="padding:12px 16px !important;cursor:pointer !important;" onclick="habToggleSection(this)">
+            <h3 style="font-size:14px !important;">&#x1F9F4; Daily &mdash; Ointments</h3>
+            <span style="font-size:11px !important;color:#94a3b8 !important;">Sequential use <span class="hab-chevron" style="margin-left:6px !important;">&#x25B2;</span></span>
+          </div>
+          <div id="hab-daily-ointments-list"></div>
         </div>
 
         <!-- WEEKLY Medications -->
@@ -3008,7 +3017,8 @@
       var { data: allHabs } = await sb.from('habit_meds').select('*').eq('freq', 'daily');
       var { data: medsList } = await sb.from('medications').select('name');
       var medNames = (medsList || []).map(function(m){ return m.name.toLowerCase(); });
-      var meds = (allHabs || []).filter(function(h){ return medNames.indexOf(h.name.toLowerCase()) !== -1; });
+      // Only morning meds (exclude ointments)
+      var meds = (allHabs || []).filter(function(h){ return medNames.indexOf(h.name.toLowerCase()) !== -1 && OINTMENT_NAMES.indexOf(h.name.toLowerCase()) === -1; });
       if (!meds.length) { btn.innerHTML = 'No meds found'; _medRecordingLock = false; return; }
       var today = new Date();
       var todayStr = today.getFullYear()+'-'+String(today.getMonth()+1).padStart(2,'0')+'-'+String(today.getDate()).padStart(2,'0');
@@ -3043,7 +3053,8 @@
       medsList = r2.data || [];
     } catch(e) { alert('Error loading meds: ' + e.message); return; }
     var medNames = medsList.map(function(m){ return m.name.toLowerCase(); });
-    var meds = allHabs.filter(function(h){ return medNames.indexOf(h.name.toLowerCase()) !== -1; });
+    // Only morning meds for backfill (exclude ointments)
+    var meds = allHabs.filter(function(h){ return medNames.indexOf(h.name.toLowerCase()) !== -1 && OINTMENT_NAMES.indexOf(h.name.toLowerCase()) === -1; });
     if (!meds.length) { alert('No daily medications found'); return; }
 
     // Default date = yesterday
@@ -3146,7 +3157,8 @@
       var { data: allHabs } = await sb.from('habit_meds').select('*').eq('freq', 'daily');
       var { data: medsList } = await sb.from('medications').select('name');
       var medNames = (medsList || []).map(function(m){ return m.name.toLowerCase(); });
-      var meds = (allHabs || []).filter(function(h){ return medNames.indexOf(h.name.toLowerCase()) !== -1; });
+      // Only morning meds (exclude ointments)
+      var meds = (allHabs || []).filter(function(h){ return medNames.indexOf(h.name.toLowerCase()) !== -1 && OINTMENT_NAMES.indexOf(h.name.toLowerCase()) === -1; });
       if (!meds.length) return;
       var { data: existing } = await sb.from('habit_logs').select('med_id').eq('date', todayStr);
       var doneIds = (existing || []).map(function(l){ return l.med_id; });
@@ -3720,8 +3732,7 @@
       { name: 'Nexium Antacid', dose: '', hasBrands: true },
       { name: 'Prochlorperazine', dose: '5-10mg up to 3x daily', group: 'Migraine', purpose: 'For dizziness/vertigo. Anti-emetic that blocks dopamine. Take orally or under tongue. Can cause drowsiness.' },
       { name: 'Cizinate', dose: '20/40mg up to 3x daily', group: 'Migraine', purpose: 'For dizziness if Prochlorperazine not enough. Cinnarizine/dimenhydrinate combo. Avoid daily use beyond 4 weeks (risk of Parkinson-like symptoms).' },
-      { name: 'Ondansetron', dose: '8mg wafer up to 3x daily', group: 'Migraine', purpose: 'For nausea. Dissolve wafer on tongue (no water needed). Blocks serotonin to stop nausea signals. Can cause headache or constipation.' },
-      { name: 'Betamethasone Valerate Ointment', dose: 'Apply thin layer', group: 'Topical', action: 'applied', purpose: 'Topical corticosteroid for eczema, dermatitis, and skin inflammation. Apply a thin layer to affected area 1\u20132x daily. Do not use on broken skin or face unless directed. Avoid prolonged use. Wash hands after applying.' }
+      { name: 'Ondansetron', dose: '8mg wafer up to 3x daily', group: 'Migraine', purpose: 'For nausea. Dissolve wafer on tongue (no water needed). Blocks serotonin to stop nausea signals. Can cause headache or constipation.' }
     ];
 
     // Load antacid brands from localStorage (user can add more via UI)
@@ -3739,8 +3750,33 @@
     var MED_TIMES = {
       'vyvanse': 'Morning',
       'valtrex': 'Morning',
-      'levothyroxine': 'Morning',
-      'xobet cream': 'Evening (apply)'
+      'levothyroxine': 'Morning'
+    };
+
+    // Ointments - sequential use (first must finish before second activates)
+    var OINTMENT_MEDS = [
+      { name: 'Xobet Cream', dose: 'Apply once daily', time: 'Evening', purpose: 'Topical corticosteroid + salicylic acid for scalp psoriasis/dermatitis. Apply thin layer to affected area in the evening. Use until tube runs out.' },
+      { name: 'Betamethasone Valerate Ointment', dose: 'Apply up to 3x daily', time: 'As needed', purpose: 'Topical corticosteroid for eczema, dermatitis, and skin inflammation. Apply a thin layer to affected area 1\u20133x daily. Do not use on broken skin or face unless directed. Avoid prolonged use. Wash hands after applying.' }
+    ];
+    var OINTMENT_NAMES = OINTMENT_MEDS.map(function(o) { return o.name.toLowerCase(); });
+
+    function isXobetFinished() {
+      return localStorage.getItem('cathhub_xobet_finished') === 'true';
+    }
+    window.habToggleXobetFinished = function() {
+      var current = isXobetFinished();
+      if (!current) {
+        if (!confirm('Mark Xobet Cream as finished? This will activate Betamethasone Valerate Ointment.')) return;
+      }
+      localStorage.setItem('cathhub_xobet_finished', current ? 'false' : 'true');
+      habRender();
+    };
+
+    window.habRecordOintment = async function(medId) {
+      var now = new Date();
+      var d = now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');
+      await sb.from('habit_logs').insert({ id: Date.now(), med_id: medId, date: d, created_at: now.toISOString() });
+      habRender();
     };
 
     async function habAutoPopulate() {
@@ -3748,7 +3784,7 @@
         var { data: allMeds } = await sb.from('medications').select('name, schedule');
         var { data: existingHabs } = await sb.from('habit_meds').select('id, name, freq');
         var existingNames = (existingHabs || []).map(function(m){ return m.name.toLowerCase(); });
-        var dailyMedNames = ['Vyvanse', 'Valtrex', 'Levothyroxine', 'Xobet'];
+        var dailyMedNames = ['Vyvanse', 'Valtrex', 'Levothyroxine', 'Xobet', 'Betamethasone'];
         var weeklyMedNames = ['Vitamin D', 'Monjaro'];
         var asNeededNames = AS_NEEDED_MEDS.map(function(m){ return m.name.toLowerCase(); });
         for (var i = 0; i < (allMeds || []).length; i++) {
@@ -3795,6 +3831,16 @@
           });
           if (wEntry && wEntry.freq !== 'weekly') {
             await sb.from('habit_meds').update({ freq: 'weekly' }).eq('id', wEntry.id);
+          }
+        }
+        // Fix ointment meds that got wrong freq (should be daily)
+        var ointNames = OINTMENT_MEDS.map(function(o) { return o.name.toLowerCase(); });
+        for (var oi = 0; oi < ointNames.length; oi++) {
+          var oEntry = refreshedList2.find(function(r) {
+            return r.name.toLowerCase().indexOf(ointNames[oi]) !== -1 || ointNames[oi].indexOf(r.name.toLowerCase()) !== -1;
+          });
+          if (oEntry && oEntry.freq !== 'daily') {
+            await sb.from('habit_meds').update({ freq: 'daily' }).eq('id', oEntry.id);
           }
         }
         // Clean up ALL duplicate habit_meds (same name appearing more than once)
@@ -4044,8 +4090,8 @@
       // #1: Morning reminder banner (inside meds section)
       var bannerEl = document.getElementById('hab-morning-banner');
       var hour = new Date().getHours();
-      // Only count actual meds for the "all done" check
-      var dailyMeds = daily.filter(function(m){ return medNames.indexOf(m.name.toLowerCase()) !== -1; });
+      // Only count morning meds (not ointments) for the "all done" check
+      var dailyMeds = daily.filter(function(m){ return medNames.indexOf(m.name.toLowerCase()) !== -1 && OINTMENT_NAMES.indexOf(m.name.toLowerCase()) === -1; });
       var allMedsDone = dailyMeds.length > 0 && dailyMeds.every(function(m){ return logs[m.id]&&logs[m.id][today]; });
       if (hour < 12 && !allMedsDone && dailyMeds.length > 0) {
         bannerEl.innerHTML = '<div class="hab-reminder-banner">&#x2600;&#xFE0F; Have you taken your morning meds?</div>';
@@ -4069,18 +4115,20 @@
 
 
 
-      // #3: Daily with AM/PM time labels
-      var dl = document.getElementById('hab-daily-list');
-      if (!daily.length) {
-        dl.innerHTML = '<div class="hab-empty">No daily medications yet. Tap + Add to get started.</div>';
+      // #3: Daily Morning meds (non-ointment)
+      var morningMeds = daily.filter(function(m){ return OINTMENT_NAMES.indexOf(m.name.toLowerCase()) === -1; });
+      var ointmentMeds = daily.filter(function(m){ return OINTMENT_NAMES.indexOf(m.name.toLowerCase()) !== -1; });
+
+      var dl = document.getElementById('hab-daily-morning-list');
+      if (!morningMeds.length) {
+        dl.innerHTML = '<div class="hab-empty">No morning medications yet.</div>';
       } else {
         var h = '';
-        for (var i = 0; i < daily.length; i++) {
-          var med = daily[i];
+        for (var i = 0; i < morningMeds.length; i++) {
+          var med = morningMeds[i];
           var done = !!(logs[med.id] && logs[med.id][today]);
           var s = await streakFor(med.id, logs);
           var timeLabel = MED_TIMES[med.name.toLowerCase()] || '';
-          // Get time taken today
           var takenTime = '';
           var takenLogId = '';
           var takenNote = '';
@@ -4118,6 +4166,111 @@
         }
         dl.innerHTML = h;
       }
+
+      // #3b: Daily Ointments (sequential)
+      var ol = document.getElementById('hab-daily-ointments-list');
+      var xobetDone = isXobetFinished();
+      var oh = '';
+      // Find Xobet in habit_meds
+      var xobetMed = ointmentMeds.find(function(m){ return m.name.toLowerCase().indexOf('xobet') !== -1; });
+      // Find Betamethasone in habit_meds (may be in asneeded or daily)
+      var betaMed = meds.find(function(m){ return m.name.toLowerCase().indexOf('betamethasone') !== -1; });
+      var xobetConfig = OINTMENT_MEDS[0];
+      var betaConfig = OINTMENT_MEDS[1];
+
+      if (!xobetDone) {
+        // XOBET ACTIVE
+        if (xobetMed) {
+          var xDone = !!(logs[xobetMed.id] && logs[xobetMed.id][today]);
+          var xTakenTime = '', xLogId = '', xNote = '';
+          if (xDone) {
+            try {
+              var { data: xLog } = await sb.from('habit_logs').select('id, created_at, note').eq('med_id', xobetMed.id).eq('date', today).limit(1);
+              if (xLog && xLog[0]) {
+                if (xLog[0].created_at) xTakenTime = new Date(xLog[0].created_at).toLocaleTimeString('en-AU', { hour: '2-digit', minute: '2-digit' });
+                xLogId = xLog[0].id;
+                xNote = xLog[0].note || '';
+              }
+            } catch(e) {}
+          }
+          oh += '<div class="hab-med-row">';
+          oh += '<div class="hab-check'+(xDone?' done':'')+'" onclick="habToggleDaily('+xobetMed.id+')"></div>';
+          oh += '<div style="flex:1 !important;"><div class="hab-med-name" style="margin-bottom:0 !important;">'+esc(xobetConfig.name)+' <span style="font-size:10px !important;color:#10b981 !important;font-weight:400 !important;">CURRENT</span></div>';
+          oh += '<div style="font-size:10px !important;color:#94a3b8 !important;">'+esc(xobetConfig.dose)+' &mdash; '+esc(xobetConfig.time)+'</div>';
+          oh += '<div style="font-size:10px !important;color:#94a3b8 !important;font-style:italic !important;line-height:1.4 !important;margin-top:2px !important;">'+esc(xobetConfig.purpose)+'</div>';
+          if (xDone && xTakenTime) {
+            oh += '<div style="font-size:10px !important;color:#10b981 !important;margin-top:2px !important;">Applied at '+esc(xTakenTime);
+            oh += ' <span onclick="habChangeTime(\''+xLogId+'\')" style="cursor:pointer !important;color:#3b82f6 !important;">&#x270F;</span></div>';
+            if (xNote) {
+              oh += '<div style="font-size:10px !important;color:#64748b !important;font-style:italic !important;">'+esc(xNote)+' <span onclick="habAddNote(\''+xLogId+'\')" style="cursor:pointer !important;color:#3b82f6 !important;font-style:normal !important;">edit</span></div>';
+            } else {
+              oh += '<div style="font-size:10px !important;"><span onclick="habAddNote(\''+xLogId+'\')" style="cursor:pointer !important;color:#3b82f6 !important;">+ add note</span></div>';
+            }
+          }
+          oh += '</div>';
+          oh += '</div>';
+        }
+        // Betamethasone greyed out (next up)
+        oh += '<div class="hab-med-row" style="opacity:0.5 !important;">';
+        oh += '<div style="width:22px !important;height:22px !important;border-radius:6px !important;border:2px solid #e2e8f0 !important;background:#f8fafc !important;flex-shrink:0 !important;"></div>';
+        oh += '<div style="flex:1 !important;"><div class="hab-med-name" style="margin-bottom:0 !important;">'+esc(betaConfig.name)+' <span style="font-size:10px !important;color:#94a3b8 !important;font-weight:400 !important;">NEXT</span></div>';
+        oh += '<div style="font-size:10px !important;color:#94a3b8 !important;">'+esc(betaConfig.dose)+' &mdash; Use after Xobet runs out</div>';
+        oh += '<div style="font-size:10px !important;color:#94a3b8 !important;font-style:italic !important;line-height:1.4 !important;margin-top:2px !important;">'+esc(betaConfig.purpose)+'</div>';
+        oh += '</div></div>';
+        // Mark finished button
+        oh += '<div style="padding:8px 16px !important;text-align:center !important;">';
+        oh += '<button onclick="habToggleXobetFinished()" style="background:none !important;border:1px solid #e2e8f0 !important;border-radius:8px !important;padding:6px 16px !important;font-size:11px !important;color:#64748b !important;cursor:pointer !important;font-family:inherit !important;">&#x1F4E6; Mark Xobet as finished</button>';
+        oh += '</div>';
+      } else {
+        // XOBET FINISHED - Betamethasone active
+        oh += '<div class="hab-med-row" style="opacity:0.5 !important;">';
+        oh += '<div style="width:22px !important;height:22px !important;border-radius:6px !important;background:#10b981 !important;flex-shrink:0 !important;display:flex !important;align-items:center !important;justify-content:center !important;color:white !important;font-size:13px !important;">&#x2713;</div>';
+        oh += '<div style="flex:1 !important;"><div class="hab-med-name" style="margin-bottom:0 !important;text-decoration:line-through !important;">'+esc(xobetConfig.name)+' <span style="font-size:10px !important;color:#10b981 !important;font-weight:400 !important;text-decoration:none !important;">FINISHED</span></div>';
+        oh += '<div style="font-size:10px !important;color:#94a3b8 !important;">Tube completed</div>';
+        oh += '</div></div>';
+        // Betamethasone active - as-needed style (record each application)
+        if (betaMed) {
+          var betaTodayLogs = [];
+          try {
+            var { data: btl } = await sb.from('habit_logs').select('*').eq('med_id', betaMed.id).eq('date', today);
+            betaTodayLogs = btl || [];
+          } catch(e) {}
+          oh += '<div class="hab-med-row" style="flex-wrap:wrap !important;">';
+          oh += '<button class="am-btn" onclick="habRecordOintment('+betaMed.id+')" style="background:#3b82f6 !important;color:white !important;border-color:#3b82f6 !important;padding:6px 12px !important;font-size:12px !important;">Record application</button>';
+          oh += '<div style="flex:1 !important;"><div class="hab-med-name" style="margin-bottom:0 !important;">'+esc(betaConfig.name)+' <span style="font-size:10px !important;color:#10b981 !important;font-weight:400 !important;">CURRENT</span></div>';
+          oh += '<div style="font-size:10px !important;color:#94a3b8 !important;">'+esc(betaConfig.dose)+'</div>';
+          oh += '<div style="font-size:10px !important;color:#94a3b8 !important;font-style:italic !important;line-height:1.4 !important;margin-top:2px !important;">'+esc(betaConfig.purpose)+'</div>';
+          if (betaTodayLogs.length > 0) {
+            oh += '<div style="font-size:11px !important;color:#10b981 !important;margin-top:4px !important;">' + betaTodayLogs.length + ' application' + (betaTodayLogs.length > 1 ? 's' : '') + ' today</div>';
+            betaTodayLogs.forEach(function(bl) {
+              var bt = bl.created_at ? new Date(bl.created_at).toLocaleTimeString('en-AU', { hour: '2-digit', minute: '2-digit' }) : 'no time';
+              oh += '<div style="display:flex !important;align-items:center !important;gap:6px !important;font-size:11px !important;color:#64748b !important;padding:2px 0 !important;">';
+              oh += '<span onclick="habChangeTime(\'' + bl.id + '\')" style="cursor:pointer !important;color:#3b82f6 !important;">' + bt + ' &#x270F;</span>';
+              if (bl.note) {
+                oh += '<span style="font-style:italic !important;">' + esc(bl.note) + '</span>';
+                oh += '<span onclick="habAddNote(\'' + bl.id + '\')" style="cursor:pointer !important;color:#3b82f6 !important;">edit</span>';
+              } else {
+                oh += '<span onclick="habAddNote(\'' + bl.id + '\')" style="cursor:pointer !important;color:#3b82f6 !important;">+ note</span>';
+              }
+              oh += '<span onclick="habDeleteDose(\'' + bl.id + '\')" style="cursor:pointer !important;color:#ef4444 !important;" title="Remove">&#x2715;</span>';
+              oh += '</div>';
+            });
+          }
+          oh += '</div></div>';
+        } else {
+          // Betamethasone not in habit_meds yet - show info
+          oh += '<div class="hab-med-row">';
+          oh += '<div style="flex:1 !important;"><div class="hab-med-name" style="margin-bottom:0 !important;">'+esc(betaConfig.name)+' <span style="font-size:10px !important;color:#f59e0b !important;font-weight:400 !important;">NOT TRACKED</span></div>';
+          oh += '<div style="font-size:10px !important;color:#94a3b8 !important;">'+esc(betaConfig.dose)+'</div>';
+          oh += '<div style="font-size:10px !important;color:#94a3b8 !important;font-style:italic !important;">'+esc(betaConfig.purpose)+'</div>';
+          oh += '</div></div>';
+        }
+        // Undo button
+        oh += '<div style="padding:8px 16px !important;text-align:center !important;">';
+        oh += '<button onclick="habToggleXobetFinished()" style="background:none !important;border:1px solid #e2e8f0 !important;border-radius:8px !important;padding:6px 16px !important;font-size:11px !important;color:#64748b !important;cursor:pointer !important;font-family:inherit !important;">&#x21A9; Undo &mdash; Xobet not finished</button>';
+        oh += '</div>';
+      }
+      ol.innerHTML = oh;
 
       // Weekly
       var wl = document.getElementById('hab-weekly-list');
@@ -4571,7 +4724,7 @@
     var afMessages = [];
     var afOpen = false;
     var _afToday = new Date(); var _afTodayStr = _afToday.getFullYear()+'-'+String(_afToday.getMonth()+1).padStart(2,'0')+'-'+String(_afToday.getDate()).padStart(2,'0');
-    var afSystemPrompt = "Today's date is " + _afTodayStr + " (DD/MM/YYYY: " + _afTodayStr.split('-').reverse().join('/') + "). Cath's timezone is Australia/Sydney (AEST/AEDT). Always show times in Sydney time.\n\nYou are Cath's warm and practical personal AI assistant built into Cath Hub. Cath is an Australian woman who runs a coaching business called Coach4U. She uses Cath Hub to manage her personal life \u2014 workouts, medical appointments, habits, and to-do lists. Be friendly, concise, and helpful. Use Australian English. Currency is AUD ($). Dates in DD/MM/YYYY format. Don't be overly formal.\n\nIMPORTANT: Shopping and AisleMate features have moved to Baker Hub. If Cath asks about shopping, tell her to use Baker Hub instead. Do NOT use shopping-related tools (search_items, add_to_shopping_list, view_shopping_list, etc.).\n\nTO-DO LIST:\nYou can add, complete, and remove tasks from Cath's personal to-do list. Use the todo tools when asked.\n\nIMPORTANT: Fiona's cleaning list has moved to Baker Hub. If Cath asks about Fiona's list, tell her to use Baker Hub instead. Do NOT use fiona tools.\n\nMEDICATIONS & MEDICAL:\nYou can view and manage medications, medical sessions (for the Mental Health Plan tracker), and habit/medication logs. Use these tools when Cath asks about her meds, appointments, or health tracking.\n\nCath's daily meds: Vyvanse, Valtrex, Levothyroxine, Xobet Cream (evening apply).\nWeekly meds: Vitamin D, Monjaro.\nAs-needed: Nurofen, Panadol, Nexium Antacid, Prochlorperazine, Cizinate, Ondansetron, Betamethasone Valerate Ointment (topical - say 'applied' not 'taken').\n\nWhen Cath adds a new medication, ask her about it: what it's for, the dose, how often she takes it, and any special instructions. If she doesn't know the purpose, offer to explain what the medication is commonly used for based on your knowledge.\n\nWhen Cath asks to log meds for a past date, ALWAYS use the backfill_meds tool (not db_write). It handles med IDs and duplicate checking automatically.\n\nMEMORIES:\nYou can save and recall facts about Cath using save_memory, forget_memory, and list_memories.\n\nGENERAL DATABASE:\nYou have a general-purpose query tool (db_query) that can select from ANY table, and a general-purpose write tool (db_write) that can insert, update, or delete from ANY table. Use these for anything the specific tools don't cover.\n\nTables: personal_todos, medications, habit_meds, habit_logs, medical_sessions, ai_memory.";
+    var afSystemPrompt = "Today's date is " + _afTodayStr + " (DD/MM/YYYY: " + _afTodayStr.split('-').reverse().join('/') + "). Cath's timezone is Australia/Sydney (AEST/AEDT). Always show times in Sydney time.\n\nYou are Cath's warm and practical personal AI assistant built into Cath Hub. Cath is an Australian woman who runs a coaching business called Coach4U. She uses Cath Hub to manage her personal life \u2014 workouts, medical appointments, habits, and to-do lists. Be friendly, concise, and helpful. Use Australian English. Currency is AUD ($). Dates in DD/MM/YYYY format. Don't be overly formal.\n\nIMPORTANT: Shopping and AisleMate features have moved to Baker Hub. If Cath asks about shopping, tell her to use Baker Hub instead. Do NOT use shopping-related tools (search_items, add_to_shopping_list, view_shopping_list, etc.).\n\nTO-DO LIST:\nYou can add, complete, and remove tasks from Cath's personal to-do list. Use the todo tools when asked.\n\nIMPORTANT: Fiona's cleaning list has moved to Baker Hub. If Cath asks about Fiona's list, tell her to use Baker Hub instead. Do NOT use fiona tools.\n\nMEDICATIONS & MEDICAL:\nYou can view and manage medications, medical sessions (for the Mental Health Plan tracker), and habit/medication logs. Use these tools when Cath asks about her meds, appointments, or health tracking.\n\nCath's daily morning meds: Vyvanse, Valtrex, Levothyroxine.\nDaily ointments (sequential use): Xobet Cream (once daily, evening - use until tube runs out), then Betamethasone Valerate Ointment (up to 3x daily - activates after Xobet finishes). Say 'applied' not 'taken' for ointments.\nWeekly meds: Vitamin D, Monjaro.\nAs-needed: Nurofen, Panadol, Nexium Antacid, Prochlorperazine, Cizinate, Ondansetron.\n\nWhen Cath adds a new medication, ask her about it: what it's for, the dose, how often she takes it, and any special instructions. If she doesn't know the purpose, offer to explain what the medication is commonly used for based on your knowledge.\n\nWhen Cath asks to log meds for a past date, ALWAYS use the backfill_meds tool (not db_write). It handles med IDs and duplicate checking automatically.\n\nMEMORIES:\nYou can save and recall facts about Cath using save_memory, forget_memory, and list_memories.\n\nGENERAL DATABASE:\nYou have a general-purpose query tool (db_query) that can select from ANY table, and a general-purpose write tool (db_write) that can insert, update, or delete from ANY table. Use these for anything the specific tools don't cover.\n\nTables: personal_todos, medications, habit_meds, habit_logs, medical_sessions, ai_memory.";
 
     var afTools = [
       {
@@ -6065,8 +6218,8 @@
       var { data: allHabs } = await sb.from('habit_meds').select('*').eq('freq', 'daily');
       var { data: medsList } = await sb.from('medications').select('name');
       var medNames = (medsList || []).map(function(m){ return m.name.toLowerCase(); });
-      // Only check habits that match actual medications (same logic as dashTakeMorningMeds)
-      var meds = (allHabs || []).filter(function(h){ return medNames.indexOf(h.name.toLowerCase()) !== -1; });
+      // Only check morning meds (exclude ointments)
+      var meds = (allHabs || []).filter(function(h){ return medNames.indexOf(h.name.toLowerCase()) !== -1 && OINTMENT_NAMES.indexOf(h.name.toLowerCase()) === -1; });
       if (!meds.length) { banner.style.setProperty('display', 'none', 'important'); return; }
       var { data: logs } = await sb.from('habit_logs').select('med_id').eq('date', todayStr);
       var loggedIds = (logs || []).map(function(l) { return l.med_id; });

@@ -84,12 +84,11 @@
   <div id="items-container"><div class="loading">Loading...</div></div>
 </div>
 
+<script src="config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
 (async function(){
-  var SB_URL = 'https://ziwycymhaqghdiznyhhw.supabase.co';
-  var SB_KEY = 'sb_publishable_n-xBxzqdGySGh-JWHuI40g_Hb5Qf8mg';
-  var sb = window.supabase.createClient(SB_URL, SB_KEY);
+  var sb = window.supabase.createClient(SUPABASE_CONFIG.url, SUPABASE_CONFIG.anonKey);
 
   var CAT_ICONS = {'Fruit & Veg':'\u{1F96C}','Meat':'\u{1F969}','Dairy':'\u{1F95B}','Pantry':'\u{1F96B}','Frozen':'\u{2744}','Drinks':'\u{1F964}','Household':'\u{1F9F9}','Other':'\u{1F4E6}'};
   var CAT_ORDER = ['Fruit & Veg','Meat','Dairy','Pantry','Frozen','Drinks','Household','Other'];
@@ -180,10 +179,15 @@
 
   // ─── TOGGLE CHECK ───
   window.toggleItem = async function(el) {
-    var id = el.closest('.shop-item').dataset.id;
-    var isDone = !el.classList.contains('done');
-    await sb.from('shopping_items').update({ checked: isDone }).eq('id', id);
-    loadItems();
+    try {
+      var id = el.closest('.shop-item').dataset.id;
+      var isDone = !el.classList.contains('done');
+      await sb.from('shopping_items').update({ checked: isDone }).eq('id', id);
+      loadItems();
+    } catch (err) {
+      console.error('Error updating item:', err);
+      showToast('Failed to update item. Please try again.', 'error');
+    }
   };
 
   // ─── QUANTITY ───
@@ -200,26 +204,34 @@
     var input = document.getElementById('add-input');
     var name = input.value.trim();
     if (!name) return;
-    document.getElementById('add-btn').disabled = true;
+    var btn = document.getElementById('add-btn');
+    lockBtn(btn, 'Adding...');
 
-    // Check if it's in master list for auto category/store
-    var { data: match } = await sb.from('master_items').select('*').ilike('name', name).limit(1);
-    var row = { name: name, category: 'Other', store: 'Other' };
-    if (match && match.length) {
-      row.name = match[0].name;
-      row.category = match[0].category || 'Other';
-      row.store = match[0].store || 'Other';
+    try {
+      // Check if it's in master list for auto category/store
+      var { data: match } = await sb.from('master_items').select('*').ilike('name', name).limit(1);
+      var row = { name: name, category: 'Other', store: 'Other' };
+      if (match && match.length) {
+        row.name = match[0].name;
+        row.category = match[0].category || 'Other';
+        row.store = match[0].store || 'Other';
+      }
+      var qty = parseInt(document.getElementById('add-qty').textContent) || 1;
+      if (qty > 1) row.name = row.name + ' x' + qty;
+
+      await sb.from('shopping_items').insert(row);
+      input.value = '';
+      document.getElementById('add-qty').textContent = '1';
+      document.getElementById('suggest-list').classList.remove('visible');
+      loadItems();
+      input.focus();
+      showToast('Item added!', 'success');
+    } catch (err) {
+      console.error('Error adding item:', err);
+      showToast('Failed to add item. Please try again.', 'error');
+    } finally {
+      unlockBtn(btn);
     }
-    var qty = parseInt(document.getElementById('add-qty').textContent) || 1;
-    if (qty > 1) row.name = row.name + ' x' + qty;
-
-    await sb.from('shopping_items').insert(row);
-    input.value = '';
-    document.getElementById('add-qty').textContent = '1';
-    document.getElementById('suggest-list').classList.remove('visible');
-    document.getElementById('add-btn').disabled = false;
-    loadItems();
-    input.focus();
   };
 
   // ─── SUGGESTIONS ───

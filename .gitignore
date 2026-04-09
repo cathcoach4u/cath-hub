@@ -1,5 +1,7 @@
 node_modules/
-.claude/
+.claude/*
+!.claude/hooks/
+!.claude/settings.json
 batch*.json
 seed_master_items.sql
 package-lock.json

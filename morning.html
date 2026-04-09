@@ -56,12 +56,11 @@
   <div class="time-display" id="time-display"></div>
 </div>
 
+<script src="config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
 (async function(){
-  var SB_URL = 'https://ziwycymhaqghdiznyhhw.supabase.co';
-  var SB_KEY = 'sb_publishable_n-xBxzqdGySGh-JWHuI40g_Hb5Qf8mg';
-  var sb = window.supabase.createClient(SB_URL, SB_KEY);
+  var sb = window.supabase.createClient(SUPABASE_CONFIG.url, SUPABASE_CONFIG.anonKey);
 
   var MORNING_MEDS = ['vyvanse', 'valtrex', 'levothyroxine'];
   var checkIds = { 'vyvanse': 'check-vyvanse', 'valtrex': 'check-valtrex', 'levothyroxine': 'check-levo' };

@@ -697,13 +697,15 @@
           </div>
         </div>
 
-        <!-- Daily Rhythm Checklist -->
+        <!-- Morning Habits Link -->
         <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:12px !important;padding:12px !important;">
-          <div style="display:flex !important;align-items:center !important;justify-content:space-between !important;margin-bottom:8px !important;">
-            <div style="font-size:12px !important;font-weight:700 !important;color:#1e293b !important;" id="dash-rhythm-title">&#x2600;&#xFE0F; Morning Rhythm</div>
-            <span style="font-size:10px !important;color:#94a3b8 !important;" id="dash-rhythm-count"></span>
+          <div onclick="chNav('habits');setTimeout(function(){zbTab('rhythms')},100)" style="cursor:pointer !important;display:flex !important;align-items:center !important;justify-content:space-between !important;padding:8px !important;background:#f0fdf4 !important;border:1px solid #bbf7d0 !important;border-radius:8px !important;">
+            <div>
+              <div style="font-size:12px !important;font-weight:700 !important;color:#166534 !important;">&#x2600;&#xFE0F; Morning Habits</div>
+              <div style="font-size:10px !important;color:#15803d !important;">View & track your routine</div>
+            </div>
+            <span style="font-size:12px !important;color:#86efac !important;">&#x276F;</span>
           </div>
-          <div id="dash-rhythm-items"></div>
         </div>
 
       </div>
@@ -4168,7 +4170,12 @@
             if (oDone) {
               h += '<div style="font-size:10px !important;color:#10b981 !important;">✓ Done</div>';
             } else {
-              h += '<div style="font-size:10px !important;color:#92400e !important;">Apply as directed</div>';
+              // Special description for Betamethasone Valerate
+              var descText = 'Apply as directed';
+              if (oment.name.toLowerCase().indexOf('betamethasone') !== -1 && oment.name.toLowerCase().indexOf('valerate') !== -1) {
+                descText = 'To be applied when Xobet is finished';
+              }
+              h += '<div style="font-size:10px !important;color:#92400e !important;">'+descText+'</div>';
             }
             h += '</div>';
             h += '<div class="hab-del" onclick="habDeleteMed('+oment.id+')" style="flex-shrink:0 !important;">&#x1F5D1;</div>';

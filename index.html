@@ -461,8 +461,8 @@
     /* Improve button sizes on mobile */
     #cathHub #ch-home .am-btn { font-size: 13px !important; padding: 10px 14px !important; }
     /* Top section: Word of Year + Strengths + Filing - stack on mobile */
-    #cathHub #ch-home > div:first-child > div:nth-child(1) { flex-direction: column !important; gap: 10px !important; }
-    #cathHub #ch-home > div:first-child > div:nth-child(1) > div:nth-child(1) { min-width: 0 !important; width: 100% !important; }
+    #cathHub #ch-home > div:first-child > div:nth-child(1) { flex-direction: column !important; gap: 10px !important; align-items: stretch !important; }
+    #cathHub #ch-home > div:first-child > div:nth-child(1) > div:nth-child(1) { min-width: 0 !important; width: 100% !important; flex: 1 !important; }
     #cathHub #ch-home > div:first-child > div:nth-child(1) > div:nth-child(2) { width: 100% !important; min-width: 0 !important; }
     #cathHub #ch-home > div:first-child > div:nth-child(1) > button { width: 100% !important; }
     /* Daily habits and rhythm - better card sizing */
@@ -727,8 +727,6 @@
         </div>
         <div class="dash-mh-summary" id="dash-mh-summary">
           <div class="dash-mh-stat"><div class="mh-num" id="dash-mh-remaining" style="color:#16a34a !important;font-size:28px !important;">4</div><div class="mh-label">Sessions Left (2026)</div></div>
-          <div class="dash-mh-stat"><div class="mh-num" id="dash-mh-total">12</div><div class="mh-label">Total Completed</div></div>
-          <div class="dash-mh-stat"><div class="mh-num" id="dash-mh-plans">MHP</div><div class="mh-label">Plan Type</div></div>
         </div>
       </div>
 

@@ -3247,12 +3247,17 @@
       else other.push(m);
     });
 
-    // Sort daily meds: Xobet before Betamethasone valerate
+    // Sort daily meds in specific order: Vyvanse, Valtrex, Levothyroxine, Xobet, then Betamethasone Valerate
+    var medOrder = ['Vyvanse', 'Valtrex', 'Levothyroxine', 'Xobet', 'Betamethasone'];
     daily.sort(function(a, b) {
-      var aIsXobet = a.name.toLowerCase().indexOf('xobet') !== -1;
-      var bIsValerate = b.name.toLowerCase().indexOf('valerate') !== -1 || b.name.toLowerCase().indexOf('betamethasone') !== -1;
-      if (aIsXobet && bIsValerate) return -1;
-      if (!aIsXobet && !bIsValerate) return 0;
+      var aIdx = -1, bIdx = -1;
+      for (var i = 0; i < medOrder.length; i++) {
+        if (aIdx === -1 && a.name.toLowerCase().indexOf(medOrder[i].toLowerCase()) !== -1) aIdx = i;
+        if (bIdx === -1 && b.name.toLowerCase().indexOf(medOrder[i].toLowerCase()) !== -1) bIdx = i;
+      }
+      if (aIdx !== -1 && bIdx !== -1) return aIdx - bIdx;
+      if (aIdx !== -1) return -1;
+      if (bIdx !== -1) return 1;
       return 0;
     });
 

@@ -3233,12 +3233,14 @@
     if (!container) return;
 
     // Classify each med
-    var daily = [], migraine = [], asNeeded = [], other = [];
+    var daily = [], weekly = [], migraine = [], asNeeded = [], other = [];
     (meds || []).forEach(function(m) {
       var isDaily = DAILY_MED_NAMES.some(function(d){ return m.name.toLowerCase().indexOf(d.toLowerCase()) !== -1; });
       var isMigraine = MIGRAINE_NAMES.some(function(d){ return m.name.toLowerCase().indexOf(d.toLowerCase()) !== -1; });
       var isAN = AS_NEEDED_NAMES.some(function(d){ return m.name.toLowerCase().indexOf(d.toLowerCase()) !== -1; }) || (m.schedule && m.schedule.toLowerCase().indexOf('as needed') !== -1);
+      var isWeekly = m.schedule && m.schedule.toLowerCase().indexOf('weekly') !== -1;
       if (isDaily) daily.push(m);
+      else if (isWeekly) weekly.push(m);
       else if (isMigraine) migraine.push(m);
       else if (isAN) asNeeded.push(m);
       else other.push(m);
@@ -3294,6 +3296,7 @@
 
     var html = '';
     html += renderSection('&#x2600;&#xFE0F;', 'DAILY', 'Every morning', '#1d4ed8', '#dbeafe', daily);
+    html += renderSection('&#x1F4C3;', 'WEEKLY', 'Once a week', '#059669', '#d1fae5', weekly);
     html += renderSection('&#x1F7E3;', 'MIGRAINE', 'As needed during attacks', '#7c3aed', '#ede9fe', migraine);
     html += renderSection('&#x1F7E2;', 'AS NEEDED', 'Take when required', '#15803d', '#f0fdf4', asNeeded);
     html += renderSection('&#x1F7E1;', 'OTHER', '', '#92400e', '#fef3c7', other);

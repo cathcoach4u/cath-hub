@@ -1853,13 +1853,12 @@
 
 </div><!-- /cathHub -->
 
+<script src="config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
 <script>
 (function(){
-  var SB_URL = 'https://ziwycymhaqghdiznyhhw.supabase.co';
-  var SB_KEY = 'sb_publishable_n-xBxzqdGySGh-JWHuI40g_Hb5Qf8mg';
-  var sb = window.supabase.createClient(SB_URL, SB_KEY);
+  var sb = window.supabase.createClient(SUPABASE_CONFIG.url, SUPABASE_CONFIG.anonKey);
 
   // ─── AUTH ───
   function showApp() {
@@ -3316,7 +3315,7 @@
       h += '</select>';
       h += '<input type="text" id="med-ed-purp-' + mid + '" value="' + esc(m.purpose||'').replace(/"/g,'&quot;') + '" placeholder="Purpose" style="width:100% !important;padding:8px 10px !important;border:1px solid #e2e8f0 !important;border-radius:8px !important;font-size:14px !important;box-sizing:border-box !important;">';
       h += '<div style="display:flex !important;gap:8px !important;">';
-      h += '<button onclick="medSaveEdit(\'' + mid + '\')" style="flex:1 !important;padding:10px !important;background:#10b981 !important;color:white !important;border:none !important;border-radius:8px !important;font-size:13px !important;font-weight:600 !important;cursor:pointer !important;">Save</button>';
+      h += '<button id="med-save-' + mid + '" onclick="medSaveEdit(\'' + mid + '\')" style="flex:1 !important;padding:10px !important;background:#10b981 !important;color:white !important;border:none !important;border-radius:8px !important;font-size:13px !important;font-weight:600 !important;cursor:pointer !important;">Save</button>';
       h += '<button onclick="medCancelEdit(\'' + mid + '\')" style="padding:10px 16px !important;background:#e2e8f0 !important;color:#64748b !important;border:none !important;border-radius:8px !important;font-size:13px !important;cursor:pointer !important;">Cancel</button>';
       h += '</div></div></div>';
       h += '</div>';
@@ -3379,13 +3378,25 @@
   };
 
   window.medSaveEdit = async function(id) {
-    var name = document.getElementById('med-ed-name-' + id).value.trim();
-    var dose = document.getElementById('med-ed-dose-' + id).value.trim();
-    var schedule = document.getElementById('med-ed-sched-' + id).value;
-    var purpose = document.getElementById('med-ed-purp-' + id).value.trim();
-    if (!name) { alert('Name is required.'); return; }
-    await sb.from('medications').update({ name: name, dose: dose, schedule: schedule, purpose: purpose }).eq('id', id);
-    loadMedicationPlan();
+    try {
+      var name = document.getElementById('med-ed-name-' + id).value.trim();
+      var dose = document.getElementById('med-ed-dose-' + id).value.trim();
+      var schedule = document.getElementById('med-ed-sched-' + id).value;
+      var purpose = document.getElementById('med-ed-purp-' + id).value.trim();
+      if (!name) { alert('Name is required.'); return; }
+
+      var btn = document.getElementById('med-save-' + id);
+      lockBtn(btn, 'Saving...');
+
+      await sb.from('medications').update({ name: name, dose: dose, schedule: schedule, purpose: purpose }).eq('id', id);
+      loadMedicationPlan();
+      showToast('Medication updated', 'success');
+    } catch (err) {
+      console.error('Error updating medication:', err);
+      showToast('Failed to update medication. Please try again.', 'error');
+      var btn = document.getElementById('med-save-' + id);
+      unlockBtn(btn);
+    }
   };
 
   (async function loadMedical(){
@@ -4455,7 +4466,7 @@
             ph += '<input type="date" id="td-edit-date-'+t.id+'" value="'+(t.due_date || '')+'" style="flex:1 !important;padding:8px 10px !important;border:1px solid #e2e8f0 !important;border-radius:8px !important;font-size:13px !important;background:white !important;">';
             ph += '</div>';
             ph += '<div style="display:flex !important;gap:8px !important;">';
-            ph += '<button onclick="tdSaveEdit('+t.id+')" style="flex:1 !important;padding:8px !important;background:#3b82f6 !important;color:white !important;border:none !important;border-radius:8px !important;font-size:13px !important;font-weight:600 !important;cursor:pointer !important;">Save</button>';
+            ph += '<button id="td-save-'+t.id+'" onclick="tdSaveEdit('+t.id+')" style="flex:1 !important;padding:8px !important;background:#3b82f6 !important;color:white !important;border:none !important;border-radius:8px !important;font-size:13px !important;font-weight:600 !important;cursor:pointer !important;">Save</button>';
             ph += '<button onclick="tdCancelEdit('+t.id+')" style="flex:1 !important;padding:8px !important;background:#f1f5f9 !important;color:#64748b !important;border:none !important;border-radius:8px !important;font-size:13px !important;cursor:pointer !important;">Cancel</button>';
             ph += '</div>';
             ph += '</div>';
@@ -4523,18 +4534,35 @@
     };
 
     window.tdSaveEdit = async function(id) {
-      var task = document.getElementById('td-edit-task-' + id).value.trim();
-      var category = document.getElementById('td-edit-cat-' + id).value;
-      var dueDate = document.getElementById('td-edit-date-' + id).value || null;
-      if (!task) return;
-      await sb.from('personal_todos').update({ task: task, category: category, due_date: dueDate }).eq('id', id);
-      tdLoad();
+      try {
+        var task = document.getElementById('td-edit-task-' + id).value.trim();
+        var category = document.getElementById('td-edit-cat-' + id).value;
+        var dueDate = document.getElementById('td-edit-date-' + id).value || null;
+        if (!task) return;
+
+        var btn = document.getElementById('td-save-' + id);
+        lockBtn(btn, 'Saving...');
+
+        await sb.from('personal_todos').update({ task: task, category: category, due_date: dueDate }).eq('id', id);
+        tdLoad();
+        showToast('Task updated', 'success');
+      } catch (err) {
+        console.error('Error updating task:', err);
+        showToast('Failed to update task. Please try again.', 'error');
+        var btn = document.getElementById('td-save-' + id);
+        unlockBtn(btn);
+      }
     };
 
     window.tdToggle = async function(id) {
-      var { data } = await sb.from('personal_todos').select('done').eq('id', id).single();
-      await sb.from('personal_todos').update({ done: !data.done }).eq('id', id);
-      tdLoad();
+      try {
+        var { data } = await sb.from('personal_todos').select('done').eq('id', id).single();
+        await sb.from('personal_todos').update({ done: !data.done }).eq('id', id);
+        tdLoad();
+      } catch (err) {
+        console.error('Error toggling task:', err);
+        showToast('Failed to update task. Please try again.', 'error');
+      }
     };
 
     window.tdDelete = async function(id) {

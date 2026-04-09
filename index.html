@@ -444,6 +444,29 @@
     #cathHub #ch-home > div:nth-child(3) { display: flex !important; flex-direction: column !important; gap: 10px !important; }
     #cathHub #ch-home > div:nth-child(4) { display: grid !important; grid-template-columns: 1fr !important; gap: 10px !important; }
     #cathHub #ch-home > div:nth-child(5) { display: grid !important; grid-template-columns: 1fr !important; gap: 10px !important; }
+    /* Improve dashboard readability on mobile */
+    #cathHub #ch-home h2 { font-size: 18px !important; margin-bottom: 14px !important; }
+    #cathHub #ch-home > div:first-child > div > div { padding: 14px 14px !important; }
+    #cathHub #ch-home > div:first-child > div > div > div:first-child { font-size: 10px !important; }
+    #cathHub #ch-home > div:first-child > div > div > div:last-child { font-size: 18px !important; }
+    #cathHub #ch-home .dash-section { padding: 14px !important; margin-bottom: 12px !important; }
+    #cathHub #ch-home .dash-section h3 { font-size: 13px !important; margin-bottom: 10px !important; }
+    #cathHub #ch-home .dash-mh-stat { padding: 10px 8px !important; }
+    #cathHub #ch-home .dash-mh-stat .mh-num { font-size: 24px !important; }
+    #cathHub #ch-home .dash-mh-stat .mh-label { font-size: 11px !important; }
+    #cathHub #ch-home .dash-shop-item, #cathHub #ch-home .dash-receipt-row { font-size: 13px !important; padding: 8px 0 !important; }
+    /* Dashboard habit cards - improve spacing */
+    #cathHub #ch-home > div:nth-child(3) > div { padding: 14px !important; }
+    #cathHub #ch-home > div:nth-child(3) > div > div:first-child { font-size: 13px !important; }
+    /* Improve button sizes on mobile */
+    #cathHub #ch-home .am-btn { font-size: 13px !important; padding: 10px 14px !important; }
+    /* Top section: Word of Year + Strengths + Filing - stack on mobile */
+    #cathHub #ch-home > div:first-child > div:nth-child(1) { flex-direction: column !important; gap: 10px !important; }
+    #cathHub #ch-home > div:first-child > div:nth-child(1) > div:nth-child(1) { min-width: auto !important; width: 100% !important; }
+    #cathHub #ch-home > div:first-child > div:nth-child(1) > button { width: 100% !important; }
+    /* Daily habits and rhythm - better card sizing */
+    #cathHub #ch-home > div:nth-child(3) > div > div:nth-child(3) { padding: 10px 8px !important; }
+    #cathHub #ch-home > div:nth-child(3) > div > div:nth-child(3) .am-btn { font-size: 12px !important; padding: 8px 10px !important; }
   }
     #cathHub .sidebar { display: none !important; }
     #cathHub .mobile-top-bar { display: flex !important; align-items: center !important; justify-content: space-between !important; background: #0d9488 !important; padding: 16px 20px !important; padding-top: calc(16px + env(safe-area-inset-top)) !important; position: sticky !important; top: 0 !important; z-index: 99 !important; }

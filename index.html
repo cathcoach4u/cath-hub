@@ -3672,14 +3672,41 @@
         logDate = lastNight.getFullYear() + '-' + String(lastNight.getMonth()+1).padStart(2,'0') + '-' + String(lastNight.getDate()).padStart(2,'0');
         logCreatedAt = lastNight.toISOString();
       } else {
-        var timeStr = prompt('Enter date & time (e.g. 8:30pm, yesterday 2pm, 29/3 9pm):');
-        if (!timeStr) return;
-        var parsed = parseFlexibleDateTime(timeStr);
-        if (!parsed) { alert('Could not understand that. Try: 8:30pm, yesterday 2pm, or 29/3 9pm'); return; }
-        logDate = parsed.date;
-        logCreatedAt = parsed.iso;
+        // Show input modal instead of prompt
+        var modal = document.createElement('div');
+        modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:1000;';
+        modal.innerHTML = '<div style="background:white;border-radius:12px;padding:24px;max-width:320px;width:90%;box-shadow:0 4px 12px rgba(0,0,0,0.15);">' +
+          '<div style="font-size:16px;font-weight:700;margin-bottom:12px;">When did you take it?</div>' +
+          '<div style="font-size:12px;color:#64748b;margin-bottom:14px;">Examples: 8:30pm, yesterday 2pm, 29/3 9pm</div>' +
+          '<input id="custom-time-input" type="text" placeholder="e.g. 8:30pm" style="width:100%;padding:10px 12px;border:1px solid #e2e8f0;border-radius:8px;font-size:14px;box-sizing:border-box;margin-bottom:14px;" autofocus>' +
+          '<div style="display:flex;gap:8px;">' +
+          '<button onclick="var input=document.getElementById(\'custom-time-input\').value.trim();if(input){habProcessCustomTime(' + medId + ',input,' + hasBrands + ');}else{alert(\'Please enter a time\');}document.body.removeChild(this.parentNode.parentNode);" style="flex:1;padding:10px;background:#10b981;color:white;border:none;border-radius:8px;font-weight:600;cursor:pointer;">Submit</button>' +
+          '<button onclick="document.body.removeChild(this.parentNode.parentNode);" style="padding:10px 16px;background:#e2e8f0;color:#64748b;border:none;border-radius:8px;cursor:pointer;">Cancel</button>' +
+          '</div></div>';
+        document.body.appendChild(modal);
+        document.getElementById('custom-time-input').addEventListener('keypress', function(e) {
+          if (e.key === 'Enter') {
+            var input = this.value.trim();
+            if (input) { habProcessCustomTime(' + medId + ', input, ' + hasBrands + '); document.body.removeChild(modal); }
+          }
+        });
+        return;
       }
       // Get optional note
+      var noteEl = document.getElementById('dose-note-' + medId);
+      var note = noteEl ? noteEl.value.trim() : '';
+      if (hasBrands) {
+        habShowBrandButtons(medId, logDate, logCreatedAt, note);
+      } else {
+        habInsertDose(medId, logDate, logCreatedAt, note || undefined);
+      }
+    };
+
+    window.habProcessCustomTime = function(medId, timeStr, hasBrands) {
+      var parsed = parseFlexibleDateTime(timeStr);
+      if (!parsed) { alert('Could not understand that. Try: 8:30pm, yesterday 2pm, or 29/3 9pm'); return; }
+      var logDate = parsed.date;
+      var logCreatedAt = parsed.iso;
       var noteEl = document.getElementById('dose-note-' + medId);
       var note = noteEl ? noteEl.value.trim() : '';
       if (hasBrands) {

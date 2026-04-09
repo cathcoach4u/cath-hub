@@ -3985,11 +3985,7 @@
             } catch(e) {}
             h += '<div class="hab-med-row" style="flex-wrap:wrap !important;">';
             h += '<button class="am-btn" onclick="habShowRecordOptions(' + med.id + ',' + hasBrands + ')" style="background:#3b82f6 !important;color:white !important;border-color:#3b82f6 !important;padding:6px 12px !important;font-size:12px !important;">Record dose</button>';
-            var purposeText = asInfo && asInfo.purpose ? asInfo.purpose : '';
             h += '<div style="flex:1 !important;"><div class="hab-med-name" style="margin-bottom:0 !important;">' + esc(med.name) + esc(doseLabel) + '</div>';
-            if (purposeText) {
-              h += '<div style="font-size:11px !important;color:#94a3b8 !important;line-height:1.4 !important;margin:2px 0 4px !important;">' + esc(purposeText) + '</div>';
-            }
             if (todayLogs.length > 0) {
               h += '<div style="font-size:11px !important;color:#10b981 !important;">' + todayLogs.length + ' dose' + (todayLogs.length > 1 ? 's' : '') + ' today</div>';
               todayLogs.forEach(function(tl) {

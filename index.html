@@ -4536,7 +4536,7 @@
       var catSelect = document.getElementById('td-cat-select');
       var dateInput = document.getElementById('td-date-input');
       var category = catSelect.value;
-      var row = { task: task, done: false, category: category, created_at: new Date().toISOString() };
+      var row = { id: Date.now(), task: task, done: false, category: category, created_at: new Date().toISOString() };
       if (dateInput.value) row.due_date = dateInput.value;
       var { error } = await sb.from('personal_todos').insert(row);
       if (error) { alert('Could not add task: ' + error.message); return; }

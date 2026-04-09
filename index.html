@@ -462,16 +462,12 @@
     #cathHub #ch-home .am-btn { font-size: 13px !important; padding: 10px 14px !important; }
     /* Top section: Word of Year + Strengths + Filing - stack on mobile */
     #cathHub #ch-home > div:first-child > div:nth-child(1) { flex-direction: column !important; gap: 10px !important; }
-    #cathHub #ch-home > div:first-child > div:nth-child(1) > div:nth-child(1) { min-width: auto !important; width: 100% !important; }
+    #cathHub #ch-home > div:first-child > div:nth-child(1) > div:nth-child(1) { min-width: 0 !important; width: 100% !important; }
+    #cathHub #ch-home > div:first-child > div:nth-child(1) > div:nth-child(2) { width: 100% !important; min-width: 0 !important; }
     #cathHub #ch-home > div:first-child > div:nth-child(1) > button { width: 100% !important; }
     /* Daily habits and rhythm - better card sizing */
     #cathHub #ch-home > div:nth-child(3) > div > div:nth-child(3) { padding: 10px 8px !important; }
     #cathHub #ch-home > div:nth-child(3) > div > div:nth-child(3) .am-btn { font-size: 12px !important; padding: 8px 10px !important; }
-    /* Improve table readability on mobile */
-    #cathHub .med-table { font-size: 13px !important; }
-    #cathHub .med-table th { padding: 10px 10px !important; font-size: 11px !important; }
-    #cathHub .med-table td { padding: 12px 10px !important; font-size: 13px !important; }
-    #cathHub .med-table td:nth-child(2) { font-weight: 600 !important; color: #1e293b !important; }
   }
     #cathHub .sidebar { display: none !important; }
     #cathHub .mobile-top-bar { display: flex !important; align-items: center !important; justify-content: space-between !important; background: #0d9488 !important; padding: 16px 20px !important; padding-top: calc(16px + env(safe-area-inset-top)) !important; position: sticky !important; top: 0 !important; z-index: 99 !important; }
@@ -634,30 +630,30 @@
       <h2 style="font-size:20px !important;margin-bottom:16px !important;">Dashboard</h2>
 
       <!-- Top row: Calm + Strengths + Filing -->
-      <div style="display:grid !important;grid-template-columns:1.2fr 2fr 1fr !important;align-items:stretch !important;gap:10px !important;margin-bottom:12px !important;">
+      <div style="display:flex !important;align-items:stretch !important;gap:10px !important;margin-bottom:12px !important;">
         <!-- Word of the Year -->
-        <div style="text-align:center !important;padding:16px 14px !important;background:linear-gradient(135deg, #f0f4f8, #e0e7ff) !important;border-radius:12px !important;border:1px solid #c7d2fe !important;display:flex !important;flex-direction:column !important;justify-content:center !important;min-height:100px !important;">
-          <div style="font-size:8px !important;font-weight:700 !important;text-transform:uppercase !important;letter-spacing:0.5px !important;color:#6366f1 !important;margin-bottom:6px !important;line-height:1.2 !important;">Word<br>of Year</div>
-          <div style="font-size:24px !important;font-weight:700 !important;color:#1e293b !important;letter-spacing:0px !important;line-height:1 !important;">Calm</div>
+        <div style="text-align:center !important;padding:10px 16px !important;background:linear-gradient(135deg, #f0f4f8, #e0e7ff) !important;border-radius:12px !important;border:1px solid #c7d2fe !important;display:flex !important;flex-direction:column !important;justify-content:center !important;min-width:90px !important;">
+          <div style="font-size:8px !important;font-weight:700 !important;text-transform:uppercase !important;letter-spacing:1.5px !important;color:#6366f1 !important;margin-bottom:2px !important;">Word of the Year</div>
+          <div style="font-size:20px !important;font-weight:700 !important;color:#1e293b !important;letter-spacing:2px !important;">Calm</div>
         </div>
         <!-- Strengths -->
-        <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:12px !important;padding:12px !important;">
-          <div style="font-size:11px !important;font-weight:700 !important;color:#64748b !important;margin-bottom:8px !important;text-transform:uppercase !important;letter-spacing:0.5px !important;">&#x1F4AA; Strengths</div>
-          <div style="display:flex !important;flex-wrap:wrap !important;gap:5px !important;">
-            <span style="font-size:11px !important;font-weight:600 !important;padding:4px 9px !important;border-radius:99px !important;background:#ede9fe !important;color:#6d28d9 !important;">Connectedness</span>
-            <span style="font-size:11px !important;font-weight:600 !important;padding:4px 9px !important;border-radius:99px !important;background:#ede9fe !important;color:#6d28d9 !important;">Includer</span>
-            <span style="font-size:11px !important;font-weight:600 !important;padding:4px 9px !important;border-radius:99px !important;background:#dbeafe !important;color:#1d4ed8 !important;">Ideation</span>
-            <span style="font-size:11px !important;font-weight:600 !important;padding:4px 9px !important;border-radius:99px !important;background:#dbeafe !important;color:#1d4ed8 !important;">Activator</span>
-            <span style="font-size:11px !important;font-weight:600 !important;padding:4px 9px !important;border-radius:99px !important;background:#fce7f3 !important;color:#be185d !important;">Restorative</span>
-            <span style="font-size:11px !important;font-weight:600 !important;padding:4px 9px !important;border-radius:99px !important;background:#ede9fe !important;color:#6d28d9 !important;">Relator</span>
-            <span style="font-size:11px !important;font-weight:600 !important;padding:4px 9px !important;border-radius:99px !important;background:#dbeafe !important;color:#1d4ed8 !important;">Arranger</span>
-            <span style="font-size:11px !important;font-weight:600 !important;padding:4px 9px !important;border-radius:99px !important;background:#dbeafe !important;color:#1d4ed8 !important;">Input</span>
-            <span style="font-size:11px !important;font-weight:600 !important;padding:4px 9px !important;border-radius:99px !important;background:#ede9fe !important;color:#6d28d9 !important;">Positivity</span>
-            <span style="font-size:11px !important;font-weight:600 !important;padding:4px 9px !important;border-radius:99px !important;background:#ede9fe !important;color:#6d28d9 !important;">Empathy</span>
+        <div style="flex:1 !important;background:white !important;border:1px solid #e2e8f0 !important;border-radius:12px !important;padding:10px 12px !important;min-width:0 !important;">
+          <div style="font-size:10px !important;font-weight:700 !important;color:#64748b !important;margin-bottom:6px !important;text-transform:uppercase !important;letter-spacing:0.5px !important;">&#x1F4AA; My Strengths</div>
+          <div style="display:flex !important;flex-wrap:wrap !important;gap:4px !important;">
+            <span style="font-size:10px !important;font-weight:600 !important;padding:3px 8px !important;border-radius:99px !important;background:#ede9fe !important;color:#6d28d9 !important;">Connectedness</span>
+            <span style="font-size:10px !important;font-weight:600 !important;padding:3px 8px !important;border-radius:99px !important;background:#ede9fe !important;color:#6d28d9 !important;">Includer</span>
+            <span style="font-size:10px !important;font-weight:600 !important;padding:3px 8px !important;border-radius:99px !important;background:#dbeafe !important;color:#1d4ed8 !important;">Ideation</span>
+            <span style="font-size:10px !important;font-weight:600 !important;padding:3px 8px !important;border-radius:99px !important;background:#dbeafe !important;color:#1d4ed8 !important;">Activator</span>
+            <span style="font-size:10px !important;font-weight:600 !important;padding:3px 8px !important;border-radius:99px !important;background:#fce7f3 !important;color:#be185d !important;">Restorative</span>
+            <span style="font-size:10px !important;font-weight:600 !important;padding:3px 8px !important;border-radius:99px !important;background:#ede9fe !important;color:#6d28d9 !important;">Relator</span>
+            <span style="font-size:10px !important;font-weight:600 !important;padding:3px 8px !important;border-radius:99px !important;background:#dbeafe !important;color:#1d4ed8 !important;">Arranger</span>
+            <span style="font-size:10px !important;font-weight:600 !important;padding:3px 8px !important;border-radius:99px !important;background:#dbeafe !important;color:#1d4ed8 !important;">Input</span>
+            <span style="font-size:10px !important;font-weight:600 !important;padding:3px 8px !important;border-radius:99px !important;background:#ede9fe !important;color:#6d28d9 !important;">Positivity</span>
+            <span style="font-size:10px !important;font-weight:600 !important;padding:3px 8px !important;border-radius:99px !important;background:#ede9fe !important;color:#6d28d9 !important;">Empathy</span>
           </div>
         </div>
         <!-- Filing -->
-        <button class="am-btn" onclick="dashQuickNav({value:'filing'})" style="padding:12px 14px !important;font-size:13px !important;text-align:center !important;background:white !important;border:1px solid #e2e8f0 !important;border-radius:12px !important;color:#1e293b !important;white-space:nowrap !important;align-self:stretch !important;display:flex !important;align-items:center !important;justify-content:center !important;gap:6px !important;">&#x1F4C1; Filing</button>
+        <button class="am-btn" onclick="dashQuickNav({value:'filing'})" style="padding:10px 14px !important;font-size:12px !important;text-align:center !important;background:white !important;border:1px solid #e2e8f0 !important;border-radius:12px !important;color:#1e293b !important;white-space:nowrap !important;align-self:stretch !important;display:flex !important;align-items:center !important;gap:6px !important;">&#x1F4C1; Filing</button>
       </div>
 
       <!-- Two-column: Daily Habits + Daily Rhythm -->
@@ -731,6 +727,7 @@
         </div>
         <div class="dash-mh-summary" id="dash-mh-summary">
           <div class="dash-mh-stat"><div class="mh-num" id="dash-mh-remaining" style="color:#16a34a !important;font-size:28px !important;">4</div><div class="mh-label">Sessions Left (2026)</div></div>
+          <div class="dash-mh-stat"><div class="mh-num" id="dash-mh-total">12</div><div class="mh-label">Total Completed</div></div>
           <div class="dash-mh-stat"><div class="mh-num" id="dash-mh-plans">MHP</div><div class="mh-label">Plan Type</div></div>
         </div>
       </div>
@@ -1031,13 +1028,13 @@
           <div style="padding:14px 16px !important;">
             <div style="font-size:12px !important;font-weight:700 !important;text-transform:uppercase !important;color:#7c3aed !important;margin-bottom:10px !important;">Sessions by Year</div>
             <div style="display:grid !important;grid-template-columns:1fr 1fr !important;gap:8px !important;">
-              <div style="background:#f0fdf4 !important;padding:10px 12px !important;border-radius:8px !important;border-left:3px solid #16a34a !important;">
-                <div style="font-size:14px !important;font-weight:700 !important;color:#166534 !important;">2026</div>
-                <div style="font-size:13px !important;color:#15803d !important;margin-top:4px !important;">6 used, 4 remaining</div>
-              </div>
               <div style="background:#f0f4f8 !important;padding:10px 12px !important;border-radius:8px !important;border-left:3px solid #64748b !important;">
                 <div style="font-size:14px !important;font-weight:700 !important;color:#1e293b !important;">2025</div>
                 <div style="font-size:13px !important;color:#64748b !important;margin-top:4px !important;">6 sessions used</div>
+              </div>
+              <div style="background:#f0fdf4 !important;padding:10px 12px !important;border-radius:8px !important;border-left:3px solid #16a34a !important;">
+                <div style="font-size:14px !important;font-weight:700 !important;color:#166534 !important;">2026</div>
+                <div style="font-size:13px !important;color:#15803d !important;margin-top:4px !important;">6 used, 4 remaining</div>
               </div>
             </div>
           </div>
@@ -1062,7 +1059,7 @@
         <div class="med-section">
           <div class="med-section-header"><h3 style="font-size:14px !important;">Session Tracker (Medicare Claims)</h3></div>
           <div style="overflow-x:auto !important;padding:0 !important;">
-            <table class="med-table" style="font-size:13px !important;">
+            <table class="med-table" style="font-size:12px !important;">
               <thead>
                 <tr><th>#</th><th>Date</th><th>Provider</th><th>Type</th><th>Item</th><th>Benefit</th></tr>
               </thead>
@@ -3028,7 +3025,7 @@
     loadMedicalSessions();
   };
 
-  var DAILY_MED_NAMES = ['Vyvanse', 'Valtrex', 'Levothyroxine', 'Xobet', 'Ointment'];
+  var DAILY_MED_NAMES = ['Vyvanse', 'Valtrex', 'Levothyroxine', 'Xobet'];
   var AS_NEEDED_NAMES = ['Nurofen', 'Panadol', 'Nexium', 'Prochlorperazine', 'Cizinate', 'Ondansetron'];
 
   // Migraine med names for grouping
@@ -3676,41 +3673,14 @@
         logDate = lastNight.getFullYear() + '-' + String(lastNight.getMonth()+1).padStart(2,'0') + '-' + String(lastNight.getDate()).padStart(2,'0');
         logCreatedAt = lastNight.toISOString();
       } else {
-        // Show input modal instead of prompt
-        var modal = document.createElement('div');
-        modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:1000;';
-        modal.innerHTML = '<div style="background:white;border-radius:12px;padding:24px;max-width:320px;width:90%;box-shadow:0 4px 12px rgba(0,0,0,0.15);">' +
-          '<div style="font-size:16px;font-weight:700;margin-bottom:12px;">When did you take it?</div>' +
-          '<div style="font-size:12px;color:#64748b;margin-bottom:14px;">Examples: 8:30pm, yesterday 2pm, 29/3 9pm</div>' +
-          '<input id="custom-time-input" type="text" placeholder="e.g. 8:30pm" style="width:100%;padding:10px 12px;border:1px solid #e2e8f0;border-radius:8px;font-size:14px;box-sizing:border-box;margin-bottom:14px;" autofocus>' +
-          '<div style="display:flex;gap:8px;">' +
-          '<button onclick="var input=document.getElementById(\'custom-time-input\').value.trim();if(input){habProcessCustomTime(' + medId + ',input,' + hasBrands + ');}else{alert(\'Please enter a time\');}document.body.removeChild(this.parentNode.parentNode);" style="flex:1;padding:10px;background:#10b981;color:white;border:none;border-radius:8px;font-weight:600;cursor:pointer;">Submit</button>' +
-          '<button onclick="document.body.removeChild(this.parentNode.parentNode);" style="padding:10px 16px;background:#e2e8f0;color:#64748b;border:none;border-radius:8px;cursor:pointer;">Cancel</button>' +
-          '</div></div>';
-        document.body.appendChild(modal);
-        document.getElementById('custom-time-input').addEventListener('keypress', function(e) {
-          if (e.key === 'Enter') {
-            var input = this.value.trim();
-            if (input) { habProcessCustomTime(' + medId + ', input, ' + hasBrands + '); document.body.removeChild(modal); }
-          }
-        });
-        return;
+        var timeStr = prompt('Enter date & time (e.g. 8:30pm, yesterday 2pm, 29/3 9pm):');
+        if (!timeStr) return;
+        var parsed = parseFlexibleDateTime(timeStr);
+        if (!parsed) { alert('Could not understand that. Try: 8:30pm, yesterday 2pm, or 29/3 9pm'); return; }
+        logDate = parsed.date;
+        logCreatedAt = parsed.iso;
       }
       // Get optional note
-      var noteEl = document.getElementById('dose-note-' + medId);
-      var note = noteEl ? noteEl.value.trim() : '';
-      if (hasBrands) {
-        habShowBrandButtons(medId, logDate, logCreatedAt, note);
-      } else {
-        habInsertDose(medId, logDate, logCreatedAt, note || undefined);
-      }
-    };
-
-    window.habProcessCustomTime = function(medId, timeStr, hasBrands) {
-      var parsed = parseFlexibleDateTime(timeStr);
-      if (!parsed) { alert('Could not understand that. Try: 8:30pm, yesterday 2pm, or 29/3 9pm'); return; }
-      var logDate = parsed.date;
-      var logCreatedAt = parsed.iso;
       var noteEl = document.getElementById('dose-note-' + medId);
       var note = noteEl ? noteEl.value.trim() : '';
       if (hasBrands) {
@@ -3892,8 +3862,13 @@
         dl.innerHTML = '<div class="hab-empty">No daily medications yet. Tap + Add to get started.</div>';
       } else {
         var h = '';
-        for (var i = 0; i < daily.length; i++) {
-          var med = daily[i];
+        // Separate ointments from other daily meds
+        var ointments = daily.filter(function(m){ return m.name.toLowerCase().indexOf('ointment') !== -1; });
+        var otherDaily = daily.filter(function(m){ return m.name.toLowerCase().indexOf('ointment') === -1; });
+
+        // Render non-ointment meds first
+        for (var i = 0; i < otherDaily.length; i++) {
+          var med = otherDaily[i];
           var done = !!(logs[med.id] && logs[med.id][today]);
           var s = await streakFor(med.id, logs);
           var timeLabel = MED_TIMES[med.name.toLowerCase()] || '';
@@ -3931,6 +3906,31 @@
           h += '</div>';
           if (s > 1) h += '<div class="hab-streak">&#x1F525; '+s+'d</div>';
           h += '<div class="hab-del" onclick="habDeleteMed('+med.id+')">&#x1F5D1;</div>';
+          h += '</div>';
+        }
+
+        // Render ointments grouped together in vertical stack
+        if (ointments.length > 0) {
+          h += '<div style="padding:10px 0 4px !important;font-size:11px !important;font-weight:700 !important;text-transform:uppercase !important;color:#d97706 !important;letter-spacing:0.5px !important;">&#x1F9F4; Ointments</div>';
+          h += '<div style="background:#fffbeb !important;border:1px solid #fde68a !important;border-radius:10px !important;padding:12px !important;display:flex !important;flex-direction:column !important;gap:10px !important;">';
+          for (var oi = 0; oi < ointments.length; oi++) {
+            var oment = ointments[oi];
+            var oDone = !!(logs[oment.id] && logs[oment.id][today]);
+            var oS = await streakFor(oment.id, logs);
+            h += '<div style="display:flex !important;align-items:center !important;gap:10px !important;padding:8px 10px !important;background:white !important;border-radius:8px !important;border:1px solid #fcd34d !important;">';
+            h += '<div class="hab-check'+(oDone?' done':'')+'" onclick="habToggleDaily('+oment.id+')" style="flex-shrink:0 !important;"></div>';
+            var oMedInfo = medsLookup[oment.name.toLowerCase()];
+            var oDoseStr = oMedInfo && oMedInfo.dose ? oMedInfo.dose : '';
+            h += '<div style="flex:1 !important;"><div class="hab-med-name" style="margin-bottom:0 !important;">'+esc(oment.name)+(oDoseStr ? ' <span style="font-size:10px !important;color:#94a3b8 !important;font-weight:400 !important;">'+esc(oDoseStr)+'</span>' : '')+'</div>';
+            if (oDone) {
+              h += '<div style="font-size:10px !important;color:#10b981 !important;">✓ Done</div>';
+            } else {
+              h += '<div style="font-size:10px !important;color:#92400e !important;">Apply as directed</div>';
+            }
+            h += '</div>';
+            h += '<div class="hab-del" onclick="habDeleteMed('+oment.id+')" style="flex-shrink:0 !important;">&#x1F5D1;</div>';
+            h += '</div>';
+          }
           h += '</div>';
         }
         dl.innerHTML = h;
@@ -3989,7 +3989,11 @@
             } catch(e) {}
             h += '<div class="hab-med-row" style="flex-wrap:wrap !important;">';
             h += '<button class="am-btn" onclick="habShowRecordOptions(' + med.id + ',' + hasBrands + ')" style="background:#3b82f6 !important;color:white !important;border-color:#3b82f6 !important;padding:6px 12px !important;font-size:12px !important;">Record dose</button>';
+            var purposeText = asInfo && asInfo.purpose ? asInfo.purpose : '';
             h += '<div style="flex:1 !important;"><div class="hab-med-name" style="margin-bottom:0 !important;">' + esc(med.name) + esc(doseLabel) + '</div>';
+            if (purposeText) {
+              h += '<div style="font-size:11px !important;color:#94a3b8 !important;line-height:1.4 !important;margin:2px 0 4px !important;">' + esc(purposeText) + '</div>';
+            }
             if (todayLogs.length > 0) {
               h += '<div style="font-size:11px !important;color:#10b981 !important;">' + todayLogs.length + ' dose' + (todayLogs.length > 1 ? 's' : '') + ' today</div>';
               todayLogs.forEach(function(tl) {

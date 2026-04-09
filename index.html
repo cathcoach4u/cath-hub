@@ -572,7 +572,6 @@
     <button class="mobile-nav-item" data-nav="medical" onclick="chNavMobile('medical',this)"><span class="icon">&#x1FA7A;</span> Medical</button>
     <button class="mobile-nav-item" data-nav="habits" onclick="chNavMobile('habits',this)"><span class="icon">&#x2B50;</span> My Habits</button>
     <button class="mobile-nav-item" data-nav="travel" onclick="chNavMobile('travel',this)"><span class="icon">&#x2708;&#xFE0F;</span> Travel</button>
-    <button class="mobile-nav-item" data-nav="hometab" onclick="chNavMobile('hometab',this)"><span class="icon">&#x1F3E0;</span> Home</button>
     <button class="mobile-nav-item" data-nav="about" onclick="chNavMobile('about',this)"><span class="icon">&#x2139;&#xFE0F;</span> About</button>
     <div class="mobile-drawer-footer">
       <div class="dm-row">
@@ -596,7 +595,6 @@
     <button class="nav-item" onclick="chNav('medical',this)"><span class="icon">&#x1FA7A;</span> Medical</button>
     <button class="nav-item" onclick="chNav('habits',this)"><span class="icon">&#x2B50;</span> My Habits</button>
     <button class="nav-item" onclick="chNav('travel',this)"><span class="icon">&#x2708;&#xFE0F;</span> Travel</button>
-    <button class="nav-item" onclick="chNav('hometab',this)"><span class="icon">&#x1F3E0;</span> Home</button>
     <button class="nav-item" onclick="chNav('about',this)"><span class="icon">&#x2139;&#xFE0F;</span> About</button>
     <div class="sidebar-footer">
       <div style="display:flex !important;align-items:center !important;gap:6px !important;margin-bottom:6px !important;">
@@ -702,17 +700,6 @@
         </div>
       </div>
 
-      <!-- ARCHIVED: Fiona's List moved to Baker Hub
-      <div class="dash-section">
-        <div style="display:flex !important;justify-content:space-between !important;align-items:center !important;margin-bottom:12px !important;">
-          <h3 style="margin-bottom:0 !important;">&#x1F9F9; Fiona's List</h3>
-          <span style="font-size:12px !important;color:#3b82f6 !important;cursor:pointer !important;" onclick="chNav('hometab',document.querySelectorAll('#cathHub .nav-item')[6]);setTimeout(function(){hmGo('fiona')},100)">View all &rarr;</span>
-        </div>
-        <div id="dash-fiona-summary">
-          <div style="font-size:13px !important;color:#94a3b8 !important;">Loading...</div>
-        </div>
-      </div>
-      -->
 
       <!-- ARCHIVED: AisleMate moved to Baker Hub
       <div class="dash-section">
@@ -1720,51 +1707,6 @@
     </div>
 
     <!-- ═══ HOME ═══ -->
-    <div class="screen" id="ch-hometab">
-      <h2>&#x1F3E0; Home</h2>
-
-      <!-- HOME: Navigation -->
-      <div class="am-subscreen active" id="hm-home">
-        <div style="display:flex !important;flex-direction:column !important;gap:10px !important;">
-          <button class="am-btn" onclick="hmGo('fiona')" style="width:100% !important;padding:14px 16px !important;font-size:15px !important;text-align:left !important;background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;color:#1e293b !important;display:flex !important;align-items:center !important;gap:10px !important;">&#x1F9F9; Fiona's List <span style="margin-left:auto !important;color:#94a3b8 !important;font-size:12px !important;" id="hm-fiona-badge">0 tasks</span></button>
-        </div>
-      </div>
-
-      <!-- SUB: Fiona's List -->
-      <div class="am-subscreen" id="hm-fiona">
-        <button class="am-back" onclick="hmGo('home')">&#x2190; Back</button>
-        <h3 style="font-size:18px !important;font-weight:700 !important;margin-bottom:4px !important;">&#x1F9F9; Fiona's List</h3>
-        <p style="font-size:12px !important;color:#94a3b8 !important;margin-bottom:16px !important;">Sorting &amp; cleaning tasks for Fiona's next visit. Add tasks as you think of them.</p>
-
-        <!-- Add task -->
-        <div style="display:flex !important;gap:8px !important;margin-bottom:16px !important;">
-          <input type="text" id="fi-task-input" placeholder="Add a task..." style="flex:1 !important;padding:12px 14px !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;font-size:14px !important;box-sizing:border-box !important;" onkeydown="if(event.key==='Enter')fiAddTask()">
-          <button class="am-btn" onclick="fiAddTask()" style="background:#7c3aed !important;color:white !important;border-color:#7c3aed !important;padding:12px 16px !important;font-size:14px !important;white-space:nowrap !important;">+ Add</button>
-        </div>
-
-        <!-- Task count -->
-        <div style="display:flex !important;align-items:center !important;justify-content:space-between !important;margin-bottom:12px !important;">
-          <div style="font-size:13px !important;color:#64748b !important;" id="fi-task-count">0 tasks</div>
-          <button class="am-btn" onclick="fiClearAll()" id="fi-clear-btn" style="background:#ef4444 !important;color:white !important;border-color:#ef4444 !important;padding:8px 14px !important;font-size:12px !important;display:none !important;">&#x1F504; Clear All &amp; Refresh</button>
-        </div>
-
-        <!-- Task list -->
-        <div id="fi-task-list" style="display:flex !important;flex-direction:column !important;gap:6px !important;">
-          <div style="padding:20px !important;text-align:center !important;color:#94a3b8 !important;font-size:13px !important;">Loading...</div>
-        </div>
-
-        <!-- Standalone link -->
-        <div style="margin-top:20px !important;padding:14px 16px !important;background:#f8fafc !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;">
-          <div style="font-size:12px !important;font-weight:600 !important;color:#64748b !important;margin-bottom:6px !important;">&#x1F517; Quick Access Link</div>
-          <div style="font-size:12px !important;color:#94a3b8 !important;margin-bottom:8px !important;">Bookmark this for fast access without logging in</div>
-          <div style="display:flex !important;gap:8px !important;align-items:center !important;">
-            <input type="text" readonly id="fi-link" style="flex:1 !important;padding:8px 10px !important;border:1px solid #e2e8f0 !important;border-radius:6px !important;font-size:11px !important;color:#475569 !important;background:white !important;">
-            <button class="am-btn" onclick="fiCopyLink()" style="padding:8px 12px !important;font-size:12px !important;white-space:nowrap !important;">Copy</button>
-          </div>
-        </div>
-      </div>
-
-    </div>
 
     <!-- ═══ ABOUT ═══ -->
     <div class="screen" id="ch-about">

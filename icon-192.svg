@@ -1,7 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" width="192" height="192">
   <rect width="192" height="192" rx="42" fill="#0d9488"/>
+  <!-- Bold C using circles and rectangles -->
   <g fill="white">
-    <path d="M 145 55 L 70 55 Q 55 55 55 70 L 55 122 Q 55 137 70 137 L 145 137 L 145 122 L 75 122 Q 70 122 70 117 L 70 75 Q 70 70 75 70 L 145 70 Z"/>
-    <rect x="130" y="70" width="20" height="52" fill="white"/>
+    <circle cx="96" cy="96" r="48" fill="none" stroke="white" stroke-width="28"/>
+    <rect x="110" y="70" width="30" height="52" fill="#0d9488"/>
   </g>
 </svg>

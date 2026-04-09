@@ -3261,7 +3261,7 @@
       h += '</div></div>';
       if (m.dose) h += '<div style="font-size:13px !important;color:#1e293b !important;margin-bottom:4px !important;"><strong>Dose:</strong> ' + esc(m.dose) + '</div>';
       if (m.schedule) h += '<div style="font-size:13px !important;color:#1e293b !important;margin-bottom:4px !important;"><strong>When:</strong> ' + esc(m.schedule) + '</div>';
-      if (m.purpose && !isMigraineMed) h += '<div style="font-size:12px !important;color:#64748b !important;line-height:1.4 !important;">' + esc(m.purpose) + '</div>';
+      if (m.purpose) h += '<div style="font-size:12px !important;color:#64748b !important;line-height:1.4 !important;">' + esc(m.purpose) + '</div>';
       if (m.conditions) h += '<div style="font-size:12px !important;color:#7c3aed !important;margin-top:4px !important;"><strong>For:</strong> ' + esc(m.conditions) + '</div>';
       h += '</div>';
       // Edit mode (hidden)

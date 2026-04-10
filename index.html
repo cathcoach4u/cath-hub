@@ -4553,8 +4553,9 @@
             ph += '<div style="display:flex !important;gap:8px !important;margin-bottom:8px !important;">';
             ph += '<select id="td-edit-cat-'+t.id+'" style="flex:1 !important;padding:8px 10px !important;border:1px solid #e2e8f0 !important;border-radius:8px !important;font-size:13px !important;background:white !important;appearance:auto !important;-webkit-appearance:listbox !important;">';
             var tdCatList = ['General','Health','Home','Work','Shopping','Finance','Family','Admin','Personal','Event/Party'];
+            var currentCat = t.category ? t.category.trim() : 'General';
             for (var ci = 0; ci < tdCatList.length; ci++) {
-              var sel = (t.category || 'General') === tdCatList[ci] ? ' selected' : '';
+              var sel = currentCat === tdCatList[ci] ? ' selected' : '';
               ph += '<option value="'+tdCatList[ci]+'"'+sel+'>'+tdCatList[ci]+'</option>';
             }
             ph += '</select>';

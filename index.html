@@ -4104,82 +4104,85 @@
         dl.innerHTML = '<div class="hab-empty">No daily medications yet. Tap + Add to get started.</div>';
       } else {
         var h = '';
-        // Separate ointments from other daily meds
-        var ointments = daily.filter(function(m){ return m.name.toLowerCase().indexOf('ointment') !== -1; });
-        var otherDaily = daily.filter(function(m){ return m.name.toLowerCase().indexOf('ointment') === -1; });
+        // Separate creams/ointments from other daily meds
+        var creamsOintments = daily.filter(function(m){ return m.name.toLowerCase().indexOf('cream') !== -1 || m.name.toLowerCase().indexOf('ointment') !== -1; });
+        var morningMeds = daily.filter(function(m){ return m.name.toLowerCase().indexOf('cream') === -1 && m.name.toLowerCase().indexOf('ointment') === -1; });
 
-        // Render non-ointment meds first
-        for (var i = 0; i < otherDaily.length; i++) {
-          var med = otherDaily[i];
-          var done = !!(logs[med.id] && logs[med.id][today]);
-          // Only calculate streak for first 3 medications (Vyvanse, Valtrex, Levothyroxine)
-          var streakMeds = ['vyvanse', 'valtrex', 'levothyroxine'];
-          var s = streakMeds.indexOf(med.name.toLowerCase()) !== -1 ? await streakFor(med.id, logs) : 0;
-          var timeLabel = MED_TIMES[med.name.toLowerCase()] || '';
-          // Get time taken today
-          var takenTime = '';
-          var takenLogId = '';
-          var takenNote = '';
-          if (done) {
-            try {
-              var { data: tLog } = await sb.from('habit_logs').select('id, created_at, note').eq('med_id', med.id).eq('date', today).limit(1);
-              if (tLog && tLog[0]) {
-                if (tLog[0].created_at) takenTime = new Date(tLog[0].created_at).toLocaleTimeString('en-AU', { hour: '2-digit', minute: '2-digit' });
-                takenLogId = tLog[0].id;
-                takenNote = tLog[0].note || '';
-              }
-            } catch(e) {}
-          }
-          h += '<div class="hab-med-row">';
-          h += '<div class="hab-check'+(done?' done':'')+'" onclick="habToggleDaily('+med.id+')"></div>';
-          var medInfo = medsLookup[med.name.toLowerCase()];
-          var doseStr = medInfo && medInfo.dose ? medInfo.dose : '';
-          // Display name without "cream" suffix
-          var displayName = med.name.replace(/\s+cream/i, '').replace(/\s+ointment/i, '');
-          h += '<div style="flex:1 !important;"><div class="hab-med-name" style="margin-bottom:0 !important;">'+esc(displayName)+(doseStr ? ' <span style="font-size:10px !important;color:#94a3b8 !important;font-weight:400 !important;">'+esc(doseStr)+'</span>' : '')+'</div>';
-          if (done && takenTime) {
-            h += '<div style="font-size:10px !important;color:#10b981 !important;">Taken at '+esc(takenTime);
-            h += ' <span onclick="habChangeTime(\''+takenLogId+'\')" style="cursor:pointer !important;color:#3b82f6 !important;">&#x270F;</span>';
-            h += '</div>';
-            if (takenNote) {
-              h += '<div style="font-size:10px !important;color:#64748b !important;font-style:italic !important;">'+esc(takenNote)+' <span onclick="habAddNote(\''+takenLogId+'\')" style="cursor:pointer !important;color:#3b82f6 !important;font-style:normal !important;">edit</span></div>';
-            } else {
-              h += '<div style="font-size:10px !important;"><span onclick="habAddNote(\''+takenLogId+'\')" style="cursor:pointer !important;color:#3b82f6 !important;">+ add note</span></div>';
+        // ═══ MORNING MEDICATIONS ═══
+        if (morningMeds.length > 0) {
+          h += '<div style="padding:10px 0 4px !important;font-size:11px !important;font-weight:700 !important;text-transform:uppercase !important;color:#059669 !important;letter-spacing:0.5px !important;">&#x2600;&#xFE0F; Daily Morning</div>';
+          for (var i = 0; i < morningMeds.length; i++) {
+            var med = morningMeds[i];
+            var done = !!(logs[med.id] && logs[med.id][today]);
+            // Only calculate streak for first 3 medications (Vyvanse, Valtrex, Levothyroxine)
+            var streakMeds = ['vyvanse', 'valtrex', 'levothyroxine'];
+            var s = streakMeds.indexOf(med.name.toLowerCase()) !== -1 ? await streakFor(med.id, logs) : 0;
+            var timeLabel = MED_TIMES[med.name.toLowerCase()] || '';
+            // Get time taken today
+            var takenTime = '';
+            var takenLogId = '';
+            var takenNote = '';
+            if (done) {
+              try {
+                var { data: tLog } = await sb.from('habit_logs').select('id, created_at, note').eq('med_id', med.id).eq('date', today).limit(1);
+                if (tLog && tLog[0]) {
+                  if (tLog[0].created_at) takenTime = new Date(tLog[0].created_at).toLocaleTimeString('en-AU', { hour: '2-digit', minute: '2-digit' });
+                  takenLogId = tLog[0].id;
+                  takenNote = tLog[0].note || '';
+                }
+              } catch(e) {}
             }
-          } else if (timeLabel) {
-            h += '<div style="font-size:10px !important;color:#94a3b8 !important;">'+timeLabel+'</div>';
+            h += '<div class="hab-med-row">';
+            h += '<div class="hab-check'+(done?' done':'')+'" onclick="habToggleDaily('+med.id+')"></div>';
+            var medInfo = medsLookup[med.name.toLowerCase()];
+            var doseStr = medInfo && medInfo.dose ? medInfo.dose : '';
+            // Display name without "cream" suffix
+            var displayName = med.name.replace(/\s+cream/i, '').replace(/\s+ointment/i, '');
+            h += '<div style="flex:1 !important;"><div class="hab-med-name" style="margin-bottom:0 !important;">'+esc(displayName)+(doseStr ? ' <span style="font-size:10px !important;color:#94a3b8 !important;font-weight:400 !important;">'+esc(doseStr)+'</span>' : '')+'</div>';
+            if (done && takenTime) {
+              h += '<div style="font-size:10px !important;color:#10b981 !important;">Taken at '+esc(takenTime);
+              h += ' <span onclick="habChangeTime(\''+takenLogId+'\')" style="cursor:pointer !important;color:#3b82f6 !important;">&#x270F;</span>';
+              h += '</div>';
+              if (takenNote) {
+                h += '<div style="font-size:10px !important;color:#64748b !important;font-style:italic !important;">'+esc(takenNote)+' <span onclick="habAddNote(\''+takenLogId+'\')" style="cursor:pointer !important;color:#3b82f6 !important;font-style:normal !important;">edit</span></div>';
+              } else {
+                h += '<div style="font-size:10px !important;"><span onclick="habAddNote(\''+takenLogId+'\')" style="cursor:pointer !important;color:#3b82f6 !important;">+ add note</span></div>';
+              }
+            } else if (timeLabel) {
+              h += '<div style="font-size:10px !important;color:#94a3b8 !important;">'+timeLabel+'</div>';
+            }
+            h += '</div>';
+            if (s > 1) h += '<div class="hab-streak">&#x1F525; '+s+'d</div>';
+            h += '<div class="hab-del" onclick="habDeleteMed('+med.id+')">&#x1F5D1;</div>';
+            h += '</div>';
           }
-          h += '</div>';
-          if (s > 1) h += '<div class="hab-streak">&#x1F525; '+s+'d</div>';
-          h += '<div class="hab-del" onclick="habDeleteMed('+med.id+')">&#x1F5D1;</div>';
-          h += '</div>';
         }
 
-        // Render ointments grouped together in vertical stack
-        if (ointments.length > 0) {
-          h += '<div style="padding:10px 0 4px !important;font-size:11px !important;font-weight:700 !important;text-transform:uppercase !important;color:#d97706 !important;letter-spacing:0.5px !important;">&#x1F9F4; Ointments</div>';
-          h += '<div style="background:#fffbeb !important;border:1px solid #fde68a !important;border-radius:10px !important;padding:12px !important;display:flex !important;flex-direction:column !important;gap:10px !important;">';
-          for (var oi = 0; oi < ointments.length; oi++) {
-            var oment = ointments[oi];
-            var oDone = !!(logs[oment.id] && logs[oment.id][today]);
-            var oS = await streakFor(oment.id, logs);
-            h += '<div style="display:flex !important;align-items:center !important;gap:10px !important;padding:8px 10px !important;background:white !important;border-radius:8px !important;border:1px solid #fcd34d !important;">';
-            h += '<div class="hab-check'+(oDone?' done':'')+'" onclick="habToggleDaily('+oment.id+')" style="flex-shrink:0 !important;"></div>';
-            var oMedInfo = medsLookup[oment.name.toLowerCase()];
-            var oDoseStr = oMedInfo && oMedInfo.dose ? oMedInfo.dose : '';
-            h += '<div style="flex:1 !important;"><div class="hab-med-name" style="margin-bottom:0 !important;">'+esc(oment.name)+(oDoseStr ? ' <span style="font-size:10px !important;color:#94a3b8 !important;font-weight:400 !important;">'+esc(oDoseStr)+'</span>' : '')+'</div>';
-            if (oDone) {
+        // ═══ EVENING MEDICATIONS (Creams/Ointments) ═══
+        if (creamsOintments.length > 0) {
+          h += '<div style="padding:10px 0 4px !important;margin-top:12px !important;font-size:11px !important;font-weight:700 !important;text-transform:uppercase !important;color:#7c2d12 !important;letter-spacing:0.5px !important;">&#x1F31C; Daily Evening</div>';
+          h += '<div style="background:#fef3c7 !important;border:1px solid #fcd34d !important;border-radius:10px !important;padding:12px !important;display:flex !important;flex-direction:column !important;gap:10px !important;">';
+          for (var ei = 0; ei < creamsOintments.length; ei++) {
+            var eitem = creamsOintments[ei];
+            var eDone = !!(logs[eitem.id] && logs[eitem.id][today]);
+            var eS = await streakFor(eitem.id, logs);
+            h += '<div style="display:flex !important;align-items:center !important;gap:10px !important;padding:8px 10px !important;background:white !important;border-radius:8px !important;border:1px solid #fde68a !important;">';
+            h += '<div class="hab-check'+(eDone?' done':'')+'" onclick="habToggleDaily('+eitem.id+')" style="flex-shrink:0 !important;"></div>';
+            var eMedInfo = medsLookup[eitem.name.toLowerCase()];
+            var eDoseStr = eMedInfo && eMedInfo.dose ? eMedInfo.dose : '';
+            h += '<div style="flex:1 !important;"><div class="hab-med-name" style="margin-bottom:0 !important;">'+esc(eitem.name)+(eDoseStr ? ' <span style="font-size:10px !important;color:#94a3b8 !important;font-weight:400 !important;">'+esc(eDoseStr)+'</span>' : '')+'</div>';
+            if (eDone) {
               h += '<div style="font-size:10px !important;color:#10b981 !important;">✓ Done</div>';
             } else {
               // Special description for Betamethasone Valerate
-              var descText = 'Apply as directed';
-              if (oment.name.toLowerCase().indexOf('betamethasone') !== -1 && oment.name.toLowerCase().indexOf('valerate') !== -1) {
-                descText = 'To be applied when Xobet is finished';
+              var eDescText = 'Apply as directed';
+              if (eitem.name.toLowerCase().indexOf('betamethasone') !== -1 && eitem.name.toLowerCase().indexOf('valerate') !== -1) {
+                eDescText = 'To be applied when Xobet is finished';
               }
-              h += '<div style="font-size:10px !important;color:#92400e !important;">'+descText+'</div>';
+              h += '<div style="font-size:10px !important;color:#92400e !important;">'+eDescText+'</div>';
             }
             h += '</div>';
-            h += '<div class="hab-del" onclick="habDeleteMed('+oment.id+')" style="flex-shrink:0 !important;">&#x1F5D1;</div>';
+            h += '<div class="hab-del" onclick="habDeleteMed('+eitem.id+')" style="flex-shrink:0 !important;">&#x1F5D1;</div>';
             h += '</div>';
           }
           h += '</div>';

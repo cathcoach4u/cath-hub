@@ -1595,15 +1595,16 @@
 
       <!-- TAB: Rhythm Cards -->
       <div id="zb-panel-rhythms" style="display:none !important;">
-        <!-- Rhythm sub-nav -->
-        <div style="display:flex !important;gap:6px !important;margin-bottom:16px !important;flex-wrap:wrap !important;">
-          <button class="am-btn zb-rhythm-tab active" onclick="zbRhythm('daily')" id="zb-rt-daily" style="padding:6px 12px !important;font-size:11px !important;background:#10b981 !important;color:white !important;border-color:#10b981 !important;">&#x2600;&#xFE0F; Daily</button>
-          <button class="am-btn zb-rhythm-tab" onclick="zbRhythm('weekly')" id="zb-rt-weekly" style="padding:6px 12px !important;font-size:11px !important;">&#x1F4C5; Weekly</button>
-          <button class="am-btn zb-rhythm-tab" onclick="zbRhythm('fortnightly')" id="zb-rt-fortnightly" style="padding:6px 12px !important;font-size:11px !important;">&#x1F504; Fortnightly</button>
-          <button class="am-btn zb-rhythm-tab" onclick="zbRhythm('6monthly')" id="zb-rt-6monthly" style="padding:6px 12px !important;font-size:11px !important;">&#x1F4C6; 6-Monthly</button>
-          <button class="am-btn zb-rhythm-tab" onclick="zbRhythm('annual')" id="zb-rt-annual" style="padding:6px 12px !important;font-size:11px !important;">&#x1F389; Annual</button>
-        </div>
-        <div id="zb-rhythm-content"></div>
+        <!-- Daily Rhythm -->
+        <div id="zb-rhythm-daily"></div>
+        <!-- Weekly Rhythm -->
+        <div id="zb-rhythm-weekly"></div>
+        <!-- Fortnightly Rhythm -->
+        <div id="zb-rhythm-fortnightly"></div>
+        <!-- 6-Monthly Rhythm -->
+        <div id="zb-rhythm-6monthly"></div>
+        <!-- Annual Rhythm -->
+        <div id="zb-rhythm-annual"></div>
       </div>
 
       <!-- TAB: Zone Buddy -->
@@ -5626,7 +5627,7 @@
       }
     });
     if (tab === 'meds') { habRender(); habLoadHistory(); }
-    if (tab === 'rhythms') zbRhythm('daily');
+    if (tab === 'rhythms') zbRenderAllRhythms();
     if (tab === 'zones') zbRenderZoneGrid();
     if (tab === 'custom') habRenderCustom();
   };
@@ -5803,6 +5804,120 @@
       deeper: ['Vacuum interior','Wipe dashboard and surfaces','Clean windows inside','Check tyre pressure if due','Restock items (umbrella, bags, medication)'],
       done: 'Rubbish out, items removed, fuel checked', doneEnough: 'Rubbish out, boot clear' }
   ];
+
+  // ─── Render All Rhythm Cards ───
+  window.zbRenderAllRhythms = function() {
+    ['daily','weekly','fortnightly','6monthly','annual'].forEach(function(rhythm) {
+      zbRenderRhythmCard(rhythm);
+    });
+  };
+
+  // ─── Render Single Rhythm Card ───
+  window.zbRenderRhythmCard = function(rhythm) {
+    var card = ZB_RHYTHMS[rhythm];
+    var container = document.getElementById('zb-rhythm-' + rhythm);
+    if (!container) return;
+
+    // Determine storage key based on rhythm frequency
+    var storageKey;
+    if (rhythm === 'daily') storageKey = zbKey('rhythm_daily');
+    else if (rhythm === 'weekly') storageKey = zbWeekKey('rhythm_weekly');
+    else if (rhythm === 'fortnightly') storageKey = zbWeekKey('rhythm_fn');
+    else if (rhythm === '6monthly') {
+      var m = new Date().getMonth();
+      var half = m < 6 ? 'H1' : 'H2';
+      storageKey = 'rhythm_6m_' + new Date().getFullYear() + '_' + half;
+    } else {
+      storageKey = 'rhythm_annual_' + new Date().getFullYear();
+    }
+
+    var checked = zbGetChecked(storageKey);
+
+    // Build sections (handle fortnightly dynamically)
+    var sections = card.sections;
+    if (rhythm === 'fortnightly') {
+      var week = zbGetFortnightWeek();
+      sections = [
+        { name: 'Current Week: Week ' + week, icon: '\u{1F504}', items: week === 'A'
+          ? [{ id: 'fn_jojo', label: 'Jo Jo appointment' }]
+          : [{ id: 'fn_daniel', label: 'Daniel \u2014 Chiropractor' }]
+        },
+        { name: 'Preparation', icon: '\u{1F4DD}', items: [
+          { id: 'fn_cal', label: 'Check calendar time' },
+          { id: 'fn_notes', label: 'Prepare any notes about body symptoms' },
+          { id: 'fn_items', label: 'Bring required items' },
+          { id: 'fn_rec', label: 'Note any recommendations' },
+          { id: 'fn_next', label: 'Schedule the next visit if needed' }
+        ]}
+      ];
+    }
+
+    var h = '';
+    // Collapsible header
+    h += '<div class="hab-section" style="margin-bottom:12px !important;">';
+    h += '<div class="hab-section-header" style="padding:12px 16px !important;cursor:pointer !important;" onclick="habToggleSection(this)">';
+    h += '<h3 style="font-size:14px !important;">' + esc(card.title) + '</h3>';
+    h += '<span style="font-size:11px !important;color:#94a3b8 !important;">' + esc(card.subtitle.substring(0, 40)) + '... <span class="hab-chevron" style="margin-left:6px !important;">&#x25B2;</span></span>';
+    h += '</div>';
+
+    // Content (hidden by default, toggled by section header)
+    h += '<div style="display:none !important;">';
+
+    // Card info
+    h += '<div style="background:white !important;border-top:1px solid #e2e8f0 !important;border-radius:0 0 12px 12px !important;padding:16px !important;margin-bottom:0 !important;">';
+    h += '<div style="font-size:12px !important;color:#64748b !important;margin-bottom:8px !important;">' + esc(card.subtitle) + '</div>';
+    h += '<div style="font-size:11px !important;color:#10b981 !important;font-weight:600 !important;margin-bottom:12px !important;">Done means: ' + esc(card.done) + '</div>';
+
+    if (rhythm === 'fortnightly') {
+      h += '<div style="font-size:11px !important;color:#6366f1 !important;margin-bottom:12px !important;">Reference: Week A starts 16 March 2026. Currently <strong>Week ' + zbGetFortnightWeek() + '</strong></div>';
+    }
+    if (rhythm === '6monthly') {
+      var mon = new Date().getMonth();
+      var hints = [];
+      if (mon >= 2 && mon <= 3) hints.push('GP + blood tests due now (Mar)');
+      if (mon >= 8 && mon <= 9) hints.push('GP + blood tests due now (Sep)');
+      if (mon >= 4 && mon <= 5) hints.push('Dental clean due now (May)');
+      if (mon >= 10 && mon <= 11) hints.push('Dental clean due now (Nov)');
+      if (hints.length) {
+        h += '<div style="font-size:11px !important;color:#f59e0b !important;margin-bottom:12px !important;font-weight:600 !important;">\u26A0\uFE0F ' + hints.join(' | ') + '</div>';
+      }
+    }
+
+    // Progress bar
+    var totalItems = 0, doneItems = 0;
+    sections.forEach(function(s) {
+      s.items.forEach(function(item) {
+        if (item.conditional === 'thrive' && !zbInThriveBlock()) return;
+        totalItems++;
+        if (checked[item.id]) doneItems++;
+      });
+    });
+    var pct = totalItems ? Math.round((doneItems / totalItems) * 100) : 0;
+    h += '<div style="display:flex !important;align-items:center !important;gap:10px !important;margin-bottom:12px !important;">';
+    h += '<div style="flex:1 !important;height:6px !important;background:#e2e8f0 !important;border-radius:3px !important;overflow:hidden !important;"><div style="height:100% !important;background:#10b981 !important;border-radius:3px !important;width:' + pct + '% !important;transition:width 0.3s !important;"></div></div>';
+    h += '<span style="font-size:12px !important;color:#64748b !important;white-space:nowrap !important;">' + doneItems + ' / ' + totalItems + '</span>';
+    h += '</div>';
+
+    // Sections
+    sections.forEach(function(sec) {
+      h += '<div style="margin-bottom:8px !important;">';
+      h += '<div style="font-size:12px !important;font-weight:600 !important;color:#64748b !important;padding:8px 0 6px !important;margin-bottom:6px !important;">' + sec.icon + ' ' + esc(sec.name) + '</div>';
+      sec.items.forEach(function(item) {
+        if (item.conditional === 'thrive' && !zbInThriveBlock()) return;
+        var isDone = checked[item.id];
+        h += '<div style="display:flex !important;align-items:center !important;gap:10px !important;padding:8px 12px !important;background:#f8fafc !important;border-radius:6px !important;margin-bottom:4px !important;cursor:pointer !important;" onclick="zbToggleRhythm(\'' + rhythm + '\',\'' + storageKey + '\',\'' + item.id + '\')">';
+        h += '<div class="hab-check' + (isDone ? ' done' : '') + '" style="cursor:pointer !important;flex-shrink:0 !important;"></div>';
+        h += '<span style="font-size:13px !important;' + (isDone ? 'text-decoration:line-through !important;color:#94a3b8 !important;' : '') + '">' + esc(item.label) + '</span>';
+        h += '</div>';
+      });
+      h += '</div>';
+    });
+
+    h += '</div>'; // end content
+    h += '</div>'; // end section
+
+    container.innerHTML = h;
+  };
 
   // ─── Render Rhythm Card ───
   window.zbRhythm = function(rhythm) {

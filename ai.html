@@ -380,22 +380,19 @@ body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background
   function render() {
     var container = document.getElementById('messages');
     if (!messages.length) {
-      // Fetch welcome message from Supabase
-      if (!window._aiWelcomeCache) {
-        sb.from('ai_config').select('value').eq('key', 'welcome_message').limit(1).then(function(res) {
-          if (res.data && res.data[0]) {
-            window._aiWelcomeCache = res.data[0].value;
-          } else {
-            window._aiWelcomeCache = '<div class="welcome"><div class="welcome-icon">&#x1F916;</div><h3>Hi Cath!</h3><p>Ask me anything about your tasks, meds, medical info, or memories.</p></div>';
-          }
-          container.innerHTML = window._aiWelcomeCache;
-        }).catch(function() {
-          window._aiWelcomeCache = '<div class="welcome"><div class="welcome-icon">&#x1F916;</div><h3>Hi Cath!</h3><p>Ask me anything about your tasks, meds, medical info, or memories.</p></div>';
-          container.innerHTML = window._aiWelcomeCache;
-        });
-      } else {
-        container.innerHTML = window._aiWelcomeCache;
-      }
+      // Show capability pills (clickable)
+      var h = '<div style="padding:32px 16px;text-align:center;">';
+      h += '<div style="font-size:14px;font-weight:600;color:#1e293b;margin-bottom:16px;">I can help with:</div>';
+      h += '<div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:24px;">';
+      h += '<span onclick="document.getElementById(\'input\').value=\'Add \';" style="padding:8px 14px;background:#f1f5f9;border:1px solid #cbd5e1;border-radius:18px;font-size:12px;color:#0d9488;cursor:pointer;transition:all 0.2s;">📋 To-Do</span>';
+      h += '<span onclick="document.getElementById(\'input\').value=\'Log \';" style="padding:8px 14px;background:#f1f5f9;border:1px solid #cbd5e1;border-radius:18px;font-size:12px;color:#0d9488;cursor:pointer;transition:all 0.2s;">💊 Medications</span>';
+      h += '<span onclick="document.getElementById(\'input\').value=\'Tell me \';" style="padding:8px 14px;background:#f1f5f9;border:1px solid #cbd5e1;border-radius:18px;font-size:12px;color:#0d9488;cursor:pointer;transition:all 0.2s;">🏥 Medical</span>';
+      h += '<span onclick="document.getElementById(\'input\').value=\'Remember \';" style="padding:8px 14px;background:#f1f5f9;border:1px solid #cbd5e1;border-radius:18px;font-size:12px;color:#0d9488;cursor:pointer;transition:all 0.2s;">🧠 Memory</span>';
+      h += '<span onclick="document.getElementById(\'input\').value=\'Query \';" style="padding:8px 14px;background:#f1f5f9;border:1px solid #cbd5e1;border-radius:18px;font-size:12px;color:#0d9488;cursor:pointer;transition:all 0.2s;">📊 Database</span>';
+      h += '</div>';
+      h += '<div style="font-size:12px;color:#94a3b8;">Click a pill or start typing...</div>';
+      h += '</div>';
+      container.innerHTML = h;
       return;
     }
     var html = '';

@@ -5490,22 +5490,18 @@
     function afRender() {
       var container = document.getElementById('ai-float-msgs');
       if (!afMessages.length) {
-        // Fetch welcome message from Supabase
-        if (!window._aiWelcomeCache) {
-          sb.from('ai_config').select('value').eq('key', 'welcome_message').limit(1).then(function(res) {
-            if (res.data && res.data[0]) {
-              window._aiWelcomeCache = res.data[0].value;
-            } else {
-              window._aiWelcomeCache = '<div class="ai-float-welcome"><div class="ai-float-welcome-icon">&#x1F916;</div>Hi Cath! Ask me anything about your tasks, meds, medical info, or memories.</div>';
-            }
-            container.innerHTML = window._aiWelcomeCache;
-          }).catch(function() {
-            window._aiWelcomeCache = '<div class="ai-float-welcome"><div class="ai-float-welcome-icon">&#x1F916;</div>Hi Cath! Ask me anything about your tasks, meds, medical info, or memories.</div>';
-            container.innerHTML = window._aiWelcomeCache;
-          });
-        } else {
-          container.innerHTML = window._aiWelcomeCache;
-        }
+        // Show capability pills (clickable)
+        var h = '<div style="padding:16px;text-align:center;">';
+        h += '<div style="font-size:12px;color:#94a3b8;margin-bottom:12px;">I can help with:</div>';
+        h += '<div style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center;">';
+        h += '<span onclick="document.getElementById(\'ai-float-input\').value=\'Add \';" style="padding:6px 12px;background:#f1f5f9;border:1px solid #cbd5e1;border-radius:16px;font-size:11px;color:#0d9488;cursor:pointer;transition:all 0.2s;">📋 To-Do</span>';
+        h += '<span onclick="document.getElementById(\'ai-float-input\').value=\'Log \';" style="padding:6px 12px;background:#f1f5f9;border:1px solid #cbd5e1;border-radius:16px;font-size:11px;color:#0d9488;cursor:pointer;transition:all 0.2s;">💊 Meds</span>';
+        h += '<span onclick="document.getElementById(\'ai-float-input\').value=\'Tell me \';" style="padding:6px 12px;background:#f1f5f9;border:1px solid #cbd5e1;border-radius:16px;font-size:11px;color:#0d9488;cursor:pointer;transition:all 0.2s;">🏥 Medical</span>';
+        h += '<span onclick="document.getElementById(\'ai-float-input\').value=\'Remember \';" style="padding:6px 12px;background:#f1f5f9;border:1px solid #cbd5e1;border-radius:16px;font-size:11px;color:#0d9488;cursor:pointer;transition:all 0.2s;">🧠 Memory</span>';
+        h += '<span onclick="document.getElementById(\'ai-float-input\').value=\'Query \';" style="padding:6px 12px;background:#f1f5f9;border:1px solid #cbd5e1;border-radius:16px;font-size:11px;color:#0d9488;cursor:pointer;transition:all 0.2s;">📊 Database</span>';
+        h += '</div>';
+        h += '</div>';
+        container.innerHTML = h;
         return;
       }
       var html = '';

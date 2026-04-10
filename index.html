@@ -5279,7 +5279,7 @@
         return JSON.stringify(data || []);
       }
       if (toolName === 'add_todo') {
-        var { data, error } = await sb.from('personal_todos').insert({ task: toolInput.task, done: false, category: toolInput.category || 'General' }).select();
+        var { data, error } = await sb.from('personal_todos').insert({ id: Date.now(), task: toolInput.task, done: false, category: toolInput.category || 'General', created_at: new Date().toISOString() }).select();
         if (error) return JSON.stringify({ error: 'Failed to add todo: ' + error.message });
         return JSON.stringify({ added: toolInput.task, id: data && data[0] ? data[0].id : null });
       }

@@ -593,6 +593,7 @@
     <button class="mobile-nav-item" data-nav="workout" onclick="chNavMobile('workout',this)"><span class="icon">&#x1F4AA;</span> Workout Log</button>
     <button class="mobile-nav-item" data-nav="medical" onclick="chNavMobile('medical',this)"><span class="icon">&#x1FA7A;</span> Medical</button>
     <button class="mobile-nav-item" data-nav="habits" onclick="chNavMobile('habits',this)"><span class="icon">&#x2B50;</span> My Habits</button>
+    <button class="mobile-nav-item" data-nav="zones" onclick="chNavMobile('zones',this)"><span class="icon">&#x1F3D7;&#xFE0F;</span> Zone Buddy</button>
     <button class="mobile-nav-item" data-nav="travel" onclick="chNavMobile('travel',this)"><span class="icon">&#x2708;&#xFE0F;</span> Travel</button>
     <button class="mobile-nav-item" data-nav="about" onclick="chNavMobile('about',this)"><span class="icon">&#x2139;&#xFE0F;</span> About</button>
     <div class="mobile-drawer-footer">
@@ -613,6 +614,7 @@
     <button class="nav-item" onclick="chNav('workout',this)"><span class="icon">&#x1F4AA;</span> Workout Log</button>
     <button class="nav-item" onclick="chNav('medical',this)"><span class="icon">&#x1FA7A;</span> Medical</button>
     <button class="nav-item" onclick="chNav('habits',this)"><span class="icon">&#x2B50;</span> My Habits</button>
+    <button class="nav-item" onclick="chNav('zones',this)"><span class="icon">&#x1F3D7;&#xFE0F;</span> Zone Buddy</button>
     <button class="nav-item" onclick="chNav('travel',this)"><span class="icon">&#x2708;&#xFE0F;</span> Travel</button>
     <button class="nav-item" onclick="chNav('about',this)"><span class="icon">&#x2139;&#xFE0F;</span> About</button>
     <div class="sidebar-footer">
@@ -1489,7 +1491,6 @@
         <button class="am-btn zb-tab active" onclick="zbTab('meds')" id="zb-tab-meds" style="padding:8px 14px !important;font-size:12px !important;background:#3b82f6 !important;color:white !important;border-color:#3b82f6 !important;">&#x1F48A; Medication</button>
         <button class="am-btn zb-tab" onclick="zbTab('custom')" id="zb-tab-custom" style="padding:8px 14px !important;font-size:12px !important;">My Habits</button>
         <button class="am-btn zb-tab" onclick="zbTab('rhythms')" id="zb-tab-rhythms" style="padding:8px 14px !important;font-size:12px !important;">Rhythm Cards</button>
-        <button class="am-btn zb-tab" onclick="zbTab('zones')" id="zb-tab-zones" style="padding:8px 14px !important;font-size:12px !important;">Zone Buddy</button>
       </div>
 
       <!-- TAB: Medication Tracking -->
@@ -1607,16 +1608,17 @@
         <div id="zb-rhythm-annual"></div>
       </div>
 
-      <!-- TAB: Zone Buddy -->
-      <div id="zb-panel-zones" style="display:none !important;">
-        <!-- Zone info banner -->
-        <div style="background:#fefce8 !important;border:1px solid #fde68a !important;border-radius:10px !important;padding:12px 16px !important;margin-bottom:16px !important;font-size:12px !important;color:#92400e !important;">
-          <strong>Zone Buddy</strong> &mdash; One zone at a time. Containment before sorting. Functional &ldquo;done enough&rdquo; is the goal.
-        </div>
-        <div id="zb-zone-grid" style="display:grid !important;grid-template-columns:1fr 1fr !important;gap:10px !important;margin-bottom:16px !important;"></div>
-        <div id="zb-zone-detail" style="display:none !important;"></div>
-      </div>
+    </div>
 
+    <!-- ═══ ZONE BUDDY ═══ -->
+    <div class="screen" id="ch-zones">
+      <h2>&#x1F3D7;&#xFE0F; Zone Buddy</h2>
+      <!-- Zone info banner -->
+      <div style="background:#fefce8 !important;border:1px solid #fde68a !important;border-radius:10px !important;padding:12px 16px !important;margin-bottom:16px !important;font-size:12px !important;color:#92400e !important;">
+        <strong>Zone Buddy</strong> &mdash; One zone at a time. Containment before sorting. Functional &ldquo;done enough&rdquo; is the goal.
+      </div>
+      <div id="zb-zone-grid" style="display:grid !important;grid-template-columns:1fr 1fr !important;gap:10px !important;margin-bottom:16px !important;"></div>
+      <div id="zb-zone-detail" style="display:none !important;"></div>
     </div>
 
     <!-- ═══ TRAVEL ═══ -->
@@ -1950,6 +1952,7 @@
     if(name === 'hometab') hmGo('home');
     if(name === 'todo') tdLoad();
     if(name === 'habits') { zbTab('meds'); }
+    if(name === 'zones') zbRenderZoneGrid();
     if(name === 'home') dashLoad();
   };
 
@@ -5628,7 +5631,6 @@
     });
     if (tab === 'meds') { habRender(); habLoadHistory(); }
     if (tab === 'rhythms') zbRenderAllRhythms();
-    if (tab === 'zones') zbRenderZoneGrid();
     if (tab === 'custom') habRenderCustom();
   };
 

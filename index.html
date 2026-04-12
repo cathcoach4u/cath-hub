@@ -1984,6 +1984,13 @@
     if (event === 'SIGNED_IN' && session) showApp();
   });
 
+  // Refresh habit data when page regains focus (e.g., returning from morning.html)
+  document.addEventListener('visibilitychange', function() {
+    if (!document.hidden && window.habRender) {
+      setTimeout(function() { window.habRender(); }, 100);
+    }
+  });
+
   // ─── NAVIGATION ───
   // ─── MOBILE HAMBURGER NAV ───
   window.toggleMobileNav = function() {

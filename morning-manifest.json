@@ -1,0 +1,24 @@
+{
+  "name": "Morning Meds",
+  "short_name": "Morning",
+  "description": "Quick morning medication tracker",
+  "start_url": "./morning.html",
+  "display": "standalone",
+  "background_color": "#FBBF24",
+  "theme_color": "#FBBF24",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "morning-icon-192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "morning-icon-512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

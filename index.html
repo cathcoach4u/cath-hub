@@ -3210,17 +3210,17 @@
     setTimeout(function(){
       zbTab('meds');
       setTimeout(function(){
-        // Open the morning section automatically by finding the section containing hab-morning-list
+        // Open the morning section automatically
         var morningList = document.getElementById('hab-morning-list');
         if (morningList) {
+          // Show the list
+          morningList.style.display = '';
+          // Update the chevron
           var section = morningList.closest('.hab-section');
           if (section) {
-            var header = section.querySelector('.hab-section-header');
-            if (header) {
-              var content = header.nextElementSibling;
-              if (content && content.style.display === 'none') {
-                habToggleSection(header);
-              }
+            var chevron = section.querySelector('.hab-chevron');
+            if (chevron) {
+              chevron.innerHTML = '&#x25B2;';
             }
           }
         }

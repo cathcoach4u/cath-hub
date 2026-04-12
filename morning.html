@@ -81,13 +81,6 @@ var recordBtn = document.getElementById('record-btn');
   var today = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0');
 
   try {
-    var { data: sessionData } = await sb.auth.getSession();
-    if (!sessionData || !sessionData.session) {
-      // Not logged in yet — show record button
-      recordBtn.textContent = 'Sign In & Record Meds';
-      return;
-    }
-
     // Get morning med IDs
     var { data: meds } = await sb.from('habit_meds').select('id, name').eq('freq', 'daily');
     var morningMeds = (meds || []).filter(function(m) {
@@ -140,13 +133,6 @@ window.recordMeds = async function() {
   statusText.textContent = 'Recording...';
 
   try {
-    var { data: sessionData } = await sb.auth.getSession();
-    if (!sessionData || !sessionData.session) {
-      // Redirect to main app to log in, then come back
-      window.location.href = './index.html?return=morning';
-      return;
-    }
-
     // Get morning med IDs
     var { data: meds } = await sb.from('habit_meds').select('id, name').eq('freq', 'daily');
     var morningMeds = (meds || []).filter(function(m) {

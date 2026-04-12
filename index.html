@@ -1913,13 +1913,9 @@
 
   // ─── AUTH ───
   function showApp() {
-    var params = new URLSearchParams(window.location.search);
-    if (params.get('return') === 'morning') {
-      window.location.href = './morning.html';
-      return;
-    }
     document.getElementById('cathHub-login').style.setProperty('display', 'none', 'important');
     document.getElementById('cathHub').style.setProperty('display', 'flex', 'important');
+    var params = new URLSearchParams(window.location.search);
     if (params.get('view') === 'shopping-list') {
       chNav('aislemate');
       setTimeout(function(){ amGo('weekly'); }, 100);

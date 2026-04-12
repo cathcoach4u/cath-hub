@@ -3806,10 +3806,16 @@
     };
 
     window.habToggleDaily = async function(id) {
-      // Changed behavior: Add a new dose instead of toggle
-      // This allows multiple doses per day for the same medication
+      // Toggle: delete if already logged today, otherwise add
       var today = todayKey();
-      await safeDailyInsert(id, today, new Date().toISOString());
+      var { data: existing } = await sb.from('habit_logs').select('id').eq('med_id', id).eq('date', today);
+      if (existing && existing.length > 0) {
+        // Already logged — delete to uncheck
+        await sb.from('habit_logs').delete().eq('med_id', id).eq('date', today);
+      } else {
+        // Not logged — add new entry
+        await sb.from('habit_logs').insert({ med_id: id, date: today, created_at: new Date().toISOString() });
+      }
       habRender();
     };
 

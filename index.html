@@ -3210,17 +3210,18 @@
     setTimeout(function(){
       zbTab('meds');
       setTimeout(function(){
-        // Open the morning section automatically by finding the section with "Daily Morning" heading
-        var sections = document.querySelectorAll('#zb-panel-meds .hab-section');
-        for (var i = 0; i < sections.length; i++) {
-          var h3 = sections[i].querySelector('h3');
-          if (h3 && h3.textContent.indexOf('Daily Morning') !== -1) {
-            var header = sections[i].querySelector('.hab-section-header');
-            var content = header.nextElementSibling;
-            if (content && content.style.display === 'none') {
-              habToggleSection(header);
+        // Open the morning section automatically by finding the section containing hab-morning-list
+        var morningList = document.getElementById('hab-morning-list');
+        if (morningList) {
+          var section = morningList.closest('.hab-section');
+          if (section) {
+            var header = section.querySelector('.hab-section-header');
+            if (header) {
+              var content = header.nextElementSibling;
+              if (content && content.style.display === 'none') {
+                habToggleSection(header);
+              }
             }
-            break;
           }
         }
       }, 50);

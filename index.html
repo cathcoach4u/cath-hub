@@ -31,6 +31,10 @@
   #cathHub .nav-item .icon { font-size: 16px !important; width: 22px !important; text-align: center !important; }
   #cathHub .sidebar-footer { margin-top: auto !important; padding: 14px 20px !important; font-size: 10px !important; color: rgba(255,255,255,0.3) !important; }
 
+  /* ───── VERSION BADGE ───── */
+  #cathHub .version-badge { position: fixed !important; top: 16px !important; right: 32px !important; font-size: 11px !important; font-weight: 600 !important; color: #94a3b8 !important; z-index: 10 !important; }
+  @media (max-width: 768px) { #cathHub .version-badge { display: none !important; } }
+
   /* ───── MAIN ───── */
   #cathHub .main { flex: 1 !important; overflow-y: auto !important; padding: 32px !important; }
   #cathHub .main h2 { font-size: 22px !important; font-weight: 700 !important; margin-bottom: 24px !important; color: #1e293b !important; }
@@ -574,6 +578,8 @@
 </div>
 
 <div id="cathHub">
+  <div class="version-badge">Cath Hub v4.6</div>
+
   <!-- Mobile top bar -->
   <div class="mobile-top-bar">
     <button class="hamburger-btn" onclick="toggleMobileNav()" aria-label="Menu">&#x2630;</button>
@@ -601,7 +607,6 @@
         <span style="font-size:12px !important;color:rgba(255,255,255,0.5) !important;">&#x1F319;</span>
         <button class="dm-btn" onclick="toggleDarkMode()">Dark Mode</button>
       </div>
-      <span>Cath Hub v2.0</span><br>
       <button class="mobile-nav-item" onclick="cathLogout()" style="padding:10px 0 !important;border:none !important;font-size:13px !important;color:rgba(255,255,255,0.5) !important;">&#x1F6AA; Sign Out</button>
     </div>
   </div>
@@ -622,7 +627,7 @@
         <span style="font-size:12px !important;color:rgba(255,255,255,0.5) !important;">&#x1F319;</span>
         <button onclick="toggleDarkMode()" style="padding:4px 10px !important;font-size:10px !important;background:rgba(255,255,255,0.1) !important;color:rgba(255,255,255,0.6) !important;border:1px solid rgba(255,255,255,0.15) !important;border-radius:6px !important;cursor:pointer !important;" id="dark-mode-btn">Dark Mode</button>
       </div>
-      <span>Cath Hub v2.0</span><br><a href="#" onclick="cathLogout();return false" style="color:rgba(255,255,255,0.5) !important;font-size:10px !important;text-decoration:underline !important;">Sign out</a>
+      <a href="#" onclick="cathLogout();return false" style="color:rgba(255,255,255,0.5) !important;font-size:10px !important;text-decoration:underline !important;">Sign out</a>
     </div>
   </div>
 

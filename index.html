@@ -624,6 +624,9 @@
     <button class="nav-item" onclick="chNav('travel',this)"><span class="icon">&#x2708;&#xFE0F;</span> Travel</button>
     <button class="nav-item" onclick="chNav('about',this)"><span class="icon">&#x2139;&#xFE0F;</span> About</button>
     <div class="sidebar-footer">
+      <div style="display:flex !important;align-items:center !important;gap:6px !important;margin-bottom:8px !important;">
+        <div style="font-size:10px !important;font-weight:600 !important;background:#10b981 !important;color:white !important;padding:2px 8px !important;border-radius:99px !important;">v4.9</div>
+      </div>
       <div style="display:flex !important;align-items:center !important;gap:6px !important;margin-bottom:6px !important;">
         <span style="font-size:12px !important;color:rgba(255,255,255,0.5) !important;">&#x1F319;</span>
         <button onclick="toggleDarkMode()" style="padding:4px 10px !important;font-size:10px !important;background:rgba(255,255,255,0.1) !important;color:rgba(255,255,255,0.6) !important;border:1px solid rgba(255,255,255,0.15) !important;border-radius:6px !important;cursor:pointer !important;" id="dark-mode-btn">Dark Mode</button>
@@ -1756,86 +1759,109 @@
     <div class="screen" id="ch-about">
       <h2>&#x2139;&#xFE0F; About Cath Hub</h2>
 
+      <!-- Version -->
+      <div style="background:#ecfdf5 !important;border:1px solid #d1fae5 !important;border-radius:10px !important;padding:14px 16px !important;margin-bottom:16px !important;display:flex !important;align-items:center !important;justify-content:space-between !important;">
+        <div style="font-size:13px !important;color:#065f46 !important;"><strong>Current version</strong></div>
+        <div style="font-size:12px !important;font-weight:600 !important;background:#10b981 !important;color:white !important;padding:2px 10px !important;border-radius:99px !important;">v4.9</div>
+      </div>
+
+      <!-- Overview -->
       <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:20px !important;margin-bottom:16px !important;">
         <div style="font-size:16px !important;font-weight:700 !important;margin-bottom:4px !important;">cathcoach4u/personal-cath-hub</div>
-        <div style="font-size:12px !important;color:#64748b !important;margin-bottom:16px !important;">Personal health &amp; household management app</div>
+        <div style="font-size:12px !important;color:#64748b !important;">Personal health &amp; household management app. Built with vanilla HTML/CSS/JS, Supabase backend, hosted on GitHub Pages.</div>
+      </div>
 
-        <div style="font-size:13px !important;font-weight:700 !important;margin-bottom:10px !important;color:#1e293b !important;">Built With</div>
-
+      <!-- Technology Stack: Infrastructure -->
+      <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:20px !important;margin-bottom:16px !important;">
+        <div style="font-size:13px !important;font-weight:700 !important;margin-bottom:12px !important;color:#1e293b !important;">infrastructure</div>
         <div style="display:flex !important;flex-direction:column !important;gap:10px !important;">
           <div style="display:flex !important;align-items:center !important;gap:12px !important;padding:12px 14px !important;background:#f8fafc !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;">
             <div style="font-size:24px !important;">&#x1F4BB;</div>
-            <div>
-              <div style="font-size:14px !important;font-weight:600 !important;">GitHub</div>
-              <div style="font-size:11px !important;color:#64748b !important;">Source code hosting &amp; version control</div>
+            <div style="flex:1 !important;">
+              <div style="font-size:14px !important;font-weight:600 !important;">GitHub Pages</div>
+              <div style="font-size:11px !important;color:#64748b !important;">Static hosting, 1–2 min deploy time. Free tier, automatic HTTPS.</div>
             </div>
           </div>
-
           <div style="display:flex !important;align-items:center !important;gap:12px !important;padding:12px 14px !important;background:#f8fafc !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;">
-            <div style="font-size:24px !important;">&#x1F916;</div>
-            <div>
-              <div style="font-size:14px !important;font-weight:600 !important;">Claude (Anthropic AI)</div>
-              <div style="font-size:11px !important;color:#64748b !important;">AI-assisted development &amp; code generation</div>
-            </div>
-          </div>
-
-          <div style="display:flex !important;align-items:center !important;gap:12px !important;padding:12px 14px !important;background:#f8fafc !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;">
-            <div style="font-size:24px !important;">&#x26A1;</div>
-            <div>
+            <div style="font-size:24px !important;">&#x1F6A0;</div>
+            <div style="flex:1 !important;">
               <div style="font-size:14px !important;font-weight:600 !important;">Supabase</div>
-              <div style="font-size:11px !important;color:#64748b !important;">Backend database, auth, real-time data &amp; AI memory storage</div>
+              <div style="font-size:11px !important;color:#64748b !important;">PostgreSQL database, auth, realtime, storage. Free tier: 500 MB database, 1 GB storage. Est. AUD $25–50/month at scale.</div>
             </div>
           </div>
         </div>
       </div>
 
+      <!-- Technology Stack: AI Services -->
       <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:20px !important;margin-bottom:16px !important;">
-        <div style="font-size:13px !important;font-weight:700 !important;margin-bottom:10px !important;">Stack</div>
+        <div style="font-size:13px !important;font-weight:700 !important;margin-bottom:12px !important;color:#1e293b !important;">AI services (independent &amp; replaceable)</div>
+        <div style="display:flex !important;flex-direction:column !important;gap:10px !important;">
+          <div style="padding:12px 14px !important;background:#f8fafc !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;">
+            <div style="font-size:13px !important;font-weight:600 !important;margin-bottom:6px !important;">1. Claude Code (development)</div>
+            <div style="font-size:11px !important;color:#64748b !important;margin-bottom:4px !important;">AI-assisted code generation &amp; debugging. Current: Claude Haiku 4.5. Est. AUD $0.01–0.05/session.</div>
+            <div style="font-size:11px !important;color:#94a3b8 !important;">Alternatives: Sonnet 4.6, Opus 4.6</div>
+          </div>
+          <div style="padding:12px 14px !important;background:#f8fafc !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;">
+            <div style="font-size:13px !important;font-weight:600 !important;margin-bottom:6px !important;">2. Claude Haiku (chat)</div>
+            <div style="font-size:11px !important;color:#64748b !important;margin-bottom:4px !important;">Floating AI assistant. Persistent memory via <code style="background:#f1f5f9 !important;padding:1px 4px !important;border-radius:3px !important;">ai_memory</code> table. Est. AUD $0.0001–0.0005/message.</div>
+            <div style="font-size:11px !important;color:#94a3b8 !important;">Alternatives: GPT-4 Mini, Llama 3.1 70B</div>
+          </div>
+          <div style="padding:12px 14px !important;background:#f8fafc !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;">
+            <div style="font-size:13px !important;font-weight:600 !important;margin-bottom:6px !important;">3. Claude Sonnet (receipts)</div>
+            <div style="font-size:11px !important;color:#64748b !important;margin-bottom:4px !important;">OCR &amp; expense categorisation. Est. AUD $0.03–0.10/image.</div>
+            <div style="font-size:11px !important;color:#94a3b8 !important;">Alternatives: GPT-4 Vision, Gemini Pro Vision</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Technical Stack -->
+      <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:20px !important;margin-bottom:16px !important;">
+        <div style="font-size:13px !important;font-weight:700 !important;margin-bottom:10px !important;">technical stack</div>
         <div style="font-size:12px !important;color:#64748b !important;line-height:1.8 !important;">
           &bull; Vanilla HTML / CSS / JavaScript (no frameworks)<br>
-          &bull; Supabase for auth, database, storage &amp; AI memory<br>
-          &bull; Anthropic Claude API for AI assistant<br>
+          &bull; Supabase (auth, database, realtime, storage, AI memory)<br>
+          &bull; Anthropic Claude API<br>
+          &bull; GitHub for version control<br>
           &bull; GitHub Pages for hosting<br>
-          &bull; Claude Code for AI-assisted development<br>
-          &bull; PWA (installable, standalone mode)
+          &bull; PWA (installable, standalone mode, service worker caching)
         </div>
       </div>
 
+      <!-- Persistent Memory -->
       <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:20px !important;margin-bottom:16px !important;">
-        <div style="font-size:13px !important;font-weight:700 !important;margin-bottom:10px !important;">Features</div>
+        <div style="font-size:13px !important;font-weight:700 !important;margin-bottom:10px !important;">persistent memory</div>
         <div style="font-size:12px !important;color:#64748b !important;line-height:1.8 !important;">
-          &bull; Dashboard with quick stats, navigation cards, &amp; morning habits link<br>
-          &bull; To-Do lists with categories &amp; due dates<br>
-          &bull; AisleMate shopping system (archived &mdash; now in Baker Hub)<br>
-          &bull; Workout logging with exercise library &amp; custom exercises<br>
-          &bull; Medical records (daily &amp; weekly medications, sessions, contacts, mental health)<br>
-          &bull; Daily habit tracking (Vyvanse, Valtrex, Levothyroxine) with 7-day streaks<br>
-          &bull; Daily medication management with morning &amp; evening tracking<br>
-          &bull; Travel planning<br>
-          &bull; Home management with zone cleaning cards<br>
-          &bull; AI assistant with persistent memory (floating chat via Anthropic API, facts &amp; preferences saved to Supabase)<br>
-          &bull; Dark mode<br>
-          &bull; PIN lock for quick re-entry<br>
-          &bull; Responsive design (desktop sidebar, mobile hamburger menu)
+          The AI assistant learns facts &amp; preferences from conversations. Each message is saved to the <code style="background:#f8fafc !important;padding:2px 6px !important;border-radius:3px !important;">ai_memory</code> table. On next conversation, the assistant reads prior facts to provide contextual responses. Examples: dietary restrictions, medication names, preferred phrasing, recurring tasks.
         </div>
       </div>
 
-      <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:20px !important;">
-        <div style="font-size:13px !important;font-weight:700 !important;margin-bottom:10px !important;">Supabase Tables</div>
+      <!-- Using Claude Code Efficiently -->
+      <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:20px !important;margin-bottom:16px !important;">
+        <div style="font-size:13px !important;font-weight:700 !important;margin-bottom:10px !important;">using Claude Code efficiently</div>
         <div style="font-size:12px !important;color:#64748b !important;line-height:1.8 !important;">
-          &bull; <strong style="color:#1e293b !important;">shopping_items</strong> &mdash; name, category, store, checked, created_at<br>
-          &bull; <strong style="color:#1e293b !important;">personal_todos</strong> &mdash; task, done, category, due_date, created_at<br>
-          &bull; <strong style="color:#1e293b !important;">fiona_tasks</strong> &mdash; task, done, created_at<br>
-          &bull; <strong style="color:#1e293b !important;">habit_meds</strong> &mdash; name, freq (daily/asneeded)<br>
-          &bull; <strong style="color:#1e293b !important;">habit_logs</strong> &mdash; med_id, date, created_at<br>
-          &bull; <strong style="color:#1e293b !important;">medications</strong> &mdash; name, dose, schedule, purpose<br>
-          &bull; <strong style="color:#1e293b !important;">medical_sessions</strong> &mdash; date, duration, plan, practitioner<br>
-          &bull; <strong style="color:#1e293b !important;">master_items</strong> &mdash; name, category, store, family_member, last_price<br>
-          &bull; <strong style="color:#1e293b !important;">receipts</strong> &mdash; store, receipt_date, total, uploaded_at<br>
-          &bull; <strong style="color:#1e293b !important;">receipt_items</strong> &mdash; item_name, price, receipt_id<br>
-          &bull; <strong style="color:#1e293b !important;">meal_plans</strong> &mdash; day_index, meal data<br>
-          &bull; <strong style="color:#1e293b !important;">ai_memory</strong> &mdash; fact, created_at<br>
-          &bull; <strong style="color:#1e293b !important;">Storage</strong> &mdash; receipts bucket for receipt images/PDFs
+          <strong>Be specific with line numbers:</strong> "In <code style="background:#f8fafc !important;padding:2px 6px !important;border-radius:3px !important;">index.html</code> line 1234, the <code style="background:#f8fafc !important;padding:2px 6px !important;border-radius:3px !important;">amAddItem()</code> function..."<br>
+          <strong>Reference CLAUDE.md:</strong> "As noted in CLAUDE.md, use filter pills not dropdowns"<br>
+          <strong>Say "only change X":</strong> Limits scope, reduces token waste<br>
+          <strong>Paste error messages:</strong> Stack traces are cheap context<br>
+          <strong>Know the limitations:</strong> No SQL execution, no Supabase dashboard access, no OneDrive — see Limitations in CLAUDE.md
+        </div>
+      </div>
+
+      <!-- Key Links -->
+      <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:20px !important;margin-bottom:16px !important;">
+        <div style="font-size:13px !important;font-weight:700 !important;margin-bottom:10px !important;">key links</div>
+        <div style="display:flex !important;flex-direction:column !important;gap:8px !important;font-size:12px !important;">
+          <a href="https://github.com/cathcoach4u/personal-cath-hub" target="_blank" rel="noopener noreferrer" style="color:#3b82f6 !important;text-decoration:underline !important;">GitHub Repository</a>
+          <a href="https://supabase.com" target="_blank" rel="noopener noreferrer" style="color:#3b82f6 !important;text-decoration:underline !important;">Supabase Dashboard</a>
+          <a href="https://www.anthropic.com" target="_blank" rel="noopener noreferrer" style="color:#3b82f6 !important;text-decoration:underline !important;">Anthropic (Claude)</a>
+        </div>
+      </div>
+
+      <!-- If You Move Away From Claude -->
+      <div style="background:#fef3c7 !important;border:1px solid #fcd34d !important;border-radius:10px !important;padding:20px !important;">
+        <div style="font-size:13px !important;font-weight:700 !important;margin-bottom:10px !important;color:#92400e !important;">if you move away from Claude</div>
+        <div style="font-size:12px !important;color:#b45309 !important;line-height:1.8 !important;">
+          The app is independent of Claude development. Source code is on GitHub (public). Swap AI services: replace Claude Haiku chat with GPT-4 Mini, Sonnet receipt OCR with Vision API, or code generation with another LLM. No framework lock-in — vanilla HTML/CSS/JS can be edited in any text editor. Backend stays Supabase unless you migrate to Firebase/AWS.
         </div>
       </div>
     </div>

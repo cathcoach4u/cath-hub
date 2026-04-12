@@ -624,7 +624,7 @@
         <span style="font-size:12px !important;color:rgba(255,255,255,0.5) !important;">&#x1F319;</span>
         <button onclick="toggleDarkMode()" style="padding:4px 10px !important;font-size:10px !important;background:rgba(255,255,255,0.1) !important;color:rgba(255,255,255,0.6) !important;border:1px solid rgba(255,255,255,0.15) !important;border-radius:6px !important;cursor:pointer !important;" id="dark-mode-btn">Dark Mode</button>
       </div>
-      <span>Cath Hub v3.5</span><br><a href="#" onclick="cathLogout();return false" style="color:rgba(255,255,255,0.5) !important;font-size:10px !important;text-decoration:underline !important;">Sign out</a>
+      <span>Cath Hub v3.6</span><br><a href="#" onclick="cathLogout();return false" style="color:rgba(255,255,255,0.5) !important;font-size:10px !important;text-decoration:underline !important;">Sign out</a>
     </div>
   </div>
 
@@ -1537,13 +1537,37 @@
           <span onclick="dashBackfillMeds()" style="font-size:12px !important;color:#3b82f6 !important;cursor:pointer !important;text-decoration:underline !important;">Missed a day? Log it</span>
         </div>
 
-        <!-- DAILY Medications -->
+        <!-- Section Toggle Buttons -->
+        <div style="display:flex !important;gap:8px !important;margin-bottom:12px !important;justify-content:flex-end !important;">
+          <button class="am-btn" onclick="habOpenAllSections()" style="background:#3b82f6 !important;color:white !important;border-color:#3b82f6 !important;padding:6px 12px !important;font-size:11px !important;">Open All</button>
+          <button class="am-btn" onclick="habCloseAllSections()" style="background:#94a3b8 !important;color:white !important;border-color:#94a3b8 !important;padding:6px 12px !important;font-size:11px !important;">Close All</button>
+        </div>
+
+        <!-- DAILY MORNING Medications -->
         <div class="hab-section" style="margin-bottom:10px !important;">
           <div class="hab-section-header" style="padding:12px 16px !important;cursor:pointer !important;" onclick="habToggleSection(this)">
-            <h3 style="font-size:14px !important;">&#x2600; Daily</h3>
+            <h3 style="font-size:14px !important;">&#x2600;&#xFE0F; Daily Morning</h3>
             <span style="font-size:11px !important;color:#94a3b8 !important;">Tap to mark as taken <span class="hab-chevron" style="margin-left:6px !important;">&#x25B2;</span></span>
           </div>
-          <div id="hab-daily-list"></div>
+          <div id="hab-morning-list" style="display:none !important;"></div>
+        </div>
+
+        <!-- DAILY EVENING Medications -->
+        <div class="hab-section" style="margin-bottom:10px !important;">
+          <div class="hab-section-header" style="padding:12px 16px !important;cursor:pointer !important;" onclick="habToggleSection(this)">
+            <h3 style="font-size:14px !important;">&#x1F31C;&#xFE0F; Daily Evening</h3>
+            <span style="font-size:11px !important;color:#94a3b8 !important;">Tap to mark as taken <span class="hab-chevron" style="margin-left:6px !important;">&#x25B2;</span></span>
+          </div>
+          <div id="hab-evening-list" style="display:none !important;"></div>
+        </div>
+
+        <!-- MIGRAINE Medications -->
+        <div class="hab-section" style="margin-bottom:10px !important;">
+          <div class="hab-section-header" style="padding:12px 16px !important;cursor:pointer !important;" onclick="habToggleSection(this)">
+            <h3 style="font-size:14px !important;">&#x1F4A0; Migraine</h3>
+            <span style="font-size:11px !important;color:#94a3b8 !important;">As needed <span class="hab-chevron" style="margin-left:6px !important;">&#x25B2;</span></span>
+          </div>
+          <div id="hab-migraine-list" style="display:none !important;"></div>
         </div>
 
         <!-- WEEKLY Medications -->
@@ -3805,6 +3829,28 @@
       }
     };
 
+    window.habOpenAllSections = function() {
+      document.querySelectorAll('#zb-panel-meds .hab-section').forEach(function(section) {
+        var content = section.querySelector('.hab-section-header').nextElementSibling;
+        var chevron = section.querySelector('.hab-chevron');
+        if (content && content.style.display === 'none') {
+          content.style.display = '';
+          if (chevron) chevron.innerHTML = '&#x25B2;';
+        }
+      });
+    };
+
+    window.habCloseAllSections = function() {
+      document.querySelectorAll('#zb-panel-meds .hab-section').forEach(function(section) {
+        var content = section.querySelector('.hab-section-header').nextElementSibling;
+        var chevron = section.querySelector('.hab-chevron');
+        if (content && content.style.display !== 'none') {
+          content.style.display = 'none';
+          if (chevron) chevron.innerHTML = '&#x25BC;';
+        }
+      });
+    };
+
     window.habToggleDaily = async function(id) {
       // Toggle: delete if already logged today, otherwise add
       var today = todayKey();
@@ -4195,33 +4241,31 @@
 
 
 
-      // #3: Daily with AM/PM time labels
-      var dl = document.getElementById('hab-daily-list');
-      if (!daily.length) {
-        dl.innerHTML = '<div class="hab-empty">No daily medications yet. Tap + Add to get started.</div>';
+      // #3: Daily with AM/PM time labels - SPLIT INTO MORNING AND EVENING
+      // Separate creams/ointments from other daily meds (includes Betamethasone Valerate)
+      var creamsOintments = daily.filter(function(m){
+        var name = m.name.toLowerCase();
+        return name.indexOf('cream') !== -1 || name.indexOf('ointment') !== -1 || (name.indexOf('betamethasone') !== -1 && name.indexOf('valerate') !== -1);
+      });
+      var morningMeds = daily.filter(function(m){
+        var name = m.name.toLowerCase();
+        return name.indexOf('cream') === -1 && name.indexOf('ointment') === -1 && !(name.indexOf('betamethasone') !== -1 && name.indexOf('valerate') !== -1);
+      });
+      // Sort evening meds: Xobet first, then Betamethasone Valerate
+      creamsOintments.sort(function(a, b) {
+        var aName = a.name.toLowerCase();
+        var bName = b.name.toLowerCase();
+        if (aName.indexOf('xobet') !== -1) return -1;
+        if (bName.indexOf('xobet') !== -1) return 1;
+        return 0;
+      });
+
+      // ═══ RENDER MORNING MEDICATIONS ═══
+      var mlEl = document.getElementById('hab-morning-list');
+      if (!morningMeds.length) {
+        mlEl.innerHTML = '<div class="hab-empty">No daily morning medications yet. Tap + Add to get started.</div>';
       } else {
         var h = '';
-        // Separate creams/ointments from other daily meds (includes Betamethasone Valerate)
-        var creamsOintments = daily.filter(function(m){
-          var name = m.name.toLowerCase();
-          return name.indexOf('cream') !== -1 || name.indexOf('ointment') !== -1 || (name.indexOf('betamethasone') !== -1 && name.indexOf('valerate') !== -1);
-        });
-        var morningMeds = daily.filter(function(m){
-          var name = m.name.toLowerCase();
-          return name.indexOf('cream') === -1 && name.indexOf('ointment') === -1 && !(name.indexOf('betamethasone') !== -1 && name.indexOf('valerate') !== -1);
-        });
-        // Sort evening meds: Xobet first, then Betamethasone Valerate
-        creamsOintments.sort(function(a, b) {
-          var aName = a.name.toLowerCase();
-          var bName = b.name.toLowerCase();
-          if (aName.indexOf('xobet') !== -1) return -1;
-          if (bName.indexOf('xobet') !== -1) return 1;
-          return 0;
-        });
-
-        // ═══ MORNING MEDICATIONS ═══
-        if (morningMeds.length > 0) {
-          h += '<div style="padding:10px 0 4px !important;font-size:11px !important;font-weight:700 !important;text-transform:uppercase !important;color:#059669 !important;letter-spacing:0.5px !important;">&#x2600;&#xFE0F; Daily Morning</div>';
           for (var i = 0; i < morningMeds.length; i++) {
             var med = morningMeds[i];
             var done = !!(logs[med.id] && logs[med.id][today]);
@@ -4276,38 +4320,41 @@
             if (s > 1) h += '<div class="hab-streak">&#x1F525; '+s+'d</div>';
             h += '</div>';
           }
-        }
+        mlEl.innerHTML = h;
+      }
 
-        // ═══ EVENING MEDICATIONS (Creams/Ointments) ═══
-        if (creamsOintments.length > 0) {
-          h += '<div style="padding:10px 0 4px !important;margin-top:12px !important;font-size:11px !important;font-weight:700 !important;text-transform:uppercase !important;color:#7c2d12 !important;letter-spacing:0.5px !important;">&#x1F31C; Daily Evening</div>';
-          h += '<div style="background:#fef3c7 !important;border:1px solid #fcd34d !important;border-radius:10px !important;padding:12px !important;display:flex !important;flex-direction:column !important;gap:10px !important;">';
-          for (var ei = 0; ei < creamsOintments.length; ei++) {
-            var eitem = creamsOintments[ei];
-            var eDone = !!(logs[eitem.id] && logs[eitem.id][today]);
-            var eS = await streakFor(eitem.id, logs);
-            h += '<div style="display:flex !important;align-items:center !important;gap:10px !important;padding:8px 10px !important;background:white !important;border-radius:8px !important;border:1px solid #fde68a !important;">';
-            h += '<div class="hab-check'+(eDone?' done':'')+'" onclick="habToggleDaily('+eitem.id+')" style="flex-shrink:0 !important;"></div>';
-            var eMedInfo = medsLookup[eitem.name.toLowerCase()];
-            var eDoseStr = eMedInfo && eMedInfo.dose ? eMedInfo.dose : '';
-            h += '<div style="flex:1 !important;"><div class="hab-med-name" style="margin-bottom:0 !important;">'+esc(eitem.name)+(eDoseStr ? ' <span style="font-size:10px !important;color:#94a3b8 !important;font-weight:400 !important;">'+esc(eDoseStr)+'</span>' : '')+'</div>';
-            if (eDone) {
-              h += '<div style="font-size:10px !important;color:#10b981 !important;">✓ Done</div>';
-            } else {
-              // Special description for Betamethasone Valerate
-              var eDescText = 'Apply as directed';
-              if (eitem.name.toLowerCase().indexOf('betamethasone') !== -1 && eitem.name.toLowerCase().indexOf('valerate') !== -1) {
-                eDescText = 'To be applied when Xobet is finished';
-              }
-              h += '<div style="font-size:10px !important;color:#92400e !important;">'+eDescText+'</div>';
+      // ═══ RENDER EVENING MEDICATIONS (Creams/Ointments) ═══
+      var elEl = document.getElementById('hab-evening-list');
+      if (!creamsOintments.length) {
+        elEl.innerHTML = '<div class="hab-empty">No daily evening medications yet. Tap + Add to get started.</div>';
+      } else {
+        var eh = '';
+        eh += '<div style="background:#fef3c7 !important;border:1px solid #fcd34d !important;border-radius:10px !important;padding:12px !important;display:flex !important;flex-direction:column !important;gap:10px !important;">';
+        for (var ei = 0; ei < creamsOintments.length; ei++) {
+          var eitem = creamsOintments[ei];
+          var eDone = !!(logs[eitem.id] && logs[eitem.id][today]);
+          var eS = await streakFor(eitem.id, logs);
+          eh += '<div style="display:flex !important;align-items:center !important;gap:10px !important;padding:8px 10px !important;background:white !important;border-radius:8px !important;border:1px solid #fde68a !important;">';
+          eh += '<div class="hab-check'+(eDone?' done':'')+'" onclick="habToggleDaily('+eitem.id+')" style="flex-shrink:0 !important;"></div>';
+          var eMedInfo = medsLookup[eitem.name.toLowerCase()];
+          var eDoseStr = eMedInfo && eMedInfo.dose ? eMedInfo.dose : '';
+          eh += '<div style="flex:1 !important;"><div class="hab-med-name" style="margin-bottom:0 !important;">'+esc(eitem.name)+(eDoseStr ? ' <span style="font-size:10px !important;color:#94a3b8 !important;font-weight:400 !important;">'+esc(eDoseStr)+'</span>' : '')+'</div>';
+          if (eDone) {
+            eh += '<div style="font-size:10px !important;color:#10b981 !important;">✓ Done</div>';
+          } else {
+            // Special description for Betamethasone Valerate
+            var eDescText = 'Apply as directed';
+            if (eitem.name.toLowerCase().indexOf('betamethasone') !== -1 && eitem.name.toLowerCase().indexOf('valerate') !== -1) {
+              eDescText = 'To be applied when Xobet is finished';
             }
-            h += '</div>';
-            h += '<div class="hab-del" onclick="habDeleteMed('+eitem.id+')" style="flex-shrink:0 !important;">&#x1F5D1;</div>';
-            h += '</div>';
+            eh += '<div style="font-size:10px !important;color:#92400e !important;">'+eDescText+'</div>';
           }
-          h += '</div>';
+          eh += '</div>';
+          eh += '<div class="hab-del" onclick="habDeleteMed('+eitem.id+')" style="flex-shrink:0 !important;">&#x1F5D1;</div>';
+          eh += '</div>';
         }
-        dl.innerHTML = h;
+        eh += '</div>';
+        elEl.innerHTML = eh;
       }
 
       // Weekly
@@ -4338,23 +4385,26 @@
       }
 
       // As-Needed medications
+      // Separate migraine from other as-needed
+      var nonMigraineMeds = asneeded.filter(function(m){
+        return !MIGRAINE_NAMES.some(function(d){ return m.name.toLowerCase().indexOf(d.toLowerCase()) !== -1; });
+      });
+      var migraineMeds = asneeded.filter(function(m){
+        return MIGRAINE_NAMES.some(function(d){ return m.name.toLowerCase().indexOf(d.toLowerCase()) !== -1; });
+      });
+
+      // ═══ RENDER AS-NEEDED (non-migraine) ═══
       var anl = document.getElementById('hab-asneeded-list');
       if (anl) {
-        if (!asneeded.length) {
+        if (!nonMigraineMeds.length) {
           anl.innerHTML = '<div class="hab-empty">No as-needed medications configured.</div>';
         } else {
           var h = '';
-          var lastGroup = '';
-          for (var a = 0; a < asneeded.length; a++) {
-            var med = asneeded[a];
+          for (var a = 0; a < nonMigraineMeds.length; a++) {
+            var med = nonMigraineMeds[a];
             var asInfo = AS_NEEDED_MEDS.find(function(x){ return x.name.toLowerCase() === med.name.toLowerCase(); });
             var doseLabel = asInfo && asInfo.dose ? ' (' + asInfo.dose + ')' : '';
             var hasBrands = !!(asInfo && asInfo.hasBrands);
-            var grp = asInfo && asInfo.group ? asInfo.group : '';
-            if (grp && grp !== lastGroup) {
-              h += '<div style="font-size:11px !important;font-weight:700 !important;text-transform:uppercase !important;color:#7c3aed !important;padding:10px 0 4px !important;letter-spacing:0.5px !important;">\uD83E\uDE79 ' + esc(grp) + ' Meds</div>';
-              lastGroup = grp;
-            }
             // Count how many times taken today
             var todayLogs = [];
             try {
@@ -4365,9 +4415,7 @@
             h += '<button class="am-btn" onclick="habShowRecordOptions(' + med.id + ',' + hasBrands + ')" style="background:#3b82f6 !important;color:white !important;border-color:#3b82f6 !important;padding:6px 12px !important;font-size:12px !important;">Record dose</button>';
             var purposeText = asInfo && asInfo.purpose ? asInfo.purpose : '';
             h += '<div style="flex:1 !important;"><div class="hab-med-name" style="margin-bottom:0 !important;">' + esc(med.name) + esc(doseLabel) + '</div>';
-            // Don't show purpose text for migraine meds - it's too verbose in the tracking view
-            var isMigraineMed = MIGRAINE_NAMES.some(function(d){ return med.name.toLowerCase().indexOf(d.toLowerCase()) !== -1; });
-            if (purposeText && !isMigraineMed) {
+            if (purposeText) {
               h += '<div style="font-size:11px !important;color:#94a3b8 !important;line-height:1.4 !important;margin:2px 0 4px !important;">' + esc(purposeText) + '</div>';
             }
             if (todayLogs.length > 0) {
@@ -4391,6 +4439,55 @@
             h += '</div>';
           }
           anl.innerHTML = h;
+        }
+      }
+
+      // ═══ RENDER MIGRAINE ═══
+      var mgl = document.getElementById('hab-migraine-list');
+      if (mgl) {
+        if (!migraineMeds.length) {
+          mgl.innerHTML = '<div class="hab-empty">No migraine medications configured.</div>';
+        } else {
+          var mh = '';
+          for (var mg = 0; mg < migraineMeds.length; mg++) {
+            var mmed = migraineMeds[mg];
+            var masInfo = AS_NEEDED_MEDS.find(function(x){ return x.name.toLowerCase() === mmed.name.toLowerCase(); });
+            var mdoseLabel = masInfo && masInfo.dose ? ' (' + masInfo.dose + ')' : '';
+            var mhasBrands = !!(masInfo && masInfo.hasBrands);
+            // Count how many times taken today
+            var mtodayLogs = [];
+            try {
+              var { data: mtl } = await sb.from('habit_logs').select('*').eq('med_id', mmed.id).eq('date', today);
+              mtodayLogs = mtl || [];
+            } catch(e) {}
+            mh += '<div class="hab-med-row" style="flex-wrap:wrap !important;">';
+            mh += '<button class="am-btn" onclick="habShowRecordOptions(' + mmed.id + ',' + mhasBrands + ')" style="background:#dc2626 !important;color:white !important;border-color:#dc2626 !important;padding:6px 12px !important;font-size:12px !important;">Record dose</button>';
+            var mpurposeText = masInfo && masInfo.purpose ? masInfo.purpose : '';
+            mh += '<div style="flex:1 !important;"><div class="hab-med-name" style="margin-bottom:0 !important;">' + esc(mmed.name) + esc(mdoseLabel) + '</div>';
+            if (mpurposeText) {
+              mh += '<div style="font-size:11px !important;color:#94a3b8 !important;line-height:1.4 !important;margin:2px 0 4px !important;">' + esc(mpurposeText) + '</div>';
+            }
+            if (mtodayLogs.length > 0) {
+              mh += '<div style="font-size:11px !important;color:#ef4444 !important;">' + mtodayLogs.length + ' dose' + (mtodayLogs.length > 1 ? 's' : '') + ' today</div>';
+              mtodayLogs.forEach(function(mtl) {
+                var mt = mtl.created_at ? new Date(mtl.created_at).toLocaleTimeString('en-AU', { hour: '2-digit', minute: '2-digit' }) : 'no time';
+                mh += '<div style="display:flex !important;align-items:center !important;gap:6px !important;font-size:11px !important;color:#64748b !important;padding:2px 0 !important;">';
+                mh += '<span onclick="habChangeTime(\'' + mtl.id + '\')" style="cursor:pointer !important;color:#3b82f6 !important;">' + mt + ' &#x270F;</span>';
+                if (mtl.note) {
+                  mh += '<span style="color:#64748b !important;font-style:italic !important;">' + esc(mtl.note) + '</span>';
+                  mh += '<span onclick="habAddNote(\'' + mtl.id + '\')" style="cursor:pointer !important;color:#3b82f6 !important;">edit</span>';
+                } else {
+                  mh += '<span onclick="habAddNote(\'' + mtl.id + '\')" style="cursor:pointer !important;color:#3b82f6 !important;">+ note</span>';
+                }
+                mh += '<span onclick="habDeleteDose(\'' + mtl.id + '\')" style="cursor:pointer !important;color:#ef4444 !important;" title="Remove dose">&#x2715;</span>';
+                mh += '</div>';
+              });
+            }
+            mh += '<div id="record-panel-' + mmed.id + '" style="display:none !important;padding:8px 0 !important;"></div>';
+            mh += '</div>';
+            mh += '</div>';
+          }
+          mgl.innerHTML = mh;
         }
       }
 

@@ -1511,7 +1511,7 @@
             <button onclick="habDismissMissed()" style="background:none !important;border:none !important;color:#991b1b !important;font-size:18px !important;cursor:pointer !important;padding:0 4px !important;line-height:1 !important;">&times;</button>
           </div>
           <div style="display:flex !important;gap:8px !important;">
-            <button onclick="habBackfillYesterday()" style="flex:1 !important;padding:8px 12px !important;font-size:12px !important;background:#10b981 !important;color:white !important;border:none !important;border-radius:6px !important;cursor:pointer !important;">I took them &mdash; mark as done</button>
+            <button id="hab-missed-btn" onclick="habBackfillYesterday()" style="flex:1 !important;padding:8px 12px !important;font-size:12px !important;background:#10b981 !important;color:white !important;border:none !important;border-radius:6px !important;cursor:pointer !important;">I took them &mdash; mark as done</button>
             <button onclick="habDismissMissed()" style="padding:8px 12px !important;font-size:12px !important;background:#94a3b8 !important;color:white !important;border:none !important;border-radius:6px !important;cursor:pointer !important;">Dismiss</button>
           </div>
         </div>
@@ -4270,6 +4270,13 @@
         var missedNames = missedYesterday.map(function(m){ return m.name; }).join(', ');
         missedAlert.style.display = 'block';
         document.getElementById('hab-missed-text').innerHTML = '&#x26A0;&#xFE0F; <strong>Missed yesterday:</strong> ' + esc(missedNames);
+        // Update button text based on med type (creams vs tablets)
+        var allCreams = missedYesterday.every(function(m){
+          var name = m.name.toLowerCase();
+          return name.indexOf('cream') !== -1 || name.indexOf('ointment') !== -1 || (name.indexOf('betamethasone') !== -1 && name.indexOf('valerate') !== -1);
+        });
+        var btn = document.getElementById('hab-missed-btn');
+        if (btn) btn.textContent = allCreams ? "I've used it — mark as done" : "I've taken them — mark as done";
       } else {
         missedAlert.style.display = 'none';
       }

@@ -134,7 +134,7 @@ Three separate, independent Claude services. Any can be swapped for alternatives
 
 ## version numbering
 
-- Current: **v4.16** (green badge in sidebar footer and About page)
+- Current: **v4.17** (green badge in sidebar footer and About page)
 - Bumped on every code change (minor version increment)
 - Service worker cache key matches version (e.g., `cache-v4-12`)
 - Update `CLAUDE.md` end-of-session checklist to confirm version is bumped

@@ -1662,26 +1662,28 @@
     <div class="screen" id="ch-habit-history">
       <h2>&#x1F4DC; Habit History</h2>
 
-      <!-- Medication Log -->
-      <div class="hab-section" id="hab-history-section" style="margin-bottom:10px !important;">
-        <div class="hab-section-header" style="padding:12px 16px !important;cursor:pointer !important;" onclick="habToggleSection(this)">
-          <h3 style="font-size:14px !important;">&#x1F48A; Medication Log</h3>
-          <span style="font-size:11px !important;color:#94a3b8 !important;">Last 30 days <span class="hab-chevron" style="margin-left:6px !important;">&#x25B2;</span></span>
-        </div>
-        <div style="padding:12px !important;" id="hab-history-container">
-          <div class="hab-empty">Loading...</div>
+      <!-- Pill Navigation -->
+      <div style="display:flex !important;gap:8px !important;margin-bottom:16px !important;flex-wrap:wrap !important;">
+        <button class="hh-pill active" onclick="hhSwitchPill('medication')" id="hh-pill-medication" style="padding:10px 16px !important;background:#10b981 !important;color:white !important;border:none !important;border-radius:20px !important;font-size:13px !important;font-weight:600 !important;cursor:pointer !important;transition:all 0.2s !important;">Medication Log</button>
+        <button class="hh-pill" onclick="hhSwitchPill('workout')" id="hh-pill-workout" style="padding:10px 16px !important;background:#e2e8f0 !important;color:#64748b !important;border:none !important;border-radius:20px !important;font-size:13px !important;font-weight:600 !important;cursor:pointer !important;transition:all 0.2s !important;">Workout Log</button>
+      </div>
+
+      <!-- Medication Log Panel -->
+      <div id="hh-medication-panel" class="hh-medication-panel">
+        <div class="hab-section" id="hab-history-section" style="margin-bottom:10px !important;">
+          <div class="hab-section-header" style="padding:12px 16px !important;cursor:pointer !important;" onclick="habToggleSection(this)">
+            <h3 style="font-size:14px !important;">&#x1F48A; Medication Log</h3>
+            <span style="font-size:11px !important;color:#94a3b8 !important;">Last 30 days <span class="hab-chevron" style="margin-left:6px !important;">&#x25B2;</span></span>
+          </div>
+          <div style="padding:12px !important;" id="hab-history-container">
+            <div class="hab-empty">Loading...</div>
+          </div>
         </div>
       </div>
 
-      <!-- Custom Habit Log -->
-      <div class="hab-section" id="hab-custom-history-section" style="margin-bottom:10px !important;">
-        <div class="hab-section-header" style="padding:12px 16px !important;cursor:pointer !important;" onclick="habToggleSection(this)">
-          <h3 style="font-size:14px !important;">&#x2B50; Custom Habits Log</h3>
-          <span style="font-size:11px !important;color:#94a3b8 !important;">Track progress <span class="hab-chevron" style="margin-left:6px !important;">&#x25B2;</span></span>
-        </div>
-        <div style="padding:12px !important;" id="hab-custom-history-container">
-          <div class="hab-empty">No habit history yet</div>
-        </div>
+      <!-- Workout Log Panel -->
+      <div id="hh-workout-panel" class="hh-workout-panel" style="display:none !important;">
+        <div id="hh-workout-list"></div>
       </div>
 
     </div>
@@ -3971,6 +3973,31 @@
           if (chevron) chevron.innerHTML = '&#x25BC;';
         }
       });
+    };
+
+    window.hhSwitchPill = function(pill) {
+      var mp = document.getElementById('hh-medication-panel');
+      var wp = document.getElementById('hh-workout-panel');
+      var pmm = document.getElementById('hh-pill-medication');
+      var pmw = document.getElementById('hh-pill-workout');
+
+      if (pill === 'medication') {
+        mp.style.cssText = 'display: block !important;';
+        wp.style.cssText = 'display: none !important;';
+        pmm.style.cssText = 'padding:10px 16px !important;background:#10b981 !important;color:white !important;border:none !important;border-radius:20px !important;font-size:13px !important;font-weight:600 !important;cursor:pointer !important;transition:all 0.2s !important;';
+        pmw.style.cssText = 'padding:10px 16px !important;background:#e2e8f0 !important;color:#64748b !important;border:none !important;border-radius:20px !important;font-size:13px !important;font-weight:600 !important;cursor:pointer !important;transition:all 0.2s !important;';
+      } else {
+        mp.style.cssText = 'display: none !important;';
+        wp.style.cssText = 'display: block !important;';
+        pmm.style.cssText = 'padding:10px 16px !important;background:#e2e8f0 !important;color:#64748b !important;border:none !important;border-radius:20px !important;font-size:13px !important;font-weight:600 !important;cursor:pointer !important;transition:all 0.2s !important;';
+        pmw.style.cssText = 'padding:10px 16px !important;background:#10b981 !important;color:white !important;border:none !important;border-radius:20px !important;font-size:13px !important;font-weight:600 !important;cursor:pointer !important;transition:all 0.2s !important;';
+        hhLoadWorkoutLog();
+      }
+    };
+
+    window.hhLoadWorkoutLog = function() {
+      var html = '<div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:16px !important;text-align:center !important;color:#94a3b8 !important;font-size:13px !important;">No workout history yet</div>';
+      document.getElementById('hh-workout-list').innerHTML = html;
     };
 
     window.habToggleDaily = async function(id) {

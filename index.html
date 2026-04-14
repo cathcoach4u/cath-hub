@@ -211,6 +211,13 @@
   #cathHub .wl-picker-item.already-added .wl-picker-plus { background: #e2e8f0 !important; color: #94a3b8 !important; font-size: 14px !important; }
   #cathHub .wl-picker-empty { padding: 32px 20px !important; text-align: center !important; color: #94a3b8 !important; font-size: 14px !important; }
 
+  /* Pill panels */
+  #cathHub .wl-workout-panel { display: block !important; }
+  #cathHub .wl-summary-panel { display: none !important; }
+  #cathHub .wl-summary-stat { background: white !important; border: 1px solid #e2e8f0 !important; border-radius: 10px !important; padding: 16px !important; margin-bottom: 12px !important; text-align: center !important; }
+  #cathHub .wl-summary-stat-value { font-size: 24px !important; font-weight: 700 !important; color: #10b981 !important; }
+  #cathHub .wl-summary-stat-label { font-size: 12px !important; color: #94a3b8 !important; margin-top: 4px !important; }
+
   /* ───── MEDICAL ───── */
   #cathHub .med-stats { display: grid !important; grid-template-columns: repeat(3, 1fr) !important; gap: 16px !important; margin-bottom: 24px !important; }
   #cathHub .med-stat { background: white !important; border: 1px solid #e2e8f0 !important; border-radius: 14px !important; padding: 20px !important; text-align: center !important; }
@@ -791,40 +798,44 @@
     <div class="screen" id="ch-workout">
       <h2>&#x1F4AA; Workout Buddy</h2>
 
-      <div class="wl-date-bar">
-        <div>
-          <div class="wl-date-label" id="wl-date-label">Today</div>
-          <div class="wl-date-sub" id="wl-date-sub"></div>
-        </div>
-        <div class="wl-ex-count" id="wl-ex-count">0 exercises</div>
+      <!-- Pill Navigation -->
+      <div style="display:flex !important;gap:8px !important;margin-bottom:16px !important;flex-wrap:wrap !important;">
+        <button class="wl-pill active" onclick="wlSwitchPill('workout')" id="wl-pill-workout" style="padding:10px 16px !important;background:#10b981 !important;color:white !important;border:none !important;border-radius:20px !important;font-size:13px !important;font-weight:600 !important;cursor:pointer !important;transition:all 0.2s !important;">Today's Workout</button>
+        <button class="wl-pill" onclick="wlSwitchPill('summary')" id="wl-pill-summary" style="padding:10px 16px !important;background:#e2e8f0 !important;color:#64748b !important;border:none !important;border-radius:20px !important;font-size:13px !important;font-weight:600 !important;cursor:pointer !important;transition:all 0.2s !important;">Summary</button>
       </div>
 
-      <div class="wl-prog-wrap">
-        <div class="wl-prog-top">
-          <span>Sets completed</span>
-          <strong id="wl-prog-label">0 / 0</strong>
+      <!-- Today's Workout Pill -->
+      <div id="wl-workout-panel" class="wl-workout-panel">
+        <div class="wl-date-bar">
+          <div>
+            <div class="wl-date-label" id="wl-date-label">Today</div>
+            <div class="wl-date-sub" id="wl-date-sub"></div>
+          </div>
+          <div class="wl-ex-count" id="wl-ex-count">0 exercises</div>
         </div>
-        <div class="wl-prog-bar"><div class="wl-prog-fill" id="wl-prog-fill" style="width:0%"></div></div>
+
+        <div class="wl-prog-wrap">
+          <div class="wl-prog-top">
+            <span>Sets completed</span>
+            <strong id="wl-prog-label">0 / 0</strong>
+          </div>
+          <div class="wl-prog-bar"><div class="wl-prog-fill" id="wl-prog-fill" style="width:0%"></div></div>
+        </div>
+
+        <!-- Session Control -->
+        <div style="display:flex !important;gap:8px !important;margin-bottom:16px !important;">
+          <button class="wl-session-btn" id="wl-start-btn" onclick="wlStartSession()">▶ Start Session</button>
+          <button class="wl-session-btn finish" id="wl-finish-btn" onclick="wlFinishSession()" style="display:none !important;">✓ Finish Session</button>
+        </div>
+
+        <div id="wl-session-list"></div>
+
+        <button class="wl-add-btn" onclick="wlOpenPicker()">➕ Add Exercise</button>
       </div>
 
-      <!-- Session Control -->
-      <div style="display:flex !important;gap:8px !important;margin-bottom:16px !important;">
-        <button class="wl-session-btn" id="wl-start-btn" onclick="wlStartSession()">▶ Start Session</button>
-        <button class="wl-session-btn finish" id="wl-finish-btn" onclick="wlFinishSession()" style="display:none !important;">✓ Finish Session</button>
-      </div>
-
-      <div id="wl-session-list"></div>
-
-      <button class="wl-add-btn" onclick="wlOpenPicker()">&#x2795; Add Exercise</button>
-
-      <!-- Quick Access Link -->
-      <div style="margin-top:16px !important;padding:14px 16px !important;background:#f8fafc !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;">
-        <div style="font-size:12px !important;font-weight:600 !important;color:#64748b !important;margin-bottom:6px !important;">&#x1F517; Quick Access Link</div>
-        <div style="font-size:12px !important;color:#94a3b8 !important;margin-bottom:8px !important;">Open workout buddy without logging in</div>
-        <div style="display:flex !important;gap:8px !important;align-items:center !important;">
-          <input type="text" readonly id="wl-quick-link" style="flex:1 !important;padding:8px 10px !important;border:1px solid #e2e8f0 !important;border-radius:6px !important;font-size:11px !important;color:#475569 !important;background:white !important;">
-          <button class="am-btn" onclick="(function(){var i=document.getElementById('wl-quick-link');i.select();document.execCommand('copy');alert('Link copied!')})()" style="padding:8px 12px !important;font-size:12px !important;white-space:nowrap !important;">Copy</button>
-        </div>
+      <!-- Summary Pill -->
+      <div id="wl-summary-panel" class="wl-summary-panel" style="display:none !important;">
+        <div id="wl-summary-stats"></div>
       </div>
     </div>
 
@@ -2884,6 +2895,33 @@
 
   var wlSessionActive = false;
   var wlSessionStartTime = null;
+
+  window.wlSwitchPill = function(pill) {
+    document.getElementById('wl-workout-panel').style.display = pill === 'workout' ? 'block' : 'none';
+    document.getElementById('wl-summary-panel').style.display = pill === 'summary' ? 'block' : 'none';
+
+    document.getElementById('wl-pill-workout').style.background = pill === 'workout' ? '#10b981' : '#e2e8f0';
+    document.getElementById('wl-pill-workout').style.color = pill === 'workout' ? 'white' : '#64748b';
+    document.getElementById('wl-pill-summary').style.background = pill === 'summary' ? '#10b981' : '#e2e8f0';
+    document.getElementById('wl-pill-summary').style.color = pill === 'summary' ? 'white' : '#64748b';
+
+    if (pill === 'summary') wlLoadSummary();
+  };
+
+  window.wlLoadSummary = function() {
+    var today = new Date().toISOString().split('T')[0];
+    var sessions = WL.session.length > 0 ? [{duration: Math.round((new Date() - wlSessionStartTime) / 60000)}] : [];
+    var totalMinutes = sessions.reduce((sum, s) => sum + (s.duration || 0), 0);
+    var exerciseCount = WL.session.length;
+    var setCount = WL.session.reduce((sum, ex) => sum + (ex.sets ? ex.sets.length : 0), 0);
+
+    var html = '';
+    html += '<div class="wl-summary-stat"><div class="wl-summary-stat-value">' + (wlSessionActive ? 1 : 0) + '</div><div class="wl-summary-stat-label">Sessions Active</div></div>';
+    html += '<div class="wl-summary-stat"><div class="wl-summary-stat-value">' + exerciseCount + '</div><div class="wl-summary-stat-label">Exercises</div></div>';
+    html += '<div class="wl-summary-stat"><div class="wl-summary-stat-value">' + setCount + '</div><div class="wl-summary-stat-label">Sets</div></div>';
+
+    document.getElementById('wl-summary-stats').innerHTML = html;
+  };
 
   window.wlStartSession = function() {
     wlSessionActive = true;

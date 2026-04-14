@@ -2897,15 +2897,23 @@
   var wlSessionStartTime = null;
 
   window.wlSwitchPill = function(pill) {
-    document.getElementById('wl-workout-panel').style.display = pill === 'workout' ? 'block' : 'none';
-    document.getElementById('wl-summary-panel').style.display = pill === 'summary' ? 'block' : 'none';
+    var wp = document.getElementById('wl-workout-panel');
+    var sp = document.getElementById('wl-summary-panel');
+    var ppw = document.getElementById('wl-pill-workout');
+    var pps = document.getElementById('wl-pill-summary');
 
-    document.getElementById('wl-pill-workout').style.background = pill === 'workout' ? '#10b981' : '#e2e8f0';
-    document.getElementById('wl-pill-workout').style.color = pill === 'workout' ? 'white' : '#64748b';
-    document.getElementById('wl-pill-summary').style.background = pill === 'summary' ? '#10b981' : '#e2e8f0';
-    document.getElementById('wl-pill-summary').style.color = pill === 'summary' ? 'white' : '#64748b';
-
-    if (pill === 'summary') wlLoadSummary();
+    if (pill === 'workout') {
+      wp.style.cssText = 'display: block !important;';
+      sp.style.cssText = 'display: none !important;';
+      ppw.style.cssText = 'padding:10px 16px !important;background:#10b981 !important;color:white !important;border:none !important;border-radius:20px !important;font-size:13px !important;font-weight:600 !important;cursor:pointer !important;transition:all 0.2s !important;';
+      pps.style.cssText = 'padding:10px 16px !important;background:#e2e8f0 !important;color:#64748b !important;border:none !important;border-radius:20px !important;font-size:13px !important;font-weight:600 !important;cursor:pointer !important;transition:all 0.2s !important;';
+    } else {
+      wp.style.cssText = 'display: none !important;';
+      sp.style.cssText = 'display: block !important;';
+      ppw.style.cssText = 'padding:10px 16px !important;background:#e2e8f0 !important;color:#64748b !important;border:none !important;border-radius:20px !important;font-size:13px !important;font-weight:600 !important;cursor:pointer !important;transition:all 0.2s !important;';
+      pps.style.cssText = 'padding:10px 16px !important;background:#10b981 !important;color:white !important;border:none !important;border-radius:20px !important;font-size:13px !important;font-weight:600 !important;cursor:pointer !important;transition:all 0.2s !important;';
+      wlLoadSummary();
+    }
   };
 
   window.wlLoadSummary = function() {

@@ -11,6 +11,8 @@
 <link rel="icon" type="image/svg+xml" href="workout-icon-192.svg">
 <link rel="apple-touch-icon" href="workout-icon-192.svg">
 <title>Workout Buddy - Cath Hub</title>
+<script src="config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: #f0f4f8; color: #1e293b; min-height: 100vh; }
@@ -18,10 +20,11 @@ body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background
 .header h1 { font-size: 18px; font-weight: 700; }
 .container { max-width: 550px; margin: 0 auto; padding: 16px; }
 
-.date-bar { background: white; border: 1px solid #e2e8f0; border-radius: 14px; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
-.date-label { font-size: 16px; font-weight: 700; }
-.date-sub { font-size: 13px; color: #64748b; margin-top: 2px; }
-.ex-count { font-size: 13px; color: #64748b; }
+.date-bar { background: linear-gradient(135deg, #334155 0%, #1e293b 100%); color: white; border-radius: 12px; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.date-label { font-size: 15px; font-weight: 700; color: white; }
+.date-sub { font-size: 13px; color: #cbd5e1; margin-top: 2px; }
+.date-version { font-size: 14px; font-weight: 600; color: white; }
+.ex-count { font-size: 13px; color: #cbd5e1; }
 
 .prog-wrap { margin-bottom: 16px; }
 .prog-top { display: flex; justify-content: space-between; font-size: 13px; color: #64748b; margin-bottom: 6px; }
@@ -63,6 +66,12 @@ body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background
 .add-set-btn:hover { border-color: #3b82f6; color: #3b82f6; }
 .notes-strip { padding: 0 20px 14px; font-size: 12px; color: #94a3b8; font-style: italic; border-top: 1px solid #f8fafc; padding-top: 10px; }
 
+.session-controls { display: flex; gap: 8px; margin-bottom: 16px; }
+.session-btn { flex: 1; padding: 12px; background: #10b981; color: white; border: none; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: inherit; }
+.session-btn:hover { background: #059669; }
+.session-btn.finish { background: #f97316; }
+.session-btn.finish:hover { background: #ea580c; }
+
 .add-btn { width: 100%; padding: 14px; background: #10b981; color: white; border: none; border-radius: 12px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit; margin-bottom: 32px; }
 .add-btn:hover { background: #059669; }
 
@@ -86,6 +95,32 @@ body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background
 .picker-plus { width: 28px; height: 28px; border-radius: 50%; background: #3b82f6; color: white; font-size: 18px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .picker-item.added .picker-plus { background: #e2e8f0; color: #94a3b8; font-size: 14px; }
 .picker-empty { padding: 32px 20px; text-align: center; color: #94a3b8; font-size: 14px; }
+
+.tabs { display: flex; gap: 0; margin-bottom: 16px; border-bottom: 1px solid #e2e8f0; }
+.tab-btn { flex: 1; padding: 12px; background: none; border: none; font-size: 13px; font-weight: 600; color: #94a3b8; cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s; }
+.tab-btn.active { color: #10b981; border-bottom-color: #10b981; }
+.tab-btn:hover { color: #1e293b; }
+
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+.history-item { background: white; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px; margin-bottom: 10px; }
+.history-date { font-size: 13px; color: #64748b; margin-bottom: 4px; }
+.history-stats { font-size: 14px; font-weight: 600; color: #1e293b; }
+.history-detail { font-size: 12px; color: #94a3b8; margin-top: 4px; }
+
+.gym-class-item { background: white; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+.gym-class-name { font-size: 14px; font-weight: 600; color: #1e293b; }
+.gym-class-time { font-size: 12px; color: #94a3b8; }
+.gym-class-remove { color: #cbd5e1; cursor: pointer; font-size: 16px; padding: 4px 8px; }
+.gym-class-remove:hover { color: #ef4444; }
+
+.summary-stat { background: white; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px; margin-bottom: 12px; text-align: center; }
+.summary-stat-value { font-size: 24px; font-weight: 700; color: #10b981; }
+.summary-stat-label { font-size: 12px; color: #94a3b8; margin-top: 4px; }
+
+.add-class-btn { width: 100%; padding: 12px; background: #10b981; color: white; border: none; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: inherit; margin-bottom: 16px; }
+.add-class-btn:hover { background: #059669; }
 </style>
 </head>
 <body>
@@ -97,24 +132,51 @@ body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background
 
 <div class="container">
   <div class="date-bar">
-    <div>
-      <div class="date-label" id="date-label">Today's Workout</div>
-      <div class="date-sub" id="date-sub"></div>
-    </div>
-    <div class="ex-count" id="ex-count">0 exercises</div>
+    <div class="date-label" id="date-label"></div>
+    <div class="date-version" id="date-version">v4.26</div>
   </div>
 
-  <div class="prog-wrap">
-    <div class="prog-top">
-      <span>Sets completed</span>
-      <strong id="prog-label">0 / 0</strong>
-    </div>
-    <div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('sessions')">Sessions</button>
+    <button class="tab-btn" onclick="switchTab('classes')">Gym Classes</button>
+    <button class="tab-btn" onclick="switchTab('summary')">Summary</button>
   </div>
 
-  <div id="session-list"></div>
+  <!-- Sessions Tab -->
+  <div id="sessions-tab" class="tab-content active">
+    <div class="prog-wrap">
+      <div class="prog-top">
+        <span>Sets completed</span>
+        <strong id="prog-label">0 / 0</strong>
+      </div>
+      <div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+    </div>
 
-  <button class="add-btn" onclick="openPicker()">&#x2795; Add Exercise</button>
+    <div class="session-controls">
+      <button class="session-btn" id="start-btn" onclick="startSession()">▶ Start Session</button>
+      <button class="session-btn finish" id="finish-btn" onclick="finishSession()" style="display:none;">✓ Finish Session</button>
+    </div>
+
+    <div id="session-list"></div>
+
+    <button class="add-btn" onclick="openPicker()">&#x2795; Add Exercise</button>
+
+    <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid #e2e8f0;">
+      <h3 style="font-size: 14px; font-weight: 700; margin-bottom: 12px; color: #1e293b;">Workout History</h3>
+      <div id="history-list"></div>
+    </div>
+  </div>
+
+  <!-- Gym Classes Tab -->
+  <div id="classes-tab" class="tab-content">
+    <button class="add-class-btn" onclick="openClassPicker()">➕ Add Class</button>
+    <div id="classes-list"></div>
+  </div>
+
+  <!-- Summary Tab -->
+  <div id="summary-tab" class="tab-content">
+    <div id="summary-stats"></div>
+  </div>
 </div>
 
 <div class="overlay" id="overlay" onclick="closePicker()"></div>
@@ -128,7 +190,230 @@ body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background
   <div id="picker-body"></div>
 </div>
 
+<div class="overlay" id="class-overlay" onclick="closeClassPicker()"></div>
+<div class="picker" id="class-picker">
+  <div class="picker-drag"></div>
+  <div class="picker-top">
+    <h3>Add Gym Class</h3>
+  </div>
+  <div style="padding: 16px 20px;">
+    <input type="text" id="class-name" placeholder="Class name (e.g., Pilates)" style="width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 13px; margin-bottom: 10px; font-family: inherit;">
+    <input type="date" id="class-date" style="width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 13px; margin-bottom: 10px; font-family: inherit;">
+    <input type="number" id="class-duration" placeholder="Duration (minutes)" style="width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 13px; margin-bottom: 10px; font-family: inherit;" min="1" max="180">
+    <button onclick="addGymClass()" style="width: 100%; padding: 10px; background: #10b981; color: white; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit;">Add Class</button>
+  </div>
+</div>
+
 <script>
+var sb = window.supabase.createClient(SUPABASE_CONFIG.url, SUPABASE_CONFIG.anonKey);
+var sessionActive = false;
+var sessionStartTime = null;
+var WLSession = null; // Will hold reference to WL.session for saving
+var gymClasses = []; // Store gym classes
+
+window.switchTab = function(tab) {
+  // Hide all tabs
+  document.getElementById('sessions-tab').classList.remove('active');
+  document.getElementById('classes-tab').classList.remove('active');
+  document.getElementById('summary-tab').classList.remove('active');
+
+  // Remove active from all buttons
+  document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+
+  // Show selected tab and highlight button
+  document.getElementById(tab + '-tab').classList.add('active');
+  event.target.classList.add('active');
+
+  // Load data when tab opens
+  if (tab === 'sessions') loadWorkoutHistory();
+  if (tab === 'classes') loadGymClasses();
+  if (tab === 'summary') loadSummary();
+};
+
+async function loadWorkoutHistory() {
+  try {
+    var { data, error } = await sb.from('workout_sessions').select('*').order('date', { ascending: false }).limit(10);
+    if (error) throw error;
+
+    var html = '';
+    if (!data || data.length === 0) {
+      html = '<div style="text-align: center; color: #94a3b8; padding: 20px;">No workouts yet</div>';
+    } else {
+      data.forEach(function(session) {
+        var date = new Date(session.date);
+        var dateStr = date.toLocaleDateString('en-AU', { weekday: 'short', day: 'numeric', month: 'short' });
+        html += '<div class="history-item">';
+        html += '<div class="history-date">' + dateStr + '</div>';
+        html += '<div class="history-stats">' + session.duration_minutes + ' min</div>';
+        html += '<div class="history-detail">Completed</div>';
+        html += '</div>';
+      });
+    }
+    document.getElementById('history-list').innerHTML = html;
+  } catch (error) {
+    console.error('Error loading history:', error);
+    document.getElementById('history-list').innerHTML = '<div style="color: #ef4444;">Error loading history</div>';
+  }
+}
+
+async function loadGymClasses() {
+  try {
+    var { data, error } = await sb.from('gym_classes').select('*').order('date', { ascending: false }).limit(20);
+    if (error) {
+      // Table might not exist yet
+      document.getElementById('classes-list').innerHTML = '<div style="text-align: center; color: #94a3b8; padding: 20px;">Create the gym_classes table to get started</div>';
+      return;
+    }
+
+    var html = '';
+    if (!data || data.length === 0) {
+      html = '<div style="text-align: center; color: #94a3b8; padding: 20px;">No classes added yet</div>';
+    } else {
+      data.forEach(function(cls) {
+        var date = new Date(cls.date);
+        var dateStr = date.toLocaleDateString('en-AU', { weekday: 'short', day: 'numeric', month: 'short' });
+        html += '<div class="gym-class-item">';
+        html += '<div><div class="gym-class-name">' + (cls.name || 'Class') + '</div>';
+        html += '<div class="gym-class-time">' + dateStr + ' · ' + (cls.duration_minutes || '?') + ' min</div></div>';
+        html += '<button class="gym-class-remove" onclick="removeGymClass(' + cls.id + ')">✕</button>';
+        html += '</div>';
+      });
+    }
+    document.getElementById('classes-list').innerHTML = html;
+  } catch (error) {
+    console.error('Error loading classes:', error);
+  }
+}
+
+async function loadSummary() {
+  try {
+    var { data: sessions, error: sessionError } = await sb.from('workout_sessions').select('*');
+    if (sessionError) throw sessionError;
+
+    var totalSessions = sessions ? sessions.length : 0;
+    var totalMinutes = sessions ? sessions.reduce((sum, s) => sum + (s.duration_minutes || 0), 0) : 0;
+    var avgMinutes = totalSessions > 0 ? Math.round(totalMinutes / totalSessions) : 0;
+
+    var { data: classes, error: classError } = await sb.from('gym_classes').select('*');
+    var totalClasses = classes ? classes.length : 0;
+
+    var html = '';
+    html += '<div class="summary-stat"><div class="summary-stat-value">' + totalSessions + '</div><div class="summary-stat-label">Workouts</div></div>';
+    html += '<div class="summary-stat"><div class="summary-stat-value">' + totalMinutes + '</div><div class="summary-stat-label">Total Minutes</div></div>';
+    html += '<div class="summary-stat"><div class="summary-stat-value">' + avgMinutes + '</div><div class="summary-stat-label">Avg Duration</div></div>';
+    html += '<div class="summary-stat"><div class="summary-stat-value">' + totalClasses + '</div><div class="summary-stat-label">Classes</div></div>';
+
+    document.getElementById('summary-stats').innerHTML = html;
+  } catch (error) {
+    console.error('Error loading summary:', error);
+  }
+}
+
+window.removeGymClass = function(id) {
+  if (confirm('Remove this class?')) {
+    sb.from('gym_classes').delete().eq('id', id).then(() => loadGymClasses());
+  }
+};
+
+window.startSession = function() {
+  sessionActive = true;
+  sessionStartTime = new Date();
+  document.getElementById('start-btn').style.display = 'none';
+  document.getElementById('finish-btn').style.display = 'flex';
+  alert('Workout session started! 💪');
+};
+
+window.finishSession = function() {
+  if (!sessionActive) return;
+  sessionActive = false;
+  var endTime = new Date();
+  var duration = Math.round((endTime - sessionStartTime) / 60000);
+  document.getElementById('start-btn').style.display = 'flex';
+  document.getElementById('finish-btn').style.display = 'none';
+
+  // Save to Supabase if we have exercises
+  if (WLSession && WLSession.length > 0) {
+    saveWorkoutSession(sessionStartTime, endTime, duration, WLSession);
+  } else {
+    alert('Workout finished! ✓\nDuration: ' + duration + ' minutes');
+  }
+};
+
+async function saveWorkoutSession(startTime, endTime, durationMinutes, exercises) {
+  try {
+    var finBtn = document.getElementById('finish-btn');
+    if (finBtn) {
+      finBtn.disabled = true;
+      finBtn.textContent = 'Saving...';
+    }
+
+    var today = startTime.toISOString().split('T')[0];
+
+    // Insert session
+    var { data: sessionData, error: sessionError } = await sb.from('workout_sessions').insert({
+      date: today,
+      start_time: startTime.toISOString(),
+      end_time: endTime.toISOString(),
+      duration_minutes: durationMinutes,
+      created_at: new Date().toISOString()
+    }).select('id');
+
+    if (sessionError) {
+      throw new Error('Failed to save session: ' + sessionError.message);
+    }
+
+    var sessionId = sessionData && sessionData.length > 0 ? sessionData[0].id : null;
+    if (!sessionId) throw new Error('No session ID returned');
+
+    // Insert exercises and sets
+    for (var i = 0; i < exercises.length; i++) {
+      var ex = exercises[i];
+      var { data: exData, error: exError } = await sb.from('workout_exercises').insert({
+        session_id: sessionId,
+        name: ex.name,
+        type: ex.type,
+        target_label: ex.targetLabel || null,
+        notes: ex.notes || null,
+        created_at: new Date().toISOString()
+      }).select('id');
+
+      if (exError) throw new Error('Failed to save exercise: ' + exError.message);
+
+      var exId = exData && exData.length > 0 ? exData[0].id : null;
+      if (!exId) continue;
+
+      // Insert sets for this exercise
+      for (var j = 0; j < ex.sets.length; j++) {
+        var s = ex.sets[j];
+        var { error: setError } = await sb.from('workout_sets').insert({
+          exercise_id: exId,
+          set_number: j + 1,
+          weight: s.weight || null,
+          reps: s.reps || null,
+          done: s.done ? true : false,
+          created_at: new Date().toISOString()
+        });
+
+        if (setError) console.warn('Failed to save set: ' + setError.message);
+      }
+    }
+
+    if (finBtn) {
+      finBtn.disabled = false;
+      finBtn.textContent = '✓ Finish Session';
+    }
+
+    alert('Workout finished! ✓\nDuration: ' + durationMinutes + ' minutes\nData saved.');
+  } catch (error) {
+    console.error('Workout save error:', error);
+    if (finBtn) {
+      finBtn.disabled = false;
+      finBtn.textContent = '✓ Finish Session';
+    }
+    alert('Workout finished! ✓\nDuration: ' + durationMinutes + ' minutes\n\nNote: Could not save to database. Make sure tables exist.');
+  }
+}
+
 (function(){
   function esc(s) { var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
 
@@ -163,7 +448,7 @@ body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background
   var now = new Date();
   var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
   var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-  document.getElementById('date-sub').textContent = days[now.getDay()] + ', ' + now.getDate() + ' ' + months[now.getMonth()] + ' ' + now.getFullYear();
+  document.getElementById('date-label').textContent = days[now.getDay()] + ' ' + now.getDate() + ' ' + months[now.getMonth()] + ' ' + now.getFullYear();
 
   function makeSet(w, r) { return {weight: w || '', reps: r || '', done: false}; }
 
@@ -186,7 +471,9 @@ body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background
     if (!WL.session.length) {
       c.innerHTML = '<div class="empty"><div class="empty-icon">&#x1F3CB;</div><div>Tap <strong>Add Exercise</strong> to start</div></div>';
       document.getElementById('ex-count').textContent = '0 exercises';
-      updateProgress(); return;
+      updateProgress();
+      WLSession = [];
+      return;
     }
     var h = '';
     WL.session.forEach(function(ex, idx) {
@@ -210,6 +497,7 @@ body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background
     });
     c.innerHTML = h;
     document.getElementById('ex-count').textContent = WL.session.length+' exercise'+(WL.session.length!==1?'s':'');
+    WLSession = JSON.parse(JSON.stringify(WL.session));
     updateProgress();
   }
 
@@ -257,6 +545,49 @@ body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background
     if (!q) return;
     WL.session.push({ name: q, type: 'custom', targetLabel: '', notes: '', sets: [makeSet('',''), makeSet('',''), makeSet('','')] });
     render(); closePicker();
+  };
+
+  window.openClassPicker = function() {
+    document.getElementById('class-overlay').classList.add('open');
+    document.getElementById('class-picker').classList.add('open');
+    document.getElementById('class-name').value = '';
+    document.getElementById('class-date').valueAsDate = new Date();
+    document.getElementById('class-duration').value = '60';
+    document.getElementById('class-name').focus();
+  };
+
+  window.closeClassPicker = function() {
+    document.getElementById('class-overlay').classList.remove('open');
+    document.getElementById('class-picker').classList.remove('open');
+  };
+
+  window.addGymClass = async function() {
+    var name = document.getElementById('class-name').value.trim();
+    var date = document.getElementById('class-date').value;
+    var duration = parseInt(document.getElementById('class-duration').value) || 60;
+
+    if (!name || !date) {
+      alert('Please fill in class name and date');
+      return;
+    }
+
+    try {
+      var { error } = await sb.from('gym_classes').insert({
+        name: name,
+        date: date,
+        duration_minutes: duration,
+        created_at: new Date().toISOString()
+      });
+
+      if (error) throw error;
+
+      closeClassPicker();
+      loadGymClasses();
+      alert('Class added!');
+    } catch (error) {
+      console.error('Error adding class:', error);
+      alert('Error adding class. Make sure gym_classes table exists.');
+    }
   };
 
   render();

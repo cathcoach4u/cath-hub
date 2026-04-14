@@ -137,6 +137,11 @@ Three separate, independent Claude services. Any can be swapped for alternatives
 - Current: **v4.17** (green badge in sidebar footer and About page)
 - Bumped on every code change (minor version increment)
 - Service worker cache key matches version (e.g., `cache-v4-12`)
+
+**Version locations to update on every change:**
+1. CLAUDE.md — `Current: **v4.XX**` (this line)
+2. index.html — `<div class="version-badge">Cath Hub v4.XX</div>` (line ~580, main heading)
+3. index.html — `<div style="...">v4.XX</div>` — 3 instances in sidebar, mobile bar, and About page (use sed: `sed -i 's/v4\.OLD/v4.NEW/g'`)
 - Update `CLAUDE.md` end-of-session checklist to confirm version is bumped
 
 ## model selection guidance

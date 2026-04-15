@@ -590,13 +590,13 @@
 </div>
 
 <div id="cathHub">
-  <div class="version-badge">Cath Hub v4.42</div>
+  <div class="version-badge">Cath Hub v4.43</div>
 
   <!-- Mobile top bar -->
   <div class="mobile-top-bar">
     <button class="hamburger-btn" onclick="toggleMobileNav()" aria-label="Menu">&#x2630;</button>
     <h1>&#x1F3E0; Cath Hub</h1>
-    <div style="font-size:10px !important;font-weight:600 !important;background:#10b981 !important;color:white !important;padding:4px 8px !important;border-radius:99px !important;">v4.42</div>
+    <div style="font-size:10px !important;font-weight:600 !important;background:#10b981 !important;color:white !important;padding:4px 8px !important;border-radius:99px !important;">v4.43</div>
   </div>
 
   <!-- Mobile slide-out drawer -->
@@ -638,7 +638,7 @@
     <button class="nav-item" onclick="chNav('about',this)"><span class="icon">&#x2139;&#xFE0F;</span> About</button>
     <div class="sidebar-footer">
       <div style="display:flex !important;align-items:center !important;gap:6px !important;margin-bottom:8px !important;">
-        <div style="font-size:10px !important;font-weight:600 !important;background:#10b981 !important;color:white !important;padding:2px 8px !important;border-radius:99px !important;">v4.42</div>
+        <div style="font-size:10px !important;font-weight:600 !important;background:#10b981 !important;color:white !important;padding:2px 8px !important;border-radius:99px !important;">v4.43</div>
       </div>
       <div style="display:flex !important;align-items:center !important;gap:6px !important;margin-bottom:6px !important;">
         <span style="font-size:12px !important;color:rgba(255,255,255,0.5) !important;">&#x1F319;</span>
@@ -1081,9 +1081,9 @@
         </div>
 
         <!-- Status -->
-        <div style="display:grid !important;grid-template-columns:1fr 1fr !important;gap:8px !important;margin-bottom:12px !important;">
+        <div id="mh-stats-container" style="display:grid !important;grid-template-columns:1fr 1fr !important;gap:8px !important;margin-bottom:12px !important;">
           <div style="text-align:center !important;background:#dcfce7 !important;border:1px solid #86efac !important;border-radius:10px !important;padding:14px 8px !important;">
-            <div style="font-size:24px !important;font-weight:700 !important;color:#16a34a !important;">4</div>
+            <div id="mh-remaining-count" style="font-size:24px !important;font-weight:700 !important;color:#16a34a !important;">4</div>
             <div style="font-size:11px !important;color:#64748b !important;">Sessions remaining (2026)</div>
           </div>
         </div>
@@ -1800,7 +1800,7 @@
       <!-- Version -->
       <div style="background:#ecfdf5 !important;border:1px solid #d1fae5 !important;border-radius:10px !important;padding:14px 16px !important;margin-bottom:16px !important;display:flex !important;align-items:center !important;justify-content:space-between !important;">
         <div style="font-size:13px !important;color:#065f46 !important;"><strong>Current version</strong></div>
-        <div style="font-size:12px !important;font-weight:600 !important;background:#10b981 !important;color:white !important;padding:2px 10px !important;border-radius:99px !important;">v4.42</div>
+        <div style="font-size:12px !important;font-weight:600 !important;background:#10b981 !important;color:white !important;padding:2px 10px !important;border-radius:99px !important;">v4.43</div>
       </div>
 
       <!-- Overview -->
@@ -3716,16 +3716,9 @@
   function updateMHPStats() {
     var sessionsUsed = (document.getElementById('mh-2026-count').textContent.match(/\d+/) || [0])[0];
     var remaining = 10 - parseInt(sessionsUsed);
-    var statsDiv = document.querySelector('[style*="grid-template-columns:1fr 1fr"][style*="#dcfce7"]');
-    if (statsDiv) {
-      var remainingEl = statsDiv.querySelector('div:first-child');
-      if (remainingEl && remainingEl.querySelector('div:first-child')) {
-        remainingEl.querySelector('div:first-child').textContent = remaining;
-      }
-    }
-    var sessionsAllocated = document.querySelector('[style*="Sessions allocated"]');
-    if (sessionsAllocated && sessionsAllocated.nextElementSibling) {
-      sessionsAllocated.nextElementSibling.textContent = sessionsUsed + ' used of 10/year, ' + remaining + ' remaining';
+    var remainingEl = document.getElementById('mh-remaining-count');
+    if (remainingEl) {
+      remainingEl.textContent = remaining;
     }
   }
 

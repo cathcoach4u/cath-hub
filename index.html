@@ -7549,15 +7549,27 @@
 
   // Populate today's date
   function populateDateBadge() {
-    var today = new Date();
-    var dateStr = ('0' + today.getDate()).slice(-2) + '/' + ('0' + (today.getMonth() + 1)).slice(-2) + '/' + today.getFullYear();
-    var dateBadge = document.getElementById('today-date-badge');
-    if (dateBadge) {
-      dateBadge.textContent = dateStr;
-      dateBadge.innerHTML = dateStr;
+    try {
+      var today = new Date();
+      var d = String(today.getDate()).padStart(2, '0');
+      var m = String(today.getMonth() + 1).padStart(2, '0');
+      var y = today.getFullYear();
+      var dateStr = d + '/' + m + '/' + y;
+      var dateBadge = document.getElementById('today-date-badge');
+      if (dateBadge) {
+        while (dateBadge.firstChild) dateBadge.removeChild(dateBadge.firstChild);
+        dateBadge.appendChild(document.createTextNode(dateStr));
+      }
+    } catch(e) {
+      console.log('Date badge error:', e);
     }
   }
-  populateDateBadge();
+  // Call immediately and on DOM ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', populateDateBadge);
+  } else {
+    populateDateBadge();
+  }
   document.addEventListener('visibilitychange', populateDateBadge);
   // Refresh date at midnight
   setInterval(function() {

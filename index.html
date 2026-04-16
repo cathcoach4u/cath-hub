@@ -7541,11 +7541,11 @@
   };
 
   // Re-render rhythm items on initial load
-  dashRenderRhythm();
-  dashRenderFortnight();
-  dashRenderBinNight();
-  dashRenderBulky();
-  dashRenderWater();
+  try { dashRenderRhythm(); } catch(e) { console.log('dashRenderRhythm error:', e); }
+  try { dashRenderFortnight(); } catch(e) { console.log('dashRenderFortnight error:', e); }
+  try { dashRenderBinNight(); } catch(e) { console.log('dashRenderBinNight error:', e); }
+  try { dashRenderBulky(); } catch(e) { console.log('dashRenderBulky error:', e); }
+  try { dashRenderWater(); } catch(e) { console.log('dashRenderWater error:', e); }
 
   // Populate today's date
   function populateDateBadge() {

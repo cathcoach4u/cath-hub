@@ -4470,6 +4470,9 @@
         var yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
         var yk = yesterday.getFullYear()+'-'+String(yesterday.getMonth()+1).padStart(2,'0')+'-'+String(yesterday.getDate()).padStart(2,'0');
         localStorage.setItem('cathHub_missedDismissed_' + yk, '1');
+        // Immediately hide the missed alert
+        var missedAlert = document.getElementById('hab-missed-alert');
+        if (missedAlert) missedAlert.style.display = 'none';
       }
       habRender();
     };

@@ -4924,6 +4924,9 @@
 
       // #3: Daily with AM/PM time labels - SPLIT INTO MORNING, MIDDAY, AND EVENING
       // Separate creams/ointments from other daily meds
+      var betaMeds = daily.filter(function(m){
+        return m.name.toLowerCase().indexOf('betamethasone') !== -1 && m.name.toLowerCase().indexOf('valerate') !== -1;
+      });
       var creamsOintments = daily.filter(function(m){
         var name = m.name.toLowerCase();
         return (name.indexOf('cream') !== -1 || name.indexOf('ointment') !== -1) && (name.indexOf('betamethasone') === -1 || name.indexOf('valerate') === -1);
@@ -4934,7 +4937,7 @@
         var isBetamethasone = name.indexOf('betamethasone') !== -1 && name.indexOf('valerate') !== -1;
         return isBetamethasone || (name.indexOf('cream') === -1 && name.indexOf('ointment') === -1);
       });
-      var middayMeds = [];
+      var middayMeds = betaMeds;
       // Sort evening meds: Xobet first, then Betamethasone Valerate
       creamsOintments.sort(function(a, b) {
         var aName = a.name.toLowerCase();

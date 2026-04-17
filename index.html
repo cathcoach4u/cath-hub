@@ -4488,9 +4488,76 @@
       if (data && data.length) {
         await sb.from('habit_logs').delete().eq('med_id', id).eq('date', dk);
       } else {
-        await sb.from('habit_logs').insert({ med_id: id, date: dk, created_at: new Date().toISOString() });
+        // Show modal to select date and time
+        habOpenWeeklyDateTimePicker(id, dk);
       }
       habRender();
+    };
+
+    window.habOpenWeeklyDateTimePicker = function(medId, dateKey) {
+      var modal = document.createElement('div');
+      modal.style.cssText = 'position:fixed !important;top:0 !important;left:0 !important;right:0 !important;bottom:0 !important;background:rgba(0,0,0,0.5) !important;z-index:9999 !important;display:flex !important;align-items:center !important;justify-content:center !important;padding:20px !important;';
+
+      var content = document.createElement('div');
+      content.style.cssText = 'background:white !important;border-radius:10px !important;padding:20px !important;max-width:400px !important;width:100% !important;';
+
+      var title = document.createElement('h3');
+      title.textContent = 'When did you take it?';
+      title.style.cssText = 'margin:0 0 15px 0 !important;';
+
+      var dateLabel = document.createElement('label');
+      dateLabel.textContent = 'Date: ';
+      dateLabel.style.cssText = 'display:block !important;margin-bottom:10px !important;font-weight:600 !important;';
+
+      var dateInput = document.createElement('input');
+      dateInput.type = 'date';
+      dateInput.value = dateKey;
+      dateInput.style.cssText = 'width:100% !important;padding:8px !important;margin-bottom:15px !important;border:1px solid #cbd5e1 !important;border-radius:6px !important;';
+
+      var timeLabel = document.createElement('label');
+      timeLabel.textContent = 'Time: ';
+      timeLabel.style.cssText = 'display:block !important;margin-bottom:10px !important;font-weight:600 !important;';
+
+      var timeInput = document.createElement('input');
+      timeInput.type = 'time';
+      var now = new Date();
+      timeInput.value = ('0' + now.getHours()).slice(-2) + ':' + ('0' + now.getMinutes()).slice(-2);
+      timeInput.style.cssText = 'width:100% !important;padding:8px !important;margin-bottom:15px !important;border:1px solid #cbd5e1 !important;border-radius:6px !important;';
+
+      var buttonsDiv = document.createElement('div');
+      buttonsDiv.style.cssText = 'display:flex !important;gap:8px !important;';
+
+      var saveBtn = document.createElement('button');
+      saveBtn.textContent = 'Save';
+      saveBtn.style.cssText = 'flex:1 !important;padding:10px !important;background:#10b981 !important;color:white !important;border:none !important;border-radius:6px !important;cursor:pointer !important;';
+      saveBtn.onclick = async function() {
+        var selectedDate = dateInput.value;
+        var selectedTime = timeInput.value;
+        var dateTimeStr = selectedDate + 'T' + selectedTime + ':00';
+        await sb.from('habit_logs').insert({ med_id: medId, date: selectedDate, created_at: new Date(dateTimeStr).toISOString() });
+        document.body.removeChild(modal);
+        habRender();
+      };
+
+      var cancelBtn = document.createElement('button');
+      cancelBtn.textContent = 'Cancel';
+      cancelBtn.style.cssText = 'flex:1 !important;padding:10px !important;background:#94a3b8 !important;color:white !important;border:none !important;border-radius:6px !important;cursor:pointer !important;';
+      cancelBtn.onclick = function() {
+        document.body.removeChild(modal);
+      };
+
+      buttonsDiv.appendChild(saveBtn);
+      buttonsDiv.appendChild(cancelBtn);
+
+      content.appendChild(title);
+      content.appendChild(dateLabel);
+      content.appendChild(dateInput);
+      content.appendChild(timeLabel);
+      content.appendChild(timeInput);
+      content.appendChild(buttonsDiv);
+
+      modal.appendChild(content);
+      document.body.appendChild(modal);
     };
 
     // As-needed medications
@@ -4856,19 +4923,18 @@
 
 
       // #3: Daily with AM/PM time labels - SPLIT INTO MORNING, MIDDAY, AND EVENING
-      // Separate creams/ointments from other daily meds (includes Betamethasone Valerate)
-      var betaMeds = daily.filter(function(m){
-        return m.name.toLowerCase().indexOf('betamethasone') !== -1 && m.name.toLowerCase().indexOf('valerate') !== -1;
-      });
+      // Separate creams/ointments from other daily meds
       var creamsOintments = daily.filter(function(m){
         var name = m.name.toLowerCase();
-        return (name.indexOf('cream') !== -1 || name.indexOf('ointment') !== -1 || (name.indexOf('betamethasone') !== -1 && name.indexOf('valerate') !== -1));
+        return (name.indexOf('cream') !== -1 || name.indexOf('ointment') !== -1) && (name.indexOf('betamethasone') === -1 || name.indexOf('valerate') === -1);
       });
       var morningMeds = daily.filter(function(m){
         var name = m.name.toLowerCase();
-        return name.indexOf('cream') === -1 && name.indexOf('ointment') === -1;
+        // Include Betamethasone Valerate in morning, exclude other creams/ointments
+        var isBetamethasone = name.indexOf('betamethasone') !== -1 && name.indexOf('valerate') !== -1;
+        return isBetamethasone || (name.indexOf('cream') === -1 && name.indexOf('ointment') === -1);
       });
-      var middayMeds = betaMeds;
+      var middayMeds = [];
       // Sort evening meds: Xobet first, then Betamethasone Valerate
       creamsOintments.sort(function(a, b) {
         var aName = a.name.toLowerCase();

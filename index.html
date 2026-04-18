@@ -5013,8 +5013,8 @@
                     h += '<div style="font-size:10px !important;color:#10b981 !important;margin-bottom:4px !important;">';
                     h += '✓ Logged at ' + esc(doseTime);
                     if (dose.note) h += ' (' + esc(dose.note) + ')';
-                    h += ' <span onclick="habDeleteDose('+dose.id+')" style="cursor:pointer !important;color:#ef4444 !important;font-weight:600 !important;">✕</span>';
-                    h += ' <span onclick="habChangeTime(\''+dose.id+'\')" style="cursor:pointer !important;color:#3b82f6 !important;">&#x270F;</span>';
+                    h += ' <button onclick="habDeleteDose('+dose.id+')" style="background:#fef2f2 !important;border:1px solid #fecaca !important;color:#ef4444 !important;font-weight:600 !important;padding:6px 12px !important;border-radius:6px !important;font-size:14px !important;cursor:pointer !important;margin-left:8px !important;">Delete</button>';
+                    h += ' <button onclick="habChangeTime(\''+dose.id+'\')" style="background:#eff6ff !important;border:1px solid #bfdbfe !important;color:#3b82f6 !important;padding:6px 12px !important;border-radius:6px !important;font-size:14px !important;cursor:pointer !important;margin-left:4px !important;">Edit time</button>';
                     h += '</div>';
                   });
                   h += '<div style="font-size:10px !important;color:#3b82f6 !important;cursor:pointer !important;padding-top:4px !important;border-top:1px solid #bbf7d0 !important;" onclick="habToggleDaily('+med.id+')">+ Add another dose</div>';
@@ -5056,7 +5056,7 @@
                   mdh += '<div style="font-size:10px !important;color:#10b981 !important;margin-bottom:4px !important;">';
                   mdh += '✓ Logged at ' + esc(mdoseTime);
                   if (mdose.note) mdh += ' (' + esc(mdose.note) + ')';
-                  mdh += ' <span onclick="habDeleteDose('+mdose.id+')" style="cursor:pointer !important;color:#ef4444 !important;font-weight:600 !important;">✕</span>';
+                  mdh += ' <button onclick="habDeleteDose('+mdose.id+')" style="background:#fef2f2 !important;border:1px solid #fecaca !important;color:#ef4444 !important;font-weight:600 !important;padding:6px 12px !important;border-radius:6px !important;font-size:14px !important;cursor:pointer !important;margin-left:8px !important;">Delete</button>';
                   mdh += '</div>';
                 });
                 mdh += '<div style="font-size:10px !important;color:#3b82f6 !important;cursor:pointer !important;padding-top:4px !important;border-top:1px solid #bbf7d0 !important;" onclick="habToggleDaily('+mdmed.id+')">+ Add another dose</div>';
@@ -5177,7 +5177,7 @@
                 } else {
                   h += '<span onclick="habAddNote(\'' + tl.id + '\')" style="cursor:pointer !important;color:#3b82f6 !important;">+ note</span>';
                 }
-                h += '<span onclick="habDeleteDose(\'' + tl.id + '\')" style="cursor:pointer !important;color:#ef4444 !important;" title="Remove dose">&#x2715;</span>';
+                h += '<button onclick="habDeleteDose(\'' + tl.id + '\')" style="background:#fef2f2 !important;border:1px solid #fecaca !important;color:#ef4444 !important;font-weight:600 !important;padding:6px 12px !important;border-radius:6px !important;font-size:14px !important;cursor:pointer !important;margin-left:8px !important;" title="Remove dose">Delete</button>';
                 h += '</div>';
               });
             }
@@ -5226,7 +5226,7 @@
                 } else {
                   mh += '<span onclick="habAddNote(\'' + mtl.id + '\')" style="cursor:pointer !important;color:#3b82f6 !important;">+ note</span>';
                 }
-                mh += '<span onclick="habDeleteDose(\'' + mtl.id + '\')" style="cursor:pointer !important;color:#ef4444 !important;" title="Remove dose">&#x2715;</span>';
+                mh += '<button onclick="habDeleteDose(\'' + mtl.id + '\')" style="background:#fef2f2 !important;border:1px solid #fecaca !important;color:#ef4444 !important;font-weight:600 !important;padding:6px 12px !important;border-radius:6px !important;font-size:14px !important;cursor:pointer !important;margin-left:8px !important;" title="Remove dose">Delete</button>';
                 mh += '</div>';
               });
             }

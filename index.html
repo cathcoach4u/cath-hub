@@ -8220,6 +8220,7 @@
     try {
       var { data: todos, error } = await sb.from('personal_todos').select('*').eq('done', false).order('created_at', { ascending: true });
       if (error) throw error;
+      console.log('To-do items:', todos);
       if (!todos || !todos.length) {
         document.getElementById('dash-todo-list').innerHTML = 'No tasks';
         return;
@@ -8227,6 +8228,7 @@
       var todoHtml = todos.map(function(t) { return '<a href="#" onclick="chNav(\'todo\'); return false;" style="color:#3b82f6 !important;text-decoration:none !important;">• ' + esc(t.task) + '</a>'; }).join('<br>');
       document.getElementById('dash-todo-list').innerHTML = todoHtml;
     } catch(e) {
+      console.log('To-do error:', e);
       document.getElementById('dash-todo-list').innerHTML = 'Error: ' + (e.message || 'unknown');
     }
   };

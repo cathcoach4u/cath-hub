@@ -8204,7 +8204,8 @@
     try {
       var session = await sb.auth.getSession();
       var userId = session && session.data && session.data.session ? session.data.session.user.id : null;
-      var weekStart = new Date(new Date().setDate(new Date().getDate() - new Date().getDay())).toISOString().split('T')[0];
+      var wk = window.weekKeys();
+      var weekStart = wk[0];
 
       var { data: weeklyItems, error } = await sb.from('weekly_items').select('*').eq('user_id', userId).order('created_at', { ascending: true });
       if (error) throw error;

@@ -8149,7 +8149,7 @@
       var weekStart = new Date(new Date().setDate(new Date().getDate() - new Date().getDay())).toISOString().split('T')[0];
 
     try {
-      var { data: habits, error } = await sb.from('habit_meds').select('*');
+      var { data: habits, error } = await sb.from('habit_meds').select('*').limit(3);
       if (error) throw error;
       if (!habits || !habits.length) {
         document.getElementById('dash-daily-meds').innerHTML = '<a href="#" onclick="chNav(\'habits\'); return false;" style="color:#3b82f6 !important;text-decoration:none !important;">➕ Add meds</a>';
@@ -8157,9 +8157,9 @@
       }
       var { data: todayLogs } = await sb.from('habit_logs').select('med_id').eq('date', today);
       var loggedMedIds = todayLogs ? todayLogs.map(function(l) { return l.med_id; }) : [];
-      var allMedIds = habits.map(function(h) { return h.id; });
-      var count = loggedMedIds.filter(function(id) { return allMedIds.indexOf(id) !== -1; }).length;
-      var html = '<a href="#" onclick="chNav(\'habits\'); return false;" style="color:#3b82f6 !important;text-decoration:none !important;cursor:pointer !important;font-size:18px !important;font-weight:bold !important;">' + count + '/' + allMedIds.length + '</a><div style="font-size:11px !important;color:#94a3b8 !important;">taken today</div>';
+      var topMedIds = habits.map(function(h) { return h.id; });
+      var count = loggedMedIds.filter(function(id) { return topMedIds.indexOf(id) !== -1; }).length;
+      var html = '<a href="#" onclick="chNav(\'habits\'); return false;" style="color:#3b82f6 !important;text-decoration:none !important;cursor:pointer !important;font-size:18px !important;font-weight:bold !important;">' + count + '/' + topMedIds.length + '</a><div style="font-size:11px !important;color:#94a3b8 !important;">taken today</div>';
       document.getElementById('dash-daily-meds').innerHTML = html;
     } catch(e) {
       console.log('Daily meds error:', e);

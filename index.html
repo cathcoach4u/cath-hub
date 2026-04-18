@@ -724,6 +724,42 @@
         </div>
       </div>
 
+      <!-- Quick Wins: This Week + Streaks -->
+      <div class="dash-section">
+        <h3 style="margin-bottom:0 !important;">⚡ Quick Wins</h3>
+        <div id="dash-quick-wins" style="display:grid !important;grid-template-columns:1fr 1fr !important;gap:10px !important;margin-top:10px !important;">
+          <div style="background:#f0fdf4 !important;border:1px solid #bbf7d0 !important;border-radius:10px !important;padding:12px !important;">
+            <div style="font-size:11px !important;font-weight:700 !important;color:#166534 !important;text-transform:uppercase !important;margin-bottom:6px !important;">This Week</div>
+            <div id="dash-weekly-items" style="font-size:13px !important;color:#64748b !important;">Loading...</div>
+          </div>
+          <div style="background:#fef3c7 !important;border:1px solid #fcd34d !important;border-radius:10px !important;padding:12px !important;">
+            <div style="font-size:11px !important;font-weight:700 !important;color:#b45309 !important;text-transform:uppercase !important;margin-bottom:6px !important;">✅ To-Do</div>
+            <div id="dash-todo-list" style="font-size:13px !important;color:#64748b !important;">Loading...</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Health Dashboard -->
+      <div class="dash-section">
+        <h3 style="margin-bottom:0 !important;">💚 Health</h3>
+        <div style="display:grid !important;grid-template-columns:1fr 1fr 1fr !important;gap:10px !important;margin-top:10px !important;">
+          <div onclick="chNav('habits')" style="cursor:pointer !important;background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:12px !important;text-align:center !important;transition:all 0.2s !important;" onmouseover="this.style.borderColor='#3b82f6 !important'" onmouseout="this.style.borderColor='#e2e8f0 !important'">
+            <div style="font-size:11px !important;font-weight:700 !important;color:#64748b !important;text-transform:uppercase !important;margin-bottom:6px !important;">💊 Daily Meds</div>
+            <div id="dash-daily-meds" style="font-size:16px !important;font-weight:700 !important;color:#3b82f6 !important;">-</div>
+            <div style="font-size:10px !important;color:#94a3b8 !important;margin-top:4px !important;">today (top 3)</div>
+          </div>
+          <div onclick="chNav('habit-history')" style="cursor:pointer !important;background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:12px !important;text-align:center !important;transition:all 0.2s !important;" onmouseover="this.style.borderColor='#10b981 !important'" onmouseout="this.style.borderColor='#e2e8f0 !important'">
+            <div style="font-size:11px !important;font-weight:700 !important;color:#64748b !important;text-transform:uppercase !important;margin-bottom:6px !important;">📅 Weekly Meds</div>
+            <div id="dash-weekly-meds" style="font-size:16px !important;font-weight:700 !important;color:#10b981 !important;">-</div>
+            <div style="font-size:10px !important;color:#94a3b8 !important;margin-top:4px !important;">this week</div>
+          </div>
+          <div onclick="chNav('medical')" style="cursor:pointer !important;background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:12px !important;text-align:center !important;transition:all 0.2s !important;" onmouseover="this.style.borderColor='#a855f7 !important'" onmouseout="this.style.borderColor='#e2e8f0 !important'">
+            <div style="font-size:11px !important;font-weight:700 !important;color:#64748b !important;text-transform:uppercase !important;margin-bottom:6px !important;">🧠 Mental Health</div>
+            <div id="dash-mental-sessions" style="font-size:16px !important;font-weight:700 !important;color:#a855f7 !important;">-</div>
+            <div style="font-size:10px !important;color:#94a3b8 !important;margin-top:4px !important;">sessions left</div>
+          </div>
+        </div>
+      </div>
 
       <!-- Productivity -->
       <div class="dash-section">
@@ -8065,6 +8101,8 @@
 
   // ─── Dashboard Data Renderers ───
   window.dashRenderAllData = async function() {
+    await dashRenderQuickWins();
+    await dashRenderHealth();
     await dashRenderProductivity();
     await dashRenderFocusArea();
   };

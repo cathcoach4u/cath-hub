@@ -713,19 +713,19 @@
         <h3 style="margin-bottom:0 !important;">💚 Health</h3>
         <div style="display:grid !important;grid-template-columns:1fr 1fr 1fr !important;gap:10px !important;margin-top:10px !important;">
           <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:12px !important;text-align:center !important;">
-            <div style="font-size:11px !important;font-weight:700 !important;color:#64748b !important;text-transform:uppercase !important;margin-bottom:6px !important;">💊 Meds</div>
-            <div id="dash-meds-compliance" style="font-size:16px !important;font-weight:700 !important;color:#3b82f6 !important;">-</div>
+            <div style="font-size:11px !important;font-weight:700 !important;color:#64748b !important;text-transform:uppercase !important;margin-bottom:6px !important;">💊 Daily Meds</div>
+            <div id="dash-daily-meds" style="font-size:16px !important;font-weight:700 !important;color:#3b82f6 !important;">-</div>
+            <div style="font-size:10px !important;color:#94a3b8 !important;margin-top:4px !important;">today (top 3)</div>
+          </div>
+          <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:12px !important;text-align:center !important;">
+            <div style="font-size:11px !important;font-weight:700 !important;color:#64748b !important;text-transform:uppercase !important;margin-bottom:6px !important;">📅 Weekly Meds</div>
+            <div id="dash-weekly-meds" style="font-size:16px !important;font-weight:700 !important;color:#10b981 !important;">-</div>
             <div style="font-size:10px !important;color:#94a3b8 !important;margin-top:4px !important;">this week</div>
           </div>
           <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:12px !important;text-align:center !important;">
-            <div style="font-size:11px !important;font-weight:700 !important;color:#64748b !important;text-transform:uppercase !important;margin-bottom:6px !important;">😊 Mood</div>
-            <div id="dash-mood-trend" style="font-size:16px !important;font-weight:700 !important;color:#f59e0b !important;">-</div>
-            <div style="font-size:10px !important;color:#94a3b8 !important;margin-top:4px !important;">last 3 sessions</div>
-          </div>
-          <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:12px !important;text-align:center !important;">
-            <div style="font-size:11px !important;font-weight:700 !important;color:#64748b !important;text-transform:uppercase !important;margin-bottom:6px !important;">📋 Medical</div>
-            <div id="dash-medical-next" style="font-size:13px !important;font-weight:700 !important;color:#ef4444 !important;">-</div>
-            <div style="font-size:10px !important;color:#94a3b8 !important;margin-top:4px !important;">next appt</div>
+            <div style="font-size:11px !important;font-weight:700 !important;color:#64748b !important;text-transform:uppercase !important;margin-bottom:6px !important;">🧠 Mental Health</div>
+            <div id="dash-mental-sessions" style="font-size:16px !important;font-weight:700 !important;color:#a855f7 !important;">-</div>
+            <div style="font-size:10px !important;color:#94a3b8 !important;margin-top:4px !important;">sessions left</div>
           </div>
         </div>
       </div>
@@ -8129,35 +8129,39 @@
   };
 
   window.dashRenderHealth = async function() {
-    try {
-      var today = new Date().toISOString().split('T')[0];
-      var userId = (await sb.auth.getSession()).data.session.user.id;
-      var weekStart = new Date(new Date().setDate(new Date().getDate() - new Date().getDay())).toISOString().split('T')[0];
-      var { data: medsLogs } = await sb.from('habit_logs').select('id').eq('user_id', userId).gte('created_at', weekStart);
-      var compliance = medsLogs ? Math.round((medsLogs.length / 7) * 100) : 0;
-      document.getElementById('dash-meds-compliance').textContent = compliance + '%';
-    } catch(e) {
-      document.getElementById('dash-meds-compliance').textContent = '-';
-    }
+    var userId = (await sb.auth.getSession()).data.session.user.id;
+    var today = new Date().toISOString().split('T')[0];
 
     try {
-      var userId = (await sb.auth.getSession()).data.session.user.id;
-      var { data: mhSessions } = await sb.from('mental_health_sessions').select('mood').eq('user_id', userId).order('date', { ascending: false }).limit(3);
-      if (mhSessions && mhSessions.length > 0) {
-        var moods = mhSessions.map(function(s) { return parseInt(s.mood) || 0; });
-        var avg = Math.round(moods.reduce(function(a,b) { return a+b; }) / moods.length);
-        document.getElementById('dash-mood-trend').textContent = ['😟','😕','😐','🙂','😊'][Math.min(Math.max(Math.round(avg/2), 0), 4)];
+      var { data: habits } = await sb.from('habit_meds').select('id,name').eq('user_id', userId).order('created_at').limit(3);
+      if (habits && habits.length > 0) {
+        var topMeds = habits.map(function(h) { return h.id; });
+        var { data: todayLogs } = await sb.from('habit_logs').select('med_id').eq('user_id', userId).eq('date', today);
+        var loggedMedIds = todayLogs ? todayLogs.map(function(l) { return l.med_id; }) : [];
+        var count = loggedMedIds.filter(function(id) { return topMeds.indexOf(id) !== -1; }).length;
+        document.getElementById('dash-daily-meds').textContent = count + '/' + topMeds.length;
+      } else {
+        document.getElementById('dash-daily-meds').textContent = '-';
       }
     } catch(e) {
-      document.getElementById('dash-mood-trend').textContent = '-';
+      document.getElementById('dash-daily-meds').textContent = '-';
     }
 
     try {
-      var userId = (await sb.auth.getSession()).data.session.user.id;
-      var { data: medSessions } = await sb.from('medical_sessions').select('date').eq('user_id', userId).gte('date', new Date().toISOString().split('T')[0]).order('date').limit(1);
-      document.getElementById('dash-medical-next').textContent = medSessions && medSessions.length ? new Date(medSessions[0].date).toLocaleDateString('en-AU', {month:'short',day:'numeric'}) : 'None soon';
+      var weekStart = new Date(new Date().setDate(new Date().getDate() - new Date().getDay())).toISOString().split('T')[0];
+      var { data: medsLogs } = await sb.from('habit_logs').select('id').eq('user_id', userId).gte('date', weekStart);
+      var compliance = medsLogs ? Math.round((medsLogs.length / 21) * 100) : 0;
+      document.getElementById('dash-weekly-meds').textContent = compliance + '%';
     } catch(e) {
-      document.getElementById('dash-medical-next').textContent = '-';
+      document.getElementById('dash-weekly-meds').textContent = '-';
+    }
+
+    try {
+      var { data: mhSessions } = await sb.from('mental_health_sessions').select('id').eq('user_id', userId).gt('date', today).order('date');
+      var count = mhSessions ? mhSessions.length : 0;
+      document.getElementById('dash-mental-sessions').textContent = count + ' planned';
+    } catch(e) {
+      document.getElementById('dash-mental-sessions').textContent = '-';
     }
   };
 

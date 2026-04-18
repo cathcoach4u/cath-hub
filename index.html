@@ -7392,12 +7392,12 @@
 
   window.dailyRenderItems = async function(variant) {
     try {
-      var { data: items, error } = await sb.from('daily_items').select('*').eq('section', 'Custom').order('created_at', { ascending: false });
+      var { data: items, error } = await sb.from('daily_items').select('*').order('section', { ascending: true }).order('created_at', { ascending: false });
       if (error) throw error;
       var list = document.getElementById('daily-items-list-' + variant);
       var h = '';
       if (!items || items.length === 0) {
-        h = '<div style="padding:16px !important;text-align:center !important;color:#94a3b8 !important;font-size:13px !important;">No custom items</div>';
+        h = '<div style="padding:16px !important;text-align:center !important;color:#94a3b8 !important;font-size:13px !important;">No items</div>';
       } else {
         h = '<table style="width:100% !important;border-collapse:collapse !important;">';
         h += '<thead style="background:#f8fafc !important;"><tr style="border-bottom:1px solid #e2e8f0 !important;">';
@@ -7453,12 +7453,12 @@
 
   window.weeklyRenderItems = async function() {
     try {
-      var { data: items, error } = await sb.from('weekly_items').select('*').eq('section', 'Custom').order('created_at', { ascending: false });
+      var { data: items, error } = await sb.from('weekly_items').select('*').order('section', { ascending: true }).order('created_at', { ascending: false });
       if (error) throw error;
       var list = document.getElementById('weekly-items-list');
       var h = '';
       if (!items || items.length === 0) {
-        h = '<div style="padding:16px !important;text-align:center !important;color:#94a3b8 !important;font-size:13px !important;">No custom items</div>';
+        h = '<div style="padding:16px !important;text-align:center !important;color:#94a3b8 !important;font-size:13px !important;">No items</div>';
       } else {
         h = '<table style="width:100% !important;border-collapse:collapse !important;">';
         h += '<thead style="background:#f8fafc !important;"><tr style="border-bottom:1px solid #e2e8f0 !important;">';
@@ -7514,12 +7514,12 @@
 
   window.sixmonthlyRenderItems = async function() {
     try {
-      var { data: items, error } = await sb.from('sixmonthly_items').select('*').eq('section', 'Custom').order('created_at', { ascending: false });
+      var { data: items, error } = await sb.from('sixmonthly_items').select('*').order('section', { ascending: true }).order('created_at', { ascending: false });
       if (error) throw error;
       var list = document.getElementById('sixmonthly-items-list');
       var h = '';
       if (!items || items.length === 0) {
-        h = '<div style="padding:16px !important;text-align:center !important;color:#94a3b8 !important;font-size:13px !important;">No custom items</div>';
+        h = '<div style="padding:16px !important;text-align:center !important;color:#94a3b8 !important;font-size:13px !important;">No items</div>';
       } else {
         h = '<table style="width:100% !important;border-collapse:collapse !important;">';
         h += '<thead style="background:#f8fafc !important;"><tr style="border-bottom:1px solid #e2e8f0 !important;">';
@@ -7575,12 +7575,12 @@
 
   window.annualRenderItems = async function() {
     try {
-      var { data: items, error } = await sb.from('annual_items').select('*').eq('section', 'Custom').order('created_at', { ascending: false });
+      var { data: items, error } = await sb.from('annual_items').select('*').order('section', { ascending: true }).order('created_at', { ascending: false });
       if (error) throw error;
       var list = document.getElementById('annual-items-list');
       var h = '';
       if (!items || items.length === 0) {
-        h = '<div style="padding:16px !important;text-align:center !important;color:#94a3b8 !important;font-size:13px !important;">No custom items</div>';
+        h = '<div style="padding:16px !important;text-align:center !important;color:#94a3b8 !important;font-size:13px !important;">No items</div>';
       } else {
         h = '<table style="width:100% !important;border-collapse:collapse !important;">';
         h += '<thead style="background:#f8fafc !important;"><tr style="border-bottom:1px solid #e2e8f0 !important;">';

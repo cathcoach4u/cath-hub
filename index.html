@@ -8124,7 +8124,7 @@
         document.getElementById('dash-todo-list').innerHTML = 'No tasks';
         return;
       }
-      var todoHtml = todos.map(function(t) { return '• ' + esc(t.task); }).join('<br>');
+      var todoHtml = todos.map(function(t) { return '<a href="#" onclick="chNav(\'todo\'); return false;" style="color:#3b82f6 !important;text-decoration:none !important;">• ' + esc(t.task) + '</a>'; }).join('<br>');
       document.getElementById('dash-todo-list').innerHTML = todoHtml;
     } catch(e) {
       document.getElementById('dash-todo-list').innerHTML = 'Error: ' + (e.message || 'unknown');

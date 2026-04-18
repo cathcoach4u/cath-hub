@@ -8119,12 +8119,14 @@
 
     try {
       var userId = (await sb.auth.getSession()).data.session.user.id;
-      var { data: todos } = await sb.from('personal_todos').select('task').eq('user_id', userId).eq('done', false);
-      var todoHtml = todos && todos.length ? todos.map(function(t) { return '• ' + esc(t.task); }).join('<br>') : 'No tasks';
+      var { data: todos, error } = await sb.from('personal_todos').select('*').eq('user_id', userId);
+      if (error) throw error;
+      var incompleteTodos = todos && todos.length ? todos.filter(function(t) { return !t.done; }) : [];
+      var todoHtml = incompleteTodos.length ? incompleteTodos.map(function(t) { return '• ' + esc(t.task); }).join('<br>') : 'No incomplete tasks';
       document.getElementById('dash-todo-list').innerHTML = todoHtml;
     } catch(e) {
       console.log('To-do error:', e);
-      document.getElementById('dash-todo-list').innerHTML = 'Error loading tasks';
+      document.getElementById('dash-todo-list').innerHTML = 'Error: ' + (e.message || 'Unknown error');
     }
   };
 

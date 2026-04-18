@@ -7103,10 +7103,35 @@
     container.innerHTML = h;
   };
 
-  window.zbToggleRhythm = function(rhythm, storageKey, itemId) {
+  window.zbToggleRhythm = async function(rhythm, storageKey, itemId) {
     var checked = zbGetChecked(storageKey);
     checked[itemId] = !checked[itemId];
     zbSetChecked(storageKey, checked);
+
+    // Sync to Supabase
+    try {
+      var table = rhythm + '_logs';
+      var userId = (await sb.auth.getSession()).data.session.user.id;
+      var period = storageKey.replace('rhythm_', '').split('-')[0]; // Extract period from key
+
+      if (checked[itemId]) {
+        // Log was checked - insert to Supabase
+        if (rhythm === 'daily') {
+          await sb.from(table).insert({ item_id: itemId, user_id: userId, log_date: todayKey() });
+        } else {
+          await sb.from(table).insert({ item_id: itemId, user_id: userId, logged_date: new Date().toISOString() });
+        }
+      } else {
+        // Log was unchecked - delete from Supabase
+        if (rhythm === 'daily') {
+          await sb.from(table).delete().eq('item_id', itemId).eq('log_date', todayKey()).eq('user_id', userId);
+        } else {
+          await sb.from(table).delete().eq('item_id', itemId).eq('user_id', userId);
+        }
+      }
+    } catch (e) {
+      console.error('Error syncing to Supabase:', e.message);
+    }
 
     // Re-render current active daily section
     if (rhythm === 'daily') {
@@ -7180,9 +7205,49 @@
     }
   };
 
-  // Initialize fortnightly list on page load
+  // Load all rhythm logs from Supabase on page load
+  window.zbLoadRhythmLogs = async function() {
+    try {
+      var userId = (await sb.auth.getSession()).data.session.user.id;
+      if (!userId) return;
+
+      // Load daily logs for today
+      var today = todayKey();
+      var { data: dailyLogs } = await sb.from('daily_logs').select('item_id').eq('user_id', userId).eq('log_date', today);
+      var checked = {};
+      if (dailyLogs) dailyLogs.forEach(function(log) { checked[log.item_id] = true; });
+      zbSetChecked(zbKey('rhythm_daily'), checked);
+
+      // Load weekly logs for this week
+      var weekKey = zbWeekKey('rhythm_weekly');
+      var { data: weeklyLogs } = await sb.from('weekly_logs').select('item_id').eq('user_id', userId);
+      checked = {};
+      if (weeklyLogs) weeklyLogs.forEach(function(log) { checked[log.item_id] = true; });
+      zbSetChecked(weekKey, checked);
+
+      // Load 6-monthly logs for this period
+      var m = new Date().getMonth();
+      var half = m < 6 ? 'H1' : 'H2';
+      var sixmKey = 'rhythm_6m_' + new Date().getFullYear() + '_' + half;
+      var { data: sixmLogs } = await sb.from('sixmonthly_logs').select('item_id').eq('user_id', userId);
+      checked = {};
+      if (sixmLogs) sixmLogs.forEach(function(log) { checked[log.item_id] = true; });
+      zbSetChecked(sixmKey, checked);
+
+      // Load annual logs for this year
+      var annualKey = 'rhythm_annual_' + new Date().getFullYear();
+      var { data: annualLogs } = await sb.from('annual_logs').select('item_id').eq('user_id', userId);
+      checked = {};
+      if (annualLogs) annualLogs.forEach(function(log) { checked[log.item_id] = true; });
+      zbSetChecked(annualKey, checked);
+    } catch (e) {
+      console.error('Error loading rhythm logs:', e.message);
+    }
+  };
+
+  // Initialize fortnightly list and load rhythm logs on page load
   window.addEventListener('load', function() {
-    setTimeout(function() { fnRenderList(); }, 100);
+    setTimeout(function() { fnRenderList(); zbLoadRhythmLogs(); }, 100);
   });
 
   // ─── Render Zone Grid ───

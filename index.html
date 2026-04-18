@@ -1570,12 +1570,9 @@
 
       <!-- Habits tab bar -->
       <div style="display:flex !important;gap:6px !important;margin-bottom:16px !important;flex-wrap:wrap !important;">
-        <button class="am-btn zb-tab active" onclick="zbTab('morning-wd', 'h2')" id="zb-tab-morning-wd-h2" style="padding:8px 14px !important;font-size:12px !important;background:#3b82f6 !important;color:white !important;border-color:#3b82f6 !important;">Morning (Weekday)</button>
-        <button class="am-btn zb-tab" onclick="zbTab('morning-we', 'h2')" id="zb-tab-morning-we-h2" style="padding:8px 14px !important;font-size:12px !important;">Morning (Weekend)</button>
-        <button class="am-btn zb-tab" onclick="zbTab('midday-wd', 'h2')" id="zb-tab-midday-wd-h2" style="padding:8px 14px !important;font-size:12px !important;">Midday (Weekday)</button>
-        <button class="am-btn zb-tab" onclick="zbTab('midday-we', 'h2')" id="zb-tab-midday-we-h2" style="padding:8px 14px !important;font-size:12px !important;">Midday (Weekend)</button>
-        <button class="am-btn zb-tab" onclick="zbTab('evening-wd', 'h2')" id="zb-tab-evening-wd-h2" style="padding:8px 14px !important;font-size:12px !important;">Evening (Weekday)</button>
-        <button class="am-btn zb-tab" onclick="zbTab('evening-we', 'h2')" id="zb-tab-evening-we-h2" style="padding:8px 14px !important;font-size:12px !important;">Evening (Weekend)</button>
+        <button class="am-btn zb-tab active" onclick="zbTab('morning', 'h2')" id="zb-tab-morning-h2" style="padding:8px 14px !important;font-size:12px !important;background:#3b82f6 !important;color:white !important;border-color:#3b82f6 !important;">Morning</button>
+        <button class="am-btn zb-tab" onclick="zbTab('midday', 'h2')" id="zb-tab-midday-h2" style="padding:8px 14px !important;font-size:12px !important;">Midday</button>
+        <button class="am-btn zb-tab" onclick="zbTab('evening', 'h2')" id="zb-tab-evening-h2" style="padding:8px 14px !important;font-size:12px !important;">Evening</button>
         <button class="am-btn zb-tab" onclick="zbTab('weekly', 'h2')" id="zb-tab-weekly-h2" style="padding:8px 14px !important;font-size:12px !important;">Weekly</button>
         <button class="am-btn zb-tab" onclick="zbTab('fortnightly', 'h2')" id="zb-tab-fortnightly-h2" style="padding:8px 14px !important;font-size:12px !important;">Fortnightly</button>
         <button class="am-btn zb-tab" onclick="zbTab('6monthly', 'h2')" id="zb-tab-6monthly-h2" style="padding:8px 14px !important;font-size:12px !important;">6-Monthly</button>
@@ -1583,104 +1580,141 @@
       </div>
 
       <!-- TAB: Rhythm Cards -->
-      <!-- Morning Weekday Panel -->
+      <!-- Morning Panel (Weekday + Weekend) -->
       <div id="zb-panel-morning-wd-h2" style="display:none !important;">
+        <h2 style="font-size:18px !important;font-weight:700 !important;margin-bottom:16px !important;">☀️ Morning</h2>
+
+        <!-- Weekday Section -->
         <div style="margin-bottom:16px !important;">
-          <h3 style="font-size:14px !important;font-weight:700 !important;margin-bottom:12px !important;">Add Custom Item</h3>
-          <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:14px !important;margin-bottom:12px !important;">
-            <div style="display:flex !important;flex-direction:column !important;gap:10px !important;">
-              <input type="text" id="daily-item-name-wd" placeholder="Item name" style="width:100% !important;padding:10px 12px !important;border:1px solid #e2e8f0 !important;border-radius:8px !important;font-size:14px !important;box-sizing:border-box !important;">
-              <button onclick="dailyAddItem('wd')" style="width:100% !important;padding:10px !important;background:#3b82f6 !important;color:white !important;border:none !important;border-radius:8px !important;font-size:14px !important;font-weight:600 !important;cursor:pointer !important;">+ Add Item</button>
+          <button onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'none' ? 'block' : 'none'" style="width:100% !important;padding:12px 16px !important;background:#f8fafc !important;border:1px solid #e2e8f0 !important;border-radius:8px !important;font-size:14px !important;font-weight:600 !important;cursor:pointer !important;text-align:left !important;color:#1e293b !important;">▼ Weekday</button>
+          <div style="display:block !important;">
+            <div style="margin-top:12px !important;">
+              <h3 style="font-size:13px !important;font-weight:700 !important;margin-bottom:10px !important;padding:0 16px !important;">Add Custom Item</h3>
+              <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:14px !important;margin-bottom:12px !important;margin-left:16px !important;margin-right:16px !important;">
+                <div style="display:flex !important;flex-direction:column !important;gap:10px !important;">
+                  <input type="text" id="daily-item-name-wd" placeholder="Item name" style="width:100% !important;padding:10px 12px !important;border:1px solid #e2e8f0 !important;border-radius:8px !important;font-size:14px !important;box-sizing:border-box !important;">
+                  <button onclick="dailyAddItem('wd')" style="width:100% !important;padding:10px !important;background:#3b82f6 !important;color:white !important;border:none !important;border-radius:8px !important;font-size:14px !important;font-weight:600 !important;cursor:pointer !important;">+ Add Item</button>
+                </div>
+              </div>
+              <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;overflow:hidden !important;margin-bottom:12px !important;margin-left:16px !important;margin-right:16px !important;">
+                <div id="daily-items-list-wd"></div>
+              </div>
+              <div id="hab-morning-list-wd-h2" style="margin-left:16px !important;margin-right:16px !important;"></div>
             </div>
           </div>
-          <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;overflow:hidden !important;margin-bottom:12px !important;">
-            <div id="daily-items-list-wd"></div>
-          </div>
         </div>
-        <div id="hab-morning-list-wd-h2"></div>
-      </div>
-      <!-- Morning Weekend Panel -->
-      <div id="zb-panel-morning-we-h2" style="display:none !important;">
+
+        <!-- Weekend Section -->
         <div style="margin-bottom:16px !important;">
-          <h3 style="font-size:14px !important;font-weight:700 !important;margin-bottom:12px !important;">Add Custom Item</h3>
-          <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:14px !important;margin-bottom:12px !important;">
-            <div style="display:flex !important;flex-direction:column !important;gap:10px !important;">
-              <input type="text" id="daily-item-name-we" placeholder="Item name" style="width:100% !important;padding:10px 12px !important;border:1px solid #e2e8f0 !important;border-radius:8px !important;font-size:14px !important;box-sizing:border-box !important;">
-              <button onclick="dailyAddItem('we')" style="width:100% !important;padding:10px !important;background:#3b82f6 !important;color:white !important;border:none !important;border-radius:8px !important;font-size:14px !important;font-weight:600 !important;cursor:pointer !important;">+ Add Item</button>
+          <button onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'none' ? 'block' : 'none'" style="width:100% !important;padding:12px 16px !important;background:#f8fafc !important;border:1px solid #e2e8f0 !important;border-radius:8px !important;font-size:14px !important;font-weight:600 !important;cursor:pointer !important;text-align:left !important;color:#1e293b !important;">▼ Weekend</button>
+          <div style="display:none !important;">
+            <div style="margin-top:12px !important;">
+              <h3 style="font-size:13px !important;font-weight:700 !important;margin-bottom:10px !important;padding:0 16px !important;">Add Custom Item</h3>
+              <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:14px !important;margin-bottom:12px !important;margin-left:16px !important;margin-right:16px !important;">
+                <div style="display:flex !important;flex-direction:column !important;gap:10px !important;">
+                  <input type="text" id="daily-item-name-we" placeholder="Item name" style="width:100% !important;padding:10px 12px !important;border:1px solid #e2e8f0 !important;border-radius:8px !important;font-size:14px !important;box-sizing:border-box !important;">
+                  <button onclick="dailyAddItem('we')" style="width:100% !important;padding:10px !important;background:#3b82f6 !important;color:white !important;border:none !important;border-radius:8px !important;font-size:14px !important;font-weight:600 !important;cursor:pointer !important;">+ Add Item</button>
+                </div>
+              </div>
+              <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;overflow:hidden !important;margin-bottom:12px !important;margin-left:16px !important;margin-right:16px !important;">
+                <div id="daily-items-list-we"></div>
+              </div>
+              <div id="hab-morning-list-we-h2" style="margin-left:16px !important;margin-right:16px !important;"></div>
             </div>
           </div>
-          <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;overflow:hidden !important;margin-bottom:12px !important;">
-            <div id="daily-items-list-we"></div>
-          </div>
         </div>
-        <div id="hab-morning-list-we-h2"></div>
       </div>
-      <!-- Midday Weekday Panel -->
+      <!-- Midday Panel (Weekday + Weekend) -->
       <div id="zb-panel-midday-wd-h2" style="display:none !important;">
+        <h2 style="font-size:18px !important;font-weight:700 !important;margin-bottom:16px !important;">☀️ Midday</h2>
+
+        <!-- Weekday Section -->
         <div style="margin-bottom:16px !important;">
-          <h3 style="font-size:14px !important;font-weight:700 !important;margin-bottom:12px !important;">Add Custom Item</h3>
-          <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:14px !important;margin-bottom:12px !important;">
-            <div style="display:flex !important;flex-direction:column !important;gap:10px !important;">
-              <input type="text" id="daily-item-name-midday-wd" placeholder="Item name" style="width:100% !important;padding:10px 12px !important;border:1px solid #e2e8f0 !important;border-radius:8px !important;font-size:14px !important;box-sizing:border-box !important;">
-              <button onclick="dailyAddItem('midday-wd')" style="width:100% !important;padding:10px !important;background:#3b82f6 !important;color:white !important;border:none !important;border-radius:8px !important;font-size:14px !important;font-weight:600 !important;cursor:pointer !important;">+ Add Item</button>
+          <button onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'none' ? 'block' : 'none'" style="width:100% !important;padding:12px 16px !important;background:#f8fafc !important;border:1px solid #e2e8f0 !important;border-radius:8px !important;font-size:14px !important;font-weight:600 !important;cursor:pointer !important;text-align:left !important;color:#1e293b !important;">▼ Weekday</button>
+          <div style="display:block !important;">
+            <div style="margin-top:12px !important;">
+              <h3 style="font-size:13px !important;font-weight:700 !important;margin-bottom:10px !important;padding:0 16px !important;">Add Custom Item</h3>
+              <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:14px !important;margin-bottom:12px !important;margin-left:16px !important;margin-right:16px !important;">
+                <div style="display:flex !important;flex-direction:column !important;gap:10px !important;">
+                  <input type="text" id="daily-item-name-midday-wd" placeholder="Item name" style="width:100% !important;padding:10px 12px !important;border:1px solid #e2e8f0 !important;border-radius:8px !important;font-size:14px !important;box-sizing:border-box !important;">
+                  <button onclick="dailyAddItem('midday-wd')" style="width:100% !important;padding:10px !important;background:#3b82f6 !important;color:white !important;border:none !important;border-radius:8px !important;font-size:14px !important;font-weight:600 !important;cursor:pointer !important;">+ Add Item</button>
+                </div>
+              </div>
+              <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;overflow:hidden !important;margin-bottom:12px !important;margin-left:16px !important;margin-right:16px !important;">
+                <div id="daily-items-list-midday-wd"></div>
+              </div>
+              <div id="hab-midday-list-wd-h2" style="margin-left:16px !important;margin-right:16px !important;"></div>
             </div>
           </div>
-          <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;overflow:hidden !important;margin-bottom:12px !important;">
-            <div id="daily-items-list-midday-wd"></div>
-          </div>
         </div>
-        <div id="hab-midday-list-wd-h2"></div>
-      </div>
-      <!-- Midday Weekend Panel -->
-      <div id="zb-panel-midday-we-h2" style="display:none !important;">
+
+        <!-- Weekend Section -->
         <div style="margin-bottom:16px !important;">
-          <h3 style="font-size:14px !important;font-weight:700 !important;margin-bottom:12px !important;">Add Custom Item</h3>
-          <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:14px !important;margin-bottom:12px !important;">
-            <div style="display:flex !important;flex-direction:column !important;gap:10px !important;">
-              <input type="text" id="daily-item-name-midday-we" placeholder="Item name" style="width:100% !important;padding:10px 12px !important;border:1px solid #e2e8f0 !important;border-radius:8px !important;font-size:14px !important;box-sizing:border-box !important;">
-              <button onclick="dailyAddItem('midday-we')" style="width:100% !important;padding:10px !important;background:#3b82f6 !important;color:white !important;border:none !important;border-radius:8px !important;font-size:14px !important;font-weight:600 !important;cursor:pointer !important;">+ Add Item</button>
+          <button onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'none' ? 'block' : 'none'" style="width:100% !important;padding:12px 16px !important;background:#f8fafc !important;border:1px solid #e2e8f0 !important;border-radius:8px !important;font-size:14px !important;font-weight:600 !important;cursor:pointer !important;text-align:left !important;color:#1e293b !important;">▼ Weekend</button>
+          <div style="display:none !important;">
+            <div style="margin-top:12px !important;">
+              <h3 style="font-size:13px !important;font-weight:700 !important;margin-bottom:10px !important;padding:0 16px !important;">Add Custom Item</h3>
+              <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:14px !important;margin-bottom:12px !important;margin-left:16px !important;margin-right:16px !important;">
+                <div style="display:flex !important;flex-direction:column !important;gap:10px !important;">
+                  <input type="text" id="daily-item-name-midday-we" placeholder="Item name" style="width:100% !important;padding:10px 12px !important;border:1px solid #e2e8f0 !important;border-radius:8px !important;font-size:14px !important;box-sizing:border-box !important;">
+                  <button onclick="dailyAddItem('midday-we')" style="width:100% !important;padding:10px !important;background:#3b82f6 !important;color:white !important;border:none !important;border-radius:8px !important;font-size:14px !important;font-weight:600 !important;cursor:pointer !important;">+ Add Item</button>
+                </div>
+              </div>
+              <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;overflow:hidden !important;margin-bottom:12px !important;margin-left:16px !important;margin-right:16px !important;">
+                <div id="daily-items-list-midday-we"></div>
+              </div>
+              <div id="hab-midday-list-we-h2" style="margin-left:16px !important;margin-right:16px !important;"></div>
             </div>
           </div>
-          <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;overflow:hidden !important;margin-bottom:12px !important;">
-            <div id="daily-items-list-midday-we"></div>
-          </div>
         </div>
-        <div id="hab-midday-list-we-h2"></div>
       </div>
-      <!-- Evening Weekday Panel -->
+      <!-- Evening Panel (Weekday + Weekend) -->
       <div id="zb-panel-evening-wd-h2" style="display:none !important;">
+        <h2 style="font-size:18px !important;font-weight:700 !important;margin-bottom:16px !important;">🌙 Evening</h2>
+
+        <!-- Weekday Section -->
         <div style="margin-bottom:16px !important;">
-          <h3 style="font-size:14px !important;font-weight:700 !important;margin-bottom:12px !important;">Add Custom Item</h3>
-          <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:14px !important;margin-bottom:12px !important;">
-            <div style="display:flex !important;flex-direction:column !important;gap:10px !important;">
-              <input type="text" id="daily-item-name-evening-wd" placeholder="Item name" style="width:100% !important;padding:10px 12px !important;border:1px solid #e2e8f0 !important;border-radius:8px !important;font-size:14px !important;box-sizing:border-box !important;">
-              <button onclick="dailyAddItem('evening-wd')" style="width:100% !important;padding:10px !important;background:#3b82f6 !important;color:white !important;border:none !important;border-radius:8px !important;font-size:14px !important;font-weight:600 !important;cursor:pointer !important;">+ Add Item</button>
+          <button onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'none' ? 'block' : 'none'" style="width:100% !important;padding:12px 16px !important;background:#f8fafc !important;border:1px solid #e2e8f0 !important;border-radius:8px !important;font-size:14px !important;font-weight:600 !important;cursor:pointer !important;text-align:left !important;color:#1e293b !important;">▼ Weekday</button>
+          <div style="display:block !important;">
+            <div style="margin-top:12px !important;">
+              <h3 style="font-size:13px !important;font-weight:700 !important;margin-bottom:10px !important;padding:0 16px !important;">Add Custom Item</h3>
+              <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:14px !important;margin-bottom:12px !important;margin-left:16px !important;margin-right:16px !important;">
+                <div style="display:flex !important;flex-direction:column !important;gap:10px !important;">
+                  <input type="text" id="daily-item-name-evening-wd" placeholder="Item name" style="width:100% !important;padding:10px 12px !important;border:1px solid #e2e8f0 !important;border-radius:8px !important;font-size:14px !important;box-sizing:border-box !important;">
+                  <button onclick="dailyAddItem('evening-wd')" style="width:100% !important;padding:10px !important;background:#3b82f6 !important;color:white !important;border:none !important;border-radius:8px !important;font-size:14px !important;font-weight:600 !important;cursor:pointer !important;">+ Add Item</button>
+                </div>
+              </div>
+              <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;overflow:hidden !important;margin-bottom:12px !important;margin-left:16px !important;margin-right:16px !important;">
+                <div id="daily-items-list-evening-wd"></div>
+              </div>
+              <div id="hab-evening-list-wd-h2" style="margin-left:16px !important;margin-right:16px !important;"></div>
             </div>
           </div>
-          <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;overflow:hidden !important;margin-bottom:12px !important;">
-            <div id="daily-items-list-evening-wd"></div>
-          </div>
         </div>
-        <div id="hab-evening-list-wd-h2"></div>
-      </div>
-      <!-- Evening Weekend Panel -->
-      <div id="zb-panel-evening-we-h2" style="display:none !important;">
+
+        <!-- Weekend Section -->
         <div style="margin-bottom:16px !important;">
-          <h3 style="font-size:14px !important;font-weight:700 !important;margin-bottom:12px !important;">Add Custom Item</h3>
-          <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:14px !important;margin-bottom:12px !important;">
-            <div style="display:flex !important;flex-direction:column !important;gap:10px !important;">
-              <input type="text" id="daily-item-name-evening-we" placeholder="Item name" style="width:100% !important;padding:10px 12px !important;border:1px solid #e2e8f0 !important;border-radius:8px !important;font-size:14px !important;box-sizing:border-box !important;">
-              <button onclick="dailyAddItem('evening-we')" style="width:100% !important;padding:10px !important;background:#3b82f6 !important;color:white !important;border:none !important;border-radius:8px !important;font-size:14px !important;font-weight:600 !important;cursor:pointer !important;">+ Add Item</button>
+          <button onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'none' ? 'block' : 'none'" style="width:100% !important;padding:12px 16px !important;background:#f8fafc !important;border:1px solid #e2e8f0 !important;border-radius:8px !important;font-size:14px !important;font-weight:600 !important;cursor:pointer !important;text-align:left !important;color:#1e293b !important;">▼ Weekend</button>
+          <div style="display:none !important;">
+            <div style="margin-top:12px !important;">
+              <h3 style="font-size:13px !important;font-weight:700 !important;margin-bottom:10px !important;padding:0 16px !important;">Add Custom Item</h3>
+              <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:14px !important;margin-bottom:12px !important;margin-left:16px !important;margin-right:16px !important;">
+                <div style="display:flex !important;flex-direction:column !important;gap:10px !important;">
+                  <input type="text" id="daily-item-name-evening-we" placeholder="Item name" style="width:100% !important;padding:10px 12px !important;border:1px solid #e2e8f0 !important;border-radius:8px !important;font-size:14px !important;box-sizing:border-box !important;">
+                  <button onclick="dailyAddItem('evening-we')" style="width:100% !important;padding:10px !important;background:#3b82f6 !important;color:white !important;border:none !important;border-radius:8px !important;font-size:14px !important;font-weight:600 !important;cursor:pointer !important;">+ Add Item</button>
+                </div>
+              </div>
+              <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;overflow:hidden !important;margin-bottom:12px !important;margin-left:16px !important;margin-right:16px !important;">
+                <div id="daily-items-list-evening-we"></div>
+              </div>
+              <div id="hab-evening-list-we-h2" style="margin-left:16px !important;margin-right:16px !important;"></div>
             </div>
           </div>
-          <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;overflow:hidden !important;margin-bottom:12px !important;">
-            <div id="daily-items-list-evening-we"></div>
-          </div>
         </div>
-        <div id="hab-evening-list-we-h2"></div>
       </div>
       <!-- Weekly Panel -->
       <div id="zb-panel-weekly-h2" style="display:none !important;">
+        <h2 style="font-size:18px !important;font-weight:700 !important;margin-bottom:16px !important;">📅 Weekly</h2>
         <div style="margin-bottom:16px !important;">
           <h3 style="font-size:14px !important;font-weight:700 !important;margin-bottom:12px !important;">Add Custom Item</h3>
           <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:14px !important;margin-bottom:12px !important;">
@@ -1697,6 +1731,7 @@
       </div>
       <!-- Fortnightly Panel -->
       <div id="zb-panel-fortnightly-h2" style="display:none !important;">
+        <h2 style="font-size:18px !important;font-weight:700 !important;margin-bottom:16px !important;">🔄 Fortnightly</h2>
         <div style="margin-bottom:16px !important;">
           <h3 style="font-size:14px !important;font-weight:700 !important;margin-bottom:12px !important;">Fortnightly Items</h3>
 
@@ -1722,6 +1757,7 @@
       </div>
       <!-- 6-Monthly Panel -->
       <div id="zb-panel-6monthly-h2" style="display:none !important;">
+        <h2 style="font-size:18px !important;font-weight:700 !important;margin-bottom:16px !important;">🏥 6-Monthly</h2>
         <div style="margin-bottom:16px !important;">
           <h3 style="font-size:14px !important;font-weight:700 !important;margin-bottom:12px !important;">Add Custom Item</h3>
           <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:14px !important;margin-bottom:12px !important;">
@@ -1738,6 +1774,7 @@
       </div>
       <!-- Annual Panel -->
       <div id="zb-panel-annual-h2" style="display:none !important;">
+        <h2 style="font-size:18px !important;font-weight:700 !important;margin-bottom:16px !important;">🎯 Annual</h2>
         <div style="margin-bottom:16px !important;">
           <h3 style="font-size:14px !important;font-weight:700 !important;margin-bottom:12px !important;">Add Custom Item</h3>
           <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:14px !important;margin-bottom:12px !important;">
@@ -6741,10 +6778,20 @@
   // ─── Tab switching ───
   window.zbTab = function(tab, variant) {
     variant = variant || ''; // default to original panels (no suffix)
-    // Handle both old style (morning/midday/evening) and new style (morning-wd/morning-we/etc)
-    var allTabs = ['meds','morning','midday','evening','morning-wd','morning-we','midday-wd','midday-we','evening-wd','evening-we','weekly','fortnightly','6monthly','annual'];
+    // Map tab names to panel IDs
+    var tabMap = {
+      'morning': 'morning-wd',
+      'midday': 'midday-wd',
+      'evening': 'evening-wd',
+      'meds': 'meds',
+      'weekly': 'weekly',
+      'fortnightly': 'fortnightly',
+      '6monthly': '6monthly',
+      'annual': 'annual'
+    };
+    var allTabs = ['meds','morning','midday','evening','weekly','fortnightly','6monthly','annual'];
     allTabs.forEach(function(t) {
-      var panelId = 'zb-panel-' + t + (variant ? '-' + variant : '');
+      var panelId = 'zb-panel-' + (tabMap[t] || t) + (variant ? '-' + variant : '');
       var btnId = 'zb-tab-' + t + (variant ? '-' + variant : '');
       var panel = document.getElementById(panelId);
       var btn = document.getElementById(btnId);
@@ -6762,15 +6809,9 @@
       }
     });
     if (tab === 'meds') { habRender(); habLoadHistory(); }
-    if (tab === 'morning') { zbRenderDailySection('morning', variant); }
-    if (tab === 'midday') { zbRenderDailySection('midday', variant); }
-    if (tab === 'evening') { zbRenderDailySection('evening', variant); }
-    if (tab === 'morning-wd') { zbRenderDailySection('morning', variant, 'weekday'); }
-    if (tab === 'morning-we') { zbRenderDailySection('morning', variant, 'weekend'); }
-    if (tab === 'midday-wd') { zbRenderDailySection('midday', variant, 'weekday'); }
-    if (tab === 'midday-we') { zbRenderDailySection('midday', variant, 'weekend'); }
-    if (tab === 'evening-wd') { zbRenderDailySection('evening', variant, 'weekday'); }
-    if (tab === 'evening-we') { zbRenderDailySection('evening', variant, 'weekend'); }
+    if (tab === 'morning') { zbRenderDailySection('morning', variant, 'weekday'); }
+    if (tab === 'midday') { zbRenderDailySection('midday', variant, 'weekday'); }
+    if (tab === 'evening') { zbRenderDailySection('evening', variant, 'weekday'); }
     if (['weekly','fortnightly','6monthly','annual'].indexOf(tab) !== -1) {
       zbRenderRhythmCard(tab, variant);
     }

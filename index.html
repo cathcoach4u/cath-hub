@@ -1585,30 +1585,114 @@
       <!-- TAB: Rhythm Cards -->
       <!-- Morning Weekday Panel -->
       <div id="zb-panel-morning-wd-h2" style="display:none !important;">
+        <div style="margin-bottom:16px !important;">
+          <h3 style="font-size:14px !important;font-weight:700 !important;margin-bottom:12px !important;">Add Custom Item</h3>
+          <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:14px !important;margin-bottom:12px !important;">
+            <div style="display:flex !important;flex-direction:column !important;gap:10px !important;">
+              <input type="text" id="daily-item-name-wd" placeholder="Item name" style="width:100% !important;padding:10px 12px !important;border:1px solid #e2e8f0 !important;border-radius:8px !important;font-size:14px !important;box-sizing:border-box !important;">
+              <button onclick="dailyAddItem('wd')" style="width:100% !important;padding:10px !important;background:#3b82f6 !important;color:white !important;border:none !important;border-radius:8px !important;font-size:14px !important;font-weight:600 !important;cursor:pointer !important;">+ Add Item</button>
+            </div>
+          </div>
+          <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;overflow:hidden !important;margin-bottom:12px !important;">
+            <div id="daily-items-list-wd"></div>
+          </div>
+        </div>
         <div id="hab-morning-list-wd-h2"></div>
       </div>
       <!-- Morning Weekend Panel -->
       <div id="zb-panel-morning-we-h2" style="display:none !important;">
+        <div style="margin-bottom:16px !important;">
+          <h3 style="font-size:14px !important;font-weight:700 !important;margin-bottom:12px !important;">Add Custom Item</h3>
+          <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:14px !important;margin-bottom:12px !important;">
+            <div style="display:flex !important;flex-direction:column !important;gap:10px !important;">
+              <input type="text" id="daily-item-name-we" placeholder="Item name" style="width:100% !important;padding:10px 12px !important;border:1px solid #e2e8f0 !important;border-radius:8px !important;font-size:14px !important;box-sizing:border-box !important;">
+              <button onclick="dailyAddItem('we')" style="width:100% !important;padding:10px !important;background:#3b82f6 !important;color:white !important;border:none !important;border-radius:8px !important;font-size:14px !important;font-weight:600 !important;cursor:pointer !important;">+ Add Item</button>
+            </div>
+          </div>
+          <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;overflow:hidden !important;margin-bottom:12px !important;">
+            <div id="daily-items-list-we"></div>
+          </div>
+        </div>
         <div id="hab-morning-list-we-h2"></div>
       </div>
       <!-- Midday Weekday Panel -->
       <div id="zb-panel-midday-wd-h2" style="display:none !important;">
+        <div style="margin-bottom:16px !important;">
+          <h3 style="font-size:14px !important;font-weight:700 !important;margin-bottom:12px !important;">Add Custom Item</h3>
+          <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:14px !important;margin-bottom:12px !important;">
+            <div style="display:flex !important;flex-direction:column !important;gap:10px !important;">
+              <input type="text" id="daily-item-name-midday-wd" placeholder="Item name" style="width:100% !important;padding:10px 12px !important;border:1px solid #e2e8f0 !important;border-radius:8px !important;font-size:14px !important;box-sizing:border-box !important;">
+              <button onclick="dailyAddItem('midday-wd')" style="width:100% !important;padding:10px !important;background:#3b82f6 !important;color:white !important;border:none !important;border-radius:8px !important;font-size:14px !important;font-weight:600 !important;cursor:pointer !important;">+ Add Item</button>
+            </div>
+          </div>
+          <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;overflow:hidden !important;margin-bottom:12px !important;">
+            <div id="daily-items-list-midday-wd"></div>
+          </div>
+        </div>
         <div id="hab-midday-list-wd-h2"></div>
       </div>
       <!-- Midday Weekend Panel -->
       <div id="zb-panel-midday-we-h2" style="display:none !important;">
+        <div style="margin-bottom:16px !important;">
+          <h3 style="font-size:14px !important;font-weight:700 !important;margin-bottom:12px !important;">Add Custom Item</h3>
+          <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:14px !important;margin-bottom:12px !important;">
+            <div style="display:flex !important;flex-direction:column !important;gap:10px !important;">
+              <input type="text" id="daily-item-name-midday-we" placeholder="Item name" style="width:100% !important;padding:10px 12px !important;border:1px solid #e2e8f0 !important;border-radius:8px !important;font-size:14px !important;box-sizing:border-box !important;">
+              <button onclick="dailyAddItem('midday-we')" style="width:100% !important;padding:10px !important;background:#3b82f6 !important;color:white !important;border:none !important;border-radius:8px !important;font-size:14px !important;font-weight:600 !important;cursor:pointer !important;">+ Add Item</button>
+            </div>
+          </div>
+          <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;overflow:hidden !important;margin-bottom:12px !important;">
+            <div id="daily-items-list-midday-we"></div>
+          </div>
+        </div>
         <div id="hab-midday-list-we-h2"></div>
       </div>
       <!-- Evening Weekday Panel -->
       <div id="zb-panel-evening-wd-h2" style="display:none !important;">
+        <div style="margin-bottom:16px !important;">
+          <h3 style="font-size:14px !important;font-weight:700 !important;margin-bottom:12px !important;">Add Custom Item</h3>
+          <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:14px !important;margin-bottom:12px !important;">
+            <div style="display:flex !important;flex-direction:column !important;gap:10px !important;">
+              <input type="text" id="daily-item-name-evening-wd" placeholder="Item name" style="width:100% !important;padding:10px 12px !important;border:1px solid #e2e8f0 !important;border-radius:8px !important;font-size:14px !important;box-sizing:border-box !important;">
+              <button onclick="dailyAddItem('evening-wd')" style="width:100% !important;padding:10px !important;background:#3b82f6 !important;color:white !important;border:none !important;border-radius:8px !important;font-size:14px !important;font-weight:600 !important;cursor:pointer !important;">+ Add Item</button>
+            </div>
+          </div>
+          <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;overflow:hidden !important;margin-bottom:12px !important;">
+            <div id="daily-items-list-evening-wd"></div>
+          </div>
+        </div>
         <div id="hab-evening-list-wd-h2"></div>
       </div>
       <!-- Evening Weekend Panel -->
       <div id="zb-panel-evening-we-h2" style="display:none !important;">
+        <div style="margin-bottom:16px !important;">
+          <h3 style="font-size:14px !important;font-weight:700 !important;margin-bottom:12px !important;">Add Custom Item</h3>
+          <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:14px !important;margin-bottom:12px !important;">
+            <div style="display:flex !important;flex-direction:column !important;gap:10px !important;">
+              <input type="text" id="daily-item-name-evening-we" placeholder="Item name" style="width:100% !important;padding:10px 12px !important;border:1px solid #e2e8f0 !important;border-radius:8px !important;font-size:14px !important;box-sizing:border-box !important;">
+              <button onclick="dailyAddItem('evening-we')" style="width:100% !important;padding:10px !important;background:#3b82f6 !important;color:white !important;border:none !important;border-radius:8px !important;font-size:14px !important;font-weight:600 !important;cursor:pointer !important;">+ Add Item</button>
+            </div>
+          </div>
+          <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;overflow:hidden !important;margin-bottom:12px !important;">
+            <div id="daily-items-list-evening-we"></div>
+          </div>
+        </div>
         <div id="hab-evening-list-we-h2"></div>
       </div>
       <!-- Weekly Panel -->
       <div id="zb-panel-weekly-h2" style="display:none !important;">
+        <div style="margin-bottom:16px !important;">
+          <h3 style="font-size:14px !important;font-weight:700 !important;margin-bottom:12px !important;">Add Custom Item</h3>
+          <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:14px !important;margin-bottom:12px !important;">
+            <div style="display:flex !important;flex-direction:column !important;gap:10px !important;">
+              <input type="text" id="weekly-item-name" placeholder="Item name" style="width:100% !important;padding:10px 12px !important;border:1px solid #e2e8f0 !important;border-radius:8px !important;font-size:14px !important;box-sizing:border-box !important;">
+              <button onclick="weeklyAddItem()" style="width:100% !important;padding:10px !important;background:#3b82f6 !important;color:white !important;border:none !important;border-radius:8px !important;font-size:14px !important;font-weight:600 !important;cursor:pointer !important;">+ Add Item</button>
+            </div>
+          </div>
+          <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;overflow:hidden !important;margin-bottom:12px !important;">
+            <div id="weekly-items-list"></div>
+          </div>
+        </div>
         <div id="zb-rhythm-weekly-h2"></div>
       </div>
       <!-- Fortnightly Panel -->
@@ -1638,10 +1722,34 @@
       </div>
       <!-- 6-Monthly Panel -->
       <div id="zb-panel-6monthly-h2" style="display:none !important;">
+        <div style="margin-bottom:16px !important;">
+          <h3 style="font-size:14px !important;font-weight:700 !important;margin-bottom:12px !important;">Add Custom Item</h3>
+          <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:14px !important;margin-bottom:12px !important;">
+            <div style="display:flex !important;flex-direction:column !important;gap:10px !important;">
+              <input type="text" id="sixmonthly-item-name" placeholder="Item name" style="width:100% !important;padding:10px 12px !important;border:1px solid #e2e8f0 !important;border-radius:8px !important;font-size:14px !important;box-sizing:border-box !important;">
+              <button onclick="sixmonthlyAddItem()" style="width:100% !important;padding:10px !important;background:#3b82f6 !important;color:white !important;border:none !important;border-radius:8px !important;font-size:14px !important;font-weight:600 !important;cursor:pointer !important;">+ Add Item</button>
+            </div>
+          </div>
+          <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;overflow:hidden !important;margin-bottom:12px !important;">
+            <div id="sixmonthly-items-list"></div>
+          </div>
+        </div>
         <div id="zb-rhythm-6monthly-h2"></div>
       </div>
       <!-- Annual Panel -->
       <div id="zb-panel-annual-h2" style="display:none !important;">
+        <div style="margin-bottom:16px !important;">
+          <h3 style="font-size:14px !important;font-weight:700 !important;margin-bottom:12px !important;">Add Custom Item</h3>
+          <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:14px !important;margin-bottom:12px !important;">
+            <div style="display:flex !important;flex-direction:column !important;gap:10px !important;">
+              <input type="text" id="annual-item-name" placeholder="Item name" style="width:100% !important;padding:10px 12px !important;border:1px solid #e2e8f0 !important;border-radius:8px !important;font-size:14px !important;box-sizing:border-box !important;">
+              <button onclick="annualAddItem()" style="width:100% !important;padding:10px !important;background:#3b82f6 !important;color:white !important;border:none !important;border-radius:8px !important;font-size:14px !important;font-weight:600 !important;cursor:pointer !important;">+ Add Item</button>
+            </div>
+          </div>
+          <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;overflow:hidden !important;margin-bottom:12px !important;">
+            <div id="annual-items-list"></div>
+          </div>
+        </div>
         <div id="zb-rhythm-annual-h2"></div>
       </div>
 
@@ -7247,8 +7355,252 @@
 
   // Initialize fortnightly list and load rhythm logs on page load
   window.addEventListener('load', function() {
-    setTimeout(function() { fnRenderList(); zbLoadRhythmLogs(); }, 100);
+    setTimeout(function() { fnRenderList(); zbLoadRhythmLogs(); dailyRenderItems('wd'); dailyRenderItems('we'); dailyRenderItems('midday-wd'); dailyRenderItems('midday-we'); dailyRenderItems('evening-wd'); dailyRenderItems('evening-we'); weeklyRenderItems(); sixmonthlyRenderItems(); annualRenderItems(); }, 100);
   });
+
+  // ─── Daily Item Management ───
+  window.dailyAddItem = async function(variant) {
+    var nameInput = document.getElementById('daily-item-name-' + variant);
+    var name = nameInput.value.trim();
+    if (!name) { alert('Enter item name'); return; }
+
+    try {
+      var { error } = await sb.from('daily_items').insert({
+        id: 'custom_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9),
+        name: name,
+        section: 'Custom',
+        user_id: (await sb.auth.getSession()).data.session.user.id
+      });
+      if (error) throw error;
+      nameInput.value = '';
+      dailyRenderItems(variant);
+    } catch (e) {
+      alert('Error adding item: ' + e.message);
+    }
+  };
+
+  window.dailyDeleteItem = async function(id, variant) {
+    if (!confirm('Delete this item?')) return;
+    try {
+      var { error } = await sb.from('daily_items').delete().eq('id', id);
+      if (error) throw error;
+      dailyRenderItems(variant);
+    } catch (e) {
+      alert('Error deleting item: ' + e.message);
+    }
+  };
+
+  window.dailyRenderItems = async function(variant) {
+    try {
+      var { data: items, error } = await sb.from('daily_items').select('*').eq('section', 'Custom').order('created_at', { ascending: false });
+      if (error) throw error;
+      var list = document.getElementById('daily-items-list-' + variant);
+      var h = '';
+      if (!items || items.length === 0) {
+        h = '<div style="padding:16px !important;text-align:center !important;color:#94a3b8 !important;font-size:13px !important;">No custom items</div>';
+      } else {
+        h = '<table style="width:100% !important;border-collapse:collapse !important;">';
+        h += '<thead style="background:#f8fafc !important;"><tr style="border-bottom:1px solid #e2e8f0 !important;">';
+        h += '<th style="padding:12px 16px !important;text-align:left !important;font-size:11px !important;font-weight:700 !important;color:#64748b !important;text-transform:uppercase !important;">Item</th>';
+        h += '<th style="padding:12px 16px !important;text-align:right !important;font-size:11px !important;font-weight:700 !important;color:#64748b !important;text-transform:uppercase !important;">Action</th>';
+        h += '</tr></thead>';
+        h += '<tbody>';
+        items.forEach(function(item) {
+          h += '<tr style="border-bottom:1px solid #e2e8f0 !important;">';
+          h += '<td style="padding:12px 16px !important;font-size:13px !important;color:#1e293b !important;">' + esc(item.name) + '</td>';
+          h += '<td style="padding:12px 16px !important;text-align:right !important;"><button onclick="dailyDeleteItem(\'' + item.id + '\',\'' + variant + '\')" style="background:#ef4444 !important;color:white !important;border:none !important;border-radius:6px !important;padding:6px 12px !important;font-size:12px !important;cursor:pointer !important;">Delete</button></td>';
+          h += '</tr>';
+        });
+        h += '</tbody></table>';
+      }
+      list.innerHTML = h;
+    } catch (e) {
+      document.getElementById('daily-items-list-' + variant).innerHTML = '<div style="padding:16px !important;color:#ef4444 !important;font-size:12px !important;">Error loading items</div>';
+    }
+  };
+
+  // ─── Weekly Item Management ───
+  window.weeklyAddItem = async function() {
+    var nameInput = document.getElementById('weekly-item-name');
+    var name = nameInput.value.trim();
+    if (!name) { alert('Enter item name'); return; }
+
+    try {
+      var { error } = await sb.from('weekly_items').insert({
+        id: 'custom_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9),
+        name: name,
+        section: 'Custom',
+        user_id: (await sb.auth.getSession()).data.session.user.id
+      });
+      if (error) throw error;
+      nameInput.value = '';
+      weeklyRenderItems();
+    } catch (e) {
+      alert('Error adding item: ' + e.message);
+    }
+  };
+
+  window.weeklyDeleteItem = async function(id) {
+    if (!confirm('Delete this item?')) return;
+    try {
+      var { error } = await sb.from('weekly_items').delete().eq('id', id);
+      if (error) throw error;
+      weeklyRenderItems();
+    } catch (e) {
+      alert('Error deleting item: ' + e.message);
+    }
+  };
+
+  window.weeklyRenderItems = async function() {
+    try {
+      var { data: items, error } = await sb.from('weekly_items').select('*').eq('section', 'Custom').order('created_at', { ascending: false });
+      if (error) throw error;
+      var list = document.getElementById('weekly-items-list');
+      var h = '';
+      if (!items || items.length === 0) {
+        h = '<div style="padding:16px !important;text-align:center !important;color:#94a3b8 !important;font-size:13px !important;">No custom items</div>';
+      } else {
+        h = '<table style="width:100% !important;border-collapse:collapse !important;">';
+        h += '<thead style="background:#f8fafc !important;"><tr style="border-bottom:1px solid #e2e8f0 !important;">';
+        h += '<th style="padding:12px 16px !important;text-align:left !important;font-size:11px !important;font-weight:700 !important;color:#64748b !important;text-transform:uppercase !important;">Item</th>';
+        h += '<th style="padding:12px 16px !important;text-align:right !important;font-size:11px !important;font-weight:700 !important;color:#64748b !important;text-transform:uppercase !important;">Action</th>';
+        h += '</tr></thead>';
+        h += '<tbody>';
+        items.forEach(function(item) {
+          h += '<tr style="border-bottom:1px solid #e2e8f0 !important;">';
+          h += '<td style="padding:12px 16px !important;font-size:13px !important;color:#1e293b !important;">' + esc(item.name) + '</td>';
+          h += '<td style="padding:12px 16px !important;text-align:right !important;"><button onclick="weeklyDeleteItem(\'' + item.id + '\')" style="background:#ef4444 !important;color:white !important;border:none !important;border-radius:6px !important;padding:6px 12px !important;font-size:12px !important;cursor:pointer !important;">Delete</button></td>';
+          h += '</tr>';
+        });
+        h += '</tbody></table>';
+      }
+      list.innerHTML = h;
+    } catch (e) {
+      document.getElementById('weekly-items-list').innerHTML = '<div style="padding:16px !important;color:#ef4444 !important;font-size:12px !important;">Error loading items</div>';
+    }
+  };
+
+  // ─── 6-Monthly Item Management ───
+  window.sixmonthlyAddItem = async function() {
+    var nameInput = document.getElementById('sixmonthly-item-name');
+    var name = nameInput.value.trim();
+    if (!name) { alert('Enter item name'); return; }
+
+    try {
+      var { error } = await sb.from('sixmonthly_items').insert({
+        id: 'custom_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9),
+        name: name,
+        section: 'Custom',
+        user_id: (await sb.auth.getSession()).data.session.user.id
+      });
+      if (error) throw error;
+      nameInput.value = '';
+      sixmonthlyRenderItems();
+    } catch (e) {
+      alert('Error adding item: ' + e.message);
+    }
+  };
+
+  window.sixmonthlyDeleteItem = async function(id) {
+    if (!confirm('Delete this item?')) return;
+    try {
+      var { error } = await sb.from('sixmonthly_items').delete().eq('id', id);
+      if (error) throw error;
+      sixmonthlyRenderItems();
+    } catch (e) {
+      alert('Error deleting item: ' + e.message);
+    }
+  };
+
+  window.sixmonthlyRenderItems = async function() {
+    try {
+      var { data: items, error } = await sb.from('sixmonthly_items').select('*').eq('section', 'Custom').order('created_at', { ascending: false });
+      if (error) throw error;
+      var list = document.getElementById('sixmonthly-items-list');
+      var h = '';
+      if (!items || items.length === 0) {
+        h = '<div style="padding:16px !important;text-align:center !important;color:#94a3b8 !important;font-size:13px !important;">No custom items</div>';
+      } else {
+        h = '<table style="width:100% !important;border-collapse:collapse !important;">';
+        h += '<thead style="background:#f8fafc !important;"><tr style="border-bottom:1px solid #e2e8f0 !important;">';
+        h += '<th style="padding:12px 16px !important;text-align:left !important;font-size:11px !important;font-weight:700 !important;color:#64748b !important;text-transform:uppercase !important;">Item</th>';
+        h += '<th style="padding:12px 16px !important;text-align:right !important;font-size:11px !important;font-weight:700 !important;color:#64748b !important;text-transform:uppercase !important;">Action</th>';
+        h += '</tr></thead>';
+        h += '<tbody>';
+        items.forEach(function(item) {
+          h += '<tr style="border-bottom:1px solid #e2e8f0 !important;">';
+          h += '<td style="padding:12px 16px !important;font-size:13px !important;color:#1e293b !important;">' + esc(item.name) + '</td>';
+          h += '<td style="padding:12px 16px !important;text-align:right !important;"><button onclick="sixmonthlyDeleteItem(\'' + item.id + '\')" style="background:#ef4444 !important;color:white !important;border:none !important;border-radius:6px !important;padding:6px 12px !important;font-size:12px !important;cursor:pointer !important;">Delete</button></td>';
+          h += '</tr>';
+        });
+        h += '</tbody></table>';
+      }
+      list.innerHTML = h;
+    } catch (e) {
+      document.getElementById('sixmonthly-items-list').innerHTML = '<div style="padding:16px !important;color:#ef4444 !important;font-size:12px !important;">Error loading items</div>';
+    }
+  };
+
+  // ─── Annual Item Management ───
+  window.annualAddItem = async function() {
+    var nameInput = document.getElementById('annual-item-name');
+    var name = nameInput.value.trim();
+    if (!name) { alert('Enter item name'); return; }
+
+    try {
+      var { error } = await sb.from('annual_items').insert({
+        id: 'custom_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9),
+        name: name,
+        section: 'Custom',
+        user_id: (await sb.auth.getSession()).data.session.user.id
+      });
+      if (error) throw error;
+      nameInput.value = '';
+      annualRenderItems();
+    } catch (e) {
+      alert('Error adding item: ' + e.message);
+    }
+  };
+
+  window.annualDeleteItem = async function(id) {
+    if (!confirm('Delete this item?')) return;
+    try {
+      var { error } = await sb.from('annual_items').delete().eq('id', id);
+      if (error) throw error;
+      annualRenderItems();
+    } catch (e) {
+      alert('Error deleting item: ' + e.message);
+    }
+  };
+
+  window.annualRenderItems = async function() {
+    try {
+      var { data: items, error } = await sb.from('annual_items').select('*').eq('section', 'Custom').order('created_at', { ascending: false });
+      if (error) throw error;
+      var list = document.getElementById('annual-items-list');
+      var h = '';
+      if (!items || items.length === 0) {
+        h = '<div style="padding:16px !important;text-align:center !important;color:#94a3b8 !important;font-size:13px !important;">No custom items</div>';
+      } else {
+        h = '<table style="width:100% !important;border-collapse:collapse !important;">';
+        h += '<thead style="background:#f8fafc !important;"><tr style="border-bottom:1px solid #e2e8f0 !important;">';
+        h += '<th style="padding:12px 16px !important;text-align:left !important;font-size:11px !important;font-weight:700 !important;color:#64748b !important;text-transform:uppercase !important;">Item</th>';
+        h += '<th style="padding:12px 16px !important;text-align:right !important;font-size:11px !important;font-weight:700 !important;color:#64748b !important;text-transform:uppercase !important;">Action</th>';
+        h += '</tr></thead>';
+        h += '<tbody>';
+        items.forEach(function(item) {
+          h += '<tr style="border-bottom:1px solid #e2e8f0 !important;">';
+          h += '<td style="padding:12px 16px !important;font-size:13px !important;color:#1e293b !important;">' + esc(item.name) + '</td>';
+          h += '<td style="padding:12px 16px !important;text-align:right !important;"><button onclick="annualDeleteItem(\'' + item.id + '\')" style="background:#ef4444 !important;color:white !important;border:none !important;border-radius:6px !important;padding:6px 12px !important;font-size:12px !important;cursor:pointer !important;">Delete</button></td>';
+          h += '</tr>';
+        });
+        h += '</tbody></table>';
+      }
+      list.innerHTML = h;
+    } catch (e) {
+      document.getElementById('annual-items-list').innerHTML = '<div style="padding:16px !important;color:#ef4444 !important;font-size:12px !important;">Error loading items</div>';
+    }
+  };
 
   // ─── Render Zone Grid ───
   window.zbRenderZoneGrid = function() {

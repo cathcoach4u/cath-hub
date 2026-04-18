@@ -8129,9 +8129,17 @@
   };
 
   window.dashRenderHealth = async function() {
-    var userId = (await sb.auth.getSession()).data.session.user.id;
-    var today = new Date().toISOString().split('T')[0];
-    var weekStart = new Date(new Date().setDate(new Date().getDate() - new Date().getDay())).toISOString().split('T')[0];
+    try {
+      var session = await sb.auth.getSession();
+      if (!session || !session.data || !session.data.session) {
+        document.getElementById('dash-daily-meds').textContent = '-';
+        document.getElementById('dash-weekly-meds').textContent = '-';
+        document.getElementById('dash-mental-sessions').textContent = '-';
+        return;
+      }
+      var userId = session.data.session.user.id;
+      var today = new Date().toISOString().split('T')[0];
+      var weekStart = new Date(new Date().setDate(new Date().getDate() - new Date().getDay())).toISOString().split('T')[0];
 
     try {
       var { data: habits } = await sb.from('habit_meds').select('id,name').eq('user_id', userId).order('created_at').limit(3);
@@ -8171,6 +8179,12 @@
       var count = mhSessions ? mhSessions.length : 0;
       document.getElementById('dash-mental-sessions').textContent = count + ' planned';
     } catch(e) {
+      document.getElementById('dash-mental-sessions').textContent = '-';
+    }
+    } catch(e) {
+      console.error('dashRenderHealth error:', e);
+      document.getElementById('dash-daily-meds').textContent = '-';
+      document.getElementById('dash-weekly-meds').textContent = '-';
       document.getElementById('dash-mental-sessions').textContent = '-';
     }
   };

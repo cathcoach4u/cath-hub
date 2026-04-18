@@ -8109,12 +8109,16 @@
 
   window.dashRenderQuickWins = async function() {
     try {
-      var userId = (await sb.auth.getSession()).data.session.user.id;
-      var { data: weeklyItems } = await sb.from('weekly_items').select('name').eq('user_id', userId).limit(3);
-      var weeklyHtml = weeklyItems && weeklyItems.length ? weeklyItems.map(function(i) { return '✓ ' + esc(i.name); }).join('<br>') : 'No weekly items';
+      var { data: weeklyItems, error } = await sb.from('weekly_items').select('*').order('created_at', { ascending: true });
+      if (error) throw error;
+      if (!weeklyItems || !weeklyItems.length) {
+        document.getElementById('dash-weekly-items').innerHTML = 'No weekly items';
+        return;
+      }
+      var weeklyHtml = weeklyItems.map(function(i) { return '<a href="#" onclick="chNav(\'habits2\'); setTimeout(function(){zbTab(\'weekly\')},100); return false;" style="color:#10b981 !important;text-decoration:none !important;">✓ ' + esc(i.name) + '</a>'; }).join('<br>');
       document.getElementById('dash-weekly-items').innerHTML = weeklyHtml;
     } catch(e) {
-      document.getElementById('dash-weekly-items').innerHTML = 'Error loading';
+      document.getElementById('dash-weekly-items').innerHTML = 'Error loading weekly items';
     }
 
     try {

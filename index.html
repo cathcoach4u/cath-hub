@@ -764,23 +764,6 @@
 
       <div class="dash-section">
         <div style="display:flex !important;justify-content:space-between !important;align-items:center !important;margin-bottom:12px !important;">
-          <h3 style="margin-bottom:0 !important;">🛡️ Safety Net 2026</h3>
-          <span style="font-size:12px !important;color:#3b82f6 !important;cursor:pointer !important;" onclick="chNav('medical',document.querySelectorAll('#cathHub .nav-item')[3]);setTimeout(function(){medGo('safetynet')},100)">View &rarr;</span>
-        </div>
-        <div style="display:grid !important;grid-template-columns:1fr 1fr !important;gap:10px !important;">
-          <div style="background:#dbeafe !important;border:1px solid #bfdbfe !important;border-radius:10px !important;padding:12px !important;text-align:center !important;">
-            <div style="font-size:16px !important;font-weight:700 !important;color:#1d4ed8 !important;" id="dash-sn-remaining">$1,284.25</div>
-            <div style="font-size:11px !important;color:#64748b !important;margin-top:4px !important;">To Reach Threshold</div>
-          </div>
-          <div style="background:#dbeafe !important;border:1px solid #bfdbfe !important;border-radius:10px !important;padding:12px !important;text-align:center !important;">
-            <div style="font-size:13px !important;font-weight:600 !important;color:#64748b !important;margin-bottom:4px !important;">Current Out-of-Pocket</div>
-            <div style="font-size:16px !important;font-weight:700 !important;color:#f59e0b !important;">$1,414.85</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="dash-section">
-        <div style="display:flex !important;justify-content:space-between !important;align-items:center !important;margin-bottom:12px !important;">
           <h3 style="margin-bottom:0 !important;">&#x1F4CB; Care Plan (CDM) 2026</h3>
           <span style="font-size:12px !important;color:#3b82f6 !important;cursor:pointer !important;" onclick="chNav('medical',document.querySelectorAll('#cathHub .nav-item')[3]);setTimeout(function(){medGo('cdm')},100)">View &rarr;</span>
         </div>
@@ -900,7 +883,6 @@
             <div style="font-size:11px !important;font-weight:700 !important;text-transform:uppercase !important;letter-spacing:0.5px !important;color:#64748b !important;margin-bottom:10px !important;">Health Plans</div>
             <div style="display:flex !important;flex-direction:column !important;gap:8px !important;">
               <button class="am-btn" onclick="medGo('cdm')" style="width:100% !important;padding:14px 16px !important;font-size:15px !important;text-align:left !important;background:#f8fafc !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;color:#1e293b !important;display:flex !important;align-items:center !important;gap:10px !important;">&#x1F4CB; Chronic Disease Management <span style="margin-left:auto !important;color:#94a3b8 !important;font-size:12px !important;">CDM plans &rarr;</span></button>
-              <button class="am-btn" onclick="medGo('safetynet')" style="width:100% !important;padding:14px 16px !important;font-size:15px !important;text-align:left !important;background:#f8fafc !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;color:#1e293b !important;display:flex !important;align-items:center !important;gap:10px !important;">🛡️ Medicare Safety Net <span style="margin-left:auto !important;color:#94a3b8 !important;font-size:12px !important;">Thresholds &rarr;</span></button>
               <a class="am-btn" href="https://netorgft4053847.sharepoint.com/:f:/s/bakerpersonal-CathPersonal/IgA9dUmz-8GRT6x__tP5zRQvASOiqlOcVC27asvo1hXIvCo?e=YgE3aV" target="_blank" rel="noopener" style="width:100% !important;padding:14px 16px !important;font-size:15px !important;text-align:left !important;background:#f8fafc !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;color:#1e293b !important;display:flex !important;align-items:center !important;gap:10px !important;text-decoration:none !important;">&#x1F4DD; Scripts <span style="margin-left:auto !important;color:#94a3b8 !important;font-size:12px !important;">OneDrive &rarr;</span></a>
               <a class="am-btn" href="https://netorgft4053847.sharepoint.com/:f:/s/bakerpersonal-CathPersonal/IgDFriUhCKLCRpmvM1yIA6AXAcTGM09_qHmEawhXupNKhno?e=xPRVuY" target="_blank" rel="noopener" style="width:100% !important;padding:14px 16px !important;font-size:15px !important;text-align:left !important;background:#f8fafc !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;color:#1e293b !important;display:flex !important;align-items:center !important;gap:10px !important;text-decoration:none !important;">&#x1F4C4; Referrals, Forms &amp; Results <span style="margin-left:auto !important;color:#94a3b8 !important;font-size:12px !important;">OneDrive &rarr;</span></a>
               <a class="am-btn" href="https://netorgft4053847.sharepoint.com/:f:/s/bakerpersonal-CathPersonal/IgBWRrMoWGxcQ43Ecfh5BnVAAfsHOT2VVZZobrXtak3QdK8?e=xe9UC5" target="_blank" rel="noopener" style="width:100% !important;padding:14px 16px !important;font-size:15px !important;text-align:left !important;background:#f8fafc !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;color:#1e293b !important;display:flex !important;align-items:center !important;gap:10px !important;text-decoration:none !important;">&#x1F9EA; Pathology Requests <span style="margin-left:auto !important;color:#94a3b8 !important;font-size:12px !important;">OneDrive &rarr;</span></a>
@@ -1359,74 +1341,6 @@
 
       </div>
 
-      <!-- SUB: Safety Net -->
-      <div class="am-subscreen" id="med-safetynet">
-        <button class="am-back" onclick="medGo('home')">&#x2190; Back</button>
-        <h3 style="font-size:18px !important;font-weight:700 !important;margin-bottom:16px !important;">🛡️ Medicare Safety Net</h3>
-
-        <!-- 2026 Safety Net -->
-        <div class="med-section" style="margin-bottom:12px !important;background:#dbeafe !important;border-color:#bfdbfe !important;">
-          <div style="padding:16px !important;">
-            <div style="display:flex !important;justify-content:space-between !important;align-items:center !important;margin-bottom:12px !important;">
-              <div style="font-size:12px !important;font-weight:700 !important;text-transform:uppercase !important;color:#1d4ed8 !important;">2026 General Threshold</div>
-              <div style="font-size:11px !important;font-weight:600 !important;color:#64748b !important;">Updated: 9 April 2026</div>
-            </div>
-            <div style="background:white !important;border:1px solid #bfdbfe !important;border-radius:8px !important;padding:14px !important;margin-bottom:12px !important;">
-              <div style="display:flex !important;justify-content:space-between !important;margin-bottom:12px !important;align-items:center !important;">
-                <div>
-                  <div style="font-size:11px !important;font-weight:600 !important;color:#64748b !important;margin-bottom:4px !important;">Threshold</div>
-                  <div style="font-size:20px !important;font-weight:700 !important;color:#1d4ed8 !important;">$2,699.10</div>
-                </div>
-                <div style="text-align:right !important;">
-                  <div style="font-size:11px !important;font-weight:600 !important;color:#64748b !important;margin-bottom:4px !important;">Out of Pocket</div>
-                  <div style="font-size:20px !important;font-weight:700 !important;color:#f59e0b !important;" id="sn-2026-oop">$1,414.85</div>
-                </div>
-              </div>
-              <div style="background:#e0e7ff !important;height:8px !important;border-radius:4px !important;overflow:hidden !important;margin-bottom:8px !important;">
-                <div style="background:#1d4ed8 !important;height:100% !important;width:52.4% !important;border-radius:4px !important;"></div>
-              </div>
-              <div style="font-size:12px !important;color:#1e40af !important;">
-                <strong>Status:</strong> Not yet reached threshold - $1,284.25 to go
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 2025 Safety Net -->
-        <div class="med-section" style="margin-bottom:12px !important;background:#f0fdf4 !important;border-color:#bbf7d0 !important;">
-          <div style="padding:16px !important;">
-            <div style="font-size:12px !important;font-weight:700 !important;text-transform:uppercase !important;color:#166534 !important;margin-bottom:12px !important;">2025 General Threshold</div>
-            <div style="background:white !important;border:1px solid #bbf7d0 !important;border-radius:8px !important;padding:14px !important;margin-bottom:12px !important;">
-              <div style="display:flex !important;justify-content:space-between !important;margin-bottom:12px !important;align-items:center !important;">
-                <div>
-                  <div style="font-size:11px !important;font-weight:600 !important;color:#64748b !important;margin-bottom:4px !important;">Threshold</div>
-                  <div style="font-size:20px !important;font-weight:700 !important;color:#166534 !important;">$2,615.50</div>
-                </div>
-                <div style="text-align:right !important;">
-                  <div style="font-size:11px !important;font-weight:600 !important;color:#64748b !important;margin-bottom:4px !important;">Out of Pocket</div>
-                  <div style="font-size:20px !important;font-weight:700 !important;color:#10b981 !important;">$4,603.60</div>
-                </div>
-              </div>
-              <div style="background:#d1fae5 !important;height:8px !important;border-radius:4px !important;overflow:hidden !important;margin-bottom:8px !important;">
-                <div style="background:#10b981 !important;height:100% !important;width:100% !important;border-radius:4px !important;"></div>
-              </div>
-              <div style="font-size:12px !important;color:#166534 !important;font-weight:600 !important;">
-                ✓ Threshold reached - Family benefits activated
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="med-section" style="margin-bottom:12px !important;">
-          <div style="padding:16px !important;">
-            <div style="font-size:12px !important;font-weight:700 !important;text-transform:uppercase !important;color:#7c3aed !important;margin-bottom:8px !important;">About Safety Net</div>
-            <div style="font-size:13px !important;line-height:1.6 !important;">
-              Once your family's out-of-pocket costs reach the General threshold, you'll get a higher Medicare rebate for any further services for the rest of that calendar year.
-            </div>
-          </div>
-        </div>
-
-      </div>
 
       <!-- SUB: Medicare -->
       <div class="am-subscreen" id="med-medicare">

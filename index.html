@@ -5109,7 +5109,21 @@
           var displayName = eitem.name.replace(/\s+cream/i, '').replace(/\s+ointment/i, '');
           eh += '<div style="flex:1 !important;"><div class="hab-med-name" style="margin-bottom:0 !important;">'+esc(displayName)+(eDoseStr ? ' <span style="font-size:10px !important;color:#94a3b8 !important;font-weight:400 !important;">'+esc(eDoseStr)+'</span>' : '')+'</div>';
           if (eDone) {
-            eh += '<div style="font-size:10px !important;color:#10b981 !important;">✓ Done</div>';
+            try {
+              var { data: eAllDoses } = await sb.from('habit_logs').select('id, created_at, note').eq('med_id', eitem.id).eq('date', today).order('created_at', { ascending: false });
+              if (eAllDoses && eAllDoses.length) {
+                eh += '<div style="margin-top:4px !important;padding:8px !important;background:#f0fdf4 !important;border-radius:6px !important;">';
+                eAllDoses.forEach(function(edose) {
+                  var edoseTime = edose.created_at ? new Date(edose.created_at).toLocaleTimeString('en-AU', { hour: '2-digit', minute: '2-digit' }) : '';
+                  eh += '<div style="font-size:10px !important;color:#10b981 !important;margin-bottom:4px !important;">';
+                  eh += '✓ Logged at ' + esc(edoseTime);
+                  if (edose.note) eh += ' (' + esc(edose.note) + ')';
+                  eh += '</div>';
+                });
+                eh += '<div style="font-size:10px !important;color:#3b82f6 !important;cursor:pointer !important;padding-top:4px !important;border-top:1px solid #bbf7d0 !important;" onclick="habToggleDaily('+eitem.id+')">+ Add another dose</div>';
+                eh += '</div>';
+              }
+            } catch(e) {}
           }
           eh += '</div>';
           eh += '<div class="hab-del" onclick="habDeleteMed('+eitem.id+')" style="flex-shrink:0 !important;">&#x1F5D1;</div>';

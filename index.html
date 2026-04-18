@@ -5115,13 +5115,6 @@
           eh += '<div style="flex:1 !important;"><div class="hab-med-name" style="margin-bottom:0 !important;">'+esc(eitem.name)+(eDoseStr ? ' <span style="font-size:10px !important;color:#94a3b8 !important;font-weight:400 !important;">'+esc(eDoseStr)+'</span>' : '')+'</div>';
           if (eDone) {
             eh += '<div style="font-size:10px !important;color:#10b981 !important;">✓ Done</div>';
-          } else {
-            // Special description for Betamethasone Valerate
-            var eDescText = 'Apply as directed';
-            if (eitem.name.toLowerCase().indexOf('betamethasone') !== -1 && eitem.name.toLowerCase().indexOf('valerate') !== -1) {
-              eDescText = 'To be applied when Xobet is finished';
-            }
-            eh += '<div style="font-size:10px !important;color:#94a3b8 !important;">'+eDescText+'</div>';
           }
           eh += '</div>';
           eh += '<div class="hab-del" onclick="habDeleteMed('+eitem.id+')" style="flex-shrink:0 !important;">&#x1F5D1;</div>';

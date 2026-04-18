@@ -4700,6 +4700,12 @@
     }
 
     // Record an as-needed dose (always inserts — multiple doses per day allowed)
+    window.habDeleteDoseConfirm = function(logId) {
+      if (confirm('Delete this dose?')) {
+        habDeleteDose(logId);
+      }
+    };
+
     window.habDeleteDose = async function(logId) {
       await sb.from('habit_logs').delete().eq('id', logId);
       habRender();
@@ -5013,7 +5019,7 @@
                     h += '<div style="font-size:10px !important;color:#10b981 !important;margin-bottom:4px !important;">';
                     h += '✓ Logged at ' + esc(doseTime);
                     if (dose.note) h += ' (' + esc(dose.note) + ')';
-                    h += '<div style="display:flex !important;gap:6px !important;margin-top:4px !important;"><button onclick="if(confirm(\'Delete this dose?\')) habDeleteDose(' + dose.id + ')" style="background:#fef2f2 !important;border:1px solid #fecaca !important;color:#ef4444 !important;font-weight:600 !important;padding:8px 14px !important;border-radius:6px !important;font-size:13px !important;cursor:pointer !important;flex:1 !important;">🗑 Delete</button><button onclick="habChangeTime(\'' + dose.id + '\')" style="background:#eff6ff !important;border:1px solid #bfdbfe !important;color:#3b82f6 !important;padding:8px 14px !important;border-radius:6px !important;font-size:13px !important;cursor:pointer !important;flex:1 !important;">✏ Edit</button></div>';
+                    h += '<div style="display:flex !important;gap:6px !important;margin-top:4px !important;"><button onclick="habDeleteDoseConfirm(' + dose.id + ')" style="background:#fef2f2 !important;border:1px solid #fecaca !important;color:#ef4444 !important;font-weight:600 !important;padding:8px 14px !important;border-radius:6px !important;font-size:13px !important;cursor:pointer !important;flex:1 !important;">🗑 Delete</button><button onclick="habChangeTime(\'' + dose.id + '\')" style="background:#eff6ff !important;border:1px solid #bfdbfe !important;color:#3b82f6 !important;padding:8px 14px !important;border-radius:6px !important;font-size:13px !important;cursor:pointer !important;flex:1 !important;">✏ Edit</button></div>';
                     h += '</div>';
                   });
                   h += '<div style="font-size:10px !important;color:#3b82f6 !important;cursor:pointer !important;padding-top:4px !important;border-top:1px solid #bbf7d0 !important;" onclick="habToggleDaily('+med.id+')">+ Add another dose</div>';
@@ -5055,7 +5061,7 @@
                   mdh += '<div style="font-size:10px !important;color:#10b981 !important;margin-bottom:4px !important;">';
                   mdh += '✓ Logged at ' + esc(mdoseTime);
                   if (mdose.note) mdh += ' (' + esc(mdose.note) + ')';
-                  mdh += '<div style="display:flex !important;gap:6px !important;margin-top:4px !important;"><button onclick="if(confirm(\'Delete this dose?\')) habDeleteDose(' + mdose.id + ')" style="background:#fef2f2 !important;border:1px solid #fecaca !important;color:#ef4444 !important;font-weight:600 !important;padding:8px 14px !important;border-radius:6px !important;font-size:13px !important;cursor:pointer !important;flex:1 !important;">🗑 Delete</button></div>';
+                  mdh += '<div style="display:flex !important;gap:6px !important;margin-top:4px !important;"><button onclick="habDeleteDoseConfirm(' + mdose.id + ')" style="background:#fef2f2 !important;border:1px solid #fecaca !important;color:#ef4444 !important;font-weight:600 !important;padding:8px 14px !important;border-radius:6px !important;font-size:13px !important;cursor:pointer !important;flex:1 !important;">🗑 Delete</button></div>';
                   mdh += '</div>';
                 });
                 mdh += '<div style="font-size:10px !important;color:#3b82f6 !important;cursor:pointer !important;padding-top:4px !important;border-top:1px solid #bbf7d0 !important;" onclick="habToggleDaily('+mdmed.id+')">+ Add another dose</div>';
@@ -5176,7 +5182,7 @@
                 } else {
                   h += '<span onclick="habAddNote(\'' + tl.id + '\')" style="cursor:pointer !important;color:#3b82f6 !important;">+ note</span>';
                 }
-                h += '<button onclick="if(confirm(\'Delete this dose?\')) habDeleteDose(\'' + tl.id + '\')" style="background:#fef2f2 !important;border:1px solid #fecaca !important;color:#ef4444 !important;font-weight:600 !important;padding:8px 14px !important;border-radius:6px !important;font-size:13px !important;cursor:pointer !important;margin-left:8px !important;" title="Remove dose">🗑 Delete</button>';
+                h += '<button onclick="habDeleteDoseConfirm(\'' + tl.id + '\')" style="background:#fef2f2 !important;border:1px solid #fecaca !important;color:#ef4444 !important;font-weight:600 !important;padding:8px 14px !important;border-radius:6px !important;font-size:13px !important;cursor:pointer !important;margin-left:8px !important;" title="Remove dose">🗑 Delete</button>';
                 h += '</div>';
               });
             }
@@ -5225,7 +5231,7 @@
                 } else {
                   mh += '<span onclick="habAddNote(\'' + mtl.id + '\')" style="cursor:pointer !important;color:#3b82f6 !important;">+ note</span>';
                 }
-                mh += '<button onclick="if(confirm(\'Delete this dose?\')) habDeleteDose(\'' + mtl.id + '\')" style="background:#fef2f2 !important;border:1px solid #fecaca !important;color:#ef4444 !important;font-weight:600 !important;padding:8px 14px !important;border-radius:6px !important;font-size:13px !important;cursor:pointer !important;margin-left:8px !important;" title="Remove dose">🗑 Delete</button>';
+                mh += '<button onclick="habDeleteDoseConfirm(\'' + mtl.id + '\')" style="background:#fef2f2 !important;border:1px solid #fecaca !important;color:#ef4444 !important;font-weight:600 !important;padding:8px 14px !important;border-radius:6px !important;font-size:13px !important;cursor:pointer !important;margin-left:8px !important;" title="Remove dose">🗑 Delete</button>';
                 mh += '</div>';
               });
             }

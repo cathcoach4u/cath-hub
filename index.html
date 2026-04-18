@@ -4962,7 +4962,10 @@
         var isCreamOintment = name.indexOf('cream') !== -1 || name.indexOf('ointment') !== -1;
         var isMidday = name.indexOf('midday') !== -1;
         var isEvening = name.indexOf('evening') !== -1;
-        return !isCreamOintment && !isMidday && !isEvening;
+        var isBetamethasone = name.indexOf('betamethasone') !== -1 && name.indexOf('valerate') !== -1;
+        var isMorning = name.indexOf('morning') !== -1;
+        // Exclude creams/ointments and other time variants, but include Betamethasone Morning and other regular meds
+        return !isCreamOintment && !isMidday && !isEvening && (!isBetamethasone || isMorning);
       });
       var middayMeds = daily.filter(function(m){
         var name = m.name.toLowerCase();
@@ -4971,9 +4974,10 @@
       var creamsOintments = daily.filter(function(m){
         var name = m.name.toLowerCase();
         var isCreamOintment = name.indexOf('cream') !== -1 || name.indexOf('ointment') !== -1;
-        var isEvening = name.indexOf('evening') !== -1;
-        var isMorning = name.indexOf('morning') !== -1;
-        return (isCreamOintment || isEvening) && !isMorning;
+        var isBetamethasone = name.indexOf('betamethasone') !== -1 && name.indexOf('valerate') !== -1;
+        var hasTimeVariant = name.indexOf('morning') !== -1 || name.indexOf('midday') !== -1 || name.indexOf('evening') !== -1;
+        // Include creams/ointments, or Betamethasone variants with time suffix, but exclude plain Betamethasone
+        return (isCreamOintment || (isBetamethasone && hasTimeVariant));
       });
       // Sort evening meds: Xobet first, then Betamethasone Valerate
       creamsOintments.sort(function(a, b) {

@@ -616,6 +616,7 @@
     <button class="mobile-nav-item" data-nav="workout" onclick="chNavMobile('workout',this)"><span class="icon">&#x1F4AA;</span> Workout Buddy</button>
     <button class="mobile-nav-item" data-nav="medical" onclick="chNavMobile('medical',this)"><span class="icon">&#x1FA7A;</span> Medical</button>
     <button class="mobile-nav-item" data-nav="habits" onclick="chNavMobile('habits',this)"><span class="icon">&#x2B50;</span> My Habits</button>
+    <button class="mobile-nav-item" data-nav="habits2" onclick="chNavMobile('habits2',this)"><span class="icon">⭐</span> Habits 2</button>
     <button class="mobile-nav-item" data-nav="habit-history" onclick="chNavMobile('habit-history',this)"><span class="icon">&#x1F4DC;</span> Habit History</button>
     <button class="mobile-nav-item" data-nav="zones" onclick="chNavMobile('zones',this)"><span class="icon">&#x1F3D7;&#xFE0F;</span> Zone Buddy</button>
     <button class="mobile-nav-item" data-nav="travel" onclick="chNavMobile('travel',this)"><span class="icon">&#x2708;&#xFE0F;</span> Travel</button>
@@ -637,6 +638,7 @@
     <button class="nav-item" onclick="chNav('workout',this)"><span class="icon">&#x1F4AA;</span> Workout Buddy</button>
     <button class="nav-item" onclick="chNav('medical',this)"><span class="icon">&#x1FA7A;</span> Medical</button>
     <button class="nav-item" onclick="chNav('habits',this)"><span class="icon">&#x2B50;</span> My Habits</button>
+    <button class="nav-item" onclick="chNav('habits2',this)"><span class="icon">⭐</span> Habits 2</button>
     <button class="nav-item" onclick="chNav('habit-history',this)"><span class="icon">&#x1F4DC;</span> Habit History</button>
     <button class="nav-item" onclick="chNav('zones',this)"><span class="icon">&#x1F3D7;&#xFE0F;</span> Zone Buddy</button>
     <button class="nav-item" onclick="chNav('travel',this)"><span class="icon">&#x2708;&#xFE0F;</span> Travel</button>
@@ -1449,17 +1451,6 @@
     <div class="screen" id="ch-habits">
       <h2>&#x2B50; My Habits</h2>
 
-      <!-- Habits tab bar -->
-      <div style="display:flex !important;gap:6px !important;margin-bottom:16px !important;flex-wrap:wrap !important;">
-        <button class="am-btn zb-tab active" onclick="zbTab('meds')" id="zb-tab-meds" style="padding:8px 14px !important;font-size:12px !important;background:#3b82f6 !important;color:white !important;border-color:#3b82f6 !important;">&#x1F48A; Medication</button>
-        <button class="am-btn zb-tab" onclick="zbTab('morning')" id="zb-tab-morning" style="padding:8px 14px !important;font-size:12px !important;">Morning</button>
-        <button class="am-btn zb-tab" onclick="zbTab('midday')" id="zb-tab-midday" style="padding:8px 14px !important;font-size:12px !important;">Midday</button>
-        <button class="am-btn zb-tab" onclick="zbTab('evening')" id="zb-tab-evening" style="padding:8px 14px !important;font-size:12px !important;">Evening</button>
-        <button class="am-btn zb-tab" onclick="zbTab('weekly')" id="zb-tab-weekly" style="padding:8px 14px !important;font-size:12px !important;">Weekly</button>
-        <button class="am-btn zb-tab" onclick="zbTab('fortnightly')" id="zb-tab-fortnightly" style="padding:8px 14px !important;font-size:12px !important;">Fortnightly</button>
-        <button class="am-btn zb-tab" onclick="zbTab('6monthly')" id="zb-tab-6monthly" style="padding:8px 14px !important;font-size:12px !important;">6-Monthly</button>
-        <button class="am-btn zb-tab" onclick="zbTab('annual')" id="zb-tab-annual" style="padding:8px 14px !important;font-size:12px !important;">Annual</button>
-      </div>
 
       <!-- TAB: Medication Tracking -->
       <div id="zb-panel-meds">
@@ -1570,24 +1561,22 @@
         </div>
       </div>
 
-      <!-- TAB: Custom Habits -->
-      <div id="zb-panel-custom" style="display:none !important;">
-        <div id="hab-custom-list" style="margin-bottom:16px !important;"></div>
-        <div class="hab-section">
-          <div class="med-section-header" style="cursor:pointer !important;" onclick="document.getElementById('hab-custom-form').style.display=document.getElementById('hab-custom-form').style.display==='none'?'block':'none'">
-            <h3 style="font-size:14px !important;">+ Add New Habit</h3>
-          </div>
-          <div id="hab-custom-form" style="display:none !important;padding:14px 16px !important;">
-            <div style="display:flex !important;flex-direction:column !important;gap:10px !important;">
-              <input type="text" id="hab-custom-name" placeholder="Habit name (e.g. Drink 2L water)" style="width:100% !important;padding:10px 12px !important;border:1px solid #e2e8f0 !important;border-radius:8px !important;font-size:14px !important;box-sizing:border-box !important;">
-              <select id="hab-custom-freq" style="width:100% !important;padding:10px 12px !important;border:1px solid #e2e8f0 !important;border-radius:8px !important;font-size:14px !important;">
-                <option value="daily">Daily</option>
-                <option value="weekly">Weekly</option>
-              </select>
-              <button class="am-btn" onclick="habAddCustom()" style="width:100% !important;padding:12px !important;background:#7c3aed !important;color:white !important;border-color:#7c3aed !important;font-size:14px !important;justify-content:center !important;border-radius:8px !important;">Save Habit</button>
-            </div>
-          </div>
-        </div>
+
+    </div>
+
+    <!-- ═══ HABITS 2 ═══ -->
+    <div class="screen" id="ch-habits2">
+      <h2>⭐ Habits 2</h2>
+
+      <!-- Habits tab bar -->
+      <div style="display:flex !important;gap:6px !important;margin-bottom:16px !important;flex-wrap:wrap !important;">
+        <button class="am-btn zb-tab active" onclick="zbTab('morning')" id="zb-tab-morning" style="padding:8px 14px !important;font-size:12px !important;background:#3b82f6 !important;color:white !important;border-color:#3b82f6 !important;">Morning</button>
+        <button class="am-btn zb-tab" onclick="zbTab('midday')" id="zb-tab-midday" style="padding:8px 14px !important;font-size:12px !important;">Midday</button>
+        <button class="am-btn zb-tab" onclick="zbTab('evening')" id="zb-tab-evening" style="padding:8px 14px !important;font-size:12px !important;">Evening</button>
+        <button class="am-btn zb-tab" onclick="zbTab('weekly')" id="zb-tab-weekly" style="padding:8px 14px !important;font-size:12px !important;">Weekly</button>
+        <button class="am-btn zb-tab" onclick="zbTab('fortnightly')" id="zb-tab-fortnightly" style="padding:8px 14px !important;font-size:12px !important;">Fortnightly</button>
+        <button class="am-btn zb-tab" onclick="zbTab('6monthly')" id="zb-tab-6monthly" style="padding:8px 14px !important;font-size:12px !important;">6-Monthly</button>
+        <button class="am-btn zb-tab" onclick="zbTab('annual')" id="zb-tab-annual" style="padding:8px 14px !important;font-size:12px !important;">Annual</button>
       </div>
 
       <!-- TAB: Rhythm Cards -->

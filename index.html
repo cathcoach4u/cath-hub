@@ -593,7 +593,7 @@
 
 <div id="cathHub">
   <div style="position:fixed !important;top:16px !important;right:16px !important;display:flex !important;flex-direction:column !important;align-items:flex-end !important;gap:4px !important;z-index:10 !important;">
-    <div class="version-badge">Cath Hub v6.3</div>
+    <div class="version-badge">Cath Hub v6.4</div>
     <div id="today-date-badge" style="font-size:11px !important;font-weight:600 !important;color:#1e293b !important;background:#f1f5f9 !important;padding:3px 8px !important;border-radius:6px !important;border:1px solid #cbd5e1 !important;min-height:16px !important;display:flex !important;align-items:center !important;white-space:nowrap !important;">--/--/----</div>
   </div>
 
@@ -601,7 +601,7 @@
   <div class="mobile-top-bar">
     <button class="hamburger-btn" onclick="toggleMobileNav()" aria-label="Menu">&#x2630;</button>
     <h1>&#x1F3E0; Cath Hub</h1>
-    <div style="font-size:10px !important;font-weight:600 !important;background:#10b981 !important;color:white !important;padding:4px 8px !important;border-radius:99px !important;">v6.3</div>
+    <div style="font-size:10px !important;font-weight:600 !important;background:#10b981 !important;color:white !important;padding:4px 8px !important;border-radius:99px !important;">v6.4</div>
   </div>
 
   <!-- Mobile slide-out drawer -->
@@ -645,7 +645,7 @@
     <button class="nav-item" onclick="chNav('about',this)"><span class="icon">&#x2139;&#xFE0F;</span> About</button>
     <div class="sidebar-footer">
       <div style="display:flex !important;align-items:center !important;gap:6px !important;margin-bottom:8px !important;">
-        <div style="font-size:10px !important;font-weight:600 !important;background:#10b981 !important;color:white !important;padding:2px 8px !important;border-radius:99px !important;">v6.3</div>
+        <div style="font-size:10px !important;font-weight:600 !important;background:#10b981 !important;color:white !important;padding:2px 8px !important;border-radius:99px !important;">v6.4</div>
       </div>
       <div style="display:flex !important;align-items:center !important;gap:6px !important;margin-bottom:6px !important;">
         <span style="font-size:12px !important;color:rgba(255,255,255,0.5) !important;">&#x1F319;</span>
@@ -1882,7 +1882,7 @@
       <!-- Version -->
       <div style="background:#ecfdf5 !important;border:1px solid #d1fae5 !important;border-radius:10px !important;padding:14px 16px !important;margin-bottom:16px !important;display:flex !important;align-items:center !important;justify-content:space-between !important;">
         <div style="font-size:13px !important;color:#065f46 !important;"><strong>Current version</strong></div>
-        <div style="font-size:12px !important;font-weight:600 !important;background:#10b981 !important;color:white !important;padding:2px 10px !important;border-radius:99px !important;">v6.3</div>
+        <div style="font-size:12px !important;font-weight:600 !important;background:#10b981 !important;color:white !important;padding:2px 10px !important;border-radius:99px !important;">v6.4</div>
       </div>
 
       <!-- Overview -->
@@ -8250,7 +8250,7 @@
 
     try {
       var today = new Date().toISOString().split('T')[0];
-      var { data: allMeds } = await sb.from('habit_meds').select('*').eq('user_id', userId);
+      var { data: allMeds } = await sb.from('habit_meds').select('*');
       console.log('Dashboard - userId:', userId, 'All meds:', allMeds);
       var dailyMeds = (allMeds || []).filter(function(m){ return m.freq==='daily'; });
       console.log('Dashboard - Daily meds:', dailyMeds);

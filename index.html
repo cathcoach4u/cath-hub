@@ -4970,7 +4970,15 @@
         var isBetamethasone = name.indexOf('betamethasone') !== -1 && name.indexOf('valerate') !== -1;
         return isBetamethasone || (name.indexOf('cream') === -1 && name.indexOf('ointment') === -1);
       });
-      var middayMeds = betaMeds;
+      // Create separate midday Betamethasone Valerate entry by cloning with unique ID
+      var middayMeds = [];
+      if (betaMeds.length > 0) {
+        betaMeds.forEach(function(m) {
+          var clone = Object.assign({}, m);
+          clone.id = m.id + '_midday';
+          middayMeds.push(clone);
+        });
+      }
       // Sort evening meds: Xobet first, then Betamethasone Valerate
       creamsOintments.sort(function(a, b) {
         var aName = a.name.toLowerCase();

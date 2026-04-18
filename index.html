@@ -8119,10 +8119,9 @@
 
     try {
       var userId = (await sb.auth.getSession()).data.session.user.id;
-      var { data: todos, error } = await sb.from('personal_todos').select('*').eq('user_id', userId);
+      var { data: todos, error } = await sb.from('personal_todos').select('*').eq('user_id', userId).order('created_at', { ascending: false });
       if (error) throw error;
-      var incompleteTodos = todos && todos.length ? todos.filter(function(t) { return !t.done; }) : [];
-      var todoHtml = incompleteTodos.length ? incompleteTodos.map(function(t) { return '• ' + esc(t.task); }).join('<br>') : 'No incomplete tasks';
+      var todoHtml = todos && todos.length ? todos.map(function(t) { return '• ' + esc(t.task); }).join('<br>') : 'No tasks';
       document.getElementById('dash-todo-list').innerHTML = todoHtml;
     } catch(e) {
       console.log('To-do error:', e);

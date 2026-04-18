@@ -57,15 +57,16 @@ Three separate, independent Claude services. Any can be swapped for alternatives
 
 ## screens (in index.html)
 
-1. **dashboard** (`ch-home`) — overview cards, shopping summary, recent receipts
+1. **dashboard** (`ch-home`) — overview cards, quick stats, navigation
 2. **to-do** (`ch-todo`) — personal tasks with categories and due dates
-3. **aislemate** (`ch-aislemate`) — shopping system with 9 subscreens (weekly list, master items, receipts, meal plan, family members, QR share, settings)
-4. **workout log** (`ch-workout`) — exercise tracking with sets/reps, bottom-sheet picker
-5. **medical** (`ch-medical`) — medications, sessions, contacts, mental health
-6. **my habits** (`ch-habits`) — daily habit tracking with streaks
-7. **travel** (`ch-travel`) — travel planning
-8. **home** (`ch-hometab`) — household management
-9. **about** (`ch-about`) — app info, tech stack, costs, persistent memory, key links
+3. **workout buddy** (`ch-workout`) — exercise tracking with sets/reps, custom exercises, session history
+4. **medical** (`ch-medical`) — medications, doctor sessions, mental health notes
+5. **tracking medication** (`ch-habits`) — daily medication log with completion tracking
+6. **my habits** (`ch-habits2`) — rhythm cards (daily, weekly, fortnightly, 6-monthly, annual) with collapsible weekday/weekend sections
+7. **habit history** (`ch-habit-history`) — historical logs for all habit tracking
+8. **zone buddy** (`ch-zones`) — zone management &amp; tracking
+9. **travel** (`ch-travel`) — travel planning
+10. **about** (`ch-about`) — app info, tech stack, database, persistent memory, key links
 
 ## standalone pages
 
@@ -147,13 +148,16 @@ Three separate, independent Claude services. Any can be swapped for alternatives
 
 ## features
 
-- Supabase authentication with email/password + PIN lock
+- Supabase authentication with email/password
 - Dashboard with quick stats and navigation cards
-- Shopping list management (AisleMate) with categories, stores, family members, master items, receipts, meal planning, QR sharing
-- Workout logging with exercise library, custom exercises, sets/reps tracking
-- Medical records: medications, doctor sessions, contacts, mental health
-- Daily habit tracking with 7-day view and streaks
 - To-do lists with categories and due dates
+- Workout logging with exercise library, custom exercises, sets/reps tracking, session history
+- Medical records: medications, doctor sessions, mental health notes
+- Medication tracking with daily completion logging
+- Habit rhythm cards: daily (weekday/weekend), weekly, fortnightly, 6-monthly, annual with custom item management
+- Habit history with detailed logs
+- Zone buddy for zone management and tracking
+- Travel planning
 - AI assistant (floating chat panel using Anthropic API, persistent memory via `ai_memory` table)
 - Dark mode toggle
 - PWA support (installable, standalone mode)

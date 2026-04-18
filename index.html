@@ -4701,14 +4701,22 @@
 
     // Record an as-needed dose (always inserts — multiple doses per day allowed)
     window.habDeleteDoseConfirm = function(logId) {
+      console.log('Delete clicked for logId:', logId);
       if (confirm('Delete this dose?')) {
+        console.log('Confirmed. Calling habDeleteDose...');
         habDeleteDose(logId);
       }
     };
 
     window.habDeleteDose = async function(logId) {
-      await sb.from('habit_logs').delete().eq('id', logId);
-      habRender();
+      try {
+        console.log('habDeleteDose called with logId:', logId);
+        var result = await sb.from('habit_logs').delete().eq('id', logId);
+        console.log('Delete result:', result);
+        habRender();
+      } catch(e) {
+        console.error('Delete error:', e);
+      }
     };
 
     // Show the recording options panel for an as-needed med

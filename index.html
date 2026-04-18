@@ -8118,16 +8118,10 @@
     }
 
     try {
-      var session = await sb.auth.getSession();
-      var userId = session && session.data && session.data.session ? session.data.session.user.id : null;
-      if (!userId) {
-        document.getElementById('dash-todo-list').innerHTML = 'Not logged in';
-        return;
-      }
-      var { data: todos, error } = await sb.from('personal_todos').select('*').eq('user_id', userId);
+      var { data: todos, error } = await sb.from('personal_todos').select('*').eq('done', false).order('created_at', { ascending: true });
       if (error) throw error;
       if (!todos || !todos.length) {
-        document.getElementById('dash-todo-list').innerHTML = 'No tasks in DB';
+        document.getElementById('dash-todo-list').innerHTML = 'No tasks';
         return;
       }
       var todoHtml = todos.map(function(t) { return '• ' + esc(t.task); }).join('<br>');

@@ -8251,11 +8251,14 @@
     try {
       var today = new Date().toISOString().split('T')[0];
       var { data: allMeds } = await sb.from('habit_meds').select('*').eq('user_id', userId);
+      console.log('Dashboard - userId:', userId, 'All meds:', allMeds);
       var dailyMeds = (allMeds || []).filter(function(m){ return m.freq==='daily'; });
+      console.log('Dashboard - Daily meds:', dailyMeds);
       var morningMeds = dailyMeds.filter(function(m){
         var name = m.name.toLowerCase();
         return name.indexOf('cream') === -1 && name.indexOf('ointment') === -1 && !(name.indexOf('betamethasone') !== -1 && name.indexOf('valerate') !== -1);
       }).slice(0, 3);
+      console.log('Dashboard - Morning meds (after filter):', morningMeds);
 
       var { data: logs } = await sb.from('habit_logs').select('*').eq('user_id', userId);
       var logsMap = {};
@@ -8265,6 +8268,7 @@
       });
       var morningDone = 0;
       morningMeds.forEach(function(m){ if(logsMap[m.id]&&logsMap[m.id][today]) morningDone++; });
+      console.log('Dashboard - morningDone:', morningDone, 'today:', today);
       var html = '<a href="#" onclick="chNav(\'habits\'); return false;" style="color:#3b82f6 !important;text-decoration:none !important;cursor:pointer !important;font-size:18px !important;font-weight:bold !important;">' + morningDone + '/' + morningMeds.length + '</a><div style="font-size:11px !important;color:#94a3b8 !important;">taken today</div>';
       document.getElementById('dash-daily-meds').innerHTML = html;
     } catch(e) {

@@ -5319,9 +5319,11 @@
       // Attach delete button event listeners
       document.querySelectorAll('.dose-delete').forEach(function(btn) {
         btn.addEventListener('click', function(e) {
+          alert('Button clicked! ID: ' + this.getAttribute('data-id'));
           e.preventDefault();
           var id = this.getAttribute('data-id');
           if (confirm('Delete this dose?')) {
+            alert('Deleting ID: ' + id);
             habDeleteDose(id);
           }
         });

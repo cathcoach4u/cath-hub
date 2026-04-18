@@ -5067,7 +5067,7 @@
                   mdh += '<div style="font-size:10px !important;color:#10b981 !important;margin-bottom:4px !important;">';
                   mdh += '✓ Logged at ' + esc(mdoseTime);
                   if (mdose.note) mdh += ' (' + esc(mdose.note) + ')';
-                  mdh += '<div style="display:flex !important;gap:6px !important;margin-top:4px !important;"><button class="dose-delete" data-id="' + mdose.id + '" style="background:#fef2f2 !important;border:1px solid #fecaca !important;color:#ef4444 !important;font-weight:600 !important;padding:8px 14px !important;border-radius:6px !important;font-size:13px !important;cursor:pointer !important;flex:1 !important;">🗑 Delete</button></div>';
+                  mdh += '<div style="display:flex !important;gap:6px !important;margin-top:4px !important;"><button type="button" onclick="alert(\'test\')" style="background:#fef2f2 !important;border:1px solid #fecaca !important;color:#ef4444 !important;font-weight:600 !important;padding:8px 14px !important;border-radius:6px !important;font-size:13px !important;cursor:pointer !important;flex:1 !important;">🗑 Delete</button></div>';
                   mdh += '</div>';
                 });
                 mdh += '<div style="font-size:10px !important;color:#3b82f6 !important;cursor:pointer !important;padding-top:4px !important;border-top:1px solid #bbf7d0 !important;" onclick="habToggleDaily('+mdmed.id+')">+ Add another dose</div>';

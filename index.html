@@ -8131,6 +8131,7 @@
   window.dashRenderHealth = async function() {
     var userId = (await sb.auth.getSession()).data.session.user.id;
     var today = new Date().toISOString().split('T')[0];
+    var weekStart = new Date(new Date().setDate(new Date().getDate() - new Date().getDay())).toISOString().split('T')[0];
 
     try {
       var { data: habits } = await sb.from('habit_meds').select('id,name').eq('user_id', userId).order('created_at').limit(3);
@@ -8148,16 +8149,22 @@
     }
 
     try {
-      var weekStart = new Date(new Date().setDate(new Date().getDate() - new Date().getDay())).toISOString().split('T')[0];
-      var { data: medsLogs } = await sb.from('habit_logs').select('id').eq('user_id', userId).gte('date', weekStart);
-      var compliance = medsLogs ? Math.round((medsLogs.length / 21) * 100) : 0;
-      document.getElementById('dash-weekly-meds').textContent = compliance + '%';
+      var { data: allHabits } = await sb.from('habit_meds').select('id').eq('user_id', userId);
+      if (allHabits && allHabits.length > 0) {
+        var { data: weekLogs } = await sb.from('habit_logs').select('id').eq('user_id', userId).gte('date', weekStart);
+        var expectedCount = allHabits.length * 7;
+        var actualCount = weekLogs ? weekLogs.length : 0;
+        var compliance = expectedCount > 0 ? Math.round((actualCount / expectedCount) * 100) : 0;
+        document.getElementById('dash-weekly-meds').textContent = compliance + '%';
+      } else {
+        document.getElementById('dash-weekly-meds').textContent = '-';
+      }
     } catch(e) {
       document.getElementById('dash-weekly-meds').textContent = '-';
     }
 
     try {
-      var { data: mhSessions } = await sb.from('mental_health_sessions').select('id').eq('user_id', userId).gt('date', today).order('date');
+      var { data: mhSessions } = await sb.from('mental_health_sessions').select('id').eq('user_id', userId).gte('date', today).order('date');
       var count = mhSessions ? mhSessions.length : 0;
       document.getElementById('dash-mental-sessions').textContent = count + ' planned';
     } catch(e) {

@@ -8258,7 +8258,7 @@
         document.getElementById('dash-todo-list').innerHTML = 'No tasks';
         return;
       }
-      var todoHtml = todos.map(function(t) { return '<div style="display:flex !important;align-items:center !important;gap:8px !important;padding:6px 0 !important;"><input type="checkbox" onclick="dashToggleTodo(' + t.id + ')" style="cursor:pointer !important;width:18px !important;height:18px !important;" /><label style="cursor:pointer !important;flex:1 !important;margin:0 !important;color:#1e293b !important;font-size:13px !important;">' + esc(t.task) + '</label></div>'; }).join('');
+      var todoHtml = todos.map(function(t) { return '<div style="display:flex !important;align-items:center !important;gap:8px !important;padding:6px 0 !important;"><input type="checkbox" onclick="dashToggleTodo(\'' + t.id + '\')" style="cursor:pointer !important;width:18px !important;height:18px !important;" /><label style="cursor:pointer !important;flex:1 !important;margin:0 !important;color:#1e293b !important;font-size:13px !important;">' + esc(t.task) + '</label></div>'; }).join('');
       todoHtml += '<button onclick="chNav(\'todo\')" style="margin-top:8px !important;padding:6px 12px !important;background:#3b82f6 !important;color:white !important;border:none !important;border-radius:6px !important;font-size:12px !important;cursor:pointer !important;width:100% !important;">View All To-Do</button>';
       document.getElementById('dash-todo-list').innerHTML = todoHtml;
     } catch(e) {

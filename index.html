@@ -7588,12 +7588,15 @@
 
     try {
       var sectionMap = { 'wd': 'morning', 'we': 'morning', 'midday-wd': 'midday', 'midday-we': 'midday', 'evening-wd': 'evening', 'evening-we': 'evening' };
+      var dayTypeMap = { 'wd': 'weekday', 'we': 'weekend', 'midday-wd': 'weekday', 'midday-we': 'weekend', 'evening-wd': 'weekday', 'evening-we': 'weekend' };
       var section = sectionMap[variant] || 'morning';
+      var dayType = dayTypeMap[variant] || 'weekday';
 
       var { error } = await sb.from('daily_items').insert({
         id: 'custom_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9),
         name: name,
         section: section,
+        day_type: dayType,
         user_id: (await sb.auth.getSession()).data.session.user.id
       });
       if (error) throw error;
@@ -7643,12 +7646,14 @@
   window.dailyRenderItems = async function(variant) {
     try {
       var sectionMap = { 'wd': 'morning', 'we': 'morning', 'midday-wd': 'midday', 'midday-we': 'midday', 'evening-wd': 'evening', 'evening-we': 'evening' };
+      var dayTypeMap = { 'wd': 'weekday', 'we': 'weekend', 'midday-wd': 'weekday', 'midday-we': 'weekend', 'evening-wd': 'weekday', 'evening-we': 'weekend' };
       var section = sectionMap[variant] || 'morning';
+      var dayType = dayTypeMap[variant] || 'weekday';
 
       var { data: allItems, error } = await sb.from('daily_items').select('*').order('created_at', { ascending: false });
       if (error) throw error;
       var items = (allItems || []).filter(function(i) {
-        return i.section && i.section.toLowerCase() === section.toLowerCase();
+        return i.section && i.section.toLowerCase() === section.toLowerCase() && i.day_type === dayType;
       });
       var list = document.getElementById('daily-items-list-' + variant);
       var h = '';

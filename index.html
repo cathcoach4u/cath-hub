@@ -8358,10 +8358,11 @@
 
       var sectionConfig = {
         'morning': { icon: '🌅', color: '#f59e0b', bgColor: '#fef3c7' },
+        'during day': { icon: '☀️', color: '#eab308', bgColor: '#fef08a' },
         'midday': { icon: '☀️', color: '#eab308', bgColor: '#fef08a' },
         'evening': { icon: '🌙', color: '#8b5cf6', bgColor: '#f3e8ff' }
       };
-      var orderedSections = ['morning', 'midday', 'evening'];
+      var orderedSections = ['morning', 'during day', 'midday', 'evening'];
       var dailyHtml = '';
       orderedSections.forEach(function(sectionKey) {
         var items = (dailyItems || []).filter(function(i){ return i.section && i.section.toLowerCase() === sectionKey && (!i.day_type || i.day_type === dayType) && !completedIds.has(i.id); });

@@ -8362,10 +8362,11 @@
         'midday': { icon: '☀️', color: '#eab308', bgColor: '#fef08a' },
         'evening': { icon: '🌙', color: '#8b5cf6', bgColor: '#f3e8ff' }
       };
-      var orderedSections = ['morning', 'during day', 'midday', 'evening'];
+      var orderedSections = ['morning', 'during day', 'evening'];
       var dailyHtml = '';
       orderedSections.forEach(function(sectionKey) {
-        var items = (dailyItems || []).filter(function(i){ return i.section && i.section.toLowerCase() === sectionKey && (!i.day_type || i.day_type === dayType) && !completedIds.has(i.id); });
+        var matchSections = sectionKey === 'during day' ? ['during day', 'midday'] : [sectionKey];
+        var items = (dailyItems || []).filter(function(i){ return i.section && matchSections.indexOf(i.section.toLowerCase()) !== -1 && (!i.day_type || i.day_type === dayType) && !completedIds.has(i.id); });
         if (items.length > 0) {
           var config = sectionConfig[sectionKey] || { icon: '📌', color: '#6b7280', bgColor: '#f3f4f6' };
           dailyHtml += '<div style="margin-bottom:12px !important;background:' + config.bgColor + ' !important;border-radius:8px !important;padding:12px !important;border-left:4px solid ' + config.color + ' !important;"><div style="font-size:12px !important;font-weight:700 !important;color:' + config.color + ' !important;margin-bottom:8px !important;text-transform:capitalize !important;">' + config.icon + ' ' + sectionKey + '</div>';

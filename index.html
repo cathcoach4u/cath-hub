@@ -4520,9 +4520,11 @@
         var thirtyAgo = new Date();
         thirtyAgo.setDate(thirtyAgo.getDate() - 30);
         var fromDate = thirtyAgo.getFullYear()+'-'+String(thirtyAgo.getMonth()+1).padStart(2,'0')+'-'+String(thirtyAgo.getDate()).padStart(2,'0');
+        console.log('Loading weekly logs - userId:', userId, 'fromDate:', fromDate);
 
         var { data: weeklyLogs, error: logsError } = await sb.from('weekly_logs').select('item_id,logged_date').eq('user_id', userId).gte('logged_date', fromDate).order('logged_date', { ascending: false });
         if (logsError) throw logsError;
+        console.log('Weekly logs fetched:', weeklyLogs);
 
         var { data: weeklyItems, error: itemsError } = await sb.from('weekly_items').select('id,name').eq('user_id', userId);
         if (itemsError) throw itemsError;
@@ -8176,17 +8178,20 @@
       var session = await sb.auth.getSession();
       var userId = session && session.data && session.data.session ? session.data.session.user.id : null;
       var today = new Date().toISOString().split('T')[0];
+      console.log('Logging weekly item:', itemId, 'for user:', userId, 'date:', today);
 
-      var { error } = await sb.from('weekly_logs').insert({
+      var { error, data } = await sb.from('weekly_logs').insert({
         item_id: itemId,
         logged_date: today,
         user_id: userId
       });
       if (error) throw error;
+      console.log('Weekly item logged successfully:', data);
 
       await dashRenderQuickWins();
     } catch(e) {
       console.log('Error logging weekly item:', e);
+      alert('Error logging item: ' + e.message);
     }
   };
 

@@ -8364,9 +8364,10 @@
       var { data: dailyItems } = await sb.from('daily_items').select('*').order('section', { ascending: true });
       console.log('Dashboard daily items:', dailyItems);
       if (!dailyItems || !dailyItems.length) {
-        document.getElementById('dash-daily-items').innerHTML = 'No items';
+        document.getElementById('dash-daily-items').innerHTML = 'No daily_items in database';
         return;
       }
+      document.getElementById('dash-daily-items').innerHTML = 'Found ' + dailyItems.length + ' items...';
       var { data: dailyLogs } = await sb.from('daily_logs').select('item_id').eq('user_id', userId).eq('log_date', today);
       console.log('Dashboard daily logs:', dailyLogs);
       var completedIds = new Set((dailyLogs || []).map(function(l){ return l.item_id; }));

@@ -8382,8 +8382,8 @@
       if (!dailyHtml) dailyHtml = 'All done! (Items: ' + dailyItems.length + ', Logged: ' + completedIds.size + ')';
       document.getElementById('dash-daily-items').innerHTML = dailyHtml;
     } catch(e) {
-      console.log('Daily items error:', e);
-      document.getElementById('dash-daily-items').innerHTML = 'Error';
+      console.error('Daily items error:', e);
+      document.getElementById('dash-daily-items').innerHTML = 'Error: ' + e.message;
     }
   };
 

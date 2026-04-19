@@ -4526,8 +4526,9 @@
         if (logsError) throw logsError;
         console.log('Weekly logs fetched:', weeklyLogs);
 
-        var { data: weeklyItems, error: itemsError } = await sb.from('weekly_items').select('id,name').eq('user_id', userId);
+        var { data: weeklyItems, error: itemsError } = await sb.from('weekly_items').select('id,name');
         if (itemsError) throw itemsError;
+        console.log('Weekly items fetched:', weeklyItems);
 
         var itemMap = {};
         (weeklyItems || []).forEach(function(i){ itemMap[i.id] = i.name; });

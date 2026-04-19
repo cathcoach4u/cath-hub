@@ -8190,6 +8190,19 @@
     }
   };
 
+  window.dashToggleTodo = async function(todoId) {
+    try {
+      var { data: todo } = await sb.from('personal_todos').select('done').eq('id', todoId).limit(1);
+      if (!todo || !todo[0]) return;
+      var currentDone = todo[0].done;
+      var { error } = await sb.from('personal_todos').update({ done: !currentDone }).eq('id', todoId);
+      if (error) throw error;
+      await dashRenderQuickWins();
+    } catch(e) {
+      console.log('Error toggling todo:', e);
+    }
+  };
+
   // ─── Dashboard Data Renderers ───
   window.dashRenderAllData = async function() {
     await dashRenderQuickWins();
@@ -8232,14 +8245,14 @@
     }
 
     try {
-      var { data: todos, error } = await sb.from('personal_todos').select('*').eq('done', false).eq('user_id', userId).order('created_at', { ascending: true });
+      var { data: todos, error } = await sb.from('personal_todos').select('*').order('created_at', { ascending: true });
       if (error) throw error;
       console.log('To-do items:', todos);
       if (!todos || !todos.length) {
         document.getElementById('dash-todo-list').innerHTML = 'No tasks';
         return;
       }
-      var todoHtml = todos.map(function(t) { return '<a href="#" onclick="chNav(\'todo\'); return false;" style="color:#3b82f6 !important;text-decoration:none !important;">• ' + esc(t.task) + '</a>'; }).join('<br>');
+      var todoHtml = todos.map(function(t) { return '<div style="display:flex !important;align-items:center !important;gap:8px !important;padding:6px 0 !important;"><input type="checkbox" ' + (t.done ? 'checked' : '') + ' onclick="dashToggleTodo(' + t.id + ')" style="cursor:pointer !important;width:18px !important;height:18px !important;" /><label style="cursor:pointer !important;flex:1 !important;margin:0 !important;color:#1e293b !important;font-size:13px !important;' + (t.done ? 'text-decoration:line-through !important;color:#94a3b8 !important;' : '') + '">' + esc(t.task) + '</label></div>'; }).join('');
       document.getElementById('dash-todo-list').innerHTML = todoHtml;
     } catch(e) {
       console.log('To-do error:', e);

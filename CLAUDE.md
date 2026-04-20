@@ -57,15 +57,16 @@ Three separate, independent Claude services. Any can be swapped for alternatives
 
 ## screens (in index.html)
 
-1. **dashboard** (`ch-home`) — overview cards, shopping summary, recent receipts
+1. **dashboard** (`ch-home`) — overview cards, quick stats, navigation
 2. **to-do** (`ch-todo`) — personal tasks with categories and due dates
-3. **aislemate** (`ch-aislemate`) — shopping system with 9 subscreens (weekly list, master items, receipts, meal plan, family members, QR share, settings)
-4. **workout log** (`ch-workout`) — exercise tracking with sets/reps, bottom-sheet picker
-5. **medical** (`ch-medical`) — medications, sessions, contacts, mental health
-6. **my habits** (`ch-habits`) — daily habit tracking with streaks
-7. **travel** (`ch-travel`) — travel planning
-8. **home** (`ch-hometab`) — household management
-9. **about** (`ch-about`) — app info, tech stack, costs, persistent memory, key links
+3. **workout buddy** (`ch-workout`) — exercise tracking with sets/reps, custom exercises, session history
+4. **medical** (`ch-medical`) — medications, doctor sessions, mental health notes
+5. **tracking medication** (`ch-habits`) — daily medication log with completion tracking
+6. **my habits** (`ch-habits2`) — rhythm cards (daily, weekly, fortnightly, 6-monthly, annual) with collapsible weekday/weekend sections
+7. **habit history** (`ch-habit-history`) — historical logs for all habit tracking
+8. **zone buddy** (`ch-zones`) — zone management &amp; tracking
+9. **travel** (`ch-travel`) — travel planning
+10. **about** (`ch-about`) — app info, tech stack, database, persistent memory, key links
 
 ## standalone pages
 
@@ -75,20 +76,45 @@ Three separate, independent Claude services. Any can be swapped for alternatives
 
 ## database schema
 
-- `shopping_items` — name, category, store, checked, created_at
-- `personal_todos` — task, done, category, due_date, created_at
+### shopping & household
+- `shopping_items` — name, category, store, checked, created_at, user_id
+- `master_items` — name, category, store, family_member, last_price, user_id
+- `meal_plans` — day_index, meal data, user_id
+- `personal_todos` — task, done, category, due_date, created_at, user_id
 - `fiona_tasks` — task, done, created_at
-- `habit_meds` — id, name, freq ['daily', 'asneeded']
-- `habit_logs` — med_id, date, created_at
-- `medications` — name, dose, schedule, purpose
-- `medical_sessions` — date, duration, plan, practitioner
-- `master_items` — name, category, store, family_member, last_price
-- `receipts` — store, receipt_date, total, uploaded_at
-- `receipt_items` — item_name, price, receipt_id
-- `meal_plans` — day_index, meal data
-- `ai_memory` — fact, created_at (persistent memory)
-- `daily_items` — id, name, section ['morning', 'midday', 'evening'], day_type ['weekday', 'weekend'], user_id, created_at
-- `daily_logs` — id, item_id, user_id, log_date, created_at
+
+### medical & health
+- `medications` — name, dose, schedule, purpose, user_id
+- `medical_sessions` — date, duration, plan, practitioner, user_id
+- `mental_health_sessions` — date, mood, notes, user_id
+- `habit_meds` — id, name, freq ['daily', 'asneeded'], user_id
+- `habit_logs` — med_id, date, created_at, user_id
+
+### rhythms (daily, weekly, fortnightly, 6-monthly, annual)
+- `daily_items` — id, name, section ['morning','midday','evening'], day_type ['weekday','weekend'], user_id
+- `daily_logs` — item_id, log_date, user_id
+- `weekly_items` — id, name, user_id
+- `weekly_logs` — item_id, logged_date, user_id
+- `fortnightly_items` — id, name, user_id, created_at
+- `fortnightly_logs` — item_id, logged_date, user_id
+- `sixmonthly_items` — id, name, user_id, created_at
+- `sixmonthly_logs` — item_id, logged_date, user_id
+- `annual_items` — id, name, user_id, created_at
+- `annual_logs` — item_id, logged_date, user_id
+
+### fitness
+- `workout_sessions` — date, duration, type, notes, user_id
+- `workout_exercises` — session_id, name, sets, reps, weight, user_id
+- `workout_sets` — exercise_id, set_num, reps, weight, user_id
+
+### shopping receipts
+- `receipts` — store, receipt_date, total, uploaded_at, user_id
+- `receipt_items` — item_name, price, receipt_id, user_id
+
+### ai & memory
+- `ai_memory` — fact, created_at, user_id (persistent memory for AI chat)
+
+### storage
 - Storage bucket: `receipts` — receipt images/PDFs
 
 ## design system
@@ -122,39 +148,26 @@ Three separate, independent Claude services. Any can be swapped for alternatives
 
 ## features
 
-- Supabase authentication with email/password + PIN lock
+- Supabase authentication with email/password
 - Dashboard with quick stats and navigation cards
-- Shopping list management (AisleMate) with categories, stores, family members, master items, receipts, meal planning, QR sharing
-- Workout logging with exercise library, custom exercises, sets/reps tracking
-- Medical records: medications, doctor sessions, contacts, mental health
-- Daily habit tracking with 7-day view and streaks
-- Rhythm items (daily, weekly, fortnightly, 6-monthly, annual) with collapsible sections by day type
 - To-do lists with categories and due dates
+- Workout logging with exercise library, custom exercises, sets/reps tracking, session history
+- Medical records: medications, doctor sessions, mental health notes
+- Medication tracking with daily completion logging
+- Habit rhythm cards: daily (weekday/weekend), weekly, fortnightly, 6-monthly, annual with custom item management
+- Habit history with detailed logs
+- Zone buddy for zone management and tracking
+- Travel planning
 - AI assistant (floating chat panel using Anthropic API, persistent memory via `ai_memory` table)
 - Dark mode toggle
 - PWA support (installable, standalone mode)
 - Responsive design (desktop sidebar, mobile hamburger menu)
 
-## managing daily items
-
-Daily items are organized by section (morning, midday, evening) and day type (weekday, weekend). Manage via **My Habits** screen:
-
-- **UI:** Collapsible sections for weekday/weekend under each time period
-- **Database:** `daily_items` table (id, name, section, day_type, user_id, created_at)
-- **Logging:** `daily_logs` table tracks completed items per day
-
-To update items (e.g., replace weekday morning routine):
-1. Get your user ID from Supabase (Auth → Users)
-2. Run SQL from `daily-items-setup.sql` in Supabase SQL Editor, replacing `YOUR_USER_ID`
-3. Reload the app; items display in **My Habits** with collapsible controls
-
-Items are filtered by section and day type. Dashboard shows incomplete items for the current day type only.
-
 ## version numbering
 
-- Current: **v7.14** (green badge in sidebar footer and About page)
+- Current: **v7.13** (green badge in sidebar footer and About page)
 - Bumped on every code change (minor version increment)
-- Service worker cache key matches version (e.g., `cache-v5-5`)
+- Service worker cache key matches version (e.g., `cache-v4-12`)
 
 **Version locations to update on every change:**
 1. CLAUDE.md — `Current: **v4.XX**` (this line)
@@ -189,6 +202,17 @@ Make Claude Code work harder:
 - **No Supabase dashboard access.** Cannot browse tables or run queries live. Must be given table schema or query results.
 - **Service worker cache must be bumped.** Browser cache won't clear automatically. Always increment version in cache key.
 - **GitHub Pages deploy lag.** Push to main → 1–2 minutes until changes are live.
+
+## start-of-session checklist
+
+When reconnecting (each new session):
+
+- [ ] Read this CLAUDE.md file to refresh all procedures
+- [ ] Check current version number before any version bumps
+- [ ] Read relevant memory sections (e.g., "version numbering") before acting on those tasks
+- [ ] Review end-of-session checklist to understand what was last done
+
+**Critical:** Do NOT assume memory from previous sessions. Always read CLAUDE.md first.
 
 ## end-of-session checklist
 

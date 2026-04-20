@@ -96,7 +96,7 @@ Three separate, independent Claude services. Any can be swapped for alternatives
 - `medical_sessions` — date, duration, plan, practitioner, user_id
 - `mental_health_sessions` — date, mood, notes, user_id
 - `habit_meds` — id, name, freq ['daily', 'asneeded'], user_id
-- `habit_logs` — med_id, date, created_at, user_id
+- `habit_logs` — med_id, date, created_at, note, user_id (`note` stores as-needed med brand/details and weekly dose e.g. Mounjaro)
 
 ### rhythms (daily, weekly, fortnightly, 6-monthly, annual)
 - `daily_items` — id, name, section ['morning','midday','evening'], day_type ['weekday','weekend'], user_id
@@ -173,7 +173,7 @@ Three separate, independent Claude services. Any can be swapped for alternatives
 
 ## version numbering
 
-- Current: **v7.20** (green badge in sidebar footer and About page)
+- Current: **v7.21** (green badge in sidebar footer and About page)
 - Bumped on every code change (minor version increment)
 - Service worker cache key matches version (e.g., `cache-v4-12`)
 

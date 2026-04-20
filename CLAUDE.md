@@ -16,6 +16,11 @@ Cath Hub is a personal health & household management PWA built with vanilla HTML
 
 **Timezone:** Australia/Sydney (AEST/AEDT). Always use Sydney time.
 
+## User Information
+
+- **Name:** Cath Baker
+- **User ID:** `ae560260-5fab-4b00-9d3e-00d982f97de7` (use for SQL scripts and database operations)
+
 ## Architecture
 
 Single-page app with Supabase backend and GitHub Pages hosting.

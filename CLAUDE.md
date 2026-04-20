@@ -230,10 +230,12 @@ Before finishing:
 - [x] Version bumped in `CLAUDE.md` and `index.html` (sidebar footer) — v7.16
 - [x] Service worker cache key matches version — N/A (no service worker)
 - [x] SQL queries provided as copy-paste (if applicable) — daily-items-setup.sql documented
-- [x] CLAUDE.md updated with any new limitations or architecture changes — to-do category grouping added
-- [x] About page updated with new tech stack or costs (if applicable) — N/A
-- [x] No open branches or PRs
+- [x] CLAUDE.md updated with any new limitations or architecture changes — user_id filtering fixes documented
+- [x] About page audited — all current (v7.16, infrastructure, AI services, tech stack, screens, database, features all listed)
+- [x] Page titles standardised to "Cath Hub" across all HTML files
+- [x] No open branches or PRs (feature branch deleted)
 - [x] No uncommitted changes
+- [x] Feature branches cleaned up
 
 ## development notes
 
@@ -245,19 +247,29 @@ Before finishing:
 
 ## session notes (v7.16)
 
-**Changes made:**
-- Dashboard to-do list (ch-todo in index.html) now groups tasks by category with purple uppercase headers
-- Pending & completed tasks sorted within each category: no-date items first, then by due date
-- Both index.html (ch-todo) and todo.html have separate implementations — always ask which one to modify
+**Changes made this session:**
+- ✅ To-do lists grouped by category with headers (both dashboard and standalone)
+- ✅ Fixed My Habits deletion bug: added user_id filtering to all render functions (daily, weekly, fortnightly, 6-monthly, annual)
+- ✅ Fixed dashboard daily items: added user_id & day_type filtering to show only today's items
+- ✅ Fixed dashboard todos & fortnightly items: added user_id filtering
+- ✅ Standardised all page titles to "Cath Hub" (except ai.html which is "Cath AI")
+- ✅ Documented all to-do implementations in CLAUDE.md with clarification practice
+- ✅ Daily items now feed correctly into dashboard quick wins
 
-**Practice reminder:**
-When asked to modify a feature that has multiple implementations (e.g., "update to-do"), always ask which one:
-- Dashboard to-do (ch-todo in index.html)
-- Standalone to-do (todo.html)
-- etc.
+**Important fixes:**
+- Render functions were fetching ALL items (no user_id filter) — now filtered by user_id
+- Dashboard was showing items for all day types — now filters by weekday/weekend
+- Deletion appeared to fail because other users' items re-appeared — now isolated per user
+
+**Multiple implementations (ask which one):**
+- Dashboard to-do (`ch-todo` in index.html) — grouped by category
+- Standalone to-do (`todo.html`) — grouped by category
+- AI assistant (`ai.html`) — separate app with to-do API tools
 
 **Ready for next session:**
-- Daily items setup (DAILY_ITEMS_UPDATE.md, daily-items-setup.sql) documented in CLAUDE.md
+- All code on main (v7.16)
+- No open branches or PRs (feature branch cleaned up)
+- No uncommitted changes
+- CLAUDE.md fully documented with all fixes
+- Daily items setup documented (DAILY_ITEMS_UPDATE.md, daily-items-setup.sql)
 - User ID: `ae560260-5fab-4b00-9d3e-00d982f97de7`
-- All changes pushed to main (v7.16)
-- No branches or uncommitted work

@@ -8424,7 +8424,34 @@
       if (!todos || !todos.length) {
         document.getElementById('dash-todo-list').innerHTML = 'No tasks';
       } else {
-        var todoHtml = todos.map(function(t) { return '<div style="display:flex !important;align-items:center !important;gap:8px !important;padding:6px 0 !important;"><input type="checkbox" onclick="dashToggleTodo(\'' + t.id + '\')" style="cursor:pointer !important;width:18px !important;height:18px !important;" /><label style="cursor:pointer !important;flex:1 !important;margin:0 !important;color:#1e293b !important;font-size:13px !important;">' + esc(t.task) + '</label></div>'; }).join('');
+        // Group todos by category
+        var byCategory = {};
+        todos.forEach(function(t) {
+          var cat = t.category || 'General';
+          if (!byCategory[cat]) byCategory[cat] = [];
+          byCategory[cat].push(t);
+        });
+
+        // Sort todos within each category: no date first, then by date
+        Object.keys(byCategory).forEach(function(cat) {
+          byCategory[cat].sort(function(a, b) {
+            var aHasDate = a.due_date ? true : false;
+            var bHasDate = b.due_date ? true : false;
+            if (aHasDate !== bHasDate) return aHasDate ? 1 : -1; // no date first
+            if (aHasDate && bHasDate) return new Date(a.due_date) - new Date(b.due_date);
+            return 0;
+          });
+        });
+
+        var todoHtml = '';
+        Object.keys(byCategory).sort().forEach(function(cat) {
+          todoHtml += '<div style="margin-bottom:12px !important;"><div style="font-size:11px !important;font-weight:700 !important;color:#6b21a8 !important;text-transform:uppercase !important;margin-bottom:6px !important;">' + esc(cat) + '</div>';
+          byCategory[cat].forEach(function(t) {
+            var dateStr = t.due_date ? new Date(t.due_date).toLocaleDateString('en-AU', {day:'numeric', month:'short'}) : '';
+            todoHtml += '<div style="display:flex !important;align-items:center !important;gap:8px !important;padding:6px 0 !important;"><input type="checkbox" onclick="dashToggleTodo(\'' + t.id + '\')" style="cursor:pointer !important;width:18px !important;height:18px !important;" /><label style="cursor:pointer !important;flex:1 !important;margin:0 !important;color:#1e293b !important;font-size:13px !important;">' + esc(t.task) + (dateStr ? ' <span style="font-size:11px !important;color:#94a3b8 !important;">(' + dateStr + ')</span>' : '') + '</label></div>';
+          });
+          todoHtml += '</div>';
+        });
         todoHtml += '<button onclick="chNav(\'todo\')" style="margin-top:8px !important;padding:6px 12px !important;background:#3b82f6 !important;color:white !important;border:none !important;border-radius:6px !important;font-size:12px !important;cursor:pointer !important;width:100% !important;">View All To-Do</button>';
         document.getElementById('dash-todo-list').innerHTML = todoHtml;
       }

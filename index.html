@@ -593,7 +593,7 @@
 
 <div id="cathHub">
   <div style="position:fixed !important;top:16px !important;right:16px !important;display:flex !important;flex-direction:column !important;align-items:flex-end !important;gap:4px !important;z-index:10 !important;">
-    <div class="version-badge">Cath Hub v7.17</div>
+    <div class="version-badge">Cath Hub v7.18</div>
     <div id="today-date-badge" style="font-size:11px !important;font-weight:600 !important;color:#1e293b !important;background:#f1f5f9 !important;padding:3px 8px !important;border-radius:6px !important;border:1px solid #cbd5e1 !important;min-height:16px !important;display:flex !important;align-items:center !important;white-space:nowrap !important;">--/--/----</div>
   </div>
 
@@ -601,7 +601,7 @@
   <div class="mobile-top-bar">
     <button class="hamburger-btn" onclick="toggleMobileNav()" aria-label="Menu">&#x2630;</button>
     <h1>&#x1F3E0; Cath Hub</h1>
-    <div style="font-size:10px !important;font-weight:600 !important;background:#10b981 !important;color:white !important;padding:4px 8px !important;border-radius:99px !important;">v7.17</div>
+    <div style="font-size:10px !important;font-weight:600 !important;background:#10b981 !important;color:white !important;padding:4px 8px !important;border-radius:99px !important;">v7.18</div>
   </div>
 
   <!-- Mobile slide-out drawer -->
@@ -645,7 +645,7 @@
     <button class="nav-item" onclick="chNav('about',this)"><span class="icon">&#x2139;&#xFE0F;</span> About</button>
     <div class="sidebar-footer">
       <div style="display:flex !important;align-items:center !important;gap:6px !important;margin-bottom:8px !important;">
-        <div style="font-size:10px !important;font-weight:600 !important;background:#10b981 !important;color:white !important;padding:2px 8px !important;border-radius:99px !important;">v7.17</div>
+        <div style="font-size:10px !important;font-weight:600 !important;background:#10b981 !important;color:white !important;padding:2px 8px !important;border-radius:99px !important;">v7.18</div>
       </div>
       <div style="display:flex !important;align-items:center !important;gap:6px !important;margin-bottom:6px !important;">
         <span style="font-size:12px !important;color:rgba(255,255,255,0.5) !important;">&#x1F319;</span>
@@ -1441,13 +1441,14 @@
         <div id="hab-missed-alert" style="display:none !important;background:#fef2f2 !important;border:1px solid #fecaca !important;border-radius:10px !important;padding:12px 16px !important;margin-bottom:12px !important;font-size:13px !important;color:#991b1b !important;">
           <div style="display:flex !important;align-items:flex-start !important;gap:8px !important;margin-bottom:10px !important;">
             <div style="flex:1 !important;">
-              <div style="font-weight:700 !important;margin-bottom:8px !important;">You missed these yesterday:</div>
-              <div id="hab-missed-text" style="display:flex !important;flex-direction:column !important;gap:6px !important;"></div>
+              <div style="font-weight:700 !important;margin-bottom:4px !important;">You missed these yesterday:</div>
+              <div style="font-size:11px !important;color:#b91c1c !important;margin-bottom:8px !important;font-weight:400 !important;">Tap each one you actually took/used to record it.</div>
+              <div id="hab-missed-text" style="display:flex !important;flex-direction:column !important;gap:4px !important;"></div>
             </div>
             <button onclick="habDismissMissed()" style="background:none !important;border:none !important;color:#991b1b !important;font-size:18px !important;cursor:pointer !important;padding:0 4px !important;line-height:1 !important;flex-shrink:0 !important;">&times;</button>
           </div>
           <div style="display:flex !important;gap:8px !important;">
-            <button id="hab-missed-btn" onclick="habBackfillYesterday()" style="flex:1 !important;padding:8px 12px !important;font-size:12px !important;background:#10b981 !important;color:white !important;border:none !important;border-radius:6px !important;cursor:pointer !important;">I took them &mdash; mark as done</button>
+            <button id="hab-missed-btn" onclick="habBackfillYesterday()" style="flex:1 !important;padding:8px 12px !important;font-size:12px !important;background:#10b981 !important;color:white !important;border:none !important;border-radius:6px !important;cursor:pointer !important;">Mark all remaining</button>
             <button onclick="habDismissMissed()" style="padding:8px 12px !important;font-size:12px !important;background:#94a3b8 !important;color:white !important;border:none !important;border-radius:6px !important;cursor:pointer !important;">Dismiss</button>
           </div>
         </div>
@@ -1874,7 +1875,7 @@
       <!-- Version -->
       <div style="background:#ecfdf5 !important;border:1px solid #d1fae5 !important;border-radius:10px !important;padding:14px 16px !important;margin-bottom:16px !important;display:flex !important;align-items:center !important;justify-content:space-between !important;">
         <div style="font-size:13px !important;color:#065f46 !important;"><strong>Current version</strong></div>
-        <div style="font-size:12px !important;font-weight:600 !important;background:#10b981 !important;color:white !important;padding:2px 10px !important;border-radius:99px !important;">v7.17</div>
+        <div style="font-size:12px !important;font-weight:600 !important;background:#10b981 !important;color:white !important;padding:2px 10px !important;border-radius:99px !important;">v7.18</div>
       </div>
 
       <!-- Overview -->
@@ -4288,6 +4289,12 @@
       document.getElementById('hab-missed-alert').style.display = 'none';
     };
 
+    // Record a single missed med for a specific date (yesterday). Used by the per-item tap on the missed-yesterday banner.
+    window.habMarkMissedOne = async function(medId, dateKey) {
+      await safeDailyInsert(medId, dateKey, new Date(dateKey + 'T08:00:00').toISOString());
+      habRender();
+    };
+
     window.habBackfillYesterday = async function() {
       var yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
       var yk = yesterday.getFullYear()+'-'+String(yesterday.getMonth()+1).padStart(2,'0')+'-'+String(yesterday.getDate()).padStart(2,'0');
@@ -5236,6 +5243,7 @@
       bannerEl.innerHTML = '';
 
       // Missed yesterday indicator (dismissable per day)
+      // Each item is individually tappable so Cath can record only the ones she actually took.
       var missedAlert = document.getElementById('hab-missed-alert');
       var yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
       var yk = yesterday.getFullYear()+'-'+String(yesterday.getMonth()+1).padStart(2,'0')+'-'+String(yesterday.getDate()).padStart(2,'0');
@@ -5244,17 +5252,15 @@
       if (missedYesterday.length > 0 && daily.length > 0 && !localStorage.getItem(dismissKey)) {
         var missedChecklistHtml = '';
         missedYesterday.forEach(function(m) {
-          missedChecklistHtml += '<div style="display:flex !important;align-items:center !important;gap:6px !important;"><span style="color:#dc2626 !important;">☐</span> ' + esc(m.name) + '</div>';
+          missedChecklistHtml +=
+            '<div onclick="habMarkMissedOne(' + m.id + ',\'' + yk + '\')" ' +
+            'style="display:flex !important;align-items:center !important;gap:8px !important;padding:6px 8px !important;border-radius:6px !important;cursor:pointer !important;background:rgba(255,255,255,0.5) !important;border:1px solid rgba(220,38,38,0.2) !important;">' +
+              '<span style="font-size:16px !important;color:#dc2626 !important;line-height:1 !important;">&#9744;</span>' +
+              '<span style="flex:1 !important;">' + esc(m.name) + '</span>' +
+            '</div>';
         });
         missedAlert.style.display = 'block';
         document.getElementById('hab-missed-text').innerHTML = missedChecklistHtml;
-        // Update button text based on med type (creams vs tablets)
-        var allCreams = missedYesterday.every(function(m){
-          var name = m.name.toLowerCase();
-          return name.indexOf('cream') !== -1 || name.indexOf('ointment') !== -1 || (name.indexOf('betamethasone') !== -1 && name.indexOf('valerate') !== -1);
-        });
-        var btn = document.getElementById('hab-missed-btn');
-        if (btn) btn.textContent = allCreams ? "I've used it — mark as done" : "I've taken them — mark as done";
       } else {
         missedAlert.style.display = 'none';
       }

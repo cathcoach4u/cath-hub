@@ -87,6 +87,8 @@ Three separate, independent Claude services. Any can be swapped for alternatives
 - `receipt_items` — item_name, price, receipt_id
 - `meal_plans` — day_index, meal data
 - `ai_memory` — fact, created_at (persistent memory)
+- `daily_items` — id, name, section ['morning', 'midday', 'evening'], day_type ['weekday', 'weekend'], user_id, created_at
+- `daily_logs` — id, item_id, user_id, log_date, created_at
 - Storage bucket: `receipts` — receipt images/PDFs
 
 ## design system
@@ -126,11 +128,27 @@ Three separate, independent Claude services. Any can be swapped for alternatives
 - Workout logging with exercise library, custom exercises, sets/reps tracking
 - Medical records: medications, doctor sessions, contacts, mental health
 - Daily habit tracking with 7-day view and streaks
+- Rhythm items (daily, weekly, fortnightly, 6-monthly, annual) with collapsible sections by day type
 - To-do lists with categories and due dates
 - AI assistant (floating chat panel using Anthropic API, persistent memory via `ai_memory` table)
 - Dark mode toggle
 - PWA support (installable, standalone mode)
 - Responsive design (desktop sidebar, mobile hamburger menu)
+
+## managing daily items
+
+Daily items are organized by section (morning, midday, evening) and day type (weekday, weekend). Manage via **My Habits** screen:
+
+- **UI:** Collapsible sections for weekday/weekend under each time period
+- **Database:** `daily_items` table (id, name, section, day_type, user_id, created_at)
+- **Logging:** `daily_logs` table tracks completed items per day
+
+To update items (e.g., replace weekday morning routine):
+1. Get your user ID from Supabase (Auth → Users)
+2. Run SQL from `daily-items-setup.sql` in Supabase SQL Editor, replacing `YOUR_USER_ID`
+3. Reload the app; items display in **My Habits** with collapsible controls
+
+Items are filtered by section and day type. Dashboard shows incomplete items for the current day type only.
 
 ## version numbering
 

@@ -8383,10 +8383,12 @@
   };
 
   window.dashRenderQuickWins = async function() {
+    var session = await sb.auth.getSession();
+    var userId = session && session.data && session.data.session ? session.data.session.user.id : null;
+
     try {
       document.getElementById('dash-daily-items').innerHTML = 'Loading daily...';
-      var session = await sb.auth.getSession();
-      var userId = session && session.data && session.data.session ? session.data.session.user.id : null;
+    } catch(e) {}
 
     try {
       var { data: todos, error } = await sb.from('personal_todos').select('*').eq('done', false).order('created_at', { ascending: true });

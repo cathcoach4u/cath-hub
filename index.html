@@ -8434,17 +8434,11 @@
   window.dashRenderQuickWins = async function() {
     var session = await sb.auth.getSession();
     var userId = session && session.data && session.data.session ? session.data.session.user.id : null;
-    if (!userId) {
-      document.getElementById('dash-daily-items').innerHTML = 'Not logged in';
-      document.getElementById('dash-todo-list').innerHTML = 'Not logged in';
-      document.getElementById('dash-weekly-items').innerHTML = 'Not logged in';
-      return;
-    }
     var wk = window.weekKeys();
     var weekStart = wk[0];
 
     try {
-      var { data: weeklyItems, error } = await sb.from('weekly_items').select('*').eq('user_id', userId).order('created_at', { ascending: true });
+      var { data: weeklyItems, error } = await sb.from('weekly_items').select('*').order('created_at', { ascending: true });
       if (error) throw error;
       var { data: weeklyLogs } = await sb.from('weekly_logs').select('item_id').eq('user_id', userId).gte('logged_date', weekStart);
       var completedIds = new Set((weeklyLogs || []).map(function(l){ return l.item_id; }));
@@ -8467,7 +8461,7 @@
     } catch(e) {}
 
     try {
-      var { data: todos, error } = await sb.from('personal_todos').select('*').eq('user_id', userId).eq('done', false).order('created_at', { ascending: true });
+      var { data: todos, error } = await sb.from('personal_todos').select('*').eq('done', false).order('created_at', { ascending: true });
       if (error) throw error;
       console.log('To-do items:', todos);
       if (!todos || !todos.length) {
@@ -8513,7 +8507,7 @@
       var today = new Date().toISOString().split('T')[0];
       var dayOfWeek = new Date().getDay();
       var dayType = dayOfWeek === 0 || dayOfWeek === 6 ? 'weekend' : 'weekday';
-      var { data: dailyItems } = await sb.from('daily_items').select('*').eq('user_id', userId).eq('day_type', dayType).order('section', { ascending: true });
+      var { data: dailyItems } = await sb.from('daily_items').select('*').eq('day_type', dayType).order('section', { ascending: true });
       console.log('Dashboard daily items:', dailyItems);
       if (!dailyItems || !dailyItems.length) {
         document.getElementById('dash-daily-items').innerHTML = 'No daily_items in database';

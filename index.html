@@ -593,7 +593,7 @@
 
 <div id="cathHub">
   <div style="position:fixed !important;top:16px !important;right:16px !important;display:flex !important;flex-direction:column !important;align-items:flex-end !important;gap:4px !important;z-index:10 !important;">
-    <div class="version-badge">Cath Hub v7.19</div>
+    <div class="version-badge">Cath Hub v7.20</div>
     <div id="today-date-badge" style="font-size:11px !important;font-weight:600 !important;color:#1e293b !important;background:#f1f5f9 !important;padding:3px 8px !important;border-radius:6px !important;border:1px solid #cbd5e1 !important;min-height:16px !important;display:flex !important;align-items:center !important;white-space:nowrap !important;">--/--/----</div>
   </div>
 
@@ -601,7 +601,7 @@
   <div class="mobile-top-bar">
     <button class="hamburger-btn" onclick="toggleMobileNav()" aria-label="Menu">&#x2630;</button>
     <h1>&#x1F3E0; Cath Hub</h1>
-    <div style="font-size:10px !important;font-weight:600 !important;background:#10b981 !important;color:white !important;padding:4px 8px !important;border-radius:99px !important;">v7.19</div>
+    <div style="font-size:10px !important;font-weight:600 !important;background:#10b981 !important;color:white !important;padding:4px 8px !important;border-radius:99px !important;">v7.20</div>
   </div>
 
   <!-- Mobile slide-out drawer -->
@@ -645,7 +645,7 @@
     <button class="nav-item" onclick="chNav('about',this)"><span class="icon">&#x2139;&#xFE0F;</span> About</button>
     <div class="sidebar-footer">
       <div style="display:flex !important;align-items:center !important;gap:6px !important;margin-bottom:8px !important;">
-        <div style="font-size:10px !important;font-weight:600 !important;background:#10b981 !important;color:white !important;padding:2px 8px !important;border-radius:99px !important;">v7.19</div>
+        <div style="font-size:10px !important;font-weight:600 !important;background:#10b981 !important;color:white !important;padding:2px 8px !important;border-radius:99px !important;">v7.20</div>
       </div>
       <div style="display:flex !important;align-items:center !important;gap:6px !important;margin-bottom:6px !important;">
         <span style="font-size:12px !important;color:rgba(255,255,255,0.5) !important;">&#x1F319;</span>
@@ -1875,7 +1875,7 @@
       <!-- Version -->
       <div style="background:#ecfdf5 !important;border:1px solid #d1fae5 !important;border-radius:10px !important;padding:14px 16px !important;margin-bottom:16px !important;display:flex !important;align-items:center !important;justify-content:space-between !important;">
         <div style="font-size:13px !important;color:#065f46 !important;"><strong>Current version</strong></div>
-        <div style="font-size:12px !important;font-weight:600 !important;background:#10b981 !important;color:white !important;padding:2px 10px !important;border-radius:99px !important;">v7.19</div>
+        <div style="font-size:12px !important;font-weight:600 !important;background:#10b981 !important;color:white !important;padding:2px 10px !important;border-radius:99px !important;">v7.20</div>
       </div>
 
       <!-- Overview -->
@@ -4210,7 +4210,8 @@
       var logs = {};
       (data || []).forEach(function(l) {
         if (!logs[l.med_id]) logs[l.med_id] = {};
-        logs[l.med_id][l.date] = true;
+        // Store the full log row so callers can read note/dose/created_at. Still truthy for existing checks.
+        logs[l.med_id][l.date] = l;
       });
       return logs;
     }
@@ -4836,14 +4837,28 @@
       var { data } = await sb.from('habit_logs').select('*').eq('med_id', id).eq('date', dk);
       if (data && data.length) {
         await sb.from('habit_logs').delete().eq('med_id', id).eq('date', dk);
+        habRender();
       } else {
-        // Show modal to select date and time
-        habOpenWeeklyDateTimePicker(id, dk);
+        // Look up the med name so the picker can show dose presets where relevant.
+        var { data: medRow } = await sb.from('habit_meds').select('name').eq('id', id).maybeSingle();
+        habOpenWeeklyDateTimePicker(id, dk, (medRow && medRow.name) || '');
       }
-      habRender();
     };
 
-    window.habOpenWeeklyDateTimePicker = function(medId, dateKey) {
+    // Meds that prompt for a dose (stored on habit_logs.note) when marked as done.
+    // Mounjaro dose-escalation steps per Eli Lilly titration schedule.
+    var WEEKLY_DOSE_PRESETS = {
+      mounjaro: ['2.5mg','5mg','7.5mg','10mg','12.5mg','15mg']
+    };
+    function weeklyDosePresetsFor(medName) {
+      var n = (medName || '').toLowerCase();
+      if (n.indexOf('mounjaro') !== -1 || n.indexOf('monjaro') !== -1 || n.indexOf('tirzepatide') !== -1) return WEEKLY_DOSE_PRESETS.mounjaro;
+      return null;
+    }
+
+    window.habOpenWeeklyDateTimePicker = function(medId, dateKey, medName) {
+      var presets = weeklyDosePresetsFor(medName);
+
       var modal = document.createElement('div');
       modal.style.cssText = 'position:fixed !important;top:0 !important;left:0 !important;right:0 !important;bottom:0 !important;background:rgba(0,0,0,0.5) !important;z-index:9999 !important;display:flex !important;align-items:center !important;justify-content:center !important;padding:20px !important;';
 
@@ -4851,7 +4866,7 @@
       content.style.cssText = 'background:white !important;border-radius:10px !important;padding:20px !important;max-width:400px !important;width:100% !important;';
 
       var title = document.createElement('h3');
-      title.textContent = 'When did you take it?';
+      title.textContent = medName ? ('When did you take ' + medName + '?') : 'When did you take it?';
       title.style.cssText = 'margin:0 0 15px 0 !important;';
 
       var dateLabel = document.createElement('label');
@@ -4873,6 +4888,43 @@
       timeInput.value = ('0' + now.getHours()).slice(-2) + ':' + ('0' + now.getMinutes()).slice(-2);
       timeInput.style.cssText = 'width:100% !important;padding:8px !important;margin-bottom:15px !important;border:1px solid #cbd5e1 !important;border-radius:6px !important;';
 
+      // Dose section — only shown when med has preset doses (e.g. Mounjaro).
+      var doseInput = null;
+      var doseLabel = null;
+      var pillWrap = null;
+      if (presets) {
+        doseLabel = document.createElement('label');
+        doseLabel.textContent = 'Dose: ';
+        doseLabel.style.cssText = 'display:block !important;margin-bottom:10px !important;font-weight:600 !important;';
+
+        pillWrap = document.createElement('div');
+        pillWrap.style.cssText = 'display:flex !important;flex-wrap:wrap !important;gap:6px !important;margin-bottom:10px !important;';
+
+        doseInput = document.createElement('input');
+        doseInput.type = 'text';
+        doseInput.placeholder = 'Or type a custom dose (e.g. 6mg)';
+        doseInput.style.cssText = 'width:100% !important;padding:8px !important;margin-bottom:15px !important;border:1px solid #cbd5e1 !important;border-radius:6px !important;';
+
+        presets.forEach(function(d) {
+          var pill = document.createElement('button');
+          pill.type = 'button';
+          pill.textContent = d;
+          pill.style.cssText = 'padding:6px 12px !important;border:1px solid #cbd5e1 !important;background:white !important;border-radius:99px !important;font-size:12px !important;cursor:pointer !important;';
+          pill.onclick = function() {
+            doseInput.value = d;
+            Array.from(pillWrap.children).forEach(function(p) {
+              p.style.setProperty('background','white','important');
+              p.style.setProperty('color','#1e293b','important');
+              p.style.setProperty('border-color','#cbd5e1','important');
+            });
+            pill.style.setProperty('background','#3b82f6','important');
+            pill.style.setProperty('color','white','important');
+            pill.style.setProperty('border-color','#3b82f6','important');
+          };
+          pillWrap.appendChild(pill);
+        });
+      }
+
       var buttonsDiv = document.createElement('div');
       buttonsDiv.style.cssText = 'display:flex !important;gap:8px !important;';
 
@@ -4883,7 +4935,11 @@
         var selectedDate = dateInput.value;
         var selectedTime = timeInput.value;
         var dateTimeStr = selectedDate + 'T' + selectedTime + ':00';
-        await sb.from('habit_logs').insert({ med_id: medId, date: selectedDate, created_at: new Date(dateTimeStr).toISOString() });
+        var row = { med_id: medId, date: selectedDate, created_at: new Date(dateTimeStr).toISOString() };
+        if (doseInput && doseInput.value.trim()) {
+          row.note = doseInput.value.trim();
+        }
+        await sb.from('habit_logs').insert(row);
         document.body.removeChild(modal);
         habRender();
       };
@@ -4903,6 +4959,11 @@
       content.appendChild(dateInput);
       content.appendChild(timeLabel);
       content.appendChild(timeInput);
+      if (doseLabel) {
+        content.appendChild(doseLabel);
+        content.appendChild(pillWrap);
+        content.appendChild(doseInput);
+      }
       content.appendChild(buttonsDiv);
 
       modal.appendChild(content);
@@ -5475,8 +5536,15 @@
           var wMedInfo = medsLookup[med.name.toLowerCase()];
           var wDoseStr = wMedInfo && wMedInfo.dose ? wMedInfo.dose : '';
           h += '<div style="flex:1 !important;"><div class="hab-med-name" style="margin-bottom:0 !important;">'+esc(med.name)+(wDoseStr ? ' <span style="font-size:10px !important;color:#94a3b8 !important;font-weight:400 !important;">'+esc(wDoseStr)+'</span>' : '')+'</div>';
+          // Find most recent log this week (to show the recorded dose, if any)
+          var thisWeekLog = null;
+          for (var dk of wk) {
+            var logForDay = logs[med.id] && logs[med.id][dk];
+            if (logForDay) { thisWeekLog = logForDay; break; }
+          }
+          var thisWeekDose = thisWeekLog && thisWeekLog.note ? thisWeekLog.note : '';
           if (takenThisWeek) {
-            h += '<div style="font-size:10px !important;color:#10b981 !important;">&#x2713; Taken this week</div>';
+            h += '<div style="font-size:10px !important;color:#10b981 !important;">&#x2713; Taken this week' + (thisWeekDose ? ' &middot; <span style="font-weight:600 !important;">'+esc(thisWeekDose)+'</span>' : '') + '</div>';
           } else {
             h += '<div style="font-size:10px !important;color:#f59e0b !important;">Not yet taken this week</div>';
           }

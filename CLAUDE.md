@@ -155,7 +155,7 @@ Three separate, independent Claude services. Any can be swapped for alternatives
 
 - Supabase authentication with email/password
 - Dashboard with quick stats and navigation cards
-- To-do lists with categories and due dates
+- To-do lists with categories and due dates (grouped by category with headers)
 - Workout logging with exercise library, custom exercises, sets/reps tracking, session history
 - Medical records: medications, doctor sessions, mental health notes
 - Medication tracking with daily completion logging
@@ -223,14 +223,14 @@ When reconnecting (each new session):
 
 Before finishing:
 
-- [ ] All code changes pushed to main
-- [ ] Version bumped in `CLAUDE.md` and `index.html` (sidebar footer)
-- [ ] Service worker cache key matches version (e.g., `cache-v4-9`)
-- [ ] SQL queries provided as copy-paste (if applicable)
-- [ ] CLAUDE.md updated with any new limitations or architecture changes
-- [ ] About page updated with new tech stack or costs (if applicable)
-- [ ] No open branches or PRs
-- [ ] No uncommitted changes
+- [x] All code changes pushed to main
+- [x] Version bumped in `CLAUDE.md` and `index.html` (sidebar footer) — v7.15
+- [x] Service worker cache key matches version — N/A (no service worker)
+- [x] SQL queries provided as copy-paste (if applicable) — daily-items-setup.sql documented
+- [x] CLAUDE.md updated with any new limitations or architecture changes — to-do category grouping added
+- [x] About page updated with new tech stack or costs (if applicable) — N/A
+- [x] No open branches or PRs
+- [x] No uncommitted changes
 
 ## development notes
 
@@ -238,4 +238,17 @@ Before finishing:
 - Supabase client initialized with public anon key
 - No build step required — pure HTML/CSS/JS
 - Deploy via GitHub Pages (push main → live in 1–2 minutes)
-- Service worker handles offline caching and install prompts
+- Service worker: mentioned in docs but not yet implemented (file doesn't exist)
+
+## session notes (v7.15)
+
+**Changes made:**
+- Dashboard to-do list now groups tasks by category with purple uppercase headers
+- Pending & completed tasks sorted within each category: no-date items first, then by due date
+- Applies same grouping logic to both standalone todo.html and main dashboard
+
+**Ready for next session:**
+- Daily items setup (DAILY_ITEMS_UPDATE.md, daily-items-setup.sql) documented in CLAUDE.md
+- User ID known: `ae560260-5fab-4b00-9d3e-00d982f97de7`
+- All changes pushed to main (v7.15)
+- No branches or uncommitted work

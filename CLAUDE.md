@@ -173,7 +173,7 @@ Three separate, independent Claude services. Any can be swapped for alternatives
 
 ## version numbering
 
-- Current: **v7.15** (green badge in sidebar footer and About page)
+- Current: **v7.16** (green badge in sidebar footer and About page)
 - Bumped on every code change (minor version increment)
 - Service worker cache key matches version (e.g., `cache-v4-12`)
 
@@ -227,7 +227,7 @@ When reconnecting (each new session):
 Before finishing:
 
 - [x] All code changes pushed to main
-- [x] Version bumped in `CLAUDE.md` and `index.html` (sidebar footer) — v7.15
+- [x] Version bumped in `CLAUDE.md` and `index.html` (sidebar footer) — v7.16
 - [x] Service worker cache key matches version — N/A (no service worker)
 - [x] SQL queries provided as copy-paste (if applicable) — daily-items-setup.sql documented
 - [x] CLAUDE.md updated with any new limitations or architecture changes — to-do category grouping added
@@ -243,7 +243,7 @@ Before finishing:
 - Deploy via GitHub Pages (push main → live in 1–2 minutes)
 - Service worker: mentioned in docs but not yet implemented (file doesn't exist)
 
-## session notes (v7.15)
+## session notes (v7.16)
 
 **Changes made:**
 - Dashboard to-do list (ch-todo in index.html) now groups tasks by category with purple uppercase headers
@@ -259,5 +259,5 @@ When asked to modify a feature that has multiple implementations (e.g., "update 
 **Ready for next session:**
 - Daily items setup (DAILY_ITEMS_UPDATE.md, daily-items-setup.sql) documented in CLAUDE.md
 - User ID: `ae560260-5fab-4b00-9d3e-00d982f97de7`
-- All changes pushed to main (v7.15)
+- All changes pushed to main (v7.16)
 - No branches or uncommitted work

@@ -173,7 +173,7 @@ Three separate, independent Claude services. Any can be swapped for alternatives
 
 ## version numbering
 
-- Current: **v7.16** (green badge in sidebar footer and About page)
+- Current: **v7.17** (green badge in sidebar footer and About page)
 - Bumped on every code change (minor version increment)
 - Service worker cache key matches version (e.g., `cache-v4-12`)
 
@@ -227,11 +227,11 @@ When reconnecting (each new session):
 Before finishing:
 
 - [x] All code changes pushed to main
-- [x] Version bumped in `CLAUDE.md` and `index.html` (sidebar footer) — v7.16
+- [x] Version bumped in `CLAUDE.md` and `index.html` (sidebar footer) — v7.17
 - [x] Service worker cache key matches version — N/A (no service worker)
 - [x] SQL queries provided as copy-paste (if applicable) — daily-items-setup.sql documented
 - [x] CLAUDE.md updated with any new limitations or architecture changes — user_id filtering fixes documented
-- [x] About page audited — all current (v7.16, infrastructure, AI services, tech stack, screens, database, features all listed)
+- [x] About page audited — all current (v7.17, infrastructure, AI services, tech stack, screens, database, features all listed)
 - [x] Page titles standardised to "Cath Hub" across all HTML files
 - [x] No open branches or PRs (feature branch deleted)
 - [x] No uncommitted changes
@@ -245,7 +245,7 @@ Before finishing:
 - Deploy via GitHub Pages (push main → live in 1–2 minutes)
 - Service worker: mentioned in docs but not yet implemented (file doesn't exist)
 
-## session notes (v7.16)
+## session notes (v7.17)
 
 **Changes made this session:**
 - ✅ To-do lists grouped by category with headers (both dashboard and standalone)
@@ -267,7 +267,7 @@ Before finishing:
 - AI assistant (`ai.html`) — separate app with to-do API tools
 
 **Ready for next session:**
-- All code on main (v7.16)
+- All code on main (v7.17)
 - No open branches or PRs (feature branch cleaned up)
 - No uncommitted changes
 - CLAUDE.md fully documented with all fixes

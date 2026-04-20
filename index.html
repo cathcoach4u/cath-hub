@@ -8461,7 +8461,7 @@
     } catch(e) {}
 
     try {
-      var { data: todos, error } = await sb.from('personal_todos').select('*').eq('done', false).order('created_at', { ascending: true });
+      var { data: todos, error } = await sb.from('personal_todos').select('*').eq('user_id', userId).eq('done', false).order('created_at', { ascending: true });
       if (error) throw error;
       console.log('To-do items:', todos);
       if (!todos || !todos.length) {
@@ -8507,7 +8507,7 @@
       var today = new Date().toISOString().split('T')[0];
       var dayOfWeek = new Date().getDay();
       var dayType = dayOfWeek === 0 || dayOfWeek === 6 ? 'weekend' : 'weekday';
-      var { data: dailyItems } = await sb.from('daily_items').select('*').order('section', { ascending: true });
+      var { data: dailyItems } = await sb.from('daily_items').select('*').eq('user_id', userId).eq('day_type', dayType).order('section', { ascending: true });
       console.log('Dashboard daily items:', dailyItems);
       if (!dailyItems || !dailyItems.length) {
         document.getElementById('dash-daily-items').innerHTML = 'No daily_items in database';
@@ -8556,7 +8556,7 @@
     }
 
     try {
-      var { data: fortnightlyItems, error } = await sb.from('fortnightly_items').select('*').order('created_at', { ascending: true });
+      var { data: fortnightlyItems, error } = await sb.from('fortnightly_items').select('*').eq('user_id', userId).order('created_at', { ascending: true });
       if (error) throw error;
       console.log('Fortnightly items from DB:', fortnightlyItems);
 

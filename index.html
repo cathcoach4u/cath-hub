@@ -718,10 +718,15 @@
         </div>
       </div>
 
-      <!-- Quick Wins: Daily + Weekly + To-Do -->
+      <!-- Quick Wins: Fortnightly + Daily + Weekly + To-Do -->
       <div class="dash-section">
         <h3 style="margin-bottom:0 !important;">⚡ Quick Wins</h3>
-        <div style="background:#dbeafe !important;border:1px solid #93c5fd !important;border-radius:10px !important;padding:12px !important;margin-top:10px !important;margin-bottom:10px !important;">
+        <div style="background:#f3e8ff !important;border:1px solid #e9d5ff !important;border-radius:10px !important;padding:12px !important;margin-top:10px !important;margin-bottom:10px !important;">
+          <div style="font-size:11px !important;font-weight:700 !important;color:#6b21a8 !important;text-transform:uppercase !important;margin-bottom:6px !important;">⏰ Fortnightly</div>
+          <div id="dash-fortnightly-week" style="font-size:10px !important;color:#a855f7 !important;font-weight:600 !important;margin-bottom:8px !important;">Week -</div>
+          <div id="dash-fortnightly-items" style="font-size:13px !important;color:#64748b !important;">Loading...</div>
+        </div>
+        <div style="background:#dbeafe !important;border:1px solid #93c5fd !important;border-radius:10px !important;padding:12px !important;margin-bottom:10px !important;">
           <div style="font-size:11px !important;font-weight:700 !important;color:#1e40af !important;text-transform:uppercase !important;margin-bottom:6px !important;">Daily</div>
           <div id="dash-daily-items" style="font-size:13px !important;color:#64748b !important;">Loading...</div>
         </div>
@@ -734,10 +739,6 @@
             <div style="font-size:11px !important;font-weight:700 !important;color:#b45309 !important;text-transform:uppercase !important;margin-bottom:6px !important;">✅ To-Do</div>
             <div id="dash-todo-list" style="font-size:13px !important;color:#64748b !important;">Loading...</div>
           </div>
-        </div>
-        <div style="background:#f3e8ff !important;border:1px solid #e9d5ff !important;border-radius:10px !important;padding:12px !important;margin-top:10px !important;">
-          <div style="font-size:11px !important;font-weight:700 !important;color:#6b21a8 !important;text-transform:uppercase !important;margin-bottom:6px !important;">⏰ Fortnightly</div>
-          <div id="dash-fortnightly-items" style="font-size:13px !important;color:#64748b !important;">Loading...</div>
         </div>
       </div>
 
@@ -8493,6 +8494,9 @@
       if (error) throw error;
       console.log('Fortnightly items from DB:', fortnightlyItems);
 
+      var currentWeek = zbGetFortnightWeek();
+      document.getElementById('dash-fortnightly-week').textContent = 'Week ' + currentWeek;
+
       if (!fortnightlyItems || !fortnightlyItems.length) {
         document.getElementById('dash-fortnightly-items').innerHTML = 'No items yet';
       } else {
@@ -8511,7 +8515,8 @@
         var { data: fortLogs } = await sb.from('fortnightly_logs').select('item_id').eq('user_id', userId).gte('logged_date', fortStartStr);
         var completedIds = new Set((fortLogs || []).map(function(l){ return l.item_id; }));
 
-        var activeItems = (fortnightlyItems || []).filter(function(i){ return !completedIds.has(i.id); });
+        var currentWeekItems = (fortnightlyItems || []).filter(function(i){ return i.week === currentWeek; });
+        var activeItems = currentWeekItems.filter(function(i){ return !completedIds.has(i.id); });
         if (!activeItems.length) {
           document.getElementById('dash-fortnightly-items').innerHTML = 'All done!';
         } else {

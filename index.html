@@ -593,7 +593,7 @@
 
 <div id="cathHub">
   <div style="position:fixed !important;top:16px !important;right:16px !important;display:flex !important;flex-direction:column !important;align-items:flex-end !important;gap:4px !important;z-index:10 !important;">
-    <div class="version-badge">Cath Hub v7.14</div>
+    <div class="version-badge">Cath Hub v7.15</div>
     <div id="today-date-badge" style="font-size:11px !important;font-weight:600 !important;color:#1e293b !important;background:#f1f5f9 !important;padding:3px 8px !important;border-radius:6px !important;border:1px solid #cbd5e1 !important;min-height:16px !important;display:flex !important;align-items:center !important;white-space:nowrap !important;">--/--/----</div>
   </div>
 
@@ -601,7 +601,7 @@
   <div class="mobile-top-bar">
     <button class="hamburger-btn" onclick="toggleMobileNav()" aria-label="Menu">&#x2630;</button>
     <h1>&#x1F3E0; Cath Hub</h1>
-    <div style="font-size:10px !important;font-weight:600 !important;background:#10b981 !important;color:white !important;padding:4px 8px !important;border-radius:99px !important;">v7.14</div>
+    <div style="font-size:10px !important;font-weight:600 !important;background:#10b981 !important;color:white !important;padding:4px 8px !important;border-radius:99px !important;">v7.15</div>
   </div>
 
   <!-- Mobile slide-out drawer -->
@@ -645,7 +645,7 @@
     <button class="nav-item" onclick="chNav('about',this)"><span class="icon">&#x2139;&#xFE0F;</span> About</button>
     <div class="sidebar-footer">
       <div style="display:flex !important;align-items:center !important;gap:6px !important;margin-bottom:8px !important;">
-        <div style="font-size:10px !important;font-weight:600 !important;background:#10b981 !important;color:white !important;padding:2px 8px !important;border-radius:99px !important;">v7.14</div>
+        <div style="font-size:10px !important;font-weight:600 !important;background:#10b981 !important;color:white !important;padding:2px 8px !important;border-radius:99px !important;">v7.15</div>
       </div>
       <div style="display:flex !important;align-items:center !important;gap:6px !important;margin-bottom:6px !important;">
         <span style="font-size:12px !important;color:rgba(255,255,255,0.5) !important;">&#x1F319;</span>
@@ -1874,7 +1874,7 @@
       <!-- Version -->
       <div style="background:#ecfdf5 !important;border:1px solid #d1fae5 !important;border-radius:10px !important;padding:14px 16px !important;margin-bottom:16px !important;display:flex !important;align-items:center !important;justify-content:space-between !important;">
         <div style="font-size:13px !important;color:#065f46 !important;"><strong>Current version</strong></div>
-        <div style="font-size:12px !important;font-weight:600 !important;background:#10b981 !important;color:white !important;padding:2px 10px !important;border-radius:99px !important;">v7.14</div>
+        <div style="font-size:12px !important;font-weight:600 !important;background:#10b981 !important;color:white !important;padding:2px 10px !important;border-radius:99px !important;">v7.15</div>
       </div>
 
       <!-- Overview -->
@@ -5833,65 +5833,103 @@
         var filteredPending = tdFilterCat === 'All' ? pending : pending.filter(function(t){ return (t.category || 'General') === tdFilterCat; });
         var filteredDone = tdFilterCat === 'All' ? done : done.filter(function(t){ return (t.category || 'General') === tdFilterCat; });
 
-        // Render pending
+        // Render pending with category grouping
         if (!filteredPending.length) {
           pendingList.innerHTML = '<div style="padding:16px !important;text-align:center !important;color:#94a3b8 !important;font-size:13px !important;">No pending tasks' + (tdFilterCat !== 'All' ? ' in ' + tdFilterCat : '') + '</div>';
         } else {
-          var ph = '';
+          var byCategory = {};
           filteredPending.forEach(function(t) {
-            var catIcon = TD_CAT_ICONS[t.category] || TD_CAT_ICONS['General'];
-            var dateStr = '';
-            if (t.due_date) {
-              var dp = t.due_date.split('-');
-              dateStr = ' &#x1F4C5; ' + dp[2] + '/' + dp[1];
-              var today = new Date(); today.setHours(0,0,0,0);
-              var due = new Date(t.due_date + 'T00:00:00');
-              if (due < today) dateStr = ' <span style="color:#ef4444 !important;">&#x1F4C5; ' + dp[2] + '/' + dp[1] + ' (overdue)</span>';
-              else if (due.getTime() === today.getTime()) dateStr = ' <span style="color:#f59e0b !important;">&#x1F4C5; Today</span>';
-            }
-            ph += '<div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:12px 14px !important;margin-bottom:2px !important;">';
-            ph += '<div style="display:flex !important;align-items:center !important;gap:10px !important;">';
-            ph += '<div onclick="tdToggle('+t.id+')" style="width:22px !important;height:22px !important;border-radius:6px !important;border:2px solid #cbd5e1 !important;background:transparent !important;cursor:pointer !important;display:flex !important;align-items:center !important;justify-content:center !important;flex-shrink:0 !important;"></div>';
-            ph += '<div style="flex:1 !important;"><div style="font-size:14px !important;color:#1e293b !important;">'+tdEsc(t.task)+'</div><div style="font-size:11px !important;color:#94a3b8 !important;margin-top:2px !important;">'+catIcon+' '+tdEsc(t.category || 'General')+dateStr+'</div></div>';
-            ph += '<div onclick="tdEdit('+t.id+')" style="color:#94a3b8 !important;cursor:pointer !important;font-size:14px !important;padding:0 4px !important;" title="Edit">&#x270F;</div>';
-            ph += '<div onclick="tdDelete('+t.id+')" style="color:#94a3b8 !important;cursor:pointer !important;font-size:16px !important;padding:0 4px !important;" title="Remove">&#x1F5D1;</div>';
-            ph += '</div>';
-            ph += '<div id="td-edit-'+t.id+'" style="display:none !important;margin-top:10px !important;padding-top:10px !important;border-top:1px solid #e2e8f0 !important;">';
-            ph += '<input type="text" id="td-edit-task-'+t.id+'" value="'+tdEsc(t.task).replace(/"/g,'&quot;')+'" style="width:100% !important;padding:8px 10px !important;border:1px solid #e2e8f0 !important;border-radius:8px !important;font-size:14px !important;margin-bottom:8px !important;box-sizing:border-box !important;">';
-            ph += '<div style="display:flex !important;gap:8px !important;margin-bottom:8px !important;">';
-            ph += '<select id="td-edit-cat-'+t.id+'" style="flex:1 !important;padding:8px 10px !important;border:1px solid #e2e8f0 !important;border-radius:8px !important;font-size:13px !important;background:white !important;appearance:auto !important;-webkit-appearance:listbox !important;">';
-            var tdCatList = ['General','Health','Home','Work','Shopping','Finance','Family','Admin','Personal','Event/Party'];
-            var currentCat = t.category ? t.category.trim() : 'General';
-            for (var ci = 0; ci < tdCatList.length; ci++) {
-              var sel = currentCat === tdCatList[ci] ? ' selected' : '';
-              ph += '<option value="'+tdCatList[ci]+'"'+sel+'>'+tdCatList[ci]+'</option>';
-            }
-            ph += '</select>';
-            ph += '<input type="date" id="td-edit-date-'+t.id+'" value="'+(t.due_date || '')+'" style="flex:1 !important;padding:8px 10px !important;border:1px solid #e2e8f0 !important;border-radius:8px !important;font-size:13px !important;background:white !important;">';
-            ph += '</div>';
-            ph += '<div style="display:flex !important;gap:8px !important;">';
-            ph += '<button id="td-save-'+t.id+'" onclick="tdSaveEdit('+t.id+')" style="flex:1 !important;padding:8px !important;background:#3b82f6 !important;color:white !important;border:none !important;border-radius:8px !important;font-size:13px !important;font-weight:600 !important;cursor:pointer !important;">Save</button>';
-            ph += '<button onclick="tdCancelEdit('+t.id+')" style="flex:1 !important;padding:8px !important;background:#f1f5f9 !important;color:#64748b !important;border:none !important;border-radius:8px !important;font-size:13px !important;cursor:pointer !important;">Cancel</button>';
-            ph += '</div>';
-            ph += '</div>';
+            var cat = t.category || 'General';
+            if (!byCategory[cat]) byCategory[cat] = [];
+            byCategory[cat].push(t);
+          });
+          Object.keys(byCategory).forEach(function(cat) {
+            byCategory[cat].sort(function(a, b) {
+              var aHasDate = a.due_date ? true : false;
+              var bHasDate = b.due_date ? true : false;
+              if (aHasDate !== bHasDate) return aHasDate ? 1 : -1;
+              if (aHasDate && bHasDate) return new Date(a.due_date) - new Date(b.due_date);
+              return 0;
+            });
+          });
+          var ph = '';
+          Object.keys(byCategory).sort().forEach(function(cat) {
+            ph += '<div style="margin-bottom:16px !important;"><div style="font-size:11px !important;font-weight:700 !important;color:#6b21a8 !important;text-transform:uppercase !important;margin-bottom:8px !important;">'+cat+'</div>';
+            byCategory[cat].forEach(function(t) {
+              var catIcon = TD_CAT_ICONS[t.category] || TD_CAT_ICONS['General'];
+              var dateStr = '';
+              if (t.due_date) {
+                var dp = t.due_date.split('-');
+                dateStr = ' &#x1F4C5; ' + dp[2] + '/' + dp[1];
+                var today = new Date(); today.setHours(0,0,0,0);
+                var due = new Date(t.due_date + 'T00:00:00');
+                if (due < today) dateStr = ' <span style="color:#ef4444 !important;">&#x1F4C5; ' + dp[2] + '/' + dp[1] + ' (overdue)</span>';
+                else if (due.getTime() === today.getTime()) dateStr = ' <span style="color:#f59e0b !important;">&#x1F4C5; Today</span>';
+              }
+              ph += '<div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:12px 14px !important;margin-bottom:2px !important;">';
+              ph += '<div style="display:flex !important;align-items:center !important;gap:10px !important;">';
+              ph += '<div onclick="tdToggle('+t.id+')" style="width:22px !important;height:22px !important;border-radius:6px !important;border:2px solid #cbd5e1 !important;background:transparent !important;cursor:pointer !important;display:flex !important;align-items:center !important;justify-content:center !important;flex-shrink:0 !important;"></div>';
+              ph += '<div style="flex:1 !important;"><div style="font-size:14px !important;color:#1e293b !important;">'+tdEsc(t.task)+'</div><div style="font-size:11px !important;color:#94a3b8 !important;margin-top:2px !important;">'+catIcon+' '+tdEsc(t.category || 'General')+dateStr+'</div></div>';
+              ph += '<div onclick="tdEdit('+t.id+')" style="color:#94a3b8 !important;cursor:pointer !important;font-size:14px !important;padding:0 4px !important;" title="Edit">&#x270F;</div>';
+              ph += '<div onclick="tdDelete('+t.id+')" style="color:#94a3b8 !important;cursor:pointer !important;font-size:16px !important;padding:0 4px !important;" title="Remove">&#x1F5D1;</div>';
+              ph += '</div>';
+              ph += '<div id="td-edit-'+t.id+'" style="display:none !important;margin-top:10px !important;padding-top:10px !important;border-top:1px solid #e2e8f0 !important;">';
+              ph += '<input type="text" id="td-edit-task-'+t.id+'" value="'+tdEsc(t.task).replace(/"/g,'&quot;')+'" style="width:100% !important;padding:8px 10px !important;border:1px solid #e2e8f0 !important;border-radius:8px !important;font-size:14px !important;margin-bottom:8px !important;box-sizing:border-box !important;">';
+              ph += '<div style="display:flex !important;gap:8px !important;margin-bottom:8px !important;">';
+              ph += '<select id="td-edit-cat-'+t.id+'" style="flex:1 !important;padding:8px 10px !important;border:1px solid #e2e8f0 !important;border-radius:8px !important;font-size:13px !important;background:white !important;appearance:auto !important;-webkit-appearance:listbox !important;">';
+              var tdCatList = ['General','Health','Home','Work','Shopping','Finance','Family','Admin','Personal','Event/Party'];
+              var currentCat = t.category ? t.category.trim() : 'General';
+              for (var ci = 0; ci < tdCatList.length; ci++) {
+                var sel = currentCat === tdCatList[ci] ? ' selected' : '';
+                ph += '<option value="'+tdCatList[ci]+'"'+sel+'>'+tdCatList[ci]+'</option>';
+              }
+              ph += '</select>';
+              ph += '<input type="date" id="td-edit-date-'+t.id+'" value="'+(t.due_date || '')+'" style="flex:1 !important;padding:8px 10px !important;border:1px solid #e2e8f0 !important;border-radius:8px !important;font-size:13px !important;background:white !important;">';
+              ph += '</div>';
+              ph += '<div style="display:flex !important;gap:8px !important;">';
+              ph += '<button id="td-save-'+t.id+'" onclick="tdSaveEdit('+t.id+')" style="flex:1 !important;padding:8px !important;background:#3b82f6 !important;color:white !important;border:none !important;border-radius:8px !important;font-size:13px !important;font-weight:600 !important;cursor:pointer !important;">Save</button>';
+              ph += '<button onclick="tdCancelEdit('+t.id+')" style="flex:1 !important;padding:8px !important;background:#f1f5f9 !important;color:#64748b !important;border:none !important;border-radius:8px !important;font-size:13px !important;cursor:pointer !important;">Cancel</button>';
+              ph += '</div>';
+              ph += '</div>';
+              ph += '</div>';
+            });
             ph += '</div>';
           });
           pendingList.innerHTML = ph;
         }
 
-        // Render done
+        // Render done with category grouping
         if (!filteredDone.length) {
           doneList.innerHTML = '<div style="padding:12px !important;text-align:center !important;color:#94a3b8 !important;font-size:13px !important;">No completed tasks</div>';
         } else {
-          var dh = '';
+          var doneByCat = {};
           filteredDone.forEach(function(t) {
-            var catIcon = TD_CAT_ICONS[t.category] || TD_CAT_ICONS['General'];
-            var dateStr = '';
-            if (t.due_date) { var dp = t.due_date.split('-'); dateStr = ' &#x1F4C5; ' + dp[2] + '/' + dp[1]; }
-            dh += '<div style="display:flex !important;align-items:center !important;gap:10px !important;padding:12px 14px !important;background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;opacity:0.6 !important;">';
-            dh += '<div onclick="tdToggle('+t.id+')" style="width:22px !important;height:22px !important;border-radius:6px !important;border:2px solid #10b981 !important;background:#10b981 !important;cursor:pointer !important;display:flex !important;align-items:center !important;justify-content:center !important;flex-shrink:0 !important;color:white !important;font-size:13px !important;">&#x2713;</div>';
-            dh += '<div style="flex:1 !important;"><div style="font-size:14px !important;text-decoration:line-through !important;color:#94a3b8 !important;">'+tdEsc(t.task)+'</div><div style="font-size:11px !important;color:#94a3b8 !important;margin-top:2px !important;">'+catIcon+' '+tdEsc(t.category || 'General')+dateStr+'</div></div>';
-            dh += '<div onclick="tdDelete('+t.id+')" style="color:#94a3b8 !important;cursor:pointer !important;font-size:16px !important;padding:0 4px !important;" title="Remove">&#x1F5D1;</div>';
+            var cat = t.category || 'General';
+            if (!doneByCat[cat]) doneByCat[cat] = [];
+            doneByCat[cat].push(t);
+          });
+          Object.keys(doneByCat).forEach(function(cat) {
+            doneByCat[cat].sort(function(a, b) {
+              var aHasDate = a.due_date ? true : false;
+              var bHasDate = b.due_date ? true : false;
+              if (aHasDate !== bHasDate) return aHasDate ? 1 : -1;
+              if (aHasDate && bHasDate) return new Date(a.due_date) - new Date(b.due_date);
+              return 0;
+            });
+          });
+          var dh = '';
+          Object.keys(doneByCat).sort().forEach(function(cat) {
+            dh += '<div style="margin-bottom:16px !important;"><div style="font-size:11px !important;font-weight:700 !important;color:#6b21a8 !important;text-transform:uppercase !important;margin-bottom:8px !important;">'+cat+'</div>';
+            doneByCat[cat].forEach(function(t) {
+              var catIcon = TD_CAT_ICONS[t.category] || TD_CAT_ICONS['General'];
+              var dateStr = '';
+              if (t.due_date) { var dp = t.due_date.split('-'); dateStr = ' &#x1F4C5; ' + dp[2] + '/' + dp[1]; }
+              dh += '<div style="display:flex !important;align-items:center !important;gap:10px !important;padding:12px 14px !important;background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;opacity:0.6 !important;">';
+              dh += '<div onclick="tdToggle('+t.id+')" style="width:22px !important;height:22px !important;border-radius:6px !important;border:2px solid #10b981 !important;background:#10b981 !important;cursor:pointer !important;display:flex !important;align-items:center !important;justify-content:center !important;flex-shrink:0 !important;color:white !important;font-size:13px !important;">&#x2713;</div>';
+              dh += '<div style="flex:1 !important;"><div style="font-size:14px !important;text-decoration:line-through !important;color:#94a3b8 !important;">'+tdEsc(t.task)+'</div><div style="font-size:11px !important;color:#94a3b8 !important;margin-top:2px !important;">'+catIcon+' '+tdEsc(t.category || 'General')+dateStr+'</div></div>';
+              dh += '<div onclick="tdDelete('+t.id+')" style="color:#94a3b8 !important;cursor:pointer !important;font-size:16px !important;padding:0 4px !important;" title="Remove">&#x1F5D1;</div>';
+              dh += '</div>';
+            });
             dh += '</div>';
           });
           doneList.innerHTML = dh;

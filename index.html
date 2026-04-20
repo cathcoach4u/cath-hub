@@ -593,7 +593,7 @@
 
 <div id="cathHub">
   <div style="position:fixed !important;top:16px !important;right:16px !important;display:flex !important;flex-direction:column !important;align-items:flex-end !important;gap:4px !important;z-index:10 !important;">
-    <div class="version-badge">Cath Hub v7.21</div>
+    <div class="version-badge">Cath Hub v7.22</div>
     <div id="today-date-badge" style="font-size:11px !important;font-weight:600 !important;color:#1e293b !important;background:#f1f5f9 !important;padding:3px 8px !important;border-radius:6px !important;border:1px solid #cbd5e1 !important;min-height:16px !important;display:flex !important;align-items:center !important;white-space:nowrap !important;">--/--/----</div>
   </div>
 
@@ -601,7 +601,7 @@
   <div class="mobile-top-bar">
     <button class="hamburger-btn" onclick="toggleMobileNav()" aria-label="Menu">&#x2630;</button>
     <h1>&#x1F3E0; Cath Hub</h1>
-    <div style="font-size:10px !important;font-weight:600 !important;background:#10b981 !important;color:white !important;padding:4px 8px !important;border-radius:99px !important;">v7.21</div>
+    <div style="font-size:10px !important;font-weight:600 !important;background:#10b981 !important;color:white !important;padding:4px 8px !important;border-radius:99px !important;">v7.22</div>
   </div>
 
   <!-- Mobile slide-out drawer -->
@@ -645,7 +645,7 @@
     <button class="nav-item" onclick="chNav('about',this)"><span class="icon">&#x2139;&#xFE0F;</span> About</button>
     <div class="sidebar-footer">
       <div style="display:flex !important;align-items:center !important;gap:6px !important;margin-bottom:8px !important;">
-        <div style="font-size:10px !important;font-weight:600 !important;background:#10b981 !important;color:white !important;padding:2px 8px !important;border-radius:99px !important;">v7.21</div>
+        <div style="font-size:10px !important;font-weight:600 !important;background:#10b981 !important;color:white !important;padding:2px 8px !important;border-radius:99px !important;">v7.22</div>
       </div>
       <div style="display:flex !important;align-items:center !important;gap:6px !important;margin-bottom:6px !important;">
         <span style="font-size:12px !important;color:rgba(255,255,255,0.5) !important;">&#x1F319;</span>
@@ -1875,7 +1875,7 @@
       <!-- Version -->
       <div style="background:#ecfdf5 !important;border:1px solid #d1fae5 !important;border-radius:10px !important;padding:14px 16px !important;margin-bottom:16px !important;display:flex !important;align-items:center !important;justify-content:space-between !important;">
         <div style="font-size:13px !important;color:#065f46 !important;"><strong>Current version</strong></div>
-        <div style="font-size:12px !important;font-weight:600 !important;background:#10b981 !important;color:white !important;padding:2px 10px !important;border-radius:99px !important;">v7.21</div>
+        <div style="font-size:12px !important;font-weight:600 !important;background:#10b981 !important;color:white !important;padding:2px 10px !important;border-radius:99px !important;">v7.22</div>
       </div>
 
       <!-- Overview -->
@@ -4713,54 +4713,111 @@
 
     window.hhLoadFortnightlyLog = async function() {
       try {
-        var { data: items, error: itemsError } = await sb.from('fortnightly_items').select('*').order('created_at', { ascending: false });
+        var session = await sb.auth.getSession();
+        var userId = session && session.data && session.data.session ? session.data.session.user.id : null;
+        if (!userId) {
+          document.getElementById('hh-fortnightly-list').innerHTML = '<div style="padding:16px !important;color:#ef4444 !important;font-size:12px !important;">Not signed in.</div>';
+          return;
+        }
+
+        var { data: items, error: itemsError } = await sb.from('fortnightly_items').select('*').eq('user_id', userId).order('created_at', { ascending: false });
         if (itemsError) throw itemsError;
 
+        var { data: allLogs, error: logsError } = await sb.from('fortnightly_logs').select('*').eq('user_id', userId).order('logged_date', { ascending: false });
+        if (logsError) throw logsError;
+
+        var itemMap = {};
+        (items || []).forEach(function(it){ itemMap[it.id] = it; });
+
         var html = '';
+
+        // Items summary with Log button + per-item "Last"
         if (!items || items.length === 0) {
-          html = '<div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:16px !important;text-align:center !important;color:#94a3b8 !important;font-size:13px !important;">No fortnightly items yet</div>';
+          html += '<div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:16px !important;text-align:center !important;color:#94a3b8 !important;font-size:13px !important;margin-bottom:16px !important;">No fortnightly items yet</div>';
         } else {
-          html = '<div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;overflow:hidden !important;">';
+          html += '<div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;overflow:hidden !important;margin-bottom:16px !important;">';
           html += '<table style="width:100% !important;border-collapse:collapse !important;">';
           html += '<thead style="background:#f8fafc !important;"><tr style="border-bottom:1px solid #e2e8f0 !important;">';
           html += '<th style="padding:12px 16px !important;text-align:left !important;font-size:11px !important;font-weight:700 !important;color:#64748b !important;text-transform:uppercase !important;">Item</th>';
           html += '<th style="padding:12px 16px !important;text-align:left !important;font-size:11px !important;font-weight:700 !important;color:#64748b !important;text-transform:uppercase !important;">Last</th>';
           html += '<th style="padding:12px 16px !important;text-align:right !important;font-size:11px !important;font-weight:700 !important;color:#64748b !important;text-transform:uppercase !important;">Action</th>';
-          html += '</tr></thead>';
-          html += '<tbody>';
+          html += '</tr></thead><tbody>';
 
           for (var i = 0; i < items.length; i++) {
             var item = items[i];
-            var { data: logs, error: logsError } = await sb.from('fortnightly_logs').select('logged_date').eq('item_id', item.id).order('logged_date', { ascending: false }).limit(1);
-            if (logsError) throw logsError;
-
-            var lastLog = (logs && logs.length > 0) ? new Date(logs[0].logged_date).toLocaleDateString('en-AU', {weekday:'short', day:'numeric', month:'short'}) : 'Never';
+            var latest = (allLogs || []).find(function(l){ return l.item_id === item.id; });
+            var lastLog = latest ? new Date(latest.logged_date).toLocaleDateString('en-AU', {weekday:'short', day:'numeric', month:'short'}) : 'Never';
             html += '<tr style="border-bottom:1px solid #e2e8f0 !important;">';
             html += '<td style="padding:12px 16px !important;font-size:13px !important;font-weight:600 !important;color:#1e293b !important;">' + esc(item.name) + '</td>';
             html += '<td style="padding:12px 16px !important;font-size:12px !important;color:#94a3b8 !important;">' + lastLog + '</td>';
             html += '<td style="padding:12px 16px !important;text-align:right !important;"><button onclick="hhLogFortnightlyItem(\'' + item.id + '\')" style="background:#10b981 !important;color:white !important;border:none !important;border-radius:6px !important;padding:6px 12px !important;font-size:12px !important;cursor:pointer !important;">Log</button></td>';
             html += '</tr>';
           }
-          html += '</tbody></table>';
+          html += '</tbody></table></div>';
+        }
+
+        // Full action log: one row per log entry, newest first, grouped by date.
+        html += '<div style="font-size:13px !important;font-weight:700 !important;color:#1e293b !important;margin-bottom:8px !important;">Action log</div>';
+        if (!allLogs || allLogs.length === 0) {
+          html += '<div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:16px !important;text-align:center !important;color:#94a3b8 !important;font-size:13px !important;">No actions logged yet</div>';
+        } else {
+          var grouped = {};
+          allLogs.forEach(function(l){
+            var dk = new Date(l.logged_date).toISOString().split('T')[0];
+            if (!grouped[dk]) grouped[dk] = [];
+            grouped[dk].push(l);
+          });
+          var dateKeys = Object.keys(grouped).sort(function(a,b){ return a < b ? 1 : -1; });
+          html += '<div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:12px 16px !important;">';
+          dateKeys.forEach(function(dk) {
+            var dateObj = new Date(dk + 'T00:00:00');
+            var dayNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+            var dateLabel = dayNames[dateObj.getDay()] + ' ' + dateObj.getDate() + '/' + (dateObj.getMonth()+1) + '/' + dateObj.getFullYear();
+            html += '<div style="font-size:12px !important;font-weight:700 !important;color:#1e293b !important;padding:8px 0 4px !important;border-bottom:1px solid #e2e8f0 !important;margin-bottom:6px !important;">' + dateLabel + ' <span style="font-size:11px !important;color:#94a3b8 !important;font-weight:400 !important;">(' + grouped[dk].length + ')</span></div>';
+            grouped[dk].forEach(function(l) {
+              var itemName = itemMap[l.item_id] ? itemMap[l.item_id].name : 'Deleted item';
+              html += '<div style="display:flex !important;align-items:center !important;gap:8px !important;padding:4px 0 !important;">';
+              html += '<span style="color:#10b981 !important;font-size:14px !important;">&#x2713;</span>';
+              html += '<span style="font-size:13px !important;flex:1 !important;">' + esc(itemName) + '</span>';
+              html += '<span onclick="hhDeleteFortnightlyLog(\'' + l.id + '\')" style="color:#ef4444 !important;cursor:pointer !important;font-size:14px !important;" title="Delete">&#x1F5D1;</span>';
+              html += '</div>';
+            });
+          });
           html += '</div>';
         }
+
         document.getElementById('hh-fortnightly-list').innerHTML = html;
       } catch (e) {
-        document.getElementById('hh-fortnightly-list').innerHTML = '<div style="padding:16px !important;color:#ef4444 !important;font-size:12px !important;">Error loading fortnightly log</div>';
+        document.getElementById('hh-fortnightly-list').innerHTML = '<div style="padding:16px !important;color:#ef4444 !important;font-size:12px !important;">Error loading fortnightly log: ' + esc(e.message || String(e)) + '</div>';
       }
     };
 
     window.hhLogFortnightlyItem = async function(itemId) {
       try {
-        var { data: result, error } = await sb.from('fortnightly_logs').insert({
+        var session = await sb.auth.getSession();
+        var userId = session && session.data && session.data.session ? session.data.session.user.id : null;
+        if (!userId) { alert('Not signed in — please refresh and try again.'); return; }
+        var today = new Date().toISOString().split('T')[0];
+        var { error } = await sb.from('fortnightly_logs').insert({
           item_id: itemId,
-          user_id: (await sb.auth.getSession()).data.session.user.id,
-          logged_date: new Date().toISOString()
+          user_id: userId,
+          logged_date: today
         });
         if (error) throw error;
         hhLoadFortnightlyLog();
       } catch (e) {
-        alert('Error logging item: ' + e.message);
+        alert('Error logging item: ' + (e.message || e));
+      }
+    };
+
+    window.hhDeleteFortnightlyLog = async function(logId) {
+      if (!confirm('Delete this log entry?')) return;
+      try {
+        var { error } = await sb.from('fortnightly_logs').delete().eq('id', logId);
+        if (error) throw error;
+        hhLoadFortnightlyLog();
+      } catch (e) {
+        alert('Error deleting log: ' + (e.message || e));
       }
     };
 
@@ -8465,21 +8522,20 @@
     try {
       var session = await sb.auth.getSession();
       var userId = session && session.data && session.data.session ? session.data.session.user.id : null;
+      if (!userId) {
+        alert('Not signed in — please refresh and try again.');
+        return;
+      }
       var today = new Date().toISOString().split('T')[0];
-      console.log('Logging fortnightly item:', itemId, 'for user:', userId, 'date:', today);
-
-      var { error, data } = await sb.from('fortnightly_logs').insert({
+      var { error } = await sb.from('fortnightly_logs').insert({
         item_id: itemId,
         logged_date: today,
         user_id: userId
       });
       if (error) throw error;
-      console.log('Fortnightly item logged successfully:', data);
-
       await dashRenderQuickWins();
     } catch(e) {
-      console.log('Error logging fortnightly item:', e);
-      alert('Error logging item: ' + e.message);
+      alert('Error logging item: ' + (e.message || e));
     }
   };
 

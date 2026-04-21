@@ -9,6 +9,7 @@
 - **No uppercase headings.** Use lowercase for all section headers (except titles).
 - **Filter pills, not dropdowns.** Prefer horizontal filter pill buttons over dropdown menus.
 - **Collapsible sections.** Default sections to collapsed when space is tight.
+- **SQL always in chat.** When providing SQL (migrations, updates, deletes), paste it as a code block directly in the chat response. Do not only write it to a `.sql` file — the user runs it from chat. Optional: also save to a file for future reference.
 
 ## Project Overview
 

@@ -4206,7 +4206,8 @@
     function todayIdx() { var d = new Date().getDay(); return d === 0 ? 6 : d-1; }
 
     async function getLogsMap() {
-      var { data } = await sb.from('habit_logs').select('*');
+      var uid = (await sb.auth.getUser()).data.user.id;
+      var { data } = await sb.from('habit_logs').select('*').eq('user_id', uid);
       var logs = {};
       (data || []).forEach(function(l) {
         if (!logs[l.med_id]) logs[l.med_id] = {};
@@ -4313,13 +4314,14 @@
     };
 
     window.habBackfillYesterday = async function() {
+      var uid = (await sb.auth.getUser()).data.user.id;
       var yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
       var yk = yesterday.getFullYear()+'-'+String(yesterday.getMonth()+1).padStart(2,'0')+'-'+String(yesterday.getDate()).padStart(2,'0');
       var { data: allHabs } = await sb.from('habit_meds').select('*').eq('freq', 'daily');
       var { data: medsList } = await sb.from('medications').select('name');
       var medNames = (medsList || []).map(function(m){ return m.name.toLowerCase(); });
       var dailyMeds = (allHabs || []).filter(function(h){ return medNames.indexOf(h.name.toLowerCase()) !== -1; });
-      var { data: existing } = await sb.from('habit_logs').select('med_id').eq('date', yk);
+      var { data: existing } = await sb.from('habit_logs').select('med_id').eq('date', yk).eq('user_id', uid);
       var doneIds = (existing || []).map(function(l){ return l.med_id; });
       for (var i = 0; i < dailyMeds.length; i++) {
         if (doneIds.indexOf(dailyMeds[i].id) === -1) {
@@ -4348,12 +4350,13 @@
     };
 
     window.habToggleCustom = async function(id) {
+      var uid = (await sb.auth.getUser()).data.user.id;
       var today = todayKey();
-      var { data } = await sb.from('habit_logs').select('*').eq('med_id', id).eq('date', today);
+      var { data } = await sb.from('habit_logs').select('*').eq('med_id', id).eq('date', today).eq('user_id', uid);
       if (data && data.length) {
-        await sb.from('habit_logs').delete().eq('med_id', id).eq('date', today);
+        await sb.from('habit_logs').delete().eq('med_id', id).eq('date', today).eq('user_id', uid);
       } else {
-        await sb.from('habit_logs').insert({ med_id: id, date: today });
+        await sb.from('habit_logs').insert({ med_id: id, date: today, user_id: uid });
       }
       habRenderCustom();
     };
@@ -4860,14 +4863,15 @@
 
     window.habToggleDaily = async function(id) {
       // Toggle: delete if already logged today, otherwise add
+      var uid = (await sb.auth.getUser()).data.user.id;
       var today = todayKey();
-      var { data: existing } = await sb.from('habit_logs').select('id').eq('med_id', id).eq('date', today);
+      var { data: existing } = await sb.from('habit_logs').select('id').eq('med_id', id).eq('date', today).eq('user_id', uid);
       if (existing && existing.length > 0) {
         // Already logged — delete to uncheck
-        await sb.from('habit_logs').delete().eq('med_id', id).eq('date', today);
+        await sb.from('habit_logs').delete().eq('med_id', id).eq('date', today).eq('user_id', uid);
       } else {
         // Not logged — add new entry
-        await sb.from('habit_logs').insert({ med_id: id, date: today, created_at: new Date().toISOString() });
+        await sb.from('habit_logs').insert({ med_id: id, date: today, created_at: new Date().toISOString(), user_id: uid });
         // Auto-dismiss yesterday's missed alert when marking a med as taken today
         var yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
         var yk = yesterday.getFullYear()+'-'+String(yesterday.getMonth()+1).padStart(2,'0')+'-'+String(yesterday.getDate()).padStart(2,'0');
@@ -4887,9 +4891,10 @@
     };
 
     window.habToggleWeekly = async function(id, dk) {
-      var { data } = await sb.from('habit_logs').select('*').eq('med_id', id).eq('date', dk);
+      var uid = (await sb.auth.getUser()).data.user.id;
+      var { data } = await sb.from('habit_logs').select('*').eq('med_id', id).eq('date', dk).eq('user_id', uid);
       if (data && data.length) {
-        await sb.from('habit_logs').delete().eq('med_id', id).eq('date', dk);
+        await sb.from('habit_logs').delete().eq('med_id', id).eq('date', dk).eq('user_id', uid);
         habRender();
       } else {
         // Look up the med name so the picker can show dose presets where relevant.
@@ -4985,10 +4990,11 @@
       saveBtn.textContent = 'Save';
       saveBtn.style.cssText = 'flex:1 !important;padding:10px !important;background:#10b981 !important;color:white !important;border:none !important;border-radius:6px !important;cursor:pointer !important;';
       saveBtn.onclick = async function() {
+        var uid = (await sb.auth.getUser()).data.user.id;
         var selectedDate = dateInput.value;
         var selectedTime = timeInput.value;
         var dateTimeStr = selectedDate + 'T' + selectedTime + ':00';
-        var row = { med_id: medId, date: selectedDate, created_at: new Date(dateTimeStr).toISOString() };
+        var row = { med_id: medId, date: selectedDate, created_at: new Date(dateTimeStr).toISOString(), user_id: uid };
         var doseVal = doseInput && doseInput.value.trim();
         if (doseVal) row.note = doseVal;
         var { error } = await sb.from('habit_logs').insert(row);
@@ -5140,9 +5146,10 @@
 
     // Safe insert for daily meds - guarantees only one entry per med per day
     async function safeDailyInsert(medId, date, createdAt) {
-      var { data: check } = await sb.from('habit_logs').select('id').eq('med_id', medId).eq('date', date);
+      var uid = (await sb.auth.getUser()).data.user.id;
+      var { data: check } = await sb.from('habit_logs').select('id').eq('med_id', medId).eq('date', date).eq('user_id', uid);
       if (check && check.length > 0) return false; // already recorded
-      await sb.from('habit_logs').insert({ med_id: medId, date: date, created_at: createdAt });
+      await sb.from('habit_logs').insert({ med_id: medId, date: date, created_at: createdAt, user_id: uid });
       return true;
     }
 

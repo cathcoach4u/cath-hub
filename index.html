@@ -593,7 +593,7 @@
 
 <div id="cathHub">
   <div style="position:fixed !important;top:16px !important;right:16px !important;display:flex !important;flex-direction:column !important;align-items:flex-end !important;gap:4px !important;z-index:10 !important;">
-    <div class="version-badge">Cath Hub v7.26</div>
+    <div class="version-badge">Cath Hub v7.27</div>
     <div id="today-date-badge" style="font-size:11px !important;font-weight:600 !important;color:#1e293b !important;background:#f1f5f9 !important;padding:3px 8px !important;border-radius:6px !important;border:1px solid #cbd5e1 !important;min-height:16px !important;display:flex !important;align-items:center !important;white-space:nowrap !important;">--/--/----</div>
   </div>
 
@@ -601,7 +601,7 @@
   <div class="mobile-top-bar">
     <button class="hamburger-btn" onclick="toggleMobileNav()" aria-label="Menu">&#x2630;</button>
     <h1>&#x1F3E0; Cath Hub</h1>
-    <div style="font-size:10px !important;font-weight:600 !important;background:#10b981 !important;color:white !important;padding:4px 8px !important;border-radius:99px !important;">v7.26</div>
+    <div style="font-size:10px !important;font-weight:600 !important;background:#10b981 !important;color:white !important;padding:4px 8px !important;border-radius:99px !important;">v7.27</div>
   </div>
 
   <!-- Mobile slide-out drawer -->
@@ -645,7 +645,7 @@
     <button class="nav-item" onclick="chNav('about',this)"><span class="icon">&#x2139;&#xFE0F;</span> About</button>
     <div class="sidebar-footer">
       <div style="display:flex !important;align-items:center !important;gap:6px !important;margin-bottom:8px !important;">
-        <div style="font-size:10px !important;font-weight:600 !important;background:#10b981 !important;color:white !important;padding:2px 8px !important;border-radius:99px !important;">v7.26</div>
+        <div style="font-size:10px !important;font-weight:600 !important;background:#10b981 !important;color:white !important;padding:2px 8px !important;border-radius:99px !important;">v7.27</div>
       </div>
       <div style="display:flex !important;align-items:center !important;gap:6px !important;margin-bottom:6px !important;">
         <span style="font-size:12px !important;color:rgba(255,255,255,0.5) !important;">&#x1F319;</span>
@@ -1875,7 +1875,7 @@
       <!-- Version -->
       <div style="background:#ecfdf5 !important;border:1px solid #d1fae5 !important;border-radius:10px !important;padding:14px 16px !important;margin-bottom:16px !important;display:flex !important;align-items:center !important;justify-content:space-between !important;">
         <div style="font-size:13px !important;color:#065f46 !important;"><strong>Current version</strong></div>
-        <div style="font-size:12px !important;font-weight:600 !important;background:#10b981 !important;color:white !important;padding:2px 10px !important;border-radius:99px !important;">v7.26</div>
+        <div style="font-size:12px !important;font-weight:600 !important;background:#10b981 !important;color:white !important;padding:2px 10px !important;border-radius:99px !important;">v7.27</div>
       </div>
 
       <!-- Overview -->
@@ -4711,6 +4711,14 @@
       }
     };
 
+    // Sydney-local date key helper (YYYY-MM-DD). Used for any logged_date insert
+    // so clicking Log at 8am Sydney records today's date, not yesterday's UTC date.
+    window.fnLocalDateKey = function() {
+      var n = new Date();
+      return n.getFullYear() + '-' + String(n.getMonth()+1).padStart(2,'0') + '-' + String(n.getDate()).padStart(2,'0');
+    };
+    var fnLocalDateKey = window.fnLocalDateKey;
+
     window.hhLoadFortnightlyLog = async function() {
       try {
         var session = await sb.auth.getSession();
@@ -4737,14 +4745,18 @@
         } else {
           var grouped = {};
           allLogs.forEach(function(l){
-            var dk = new Date(l.logged_date).toISOString().split('T')[0];
+            // Parse the date portion of the stored value directly — avoid UTC roundtrips
+            // that shift the day when logs were recorded as full ISO timestamps.
+            var dk = String(l.logged_date || '').substring(0, 10);
             if (!grouped[dk]) grouped[dk] = [];
             grouped[dk].push(l);
           });
           var dateKeys = Object.keys(grouped).sort(function(a,b){ return a < b ? 1 : -1; });
           html += '<div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:12px 16px !important;">';
           dateKeys.forEach(function(dk) {
-            var dateObj = new Date(dk + 'T00:00:00');
+            // Construct the local date from the date portion only — no timezone drift.
+            var parts = dk.split('-');
+            var dateObj = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
             var dayNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
             var dateLabel = dayNames[dateObj.getDay()] + ' ' + dateObj.getDate() + '/' + (dateObj.getMonth()+1) + '/' + dateObj.getFullYear();
             html += '<div style="font-size:12px !important;font-weight:700 !important;color:#1e293b !important;padding:8px 0 4px !important;border-bottom:1px solid #e2e8f0 !important;margin-bottom:6px !important;">' + dateLabel + ' <span style="font-size:11px !important;color:#94a3b8 !important;font-weight:400 !important;">(' + grouped[dk].length + ')</span></div>';
@@ -4776,7 +4788,7 @@
         var session = await sb.auth.getSession();
         var userId = session && session.data && session.data.session ? session.data.session.user.id : null;
         if (!userId) { alert('Not signed in — please refresh and try again.'); return; }
-        var today = new Date().toISOString().split('T')[0];
+        var today = fnLocalDateKey();
         var { error } = await sb.from('fortnightly_logs').insert({
           item_id: itemId,
           user_id: userId,
@@ -7607,17 +7619,23 @@
       var userId = (await sb.auth.getSession()).data.session.user.id;
       var period = storageKey.replace('rhythm_', '').split('-')[0]; // Extract period from key
 
+      // Sydney-local date key — window.fnLocalDateKey is defined in the habit history IIFE.
+      var localToday = (window.fnLocalDateKey ? window.fnLocalDateKey() : (function(){
+        var n = new Date();
+        return n.getFullYear() + '-' + String(n.getMonth()+1).padStart(2,'0') + '-' + String(n.getDate()).padStart(2,'0');
+      })());
+
       if (checked[itemId]) {
         // Log was checked - insert to Supabase
         if (rhythm === 'daily') {
-          await sb.from(table).insert({ item_id: itemId, user_id: userId, log_date: todayKey() });
+          await sb.from(table).insert({ item_id: itemId, user_id: userId, log_date: localToday });
         } else {
-          await sb.from(table).insert({ item_id: itemId, user_id: userId, logged_date: new Date().toISOString() });
+          await sb.from(table).insert({ item_id: itemId, user_id: userId, logged_date: localToday });
         }
       } else {
         // Log was unchecked - delete from Supabase
         if (rhythm === 'daily') {
-          await sb.from(table).delete().eq('item_id', itemId).eq('log_date', todayKey()).eq('user_id', userId);
+          await sb.from(table).delete().eq('item_id', itemId).eq('log_date', localToday).eq('user_id', userId);
         } else {
           await sb.from(table).delete().eq('item_id', itemId).eq('user_id', userId);
         }
@@ -8518,7 +8536,10 @@
       }
       var noteInput = prompt('Add a note (optional — leave blank to skip):', '');
       if (noteInput === null) return; // user cancelled
-      var today = new Date().toISOString().split('T')[0];
+      var today = (window.fnLocalDateKey ? window.fnLocalDateKey() : (function(){
+        var n = new Date();
+        return n.getFullYear() + '-' + String(n.getMonth()+1).padStart(2,'0') + '-' + String(n.getDate()).padStart(2,'0');
+      })());
       var row = { item_id: itemId, logged_date: today, user_id: userId };
       var note = noteInput.trim();
       if (note) row.note = note;

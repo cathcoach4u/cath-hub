@@ -593,7 +593,7 @@
 
 <div id="cathHub">
   <div style="position:fixed !important;top:16px !important;right:16px !important;display:flex !important;flex-direction:column !important;align-items:flex-end !important;gap:4px !important;z-index:10 !important;">
-    <div class="version-badge">Cath Hub v7.17</div>
+    <div class="version-badge">Cath Hub v7.29</div>
     <div id="today-date-badge" style="font-size:11px !important;font-weight:600 !important;color:#1e293b !important;background:#f1f5f9 !important;padding:3px 8px !important;border-radius:6px !important;border:1px solid #cbd5e1 !important;min-height:16px !important;display:flex !important;align-items:center !important;white-space:nowrap !important;">--/--/----</div>
   </div>
 
@@ -5310,17 +5310,11 @@
             var streakMeds = ['vyvanse', 'valtrex', 'levothyroxine'];
             var s = streakMeds.indexOf(med.name.toLowerCase()) !== -1 ? await streakFor(med.id, logs) : 0;
             var timeLabel = MED_TIMES[med.name.toLowerCase()] || '';
-            // Get time taken today
-            var takenTime = '';
-            var takenLogId = '';
-            var takenNote = '';
             if (done) {
               try {
-                var { data: tLog } = await sb.from('habit_logs').select('id, created_at, note').eq('med_id', med.id).eq('date', today).limit(1);
-                if (tLog && tLog[0]) {
-                  if (tLog[0].created_at) takenTime = new Date(tLog[0].created_at).toLocaleTimeString('en-AU', { hour: '2-digit', minute: '2-digit' });
-                  takenLogId = tLog[0].id;
-                  takenNote = tLog[0].note || '';
+                var { data: tLog } = await sb.from('habit_logs').select('id, created_at').eq('med_id', med.id).eq('date', today).limit(1);
+                if (tLog && tLog[0] && tLog[0].created_at) {
+                  // Time is handled in dose history below
                 }
               } catch(e) {}
             }
@@ -5334,15 +5328,12 @@
             // Show ALL doses for this med today
             if (done) {
               try {
-                var { data: allDoses } = await sb.from('habit_logs').select('id, created_at, note').eq('med_id', med.id).eq('date', today).order('created_at', { ascending: false });
+                var { data: allDoses } = await sb.from('habit_logs').select('id, created_at').eq('med_id', med.id).eq('date', today).order('created_at', { ascending: false });
                 if (allDoses && allDoses.length) {
                   h += '<div style="margin-top:4px !important;padding:8px !important;background:#f0fdf4 !important;border-radius:6px !important;">';
                   allDoses.forEach(function(dose) {
                     var doseTime = dose.created_at ? new Date(dose.created_at).toLocaleTimeString('en-AU', { hour: '2-digit', minute: '2-digit' }) : '';
-                    h += '<div style="font-size:10px !important;color:#10b981 !important;margin-bottom:4px !important;">';
-                    h += '✓ Logged at ' + esc(doseTime);
-                    if (dose.note) h += ' (' + esc(dose.note) + ')';
-                    h += '</div>';
+                    h += '<div style="font-size:10px !important;color:#10b981 !important;margin-bottom:4px !important;">✓ Logged at ' + esc(doseTime) + '</div>';
                   });
                   h += '<div style="font-size:10px !important;color:#3b82f6 !important;cursor:pointer !important;padding-top:4px !important;border-top:1px solid #bbf7d0 !important;" onclick="habToggleDaily('+med.id+')">+ Add another dose</div>';
                   h += '</div>';

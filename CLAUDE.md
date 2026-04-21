@@ -86,18 +86,18 @@ Three separate, independent Claude services. Any can be swapped for alternatives
 ## database schema
 
 ### shopping & household
-- `shopping_items` — name, category, store, checked, created_at, user_id
+- `shopping_items` — name, category, store, checked, created_at (no user_id)
 - `master_items` — name, category, store, family_member, last_price, user_id
 - `meal_plans` — day_index, meal data, user_id
 - `personal_todos` — task, done, category, due_date, created_at, user_id
 - `fiona_tasks` — task, done, created_at
 
 ### medical & health
-- `medications` — name, dose, schedule, purpose, user_id
+- `medications` — name, dose, schedule, purpose (no user_id)
 - `medical_sessions` — date, duration, plan, practitioner, user_id
 - `mental_health_sessions` — date, mood, notes, user_id
-- `habit_meds` — id, name, freq ['daily', 'asneeded'], user_id
-- `habit_logs` — med_id, date, created_at, note, user_id (`note` stores as-needed med brand/details and weekly dose e.g. Mounjaro)
+- `habit_meds` — id, name, freq ['daily', 'asneeded'] (shared, no user_id)
+- `habit_logs` — med_id, date, created_at, note (no user_id; `note` stores as-needed med brand/details and weekly dose e.g. Mounjaro)
 
 ### rhythms (daily, weekly, fortnightly, 6-monthly, annual)
 - `daily_items` — id, name, section ['morning','midday','evening'], day_type ['weekday','weekend'], user_id

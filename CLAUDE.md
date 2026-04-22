@@ -174,7 +174,7 @@ Three separate, independent Claude services. Any can be swapped for alternatives
 
 ## version numbering
 
-- Current: **v7.44** (green badge in sidebar footer and About page)
+- Current: **v7.45** (green badge in sidebar footer and About page)
 - Bumped on every code change (minor version increment)
 - Service worker cache key matches version (e.g., `cache-v4-12`)
 

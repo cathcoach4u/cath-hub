@@ -174,15 +174,23 @@ Three separate, independent Claude services. Any can be swapped for alternatives
 
 ## version numbering
 
-- Current: **v7.48** (green badge in sidebar footer and About page)
+- Current: **v7.49** (green badge in sidebar footer and About page)
 - Bumped on every code change (minor version increment)
-- Service worker cache key matches version (e.g., `cache-v4-12`)
+- No service worker in Cath Hub (GitHub Pages handles caching). If one is added, keep its cache name in sync with the version.
 
-**Version locations to update on every change:**
-1. CLAUDE.md — `Current: **v4.XX**` (this line)
-2. index.html — `<div class="version-badge">Cath Hub v4.XX</div>` (line ~580, main heading)
-3. index.html — `<div style="...">v4.XX</div>` — 3 instances in sidebar, mobile bar, and About page (use sed: `sed -i 's/v4\.OLD/v4.NEW/g'`)
-- Update `CLAUDE.md` end-of-session checklist to confirm version is bumped
+**3 places to update version (Baker Hub convention):**
+
+1. **Mobile top bar badge** (`index.html`) — always visible, top-right of teal bar
+   - Style: 10px / 700 / white text / `background: rgba(255,255,255,0.2)` / `padding: 2px 8px` / `border-radius: 5px`
+2. **Sidebar header badge** (`index.html`) — desktop sidebar, right of "Cath Hub" h1
+   - Style: 11px / 700 / `color: rgba(255,255,255,0.7)` / `background: rgba(255,255,255,0.15)` / `padding: 3px 10px` / `border-radius: 6px`
+3. **About page version card** (`index.html`) — green card heading on About screen (pill with dark-emerald background)
+4. **CLAUDE.md** — `Current: **v7.XX**` line
+
+**One-command bump:**
+```
+OLD="v7.XX" NEW="v7.YY" && sed -i "s/${OLD}/${NEW}/g" index.html CLAUDE.md && git add -A && git commit -m "Bump version to ${NEW}" && git push
+```
 
 ## model selection guidance
 

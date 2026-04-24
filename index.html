@@ -593,7 +593,7 @@
 
 <div id="cathHub">
   <div style="position:fixed !important;top:16px !important;right:16px !important;display:flex !important;flex-direction:column !important;align-items:flex-end !important;gap:4px !important;z-index:10 !important;">
-    <div class="version-badge">Cath Hub v7.47</div>
+    <div class="version-badge">Cath Hub v7.48</div>
     <div id="today-date-badge" style="font-size:11px !important;font-weight:600 !important;color:#1e293b !important;background:#f1f5f9 !important;padding:3px 8px !important;border-radius:6px !important;border:1px solid #cbd5e1 !important;min-height:16px !important;display:flex !important;align-items:center !important;white-space:nowrap !important;"></div>
   </div>
 
@@ -603,7 +603,7 @@
     <h1>&#x1F3E0; Cath Hub</h1>
     <div style="display:flex !important;flex-direction:column !important;align-items:flex-end !important;gap:4px !important;">
       <div id="today-date-badge-mobile" style="font-size:13px !important;font-weight:700 !important;color:white !important;white-space:nowrap !important;font-family:'Segoe UI',system-ui,-apple-system,sans-serif !important;"></div>
-      <div style="font-size:11px !important;font-weight:600 !important;background:#065f46 !important;color:white !important;padding:3px 11px !important;border-radius:99px !important;font-family:'Segoe UI',system-ui,-apple-system,sans-serif !important;">v7.47</div>
+      <div style="font-size:11px !important;font-weight:600 !important;background:#065f46 !important;color:white !important;padding:3px 11px !important;border-radius:99px !important;font-family:'Segoe UI',system-ui,-apple-system,sans-serif !important;">v7.48</div>
     </div>
   </div>
 
@@ -648,7 +648,7 @@
     <button class="nav-item" onclick="chNav('about',this)"><span class="icon">&#x2139;&#xFE0F;</span> About</button>
     <div class="sidebar-footer">
       <div style="display:flex !important;align-items:center !important;gap:6px !important;margin-bottom:8px !important;">
-        <div style="font-size:10px !important;font-weight:600 !important;background:#065f46 !important;color:white !important;padding:2px 8px !important;border-radius:99px !important;">v7.47</div>
+        <div style="font-size:10px !important;font-weight:600 !important;background:#065f46 !important;color:white !important;padding:2px 8px !important;border-radius:99px !important;">v7.48</div>
       </div>
       <div style="display:flex !important;align-items:center !important;gap:6px !important;margin-bottom:6px !important;">
         <span style="font-size:12px !important;color:rgba(255,255,255,0.5) !important;">&#x1F319;</span>
@@ -1878,7 +1878,7 @@
       <!-- Version -->
       <div style="background:#ecfdf5 !important;border:1px solid #d1fae5 !important;border-radius:10px !important;padding:14px 16px !important;margin-bottom:16px !important;display:flex !important;align-items:center !important;justify-content:space-between !important;">
         <div style="font-size:13px !important;color:#065f46 !important;"><strong>Current version</strong></div>
-        <div style="font-size:12px !important;font-weight:600 !important;background:#065f46 !important;color:white !important;padding:2px 10px !important;border-radius:99px !important;">v7.47</div>
+        <div style="font-size:12px !important;font-weight:600 !important;background:#065f46 !important;color:white !important;padding:2px 10px !important;border-radius:99px !important;">v7.48</div>
       </div>
 
       <!-- Overview -->
@@ -1939,6 +1939,12 @@
             &bull; Claude Code: ~$20/month during active development (optional)
           </div>
         </div>
+      </div>
+
+      <!-- AI Agents -->
+      <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:20px !important;margin-bottom:16px !important;">
+        <div style="font-size:13px !important;font-weight:700 !important;margin-bottom:12px !important;color:#1e293b !important;">AI agents</div>
+        <div id="ch-about-agents" style="font-size:12px !important;color:#64748b !important;">Loading…</div>
       </div>
 
       <!-- Technical Stack -->
@@ -2020,7 +2026,6 @@
         <div style="font-size:12px !important;color:#92400e !important;line-height:1.8 !important;">
           <div style="margin-bottom:8px !important;"><strong>&#x2713; App keeps running</strong> &mdash; all code is on GitHub (yours), all data is in Supabase (yours). Nothing stops.</div>
           <div style="margin-bottom:8px !important;"><strong>&#x1F527; Chat assistant</strong> &mdash; swap Claude Haiku for GPT-4o-mini, Gemini Flash, Groq, or any other LLM by editing the Supabase Edge Function. ~5 minutes.</div>
-          <div style="margin-bottom:8px !important;"><strong>&#x1F4C4; Receipt OCR</strong> &mdash; swap Claude Sonnet for GPT-4o Vision, Google Vision API, or AWS Textract. Same Edge Function, different call.</div>
           <div style="margin-bottom:8px !important;"><strong>&#x1F4DD; Documentation</strong> &mdash; CLAUDE.md is a plain text file (rename to README-dev.md if needed). No framework lock-in.</div>
           <div><strong>&#x1F468;&#x200D;&#x1F4BB; Future development</strong> &mdash; any developer, GitHub Copilot, Cursor, Windsurf, or any AI tool can work on it. It's pure HTML/CSS/JS.</div>
         </div>
@@ -2208,6 +2213,7 @@
     if(name === 'habit-history') { habLoadHistory(); }
     if(name === 'zones') zbRenderZoneGrid();
     if(name === 'home') dashLoad();
+    if(name === 'about') { if(window.chRenderAgents) chRenderAgents(); }
   };
 
   // ─── DASHBOARD DATA ───
@@ -6203,7 +6209,7 @@
     var afMessages = [];
     var afOpen = false;
     var _afToday = new Date(); var _afTodayStr = _afToday.getFullYear()+'-'+String(_afToday.getMonth()+1).padStart(2,'0')+'-'+String(_afToday.getDate()).padStart(2,'0');
-    var afSystemPrompt = "Today's date is " + _afTodayStr + " (DD/MM/YYYY: " + _afTodayStr.split('-').reverse().join('/') + "). Cath's timezone is Australia/Sydney (AEST/AEDT). Always show times in Sydney time.\n\nYou are Cath's warm and practical personal AI assistant built into Cath Hub. Cath is an Australian woman who runs a coaching business called Coach4U. She uses Cath Hub to manage her personal life \u2014 workouts, medical appointments, habits, and to-do lists. Be friendly, concise, and helpful. Use Australian English. Currency is AUD ($). Dates in DD/MM/YYYY format. Don't be overly formal.\n\nIMPORTANT: Shopping and AisleMate features have moved to Baker Hub. If Cath asks about shopping, tell her to use Baker Hub instead. Do NOT use shopping-related tools (search_items, add_to_shopping_list, view_shopping_list, etc.).\n\nTO-DO LIST:\nYou can add, complete, and remove tasks from Cath's personal to-do list. When adding multiple tasks (especially related ones), ALWAYS suggest a category for them. Available categories are: General, Health, Home, Work, Shopping, Finance, Family, Admin, Personal, Event/Party. When adding tasks, include the category parameter so they're properly organized. Group related tasks under the same category.\n\nIf a task fails to add:\n- If invalid category error: explain which categories are valid and suggest the correct one\n- If database error: acknowledge the issue and suggest alternatives (like saving to notes temporarily)\n- Always be specific about what went wrong, not vague\n\nIMPORTANT: Fiona's cleaning list has moved to Baker Hub. If Cath asks about Fiona's list, tell her to use Baker Hub instead. Do NOT use fiona tools.\n\nMEDICATIONS & MEDICAL:\nYou can view and manage medications, medical sessions (for the Mental Health Plan tracker), and habit/medication logs. Use these tools when Cath asks about her meds, appointments, or health tracking.\n\nCath's daily meds: Vyvanse, Valtrex, Levothyroxine. As-needed: Nurofen, Panadol, Nexium Antacid, Prochlorperazine, Cizinate, Ondansetron.\nWhen Cath asks to log meds for a past date, ALWAYS use the backfill_meds tool (not db_write). It handles med IDs and duplicate checking automatically.\n\nMEMORIES:\nYou can save and recall facts about Cath using save_memory, forget_memory, and list_memories.\n\nGENERAL DATABASE:\nYou have a general-purpose query tool (db_query) that can select from ANY table, and a general-purpose write tool (db_write) that can insert, update, or delete from ANY table. Use these for anything the specific tools don't cover.\n\nTables: personal_todos, medications, habit_meds, habit_logs, medical_sessions, ai_memory.";
+    var afSystemPrompt = window.__cathAiSystemPrompt = "Today's date is " + _afTodayStr + " (DD/MM/YYYY: " + _afTodayStr.split('-').reverse().join('/') + "). Cath's timezone is Australia/Sydney (AEST/AEDT). Always show times in Sydney time.\n\nYou are Cath's warm and practical personal AI assistant built into Cath Hub. Cath is an Australian woman who runs a coaching business called Coach4U. She uses Cath Hub to manage her personal life \u2014 workouts, medical appointments, habits, and to-do lists. Be friendly, concise, and helpful. Use Australian English. Currency is AUD ($). Dates in DD/MM/YYYY format. Don't be overly formal.\n\nIMPORTANT: Shopping and AisleMate features have moved to Baker Hub. If Cath asks about shopping, tell her to use Baker Hub instead. Do NOT use shopping-related tools (search_items, add_to_shopping_list, view_shopping_list, etc.).\n\nTO-DO LIST:\nYou can add, complete, and remove tasks from Cath's personal to-do list. When adding multiple tasks (especially related ones), ALWAYS suggest a category for them. Available categories are: General, Health, Home, Work, Shopping, Finance, Family, Admin, Personal, Event/Party. When adding tasks, include the category parameter so they're properly organized. Group related tasks under the same category.\n\nIf a task fails to add:\n- If invalid category error: explain which categories are valid and suggest the correct one\n- If database error: acknowledge the issue and suggest alternatives (like saving to notes temporarily)\n- Always be specific about what went wrong, not vague\n\nIMPORTANT: Fiona's cleaning list has moved to Baker Hub. If Cath asks about Fiona's list, tell her to use Baker Hub instead. Do NOT use fiona tools.\n\nMEDICATIONS & MEDICAL:\nYou can view and manage medications, medical sessions (for the Mental Health Plan tracker), and habit/medication logs. Use these tools when Cath asks about her meds, appointments, or health tracking.\n\nCath's daily meds: Vyvanse, Valtrex, Levothyroxine. As-needed: Nurofen, Panadol, Nexium Antacid, Prochlorperazine, Cizinate, Ondansetron.\nWhen Cath asks to log meds for a past date, ALWAYS use the backfill_meds tool (not db_write). It handles med IDs and duplicate checking automatically.\n\nMEMORIES:\nYou can save and recall facts about Cath using save_memory, forget_memory, and list_memories.\n\nGENERAL DATABASE:\nYou have a general-purpose query tool (db_query) that can select from ANY table, and a general-purpose write tool (db_write) that can insert, update, or delete from ANY table. Use these for anything the specific tools don't cover.\n\nTables: personal_todos, medications, habit_meds, habit_logs, medical_sessions, ai_memory.";
 
     var afTools = [
       {
@@ -7130,6 +7136,44 @@
       }
     });
   })();
+
+  // ─── ABOUT: AI Agents card ───
+  window.chRenderAgents = function() {
+    var el = document.getElementById('ch-about-agents');
+    if (!el) return;
+    var prompt = window.__cathAiSystemPrompt || '(not set)';
+    var model = 'claude-haiku-4-5';
+    var maxTokens = 1024;
+    var escHtml = function(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); };
+    window.__chAiPrompts = { cath: prompt };
+
+    var html = '';
+    html += '<div style="background:#faf5ff !important;border-left:3px solid #7c3aed !important;padding:12px !important;border-radius:8px !important;margin-bottom:10px !important;">';
+    html += '<div style="font-size:13px !important;font-weight:700 !important;color:#1e293b !important;">Cath AI Chat</div>';
+    html += '<div style="font-size:11px !important;color:#64748b !important;margin-top:2px !important;">Purple C popup inside Cath Hub. Helps with to-dos, meds, appointments, habits, and memories.</div>';
+    html += '<div style="font-size:12px !important;margin-top:8px !important;"><strong>Model:</strong> <code style="background:white !important;padding:1px 6px !important;border-radius:4px !important;">' + escHtml(model) + '</code></div>';
+    html += '<div style="font-size:12px !important;margin-top:4px !important;"><strong>Max tokens:</strong> ' + escHtml(maxTokens) + '</div>';
+    html += '<div style="font-size:12px !important;margin-top:4px !important;color:#94a3b8 !important;">System prompt is hardcoded in <code>index.html</code>. Memories from <code>ai_memory</code> table are appended per session.</div>';
+    html += '<details style="margin-top:8px !important;"><summary style="font-size:12px !important;cursor:pointer !important;color:#7c3aed !important;font-weight:600 !important;">Show system prompt</summary>';
+    html += '<div style="display:flex !important;justify-content:flex-end !important;margin-top:6px !important;"><button type="button" onclick="chCopyPrompt(\'cath\',this)" style="font-size:11px !important;font-weight:600 !important;padding:4px 10px !important;border:1px solid #7c3aed !important;background:white !important;color:#7c3aed !important;border-radius:5px !important;cursor:pointer !important;">Copy</button></div>';
+    html += '<pre style="font-size:11px !important;background:white !important;padding:10px !important;border-radius:6px !important;border:1px solid #e2e8f0 !important;white-space:pre-wrap !important;word-break:break-word !important;margin-top:6px !important;font-family:ui-monospace,SFMono-Regular,Menlo,monospace !important;">' + escHtml(prompt) + '</pre>';
+    html += '</details></div>';
+    el.innerHTML = html;
+  };
+
+  window.chCopyPrompt = function(which, btn) {
+    var text = (window.__chAiPrompts && window.__chAiPrompts[which]) || '';
+    var done = function(){ var orig = btn.textContent; btn.textContent = 'Copied!'; setTimeout(function(){ btn.textContent = orig; }, 1500); };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done).catch(function(){
+        var ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select();
+        try { document.execCommand('copy'); done(); } catch(e){} document.body.removeChild(ta);
+      });
+    } else {
+      var ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); done(); } catch(e){} document.body.removeChild(ta);
+    }
+  };
 
   // ═══════════════════════════════════════════
   // ZONE BUDDY + RHYTHM CARDS

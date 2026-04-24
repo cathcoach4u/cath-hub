@@ -593,7 +593,7 @@
 
 <div id="cathHub">
   <div style="position:fixed !important;top:16px !important;right:16px !important;display:flex !important;flex-direction:column !important;align-items:flex-end !important;gap:4px !important;z-index:10 !important;">
-    <div class="version-badge">Cath Hub v7.46</div>
+    <div class="version-badge">Cath Hub v7.47</div>
     <div id="today-date-badge" style="font-size:11px !important;font-weight:600 !important;color:#1e293b !important;background:#f1f5f9 !important;padding:3px 8px !important;border-radius:6px !important;border:1px solid #cbd5e1 !important;min-height:16px !important;display:flex !important;align-items:center !important;white-space:nowrap !important;"></div>
   </div>
 
@@ -603,7 +603,7 @@
     <h1>&#x1F3E0; Cath Hub</h1>
     <div style="display:flex !important;flex-direction:column !important;align-items:flex-end !important;gap:4px !important;">
       <div id="today-date-badge-mobile" style="font-size:13px !important;font-weight:700 !important;color:white !important;white-space:nowrap !important;font-family:'Segoe UI',system-ui,-apple-system,sans-serif !important;"></div>
-      <div style="font-size:11px !important;font-weight:600 !important;background:#065f46 !important;color:white !important;padding:3px 11px !important;border-radius:99px !important;font-family:'Segoe UI',system-ui,-apple-system,sans-serif !important;">v7.46</div>
+      <div style="font-size:11px !important;font-weight:600 !important;background:#065f46 !important;color:white !important;padding:3px 11px !important;border-radius:99px !important;font-family:'Segoe UI',system-ui,-apple-system,sans-serif !important;">v7.47</div>
     </div>
   </div>
 
@@ -648,7 +648,7 @@
     <button class="nav-item" onclick="chNav('about',this)"><span class="icon">&#x2139;&#xFE0F;</span> About</button>
     <div class="sidebar-footer">
       <div style="display:flex !important;align-items:center !important;gap:6px !important;margin-bottom:8px !important;">
-        <div style="font-size:10px !important;font-weight:600 !important;background:#065f46 !important;color:white !important;padding:2px 8px !important;border-radius:99px !important;">v7.46</div>
+        <div style="font-size:10px !important;font-weight:600 !important;background:#065f46 !important;color:white !important;padding:2px 8px !important;border-radius:99px !important;">v7.47</div>
       </div>
       <div style="display:flex !important;align-items:center !important;gap:6px !important;margin-bottom:6px !important;">
         <span style="font-size:12px !important;color:rgba(255,255,255,0.5) !important;">&#x1F319;</span>
@@ -1878,7 +1878,7 @@
       <!-- Version -->
       <div style="background:#ecfdf5 !important;border:1px solid #d1fae5 !important;border-radius:10px !important;padding:14px 16px !important;margin-bottom:16px !important;display:flex !important;align-items:center !important;justify-content:space-between !important;">
         <div style="font-size:13px !important;color:#065f46 !important;"><strong>Current version</strong></div>
-        <div style="font-size:12px !important;font-weight:600 !important;background:#065f46 !important;color:white !important;padding:2px 10px !important;border-radius:99px !important;">v7.46</div>
+        <div style="font-size:12px !important;font-weight:600 !important;background:#065f46 !important;color:white !important;padding:2px 10px !important;border-radius:99px !important;">v7.47</div>
       </div>
 
       <!-- Overview -->
@@ -1926,6 +1926,17 @@
             <div style="font-size:13px !important;font-weight:600 !important;margin-bottom:6px !important;">3. Claude Sonnet (receipts)</div>
             <div style="font-size:11px !important;color:#64748b !important;margin-bottom:4px !important;">OCR &amp; expense categorisation. Est. AUD $0.03–0.10/image.</div>
             <div style="font-size:11px !important;color:#94a3b8 !important;">Alternatives: GPT-4 Vision, Gemini Pro Vision</div>
+          </div>
+        </div>
+        <!-- Cost summary -->
+        <div style="margin-top:16px !important;padding:14px !important;background:#f0fdf4 !important;border:1px solid #bbf7d0 !important;border-radius:8px !important;font-size:12px !important;color:#1e293b !important;line-height:1.7 !important;">
+          <div style="margin-bottom:6px !important;"><strong>Estimated monthly cost:</strong> <strong style="color:#059669 !important;">AUD $0–5/month</strong> for normal use</div>
+          <div style="color:#64748b !important;font-size:11px !important;">
+            &bull; Hosting: Free (GitHub Pages)<br>
+            &bull; Database: Free (Supabase free tier)<br>
+            &bull; Cath AI chat: $1–5/month (occasional use)<br>
+            &bull; Receipt OCR: $0–2/month (occasional scans)<br>
+            &bull; Claude Code: ~$20/month during active development (optional)
           </div>
         </div>
       </div>
@@ -2005,9 +2016,13 @@
 
       <!-- If You Move Away From Claude -->
       <div style="background:#fef3c7 !important;border:1px solid #fcd34d !important;border-radius:10px !important;padding:20px !important;">
-        <div style="font-size:13px !important;font-weight:700 !important;margin-bottom:10px !important;color:#92400e !important;">if you move away from Claude</div>
-        <div style="font-size:12px !important;color:#b45309 !important;line-height:1.8 !important;">
-          The app is independent of Claude development. Source code is on GitHub (public). Swap AI services: replace Claude Haiku chat with GPT-4 Mini, Sonnet receipt OCR with Vision API, or code generation with another LLM. No framework lock-in — vanilla HTML/CSS/JS can be edited in any text editor. Backend stays Supabase unless you migrate to Firebase/AWS.
+        <div style="font-size:13px !important;font-weight:700 !important;margin-bottom:12px !important;color:#92400e !important;">if you move away from Claude</div>
+        <div style="font-size:12px !important;color:#92400e !important;line-height:1.8 !important;">
+          <div style="margin-bottom:8px !important;"><strong>&#x2713; App keeps running</strong> &mdash; all code is on GitHub (yours), all data is in Supabase (yours). Nothing stops.</div>
+          <div style="margin-bottom:8px !important;"><strong>&#x1F527; Chat assistant</strong> &mdash; swap Claude Haiku for GPT-4o-mini, Gemini Flash, Groq, or any other LLM by editing the Supabase Edge Function. ~5 minutes.</div>
+          <div style="margin-bottom:8px !important;"><strong>&#x1F4C4; Receipt OCR</strong> &mdash; swap Claude Sonnet for GPT-4o Vision, Google Vision API, or AWS Textract. Same Edge Function, different call.</div>
+          <div style="margin-bottom:8px !important;"><strong>&#x1F4DD; Documentation</strong> &mdash; CLAUDE.md is a plain text file (rename to README-dev.md if needed). No framework lock-in.</div>
+          <div><strong>&#x1F468;&#x200D;&#x1F4BB; Future development</strong> &mdash; any developer, GitHub Copilot, Cursor, Windsurf, or any AI tool can work on it. It's pure HTML/CSS/JS.</div>
         </div>
       </div>
     </div>

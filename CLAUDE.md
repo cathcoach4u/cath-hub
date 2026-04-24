@@ -174,18 +174,19 @@ Three separate, independent Claude services. Any can be swapped for alternatives
 
 ## version numbering
 
-- Current: **v7.49** (green badge in sidebar footer and About page)
+- Current: **v7.50** (green badge in sidebar footer and About page)
 - Bumped on every code change (minor version increment)
 - No service worker in Cath Hub (GitHub Pages handles caching). If one is added, keep its cache name in sync with the version.
 
-**3 places to update version (Baker Hub convention):**
+**2 places to update version (Baker Hub convention):**
 
 1. **Mobile top bar badge** (`index.html`) — always visible, top-right of teal bar
    - Style: 10px / 700 / white text / `background: rgba(255,255,255,0.2)` / `padding: 2px 8px` / `border-radius: 5px`
 2. **Sidebar header badge** (`index.html`) — desktop sidebar, right of "Cath Hub" h1
    - Style: 11px / 700 / `color: rgba(255,255,255,0.7)` / `background: rgba(255,255,255,0.15)` / `padding: 3px 10px` / `border-radius: 6px`
-3. **About page version card** (`index.html`) — green card heading on About screen (pill with dark-emerald background)
-4. **CLAUDE.md** — `Current: **v7.XX**` line
+3. **CLAUDE.md** — `Current: **v7.XX**` line
+
+Date badge (mobile top bar) matches Baker Hub: 13px / 700 / white / `white-space: nowrap`, format `toLocaleDateString('en-AU', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })` → "Mon, 24 Apr 2026". Auto-updates from device date.
 
 **One-command bump:**
 ```

@@ -89,6 +89,7 @@ body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background
     </div>
   </div>
   <div class="chips" id="chips">
+    <button class="chip" onclick="quickFill('Add to-do item - ')">&#x270F;&#xFE0F; Add to-do item -</button>
     <button class="chip" onclick="quickSend('Show my open todos')">&#x1F4CB; Open todos</button>
     <button class="chip" onclick="quickSend('What meds have I taken today?')">&#x1F48A; Meds today</button>
     <button class="chip" onclick="quickSend('Log my meds for yesterday')">&#x1F4C5; Backfill meds</button>
@@ -417,6 +418,15 @@ body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background
   window.quickSend = function(text) {
     document.getElementById('chat-input').value = text;
     sendMsg();
+  };
+
+  // Pre-fill the input without sending — user types the rest then hits enter.
+  window.quickFill = function(text) {
+    var input = document.getElementById('chat-input');
+    input.value = text;
+    input.focus();
+    // Move cursor to the end.
+    input.setSelectionRange(text.length, text.length);
   };
 
   window.sendMsg = async function() {

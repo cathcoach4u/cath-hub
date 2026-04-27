@@ -602,7 +602,7 @@
     <h1>Cath Hub</h1>
     <div style="display:flex !important;flex-direction:column !important;align-items:flex-end !important;gap:4px !important;">
       <div id="today-date-badge-mobile" style="font-size:13px !important;font-weight:700 !important;color:white !important;white-space:nowrap !important;font-family:'Segoe UI',system-ui,-apple-system,sans-serif !important;"></div>
-      <span style="font-size:10px !important;font-weight:700 !important;color:white !important;background:#065f46 !important;padding:2px 8px !important;border-radius:5px !important;">v7.56</span>
+      <span style="font-size:10px !important;font-weight:700 !important;color:white !important;background:#065f46 !important;padding:2px 8px !important;border-radius:5px !important;">v7.57</span>
     </div>
   </div>
 
@@ -633,7 +633,7 @@
   </div>
 
   <div class="sidebar">
-    <h1 style="display:flex !important;align-items:center !important;justify-content:space-between !important;gap:8px !important;">Cath Hub <span style="font-size:11px !important;font-weight:700 !important;color:rgba(255,255,255,0.7) !important;background:rgba(255,255,255,0.15) !important;padding:3px 10px !important;border-radius:6px !important;">v7.56</span></h1>
+    <h1 style="display:flex !important;align-items:center !important;justify-content:space-between !important;gap:8px !important;">Cath Hub <span style="font-size:11px !important;font-weight:700 !important;color:rgba(255,255,255,0.7) !important;background:rgba(255,255,255,0.15) !important;padding:3px 10px !important;border-radius:6px !important;">v7.57</span></h1>
     <!-- Desktop: button nav -->
     <button class="nav-item active" onclick="chNav('home',this)"><span class="icon">&#x1F4CA;</span> Dashboard</button>
     <button class="nav-item" onclick="chNav('todo',this)"><span class="icon">&#x2705;</span> To-Do</button>
@@ -4898,6 +4898,14 @@
       dashRenderHealth();
     };
 
+    // Always-insert variant for "+ Add another dose" — never toggles/deletes.
+    window.habAddAnotherDose = async function(id) {
+      var today = todayKey();
+      await sb.from('habit_logs').insert({ med_id: id, date: today, created_at: new Date().toISOString() });
+      await habRender();
+      dashRenderHealth();
+    };
+
     window.habDeleteDose = async function(logId) {
       if (!confirm('Delete this dose entry?')) return;
       await sb.from('habit_logs').delete().eq('id', logId);
@@ -5505,7 +5513,7 @@
                     if (dose.note) h += ' (' + esc(dose.note) + ')';
                     h += '</div>';
                   });
-                  h += '<div style="font-size:10px !important;color:#3b82f6 !important;cursor:pointer !important;padding-top:4px !important;border-top:1px solid #bbf7d0 !important;" onclick="habToggleDaily('+med.id+')">+ Add another dose</div>';
+                  h += '<div style="font-size:10px !important;color:#3b82f6 !important;cursor:pointer !important;padding-top:4px !important;border-top:1px solid #bbf7d0 !important;" onclick="habAddAnotherDose('+med.id+')">+ Add another dose</div>';
                   h += '</div>';
                 }
               } catch(e) {}
@@ -5546,7 +5554,7 @@
                   if (mdose.note) mdh += ' (' + esc(mdose.note) + ')';
                   mdh += '</div>';
                 });
-                mdh += '<div style="font-size:10px !important;color:#3b82f6 !important;cursor:pointer !important;padding-top:4px !important;border-top:1px solid #bbf7d0 !important;" onclick="habToggleDaily('+mdmed.id+')">+ Add another dose</div>';
+                mdh += '<div style="font-size:10px !important;color:#3b82f6 !important;cursor:pointer !important;padding-top:4px !important;border-top:1px solid #bbf7d0 !important;" onclick="habAddAnotherDose('+mdmed.id+')">+ Add another dose</div>';
                 mdh += '</div>';
               }
             } catch(e) {}
@@ -5587,7 +5595,7 @@
                   if (edose.note) eh += ' (' + esc(edose.note) + ')';
                   eh += '</div>';
                 });
-                eh += '<div style="font-size:10px !important;color:#3b82f6 !important;cursor:pointer !important;padding-top:4px !important;border-top:1px solid #bbf7d0 !important;" onclick="habToggleDaily('+eitem.id+')">+ Add another dose</div>';
+                eh += '<div style="font-size:10px !important;color:#3b82f6 !important;cursor:pointer !important;padding-top:4px !important;border-top:1px solid #bbf7d0 !important;" onclick="habAddAnotherDose('+eitem.id+')">+ Add another dose</div>';
                 eh += '</div>';
               }
             } catch(e) {}

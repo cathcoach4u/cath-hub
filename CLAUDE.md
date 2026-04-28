@@ -174,7 +174,7 @@ Three separate, independent Claude services. Any can be swapped for alternatives
 
 ## version numbering
 
-- Current: **v7.58** (green badge in sidebar footer and About page)
+- Current: **v7.59** (green badge in sidebar footer and About page)
 - Bumped on every code change (minor version increment)
 - No service worker in Cath Hub (GitHub Pages handles caching). If one is added, keep its cache name in sync with the version.
 
@@ -221,6 +221,46 @@ Make Claude Code work harder:
 - **Service worker cache must be bumped.** Browser cache won't clear automatically. Always increment version in cache key.
 - **GitHub Pages deploy lag.** Push to main → 1–2 minutes until changes are live.
 
+## session workflow
+
+Treat each session like a 4-stage pipeline. Don't skip stages.
+
+### Stage 1 — Open session (read-only context check)
+Before doing any work, confirm:
+- [ ] Current branch is `main` (not a stray feature branch)
+- [ ] Working tree is clean — no uncommitted changes left over from a previous session
+- [ ] Read `CLAUDE.md` end-to-end (cheap; refreshes Working Style + schema + version locations)
+- [ ] Note the current version number — it lives in `index.html` mobile top bar / sidebar header and the line below in this file
+- [ ] If the user asks for a feature that already exists, say so before re-implementing
+
+If anything in stage 1 fails (e.g. uncommitted changes), fix that before starting new work.
+
+### Stage 2 — Plan the change
+Before edits, especially on non-trivial work:
+- Identify the exact files, line numbers, and functions involved
+- Note Supabase schema implications (does the table actually have the columns the code assumes? — habit_logs/medications/habit_meds do **not** have user_id; daily/weekly/fortnightly/sixmonthly/annual items+logs and water_logs+personal_todos do)
+- Note timezone implications (use Sydney-local for date-only fields, UTC for timestamptz — see "timezone rules")
+
+### Stage 3 — Implement, version, push
+- Edit the smallest viable surface
+- Bump version (one-command from "version numbering" section below)
+- Commit with a message that says **why** not what
+- Push to `main` (no feature branches per Working Style)
+
+### Stage 4 — Close session (verify before stopping)
+- [ ] All changes pushed to `main`
+- [ ] Working tree clean (`git status`)
+- [ ] Version visible in app matches CLAUDE.md value
+- [ ] No stray feature branches local or remote
+- [ ] If schema changed in Supabase: SQL pasted in chat (per Working Style)
+- [ ] If a new limitation discovered: documented in this file
+
+## timezone rules
+
+- **Date-only columns** (log_date, logged_date, last_seen, daily_items.date) → use `new Date().toLocaleDateString('en-CA', { timeZone: 'Australia/Sydney' })`
+- **Timestamp columns** (created_at, start_time, end_time, uploaded_at) → use `new Date().toISOString()` (UTC is correct for timestamptz)
+- **Display strings** → format with `'en-AU'` locale, Sydney timezone
+
 ## start-of-session checklist
 
 When reconnecting (each new session):
@@ -236,16 +276,13 @@ When reconnecting (each new session):
 
 Before finishing:
 
-- [x] All code changes pushed to main
-- [x] Version bumped in `CLAUDE.md` and `index.html` (sidebar footer) — v7.17
-- [x] Service worker cache key matches version — N/A (no service worker)
-- [x] SQL queries provided as copy-paste (if applicable) — daily-items-setup.sql documented
-- [x] CLAUDE.md updated with any new limitations or architecture changes — user_id filtering fixes documented
-- [x] About page audited — all current (v7.17, infrastructure, AI services, tech stack, screens, database, features all listed)
-- [x] Page titles standardised to "Cath Hub" across all HTML files
-- [x] No open branches or PRs (feature branch deleted)
-- [x] No uncommitted changes
-- [x] Feature branches cleaned up
+- [ ] All code changes pushed to main
+- [ ] Working tree clean (run `git status`)
+- [ ] Version bumped in `index.html` (mobile top bar + sidebar header) and CLAUDE.md
+- [ ] SQL provided in chat as copy-paste block (and optionally saved to `.sql` file)
+- [ ] CLAUDE.md updated with any new limitations or schema/architecture surprises
+- [ ] No open branches or PRs (feature branch deleted both locally + remote if any)
+- [ ] About page version + AI agents card still accurate
 
 ## development notes
 

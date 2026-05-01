@@ -604,7 +604,7 @@
       <div id="today-date-badge-mobile" style="font-size:13px !important;font-weight:700 !important;color:white !important;white-space:nowrap !important;font-family:'Segoe UI',system-ui,-apple-system,sans-serif !important;"></div>
       <div style="display:flex !important;align-items:center !important;gap:6px !important;">
         <button onclick="chHardRefresh()" title="Hard refresh" aria-label="Hard refresh" style="font-size:12px !important;color:white !important;background:rgba(255,255,255,0.2) !important;border:none !important;padding:2px 7px !important;border-radius:99px !important;cursor:pointer !important;line-height:1 !important;">&#x21BB;</button>
-        <span style="font-size:10px !important;font-weight:700 !important;color:white !important;background:#065f46 !important;padding:2px 8px !important;border-radius:5px !important;">v7.59</span>
+        <span style="font-size:10px !important;font-weight:700 !important;color:white !important;background:#065f46 !important;padding:2px 8px !important;border-radius:5px !important;">v7.60</span>
       </div>
     </div>
   </div>
@@ -640,7 +640,7 @@
       <span>Cath Hub</span>
       <span style="display:flex !important;align-items:center !important;gap:6px !important;">
         <button onclick="chHardRefresh()" title="Hard refresh — reload latest version" aria-label="Hard refresh" style="font-size:13px !important;color:white !important;background:rgba(255,255,255,0.2) !important;border:none !important;padding:3px 8px !important;border-radius:99px !important;cursor:pointer !important;line-height:1 !important;">&#x21BB;</button>
-        <span style="font-size:11px !important;font-weight:700 !important;color:rgba(255,255,255,0.7) !important;background:rgba(255,255,255,0.15) !important;padding:3px 10px !important;border-radius:6px !important;">v7.59</span>
+        <span style="font-size:11px !important;font-weight:700 !important;color:rgba(255,255,255,0.7) !important;background:rgba(255,255,255,0.15) !important;padding:3px 10px !important;border-radius:6px !important;">v7.60</span>
       </span>
     </h1>
     <!-- Desktop: button nav -->
@@ -3521,8 +3521,7 @@
       var medNames = (medsList || []).map(function(m){ return m.name.toLowerCase(); });
       var meds = (allHabs || []).filter(function(h){ return medNames.indexOf(h.name.toLowerCase()) !== -1; });
       if (!meds.length) { btn.innerHTML = 'No meds found'; _medRecordingLock = false; return; }
-      var today = new Date();
-      var todayStr = today.getFullYear()+'-'+String(today.getMonth()+1).padStart(2,'0')+'-'+String(today.getDate()).padStart(2,'0');
+      var todayStr = new Date().toLocaleDateString('en-CA', { timeZone: 'Australia/Sydney' });
       // Re-check right before insert to avoid race conditions
       var { data: existing } = await sb.from('habit_logs').select('med_id').eq('date', todayStr);
       var doneIds = (existing || []).map(function(l){ return l.med_id; });
@@ -3699,8 +3698,7 @@
     var btn = document.getElementById('dash-meds-btn');
     if (!btn) return;
     try {
-      var today = new Date();
-      var todayStr = today.getFullYear()+'-'+String(today.getMonth()+1).padStart(2,'0')+'-'+String(today.getDate()).padStart(2,'0');
+      var todayStr = new Date().toLocaleDateString('en-CA', { timeZone: 'Australia/Sydney' });
       var { data: allHabs } = await sb.from('habit_meds').select('*').eq('freq', 'daily');
       var { data: medsList } = await sb.from('medications').select('name');
       var medNames = (medsList || []).map(function(m){ return m.name.toLowerCase(); });
@@ -8524,8 +8522,7 @@
     var h = new Date().getHours();
     if (h < 9) { banner.style.setProperty('display', 'none', 'important'); return; }
     try {
-      var today = new Date();
-      var todayStr = today.getFullYear()+'-'+String(today.getMonth()+1).padStart(2,'0')+'-'+String(today.getDate()).padStart(2,'0');
+      var todayStr = new Date().toLocaleDateString('en-CA', { timeZone: 'Australia/Sydney' });
       var { data: allHabs } = await sb.from('habit_meds').select('*').eq('freq', 'daily');
       var { data: medsList } = await sb.from('medications').select('name');
       var medNames = (medsList || []).map(function(m){ return m.name.toLowerCase(); });
@@ -8919,10 +8916,11 @@
       console.log('Dashboard - userId:', userId, 'All meds:', allMeds);
       var dailyMeds = (allMeds || []).filter(function(m){ return m.freq==='daily'; });
       console.log('Dashboard - Daily meds:', dailyMeds);
+      var MORNING_MED_NAMES = ['vyvanse', 'valtrex', 'levothyroxine'];
       var morningMeds = dailyMeds.filter(function(m){
         var name = m.name.toLowerCase();
-        return name.indexOf('cream') === -1 && name.indexOf('ointment') === -1 && !(name.indexOf('betamethasone') !== -1 && name.indexOf('valerate') !== -1);
-      }).slice(0, 3);
+        return MORNING_MED_NAMES.some(function(n){ return name.indexOf(n) !== -1; });
+      });
       console.log('Dashboard - Morning meds (after filter):', morningMeds);
 
       var { data: logs } = await sb.from('habit_logs').select('*');

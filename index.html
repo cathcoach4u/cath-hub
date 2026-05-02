@@ -604,7 +604,7 @@
       <div id="today-date-badge-mobile" style="font-size:13px !important;font-weight:700 !important;color:white !important;white-space:nowrap !important;font-family:'Segoe UI',system-ui,-apple-system,sans-serif !important;"></div>
       <div style="display:flex !important;align-items:center !important;gap:6px !important;">
         <button onclick="chHardRefresh()" title="Hard refresh" aria-label="Hard refresh" style="font-size:12px !important;color:white !important;background:rgba(255,255,255,0.2) !important;border:none !important;padding:2px 7px !important;border-radius:99px !important;cursor:pointer !important;line-height:1 !important;">&#x21BB;</button>
-        <span style="font-size:10px !important;font-weight:700 !important;color:white !important;background:#065f46 !important;padding:2px 8px !important;border-radius:5px !important;">v7.60</span>
+        <span style="font-size:10px !important;font-weight:700 !important;color:white !important;background:#065f46 !important;padding:2px 8px !important;border-radius:5px !important;">v7.61</span>
       </div>
     </div>
   </div>
@@ -640,7 +640,7 @@
       <span>Cath Hub</span>
       <span style="display:flex !important;align-items:center !important;gap:6px !important;">
         <button onclick="chHardRefresh()" title="Hard refresh — reload latest version" aria-label="Hard refresh" style="font-size:13px !important;color:white !important;background:rgba(255,255,255,0.2) !important;border:none !important;padding:3px 8px !important;border-radius:99px !important;cursor:pointer !important;line-height:1 !important;">&#x21BB;</button>
-        <span style="font-size:11px !important;font-weight:700 !important;color:rgba(255,255,255,0.7) !important;background:rgba(255,255,255,0.15) !important;padding:3px 10px !important;border-radius:6px !important;">v7.60</span>
+        <span style="font-size:11px !important;font-weight:700 !important;color:rgba(255,255,255,0.7) !important;background:rgba(255,255,255,0.15) !important;padding:3px 10px !important;border-radius:6px !important;">v7.61</span>
       </span>
     </h1>
     <!-- Desktop: button nav -->
@@ -1806,19 +1806,508 @@
     <!-- ═══ TRAVEL ═══ -->
     <div class="screen" id="ch-travel">
       <h2>&#x2708;&#xFE0F; Travel</h2>
-      <div class="trv-card">
-        <h3>&#x1F4C5; Upcoming Trips</h3>
-        <p>No upcoming trips planned yet. Add your next adventure here.</p>
+
+      <!-- Trip header -->
+      <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:16px !important;margin-bottom:14px !important;">
+        <div style="display:flex !important;align-items:center !important;justify-content:space-between !important;flex-wrap:wrap !important;gap:10px !important;">
+          <div>
+            <div style="font-size:18px !important;font-weight:700 !important;color:#1e293b !important;">&#x1F1EF;&#x1F1F5; Japan Trip — Budget Planner</div>
+            <div style="font-size:12px !important;color:#94a3b8 !important;margin-top:2px !important;">All amounts in AUD. Edit any field — totals update automatically.</div>
+          </div>
+          <div style="display:flex !important;gap:10px !important;align-items:center !important;">
+            <label style="font-size:12px !important;color:#64748b !important;font-weight:600 !important;">Adults</label>
+            <input type="number" id="jp-adults" value="4" min="1" max="20" oninput="jpCalc()" style="width:55px !important;padding:6px 8px !important;border:1px solid #e2e8f0 !important;border-radius:7px !important;font-size:14px !important;font-weight:700 !important;text-align:center !important;">
+            <label style="font-size:12px !important;color:#64748b !important;font-weight:600 !important;">Nights</label>
+            <input type="number" id="jp-nights" value="14" min="1" max="90" oninput="jpCalc()" style="width:55px !important;padding:6px 8px !important;border:1px solid #e2e8f0 !important;border-radius:7px !important;font-size:14px !important;font-weight:700 !important;text-align:center !important;">
+          </div>
+        </div>
       </div>
-      <div class="trv-card">
-        <h3>&#x1F9F3; Packing Lists</h3>
-        <p>Create and manage packing lists for your trips. Coming soon.</p>
+
+      <!-- Flights -->
+      <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:16px !important;margin-bottom:14px !important;">
+        <div style="font-size:13px !important;font-weight:700 !important;color:#0d9488 !important;text-transform:uppercase !important;letter-spacing:.05em !important;margin-bottom:12px !important;">&#x2708;&#xFE0F; international flights</div>
+        <div style="display:grid !important;gap:8px !important;">
+          <div style="display:flex !important;align-items:center !important;justify-content:space-between !important;gap:8px !important;flex-wrap:wrap !important;">
+            <div style="flex:1 !important;min-width:180px !important;">
+              <div style="font-size:13px !important;font-weight:600 !important;color:#1e293b !important;">Return flights per person</div>
+              <div style="font-size:11px !important;color:#94a3b8 !important;">Sydney ↔ Tokyo (economy, all incl.)</div>
+            </div>
+            <div style="display:flex !important;align-items:center !important;gap:6px !important;">
+              <span style="font-size:12px !important;color:#64748b !important;">$</span>
+              <input type="number" id="jp-flight-pp" value="1600" min="0" oninput="jpCalc()" style="width:90px !important;padding:6px 8px !important;border:1px solid #e2e8f0 !important;border-radius:7px !important;font-size:13px !important;text-align:right !important;">
+              <span style="font-size:11px !important;color:#94a3b8 !important;">× <span class="jp-adults-label">4</span> adults</span>
+              <span id="jp-flight-total" style="font-size:13px !important;font-weight:700 !important;color:#1e293b !important;min-width:80px !important;text-align:right !important;"></span>
+            </div>
+          </div>
+          <div style="display:flex !important;align-items:center !important;justify-content:space-between !important;gap:8px !important;flex-wrap:wrap !important;">
+            <div style="flex:1 !important;min-width:180px !important;">
+              <div style="font-size:13px !important;font-weight:600 !important;color:#1e293b !important;">Airport transfers (home ↔ airport)</div>
+              <div style="font-size:11px !important;color:#94a3b8 !important;">Both ends, per person</div>
+            </div>
+            <div style="display:flex !important;align-items:center !important;gap:6px !important;">
+              <span style="font-size:12px !important;color:#64748b !important;">$</span>
+              <input type="number" id="jp-transfer-pp" value="80" min="0" oninput="jpCalc()" style="width:90px !important;padding:6px 8px !important;border:1px solid #e2e8f0 !important;border-radius:7px !important;font-size:13px !important;text-align:right !important;">
+              <span style="font-size:11px !important;color:#94a3b8 !important;">× <span class="jp-adults-label">4</span> adults</span>
+              <span id="jp-transfer-total" style="font-size:13px !important;font-weight:700 !important;color:#1e293b !important;min-width:80px !important;text-align:right !important;"></span>
+            </div>
+          </div>
+        </div>
+        <div style="border-top:1px solid #e2e8f0 !important;margin-top:12px !important;padding-top:10px !important;display:flex !important;justify-content:space-between !important;">
+          <span style="font-size:12px !important;font-weight:700 !important;color:#64748b !important;">FLIGHTS SUBTOTAL</span>
+          <span id="jp-flights-sub" style="font-size:14px !important;font-weight:700 !important;color:#0d9488 !important;"></span>
+        </div>
       </div>
-      <div class="trv-card">
-        <h3>&#x1F4C4; Travel Documents</h3>
-        <p>Store passport details, travel insurance, and booking confirmations. Coming soon.</p>
+
+      <!-- Accommodation -->
+      <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:16px !important;margin-bottom:14px !important;">
+        <div style="font-size:13px !important;font-weight:700 !important;color:#0d9488 !important;text-transform:uppercase !important;letter-spacing:.05em !important;margin-bottom:12px !important;">&#x1F3E8; accommodation</div>
+        <div id="jp-accom-rows" style="display:grid !important;gap:8px !important;"></div>
+        <button onclick="jpAddAccomRow()" style="margin-top:10px !important;padding:6px 14px !important;background:#f1f5f9 !important;border:1px dashed #cbd5e1 !important;border-radius:7px !important;font-size:12px !important;color:#64748b !important;cursor:pointer !important;">+ add accommodation</button>
+        <div style="border-top:1px solid #e2e8f0 !important;margin-top:12px !important;padding-top:10px !important;display:flex !important;justify-content:space-between !important;">
+          <span style="font-size:12px !important;font-weight:700 !important;color:#64748b !important;">ACCOMMODATION SUBTOTAL</span>
+          <span id="jp-accom-sub" style="font-size:14px !important;font-weight:700 !important;color:#0d9488 !important;"></span>
+        </div>
       </div>
+
+      <!-- Internal transport -->
+      <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:16px !important;margin-bottom:14px !important;">
+        <div style="font-size:13px !important;font-weight:700 !important;color:#0d9488 !important;text-transform:uppercase !important;letter-spacing:.05em !important;margin-bottom:12px !important;">&#x1F686; internal transport</div>
+        <div style="display:grid !important;gap:8px !important;">
+          <div style="display:flex !important;align-items:center !important;justify-content:space-between !important;gap:8px !important;flex-wrap:wrap !important;">
+            <div style="flex:1 !important;min-width:180px !important;">
+              <div style="font-size:13px !important;font-weight:600 !important;color:#1e293b !important;">JR Pass (14-day) per person</div>
+              <div style="font-size:11px !important;color:#94a3b8 !important;">Unlimited shinkansen + JR lines</div>
+            </div>
+            <div style="display:flex !important;align-items:center !important;gap:6px !important;">
+              <span style="font-size:12px !important;color:#64748b !important;">$</span>
+              <input type="number" id="jp-jrpass-pp" value="870" min="0" oninput="jpCalc()" style="width:90px !important;padding:6px 8px !important;border:1px solid #e2e8f0 !important;border-radius:7px !important;font-size:13px !important;text-align:right !important;">
+              <span style="font-size:11px !important;color:#94a3b8 !important;">× <span class="jp-adults-label">4</span> adults</span>
+              <span id="jp-jrpass-total" style="font-size:13px !important;font-weight:700 !important;color:#1e293b !important;min-width:80px !important;text-align:right !important;"></span>
+            </div>
+          </div>
+          <div style="display:flex !important;align-items:center !important;justify-content:space-between !important;gap:8px !important;flex-wrap:wrap !important;">
+            <div style="flex:1 !important;min-width:180px !important;">
+              <div style="font-size:13px !important;font-weight:600 !important;color:#1e293b !important;">IC Card / subway / local buses (per person/day)</div>
+              <div style="font-size:11px !important;color:#94a3b8 !important;">Metro, buses, short trips not on JR</div>
+            </div>
+            <div style="display:flex !important;align-items:center !important;gap:6px !important;">
+              <span style="font-size:12px !important;color:#64748b !important;">$</span>
+              <input type="number" id="jp-subway-ppd" value="25" min="0" oninput="jpCalc()" style="width:90px !important;padding:6px 8px !important;border:1px solid #e2e8f0 !important;border-radius:7px !important;font-size:13px !important;text-align:right !important;">
+              <span style="font-size:11px !important;color:#94a3b8 !important;">× <span class="jp-adults-label">4</span> × <span class="jp-nights-label">14</span>d</span>
+              <span id="jp-subway-total" style="font-size:13px !important;font-weight:700 !important;color:#1e293b !important;min-width:80px !important;text-align:right !important;"></span>
+            </div>
+          </div>
+          <div style="display:flex !important;align-items:center !important;justify-content:space-between !important;gap:8px !important;flex-wrap:wrap !important;">
+            <div style="flex:1 !important;min-width:180px !important;">
+              <div style="font-size:13px !important;font-weight:600 !important;color:#1e293b !important;">Taxis / ride-share (total estimate)</div>
+              <div style="font-size:11px !important;color:#94a3b8 !important;">Late nights, luggage, convenience</div>
+            </div>
+            <div style="display:flex !important;align-items:center !important;gap:6px !important;">
+              <span style="font-size:12px !important;color:#64748b !important;">$</span>
+              <input type="number" id="jp-taxi" value="400" min="0" oninput="jpCalc()" style="width:90px !important;padding:6px 8px !important;border:1px solid #e2e8f0 !important;border-radius:7px !important;font-size:13px !important;text-align:right !important;">
+              <span style="font-size:11px !important;color:#94a3b8 !important;">group total</span>
+              <span id="jp-taxi-total" style="font-size:13px !important;font-weight:700 !important;color:#1e293b !important;min-width:80px !important;text-align:right !important;"></span>
+            </div>
+          </div>
+        </div>
+        <div style="border-top:1px solid #e2e8f0 !important;margin-top:12px !important;padding-top:10px !important;display:flex !important;justify-content:space-between !important;">
+          <span style="font-size:12px !important;font-weight:700 !important;color:#64748b !important;">TRANSPORT SUBTOTAL</span>
+          <span id="jp-transport-sub" style="font-size:14px !important;font-weight:700 !important;color:#0d9488 !important;"></span>
+        </div>
+      </div>
+
+      <!-- Food & Drinks -->
+      <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:16px !important;margin-bottom:14px !important;">
+        <div style="font-size:13px !important;font-weight:700 !important;color:#0d9488 !important;text-transform:uppercase !important;letter-spacing:.05em !important;margin-bottom:12px !important;">&#x1F35C; food &amp; drinks</div>
+        <div style="display:grid !important;gap:8px !important;">
+          <div style="display:flex !important;align-items:center !important;justify-content:space-between !important;gap:8px !important;flex-wrap:wrap !important;">
+            <div style="flex:1 !important;min-width:180px !important;">
+              <div style="font-size:13px !important;font-weight:600 !important;color:#1e293b !important;">Breakfast (per person/day)</div>
+              <div style="font-size:11px !important;color:#94a3b8 !important;">Convenience store, hotel or café</div>
+            </div>
+            <div style="display:flex !important;align-items:center !important;gap:6px !important;">
+              <span style="font-size:12px !important;color:#64748b !important;">$</span>
+              <input type="number" id="jp-brekky-ppd" value="12" min="0" oninput="jpCalc()" style="width:90px !important;padding:6px 8px !important;border:1px solid #e2e8f0 !important;border-radius:7px !important;font-size:13px !important;text-align:right !important;">
+              <span style="font-size:11px !important;color:#94a3b8 !important;">× <span class="jp-adults-label">4</span> × <span class="jp-nights-label">14</span>d</span>
+              <span id="jp-brekky-total" style="font-size:13px !important;font-weight:700 !important;color:#1e293b !important;min-width:80px !important;text-align:right !important;"></span>
+            </div>
+          </div>
+          <div style="display:flex !important;align-items:center !important;justify-content:space-between !important;gap:8px !important;flex-wrap:wrap !important;">
+            <div style="flex:1 !important;min-width:180px !important;">
+              <div style="font-size:13px !important;font-weight:600 !important;color:#1e293b !important;">Lunch (per person/day)</div>
+              <div style="font-size:11px !important;color:#94a3b8 !important;">Ramen, sushi train, bento</div>
+            </div>
+            <div style="display:flex !important;align-items:center !important;gap:6px !important;">
+              <span style="font-size:12px !important;color:#64748b !important;">$</span>
+              <input type="number" id="jp-lunch-ppd" value="20" min="0" oninput="jpCalc()" style="width:90px !important;padding:6px 8px !important;border:1px solid #e2e8f0 !important;border-radius:7px !important;font-size:13px !important;text-align:right !important;">
+              <span style="font-size:11px !important;color:#94a3b8 !important;">× <span class="jp-adults-label">4</span> × <span class="jp-nights-label">14</span>d</span>
+              <span id="jp-lunch-total" style="font-size:13px !important;font-weight:700 !important;color:#1e293b !important;min-width:80px !important;text-align:right !important;"></span>
+            </div>
+          </div>
+          <div style="display:flex !important;align-items:center !important;justify-content:space-between !important;gap:8px !important;flex-wrap:wrap !important;">
+            <div style="flex:1 !important;min-width:180px !important;">
+              <div style="font-size:13px !important;font-weight:600 !important;color:#1e293b !important;">Dinner (per person/day)</div>
+              <div style="font-size:11px !important;color:#94a3b8 !important;">Sit-down restaurants, izakaya</div>
+            </div>
+            <div style="display:flex !important;align-items:center !important;gap:6px !important;">
+              <span style="font-size:12px !important;color:#64748b !important;">$</span>
+              <input type="number" id="jp-dinner-ppd" value="45" min="0" oninput="jpCalc()" style="width:90px !important;padding:6px 8px !important;border:1px solid #e2e8f0 !important;border-radius:7px !important;font-size:13px !important;text-align:right !important;">
+              <span style="font-size:11px !important;color:#94a3b8 !important;">× <span class="jp-adults-label">4</span> × <span class="jp-nights-label">14</span>d</span>
+              <span id="jp-dinner-total" style="font-size:13px !important;font-weight:700 !important;color:#1e293b !important;min-width:80px !important;text-align:right !important;"></span>
+            </div>
+          </div>
+          <div style="display:flex !important;align-items:center !important;justify-content:space-between !important;gap:8px !important;flex-wrap:wrap !important;">
+            <div style="flex:1 !important;min-width:180px !important;">
+              <div style="font-size:13px !important;font-weight:600 !important;color:#1e293b !important;">Drinks / coffee / snacks (per person/day)</div>
+              <div style="font-size:11px !important;color:#94a3b8 !important;">Vending machines, cafés, alcohol</div>
+            </div>
+            <div style="display:flex !important;align-items:center !important;gap:6px !important;">
+              <span style="font-size:12px !important;color:#64748b !important;">$</span>
+              <input type="number" id="jp-drinks-ppd" value="15" min="0" oninput="jpCalc()" style="width:90px !important;padding:6px 8px !important;border:1px solid #e2e8f0 !important;border-radius:7px !important;font-size:13px !important;text-align:right !important;">
+              <span style="font-size:11px !important;color:#94a3b8 !important;">× <span class="jp-adults-label">4</span> × <span class="jp-nights-label">14</span>d</span>
+              <span id="jp-drinks-total" style="font-size:13px !important;font-weight:700 !important;color:#1e293b !important;min-width:80px !important;text-align:right !important;"></span>
+            </div>
+          </div>
+        </div>
+        <div style="border-top:1px solid #e2e8f0 !important;margin-top:12px !important;padding-top:10px !important;display:flex !important;justify-content:space-between !important;">
+          <span style="font-size:12px !important;font-weight:700 !important;color:#64748b !important;">FOOD SUBTOTAL</span>
+          <span id="jp-food-sub" style="font-size:14px !important;font-weight:700 !important;color:#0d9488 !important;"></span>
+        </div>
+      </div>
+
+      <!-- Activities -->
+      <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:16px !important;margin-bottom:14px !important;">
+        <div style="font-size:13px !important;font-weight:700 !important;color:#0d9488 !important;text-transform:uppercase !important;letter-spacing:.05em !important;margin-bottom:12px !important;">&#x1F3AF; activities &amp; attractions</div>
+        <div style="display:grid !important;gap:8px !important;">
+          <div style="display:flex !important;align-items:center !important;justify-content:space-between !important;gap:8px !important;flex-wrap:wrap !important;">
+            <div style="flex:1 !important;min-width:180px !important;">
+              <div style="font-size:13px !important;font-weight:600 !important;color:#1e293b !important;">Entry fees / temples / museums (per person)</div>
+              <div style="font-size:11px !important;color:#94a3b8 !important;">Fushimi Inari, teamLab, shrines etc.</div>
+            </div>
+            <div style="display:flex !important;align-items:center !important;gap:6px !important;">
+              <span style="font-size:12px !important;color:#64748b !important;">$</span>
+              <input type="number" id="jp-entry-pp" value="300" min="0" oninput="jpCalc()" style="width:90px !important;padding:6px 8px !important;border:1px solid #e2e8f0 !important;border-radius:7px !important;font-size:13px !important;text-align:right !important;">
+              <span style="font-size:11px !important;color:#94a3b8 !important;">× <span class="jp-adults-label">4</span> adults</span>
+              <span id="jp-entry-total" style="font-size:13px !important;font-weight:700 !important;color:#1e293b !important;min-width:80px !important;text-align:right !important;"></span>
+            </div>
+          </div>
+          <div style="display:flex !important;align-items:center !important;justify-content:space-between !important;gap:8px !important;flex-wrap:wrap !important;">
+            <div style="flex:1 !important;min-width:180px !important;">
+              <div style="font-size:13px !important;font-weight:600 !important;color:#1e293b !important;">Day trips (Kyoto, Hakone, Nara etc.) (per person)</div>
+              <div style="font-size:11px !important;color:#94a3b8 !important;">Tours, guides, boat trips</div>
+            </div>
+            <div style="display:flex !important;align-items:center !important;gap:6px !important;">
+              <span style="font-size:12px !important;color:#64748b !important;">$</span>
+              <input type="number" id="jp-daytrip-pp" value="400" min="0" oninput="jpCalc()" style="width:90px !important;padding:6px 8px !important;border:1px solid #e2e8f0 !important;border-radius:7px !important;font-size:13px !important;text-align:right !important;">
+              <span style="font-size:11px !important;color:#94a3b8 !important;">× <span class="jp-adults-label">4</span> adults</span>
+              <span id="jp-daytrip-total" style="font-size:13px !important;font-weight:700 !important;color:#1e293b !important;min-width:80px !important;text-align:right !important;"></span>
+            </div>
+          </div>
+          <div style="display:flex !important;align-items:center !important;justify-content:space-between !important;gap:8px !important;flex-wrap:wrap !important;">
+            <div style="flex:1 !important;min-width:180px !important;">
+              <div style="font-size:13px !important;font-weight:600 !important;color:#1e293b !important;">Theme parks / special experiences (total)</div>
+              <div style="font-size:11px !important;color:#94a3b8 !important;">DisneySea, Universal Studios Japan etc.</div>
+            </div>
+            <div style="display:flex !important;align-items:center !important;gap:6px !important;">
+              <span style="font-size:12px !important;color:#64748b !important;">$</span>
+              <input type="number" id="jp-theme" value="800" min="0" oninput="jpCalc()" style="width:90px !important;padding:6px 8px !important;border:1px solid #e2e8f0 !important;border-radius:7px !important;font-size:13px !important;text-align:right !important;">
+              <span style="font-size:11px !important;color:#94a3b8 !important;">group total</span>
+              <span id="jp-theme-total" style="font-size:13px !important;font-weight:700 !important;color:#1e293b !important;min-width:80px !important;text-align:right !important;"></span>
+            </div>
+          </div>
+        </div>
+        <div style="border-top:1px solid #e2e8f0 !important;margin-top:12px !important;padding-top:10px !important;display:flex !important;justify-content:space-between !important;">
+          <span style="font-size:12px !important;font-weight:700 !important;color:#64748b !important;">ACTIVITIES SUBTOTAL</span>
+          <span id="jp-activities-sub" style="font-size:14px !important;font-weight:700 !important;color:#0d9488 !important;"></span>
+        </div>
+      </div>
+
+      <!-- Shopping & Spending -->
+      <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:16px !important;margin-bottom:14px !important;">
+        <div style="font-size:13px !important;font-weight:700 !important;color:#0d9488 !important;text-transform:uppercase !important;letter-spacing:.05em !important;margin-bottom:12px !important;">&#x1F6CD;&#xFE0F; shopping &amp; spending money</div>
+        <div style="display:grid !important;gap:8px !important;">
+          <div style="display:flex !important;align-items:center !important;justify-content:space-between !important;gap:8px !important;flex-wrap:wrap !important;">
+            <div style="flex:1 !important;min-width:180px !important;">
+              <div style="font-size:13px !important;font-weight:600 !important;color:#1e293b !important;">Shopping per person</div>
+              <div style="font-size:11px !important;color:#94a3b8 !important;">Souvenirs, clothes, electronics, cosmetics</div>
+            </div>
+            <div style="display:flex !important;align-items:center !important;gap:6px !important;">
+              <span style="font-size:12px !important;color:#64748b !important;">$</span>
+              <input type="number" id="jp-shopping-pp" value="1000" min="0" oninput="jpCalc()" style="width:90px !important;padding:6px 8px !important;border:1px solid #e2e8f0 !important;border-radius:7px !important;font-size:13px !important;text-align:right !important;">
+              <span style="font-size:11px !important;color:#94a3b8 !important;">× <span class="jp-adults-label">4</span> adults</span>
+              <span id="jp-shopping-total" style="font-size:13px !important;font-weight:700 !important;color:#1e293b !important;min-width:80px !important;text-align:right !important;"></span>
+            </div>
+          </div>
+          <div style="display:flex !important;align-items:center !important;justify-content:space-between !important;gap:8px !important;flex-wrap:wrap !important;">
+            <div style="flex:1 !important;min-width:180px !important;">
+              <div style="font-size:13px !important;font-weight:600 !important;color:#1e293b !important;">Pocket money / misc (per person)</div>
+              <div style="font-size:11px !important;color:#94a3b8 !important;">Cash, tips, random spends</div>
+            </div>
+            <div style="display:flex !important;align-items:center !important;gap:6px !important;">
+              <span style="font-size:12px !important;color:#64748b !important;">$</span>
+              <input type="number" id="jp-misc-pp" value="300" min="0" oninput="jpCalc()" style="width:90px !important;padding:6px 8px !important;border:1px solid #e2e8f0 !important;border-radius:7px !important;font-size:13px !important;text-align:right !important;">
+              <span style="font-size:11px !important;color:#94a3b8 !important;">× <span class="jp-adults-label">4</span> adults</span>
+              <span id="jp-misc-total" style="font-size:13px !important;font-weight:700 !important;color:#1e293b !important;min-width:80px !important;text-align:right !important;"></span>
+            </div>
+          </div>
+        </div>
+        <div style="border-top:1px solid #e2e8f0 !important;margin-top:12px !important;padding-top:10px !important;display:flex !important;justify-content:space-between !important;">
+          <span style="font-size:12px !important;font-weight:700 !important;color:#64748b !important;">SHOPPING SUBTOTAL</span>
+          <span id="jp-shopping-sub" style="font-size:14px !important;font-weight:700 !important;color:#0d9488 !important;"></span>
+        </div>
+      </div>
+
+      <!-- Insurance & Admin -->
+      <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:16px !important;margin-bottom:14px !important;">
+        <div style="font-size:13px !important;font-weight:700 !important;color:#0d9488 !important;text-transform:uppercase !important;letter-spacing:.05em !important;margin-bottom:12px !important;">&#x1F6E1;&#xFE0F; insurance &amp; admin</div>
+        <div style="display:grid !important;gap:8px !important;">
+          <div style="display:flex !important;align-items:center !important;justify-content:space-between !important;gap:8px !important;flex-wrap:wrap !important;">
+            <div style="flex:1 !important;min-width:180px !important;">
+              <div style="font-size:13px !important;font-weight:600 !important;color:#1e293b !important;">Travel insurance per person</div>
+              <div style="font-size:11px !important;color:#94a3b8 !important;">Comprehensive, medical + cancellation</div>
+            </div>
+            <div style="display:flex !important;align-items:center !important;gap:6px !important;">
+              <span style="font-size:12px !important;color:#64748b !important;">$</span>
+              <input type="number" id="jp-insurance-pp" value="250" min="0" oninput="jpCalc()" style="width:90px !important;padding:6px 8px !important;border:1px solid #e2e8f0 !important;border-radius:7px !important;font-size:13px !important;text-align:right !important;">
+              <span style="font-size:11px !important;color:#94a3b8 !important;">× <span class="jp-adults-label">4</span> adults</span>
+              <span id="jp-insurance-total" style="font-size:13px !important;font-weight:700 !important;color:#1e293b !important;min-width:80px !important;text-align:right !important;"></span>
+            </div>
+          </div>
+          <div style="display:flex !important;align-items:center !important;justify-content:space-between !important;gap:8px !important;flex-wrap:wrap !important;">
+            <div style="flex:1 !important;min-width:180px !important;">
+              <div style="font-size:13px !important;font-weight:600 !important;color:#1e293b !important;">Pocket WiFi / SIM card (total)</div>
+              <div style="font-size:11px !important;color:#94a3b8 !important;">Portable WiFi device or data SIMs</div>
+            </div>
+            <div style="display:flex !important;align-items:center !important;gap:6px !important;">
+              <span style="font-size:12px !important;color:#64748b !important;">$</span>
+              <input type="number" id="jp-wifi" value="120" min="0" oninput="jpCalc()" style="width:90px !important;padding:6px 8px !important;border:1px solid #e2e8f0 !important;border-radius:7px !important;font-size:13px !important;text-align:right !important;">
+              <span style="font-size:11px !important;color:#94a3b8 !important;">group total</span>
+              <span id="jp-wifi-total" style="font-size:13px !important;font-weight:700 !important;color:#1e293b !important;min-width:80px !important;text-align:right !important;"></span>
+            </div>
+          </div>
+          <div style="display:flex !important;align-items:center !important;justify-content:space-between !important;gap:8px !important;flex-wrap:wrap !important;">
+            <div style="flex:1 !important;min-width:180px !important;">
+              <div style="font-size:13px !important;font-weight:600 !important;color:#1e293b !important;">Luggage / travel accessories (total)</div>
+              <div style="font-size:11px !important;color:#94a3b8 !important;">New bags, travel adapters, misc prep</div>
+            </div>
+            <div style="display:flex !important;align-items:center !important;gap:6px !important;">
+              <span style="font-size:12px !important;color:#64748b !important;">$</span>
+              <input type="number" id="jp-luggage" value="300" min="0" oninput="jpCalc()" style="width:90px !important;padding:6px 8px !important;border:1px solid #e2e8f0 !important;border-radius:7px !important;font-size:13px !important;text-align:right !important;">
+              <span style="font-size:11px !important;color:#94a3b8 !important;">group total</span>
+              <span id="jp-luggage-total" style="font-size:13px !important;font-weight:700 !important;color:#1e293b !important;min-width:80px !important;text-align:right !important;"></span>
+            </div>
+          </div>
+        </div>
+        <div style="border-top:1px solid #e2e8f0 !important;margin-top:12px !important;padding-top:10px !important;display:flex !important;justify-content:space-between !important;">
+          <span style="font-size:12px !important;font-weight:700 !important;color:#64748b !important;">INSURANCE &amp; ADMIN SUBTOTAL</span>
+          <span id="jp-admin-sub" style="font-size:14px !important;font-weight:700 !important;color:#0d9488 !important;"></span>
+        </div>
+      </div>
+
+      <!-- Contingency -->
+      <div style="background:white !important;border:1px solid #e2e8f0 !important;border-radius:10px !important;padding:16px !important;margin-bottom:14px !important;">
+        <div style="display:flex !important;align-items:center !important;justify-content:space-between !important;gap:8px !important;flex-wrap:wrap !important;">
+          <div>
+            <div style="font-size:13px !important;font-weight:700 !important;color:#0d9488 !important;text-transform:uppercase !important;letter-spacing:.05em !important;">&#x1F6A8; contingency buffer</div>
+            <div style="font-size:11px !important;color:#94a3b8 !important;margin-top:2px !important;">% of subtotal before contingency</div>
+          </div>
+          <div style="display:flex !important;align-items:center !important;gap:6px !important;">
+            <input type="number" id="jp-contingency-pct" value="10" min="0" max="50" oninput="jpCalc()" style="width:70px !important;padding:6px 8px !important;border:1px solid #e2e8f0 !important;border-radius:7px !important;font-size:13px !important;text-align:right !important;">
+            <span style="font-size:13px !important;color:#64748b !important;">%</span>
+            <span id="jp-contingency-total" style="font-size:13px !important;font-weight:700 !important;color:#1e293b !important;min-width:80px !important;text-align:right !important;"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Grand Total -->
+      <div style="background:linear-gradient(135deg,#0d9488,#0f766e) !important;border-radius:10px !important;padding:20px !important;margin-bottom:14px !important;color:white !important;">
+        <div style="font-size:12px !important;font-weight:700 !important;text-transform:uppercase !important;letter-spacing:.08em !important;opacity:.8 !important;margin-bottom:10px !important;">total estimated budget</div>
+        <div style="display:flex !important;justify-content:space-between !important;align-items:flex-end !important;flex-wrap:wrap !important;gap:10px !important;">
+          <div>
+            <div id="jp-grand-total" style="font-size:36px !important;font-weight:700 !important;line-height:1 !important;"></div>
+            <div style="font-size:12px !important;opacity:.75 !important;margin-top:4px !important;">AUD (incl. contingency)</div>
+          </div>
+          <div style="text-align:right !important;">
+            <div id="jp-per-person" style="font-size:22px !important;font-weight:700 !important;"></div>
+            <div style="font-size:12px !important;opacity:.75 !important;margin-top:4px !important;">per person</div>
+          </div>
+        </div>
+        <!-- section breakdown -->
+        <div id="jp-breakdown" style="margin-top:16px !important;padding-top:16px !important;border-top:1px solid rgba(255,255,255,0.2) !important;display:grid !important;grid-template-columns:1fr 1fr !important;gap:4px 16px !important;font-size:12px !important;opacity:.85 !important;"></div>
+      </div>
+
     </div>
+
+    <script>
+    // ═══════════════════════════════════════════════════
+    // FEATURE: Japan Budget Calculator
+    // ═══════════════════════════════════════════════════
+    var _jpAccomRows = [];
+
+    function jpFmt(n) {
+      return '$' + Math.round(n).toLocaleString('en-AU');
+    }
+
+    function jpAddAccomRow(label, nights, rate) {
+      var id = Date.now() + Math.random();
+      _jpAccomRows.push(id);
+      var container = document.getElementById('jp-accom-rows');
+      var row = document.createElement('div');
+      row.id = 'jp-accom-' + id;
+      row.style.cssText = 'display:flex !important;align-items:center !important;gap:6px !important;flex-wrap:wrap !important;';
+      row.innerHTML =
+        '<input type="text" placeholder="e.g. Tokyo hotel" value="' + (label||'Hotel') + '" oninput="jpCalc()" style="flex:1 !important;min-width:120px !important;padding:6px 8px !important;border:1px solid #e2e8f0 !important;border-radius:7px !important;font-size:13px !important;">' +
+        '<input type="number" value="' + (nights||7) + '" min="0" oninput="jpCalc()" data-accom-nights="' + id + '" style="width:55px !important;padding:6px 8px !important;border:1px solid #e2e8f0 !important;border-radius:7px !important;font-size:13px !important;text-align:right !important;" placeholder="nights">' +
+        '<span style="font-size:11px !important;color:#94a3b8 !important;">nights ×</span>' +
+        '<span style="font-size:12px !important;color:#64748b !important;">$</span>' +
+        '<input type="number" value="' + (rate||800) + '" min="0" oninput="jpCalc()" data-accom-rate="' + id + '" style="width:90px !important;padding:6px 8px !important;border:1px solid #e2e8f0 !important;border-radius:7px !important;font-size:13px !important;text-align:right !important;" placeholder="$/night">' +
+        '<span style="font-size:11px !important;color:#94a3b8 !important;">/night</span>' +
+        '<span data-accom-total="' + id + '" style="font-size:13px !important;font-weight:700 !important;color:#1e293b !important;min-width:80px !important;text-align:right !important;"></span>' +
+        '<button onclick="jpRemoveAccomRow(' + id + ')" style="padding:4px 8px !important;background:#fee2e2 !important;border:none !important;border-radius:6px !important;font-size:11px !important;color:#ef4444 !important;cursor:pointer !important;">✕</button>';
+      container.appendChild(row);
+      jpCalc();
+    }
+
+    function jpRemoveAccomRow(id) {
+      _jpAccomRows = _jpAccomRows.filter(function(r){ return r !== id; });
+      var el = document.getElementById('jp-accom-' + id);
+      if (el) el.remove();
+      jpCalc();
+    }
+
+    function jpCalc() {
+      var adults = parseInt(document.getElementById('jp-adults').value) || 1;
+      var nights = parseInt(document.getElementById('jp-nights').value) || 1;
+
+      // Update all adults/nights labels
+      document.querySelectorAll('.jp-adults-label').forEach(function(el){ el.textContent = adults; });
+      document.querySelectorAll('.jp-nights-label').forEach(function(el){ el.textContent = nights; });
+
+      // --- Flights ---
+      var flightPP = parseFloat(document.getElementById('jp-flight-pp').value) || 0;
+      var transferPP = parseFloat(document.getElementById('jp-transfer-pp').value) || 0;
+      var flightTotal = flightPP * adults;
+      var transferTotal = transferPP * adults;
+      document.getElementById('jp-flight-total').textContent = jpFmt(flightTotal);
+      document.getElementById('jp-transfer-total').textContent = jpFmt(transferTotal);
+      var flightsSub = flightTotal + transferTotal;
+      document.getElementById('jp-flights-sub').textContent = jpFmt(flightsSub);
+
+      // --- Accommodation ---
+      var accomSub = 0;
+      _jpAccomRows.forEach(function(id) {
+        var nightsEl = document.querySelector('[data-accom-nights="' + id + '"]');
+        var rateEl = document.querySelector('[data-accom-rate="' + id + '"]');
+        var totalEl = document.querySelector('[data-accom-total="' + id + '"]');
+        if (nightsEl && rateEl && totalEl) {
+          var n = parseFloat(nightsEl.value) || 0;
+          var r = parseFloat(rateEl.value) || 0;
+          var t = n * r;
+          accomSub += t;
+          totalEl.textContent = jpFmt(t);
+        }
+      });
+      document.getElementById('jp-accom-sub').textContent = jpFmt(accomSub);
+
+      // --- Transport ---
+      var jrpassPP = parseFloat(document.getElementById('jp-jrpass-pp').value) || 0;
+      var subwayPPD = parseFloat(document.getElementById('jp-subway-ppd').value) || 0;
+      var taxiTotal = parseFloat(document.getElementById('jp-taxi').value) || 0;
+      var jrpassTotal = jrpassPP * adults;
+      var subwayTotal = subwayPPD * adults * nights;
+      document.getElementById('jp-jrpass-total').textContent = jpFmt(jrpassTotal);
+      document.getElementById('jp-subway-total').textContent = jpFmt(subwayTotal);
+      document.getElementById('jp-taxi-total').textContent = jpFmt(taxiTotal);
+      var transportSub = jrpassTotal + subwayTotal + taxiTotal;
+      document.getElementById('jp-transport-sub').textContent = jpFmt(transportSub);
+
+      // --- Food ---
+      var brekkyPPD = parseFloat(document.getElementById('jp-brekky-ppd').value) || 0;
+      var lunchPPD = parseFloat(document.getElementById('jp-lunch-ppd').value) || 0;
+      var dinnerPPD = parseFloat(document.getElementById('jp-dinner-ppd').value) || 0;
+      var drinksPPD = parseFloat(document.getElementById('jp-drinks-ppd').value) || 0;
+      var brekkyTotal = brekkyPPD * adults * nights;
+      var lunchTotal = lunchPPD * adults * nights;
+      var dinnerTotal = dinnerPPD * adults * nights;
+      var drinksTotal = drinksPPD * adults * nights;
+      document.getElementById('jp-brekky-total').textContent = jpFmt(brekkyTotal);
+      document.getElementById('jp-lunch-total').textContent = jpFmt(lunchTotal);
+      document.getElementById('jp-dinner-total').textContent = jpFmt(dinnerTotal);
+      document.getElementById('jp-drinks-total').textContent = jpFmt(drinksTotal);
+      var foodSub = brekkyTotal + lunchTotal + dinnerTotal + drinksTotal;
+      document.getElementById('jp-food-sub').textContent = jpFmt(foodSub);
+
+      // --- Activities ---
+      var entryPP = parseFloat(document.getElementById('jp-entry-pp').value) || 0;
+      var daytripPP = parseFloat(document.getElementById('jp-daytrip-pp').value) || 0;
+      var themeTotal = parseFloat(document.getElementById('jp-theme').value) || 0;
+      var entryTotal = entryPP * adults;
+      var daytripTotal = daytripPP * adults;
+      document.getElementById('jp-entry-total').textContent = jpFmt(entryTotal);
+      document.getElementById('jp-daytrip-total').textContent = jpFmt(daytripTotal);
+      document.getElementById('jp-theme-total').textContent = jpFmt(themeTotal);
+      var activitiesSub = entryTotal + daytripTotal + themeTotal;
+      document.getElementById('jp-activities-sub').textContent = jpFmt(activitiesSub);
+
+      // --- Shopping ---
+      var shoppingPP = parseFloat(document.getElementById('jp-shopping-pp').value) || 0;
+      var miscPP = parseFloat(document.getElementById('jp-misc-pp').value) || 0;
+      var shoppingTotal = shoppingPP * adults;
+      var miscTotal = miscPP * adults;
+      document.getElementById('jp-shopping-total').textContent = jpFmt(shoppingTotal);
+      document.getElementById('jp-misc-total').textContent = jpFmt(miscTotal);
+      var shoppingSub = shoppingTotal + miscTotal;
+      document.getElementById('jp-shopping-sub').textContent = jpFmt(shoppingSub);
+
+      // --- Insurance & Admin ---
+      var insurancePP = parseFloat(document.getElementById('jp-insurance-pp').value) || 0;
+      var wifiTotal = parseFloat(document.getElementById('jp-wifi').value) || 0;
+      var luggageTotal = parseFloat(document.getElementById('jp-luggage').value) || 0;
+      var insuranceTotal = insurancePP * adults;
+      document.getElementById('jp-insurance-total').textContent = jpFmt(insuranceTotal);
+      document.getElementById('jp-wifi-total').textContent = jpFmt(wifiTotal);
+      document.getElementById('jp-luggage-total').textContent = jpFmt(luggageTotal);
+      var adminSub = insuranceTotal + wifiTotal + luggageTotal;
+      document.getElementById('jp-admin-sub').textContent = jpFmt(adminSub);
+
+      // --- Contingency ---
+      var preContingency = flightsSub + accomSub + transportSub + foodSub + activitiesSub + shoppingSub + adminSub;
+      var contingencyPct = parseFloat(document.getElementById('jp-contingency-pct').value) || 0;
+      var contingencyAmt = preContingency * contingencyPct / 100;
+      document.getElementById('jp-contingency-total').textContent = jpFmt(contingencyAmt);
+
+      // --- Grand Total ---
+      var grand = preContingency + contingencyAmt;
+      document.getElementById('jp-grand-total').textContent = jpFmt(grand);
+      document.getElementById('jp-per-person').textContent = jpFmt(grand / adults);
+
+      // --- Breakdown ---
+      var sections = [
+        ['Flights & transfers', flightsSub],
+        ['Accommodation', accomSub],
+        ['Internal transport', transportSub],
+        ['Food & drinks', foodSub],
+        ['Activities', activitiesSub],
+        ['Shopping', shoppingSub],
+        ['Insurance & admin', adminSub],
+        ['Contingency', contingencyAmt],
+      ];
+      var bk = document.getElementById('jp-breakdown');
+      bk.innerHTML = sections.map(function(s){
+        var pct = grand > 0 ? Math.round(s[1]/grand*100) : 0;
+        return '<div style="display:flex !important;justify-content:space-between !important;gap:8px !important;">' +
+          '<span>' + s[0] + '</span><span style="font-weight:700 !important;">' + jpFmt(s[1]) + ' <span style="opacity:.6 !important;font-weight:400 !important;">(' + pct + '%)</span></span></div>';
+      }).join('');
+    }
+
+    // Init default accom rows
+    document.addEventListener('DOMContentLoaded', function() {
+      jpAddAccomRow('Tokyo hotel (2 rooms)', 7, 800);
+      jpAddAccomRow('Kyoto hotel (2 rooms)', 4, 750);
+      jpAddAccomRow('Osaka hotel (2 rooms)', 3, 700);
+      jpCalc();
+    });
+    </script>
 
     <!-- ═══ TO-DO ═══ -->
     <div class="screen" id="ch-todo">

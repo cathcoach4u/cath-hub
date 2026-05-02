@@ -174,7 +174,7 @@ Three separate, independent Claude services. Any can be swapped for alternatives
 
 ## version numbering
 
-- Current: **v7.61** (green badge in sidebar footer and About page)
+- Current: **v7.60** (green badge in sidebar footer and About page)
 - Bumped on every code change (minor version increment)
 - No service worker in Cath Hub (GitHub Pages handles caching). If one is added, keep its cache name in sync with the version.
 
